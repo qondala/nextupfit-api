@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres-demo
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextupfit
+    environment:
+      - PORT=3000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/usr/src/app/src # Mettez à jour le chemin si nécessaire
+    networks:
+      - nest-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    container_name: nest-pgadmin4-demo
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+    ports:
+      - '5050:80'
+    depends_on:
+      - db
+    networks:
+      - nest-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - '80:80'
+    depends_on:
+      - app
+    networks:
+      - nest-net
+
+networks:
+  nest-net:
+    driver: bridge

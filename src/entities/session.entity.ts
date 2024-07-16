@@ -30,6 +30,12 @@ export class Session {
   @Column({ nullable: true })
   type: string;
 
+  @Column({ default: 5 })
+  duration: number;
+
+  @Column({ default: 0 })
+  caloriesToburn: number;
+
   @OneToMany(
     () => TrainingSession,
     (trainingSession) => trainingSession.session,

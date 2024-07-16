@@ -11,6 +11,7 @@ import { Challenge } from "../../entities/challenge.entity";
 
 @Injectable()
 export class ChallengesService {
+ 
   constructor(
     @InjectRepository(Challenge)
     private challengesRepository: Repository<Challenge>,
@@ -101,6 +102,19 @@ export class ChallengesService {
     if (!challenges) {
       throw new NotFoundException(
         `Challenges for content ${contentId} not found`,
+      );
+    }
+    return challenges;
+  }
+
+  async findByCategory(categoryId: number) {
+    const challenges = await this.challengesRepository.find({
+      where: { content: { categoryId: categoryId } },
+      relations: ["content"],
+    });
+    if (!challenges) {
+      throw new NotFoundException(
+        `Challenges for category ${categoryId} not found`,
       );
     }
     return challenges;

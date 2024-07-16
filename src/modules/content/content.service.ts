@@ -9,6 +9,11 @@ import { CreateContentDto } from "./dto/create-content.dto";
 import { UpdateContentDto } from "./dto/update-content.dto";
 import { Content } from "../../entities/content.entity";
 
+interface PaginationResult<T> {
+  items: T[];
+  total: number;
+}
+
 @Injectable()
 export class ContentService {
   constructor(
@@ -27,8 +32,14 @@ export class ContentService {
     return this.contentRepository.save(content);
   }
 
-  async findAll(): Promise<Content[]> {
-    return this.contentRepository.find({
+  async findAll(
+    page: number,
+    pageSize: number,
+  ): Promise<PaginationResult<Content>> {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await this.contentRepository.findAndCount({
+      skip,
+      take: pageSize,
       relations: [
         "coach",
         "category",
@@ -43,6 +54,7 @@ export class ContentService {
         "contentNutrition",
       ],
     });
+    return { items, total };
   }
 
   async findOne(id: number): Promise<Content> {

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { Content } from "./content.entity";
 import { NutritionProgram } from "./nutrition-program.entity";
 

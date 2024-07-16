@@ -9,6 +9,8 @@ import {
   UseGuards,
   Req,
   Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { ContentService } from "./content.service";
 import { CreateContentDto } from "./dto/create-content.dto";
@@ -30,6 +32,11 @@ import { UserRole } from "../../shared/constants/roles";
 import { RolesGuard, Roles } from "../../shared/guards/roles.guards";
 import { JwtAuthGuard } from "../../shared/guards/jwt-auth.guard";
 
+interface PaginationResult<T> {
+  items: T[];
+  total: number;
+}
+
 @ApiTags("Content")
 @ApiBearerAuth()
 @Controller("content")
@@ -50,10 +57,29 @@ export class ContentController {
   }
 
   @Get()
-  @ApiOkResponse({ description: "List of all content", type: [Content] })
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  @ApiOkResponse({
+    description: "List of all content",
+  })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch content" })
-  findAll() {
-    return this.contentService.findAll();
+  findAll(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Content>> {
+    return this.contentService.findAll(page, pageSize);
   }
 
   @Get(":id")

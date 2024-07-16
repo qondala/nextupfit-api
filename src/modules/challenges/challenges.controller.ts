@@ -134,4 +134,23 @@ export class ChallengesController {
   findByContent(@Param("contentId") contentId: string) {
     return this.challengesService.findByContent(+contentId);
   }
+
+
+  @Get("category/:categoryId")
+  @ApiParam({
+    name: "categoryId",
+    description: "ID of the category",
+    type: "number",
+  })
+  @ApiOkResponse({
+    description: "List of challenges for the category",
+    type: [Challenge],
+  })
+  @ApiNotFoundResponse({ description: "category not found" })
+  @ApiInternalServerErrorResponse({
+    description: "Failed to fetch challenges for the category",
+  })
+  findByCategory(@Param("contentId") contentId: string) {
+    return this.challengesService.findByCategory(+contentId);
+  }
 }
