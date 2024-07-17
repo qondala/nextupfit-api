@@ -1,20 +1,21 @@
 FROM node:20-alpine
 
+# install PM2
+RUN npm install pm2 -g
+
 # create application root folder
 RUN mkdir -p /app
 
-# copy everything
-COPY . /app
-
 # cd on the /app and execute subquent npm commands
 WORKDIR /app
+
+# copy everything
+COPY . .
 
 RUN npm install
 
 RUN npm run build
 
-RUN npm install pm2 -g
-
 EXPOSE 3000
 
-CMD ["pm2-runtime", "start", "dist/src/main.js"]
+CMD ["pm2-runtime", "start", "./dist/src/main.js"]
