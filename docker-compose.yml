@@ -24,7 +24,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./src:/usr/src/app/src # Mettez à jour le chemin si nécessaire
+      - .:/app
     networks:
       - nest-net
 

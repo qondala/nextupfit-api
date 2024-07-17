@@ -1,12 +1,15 @@
 FROM node:20-alpine
 
-WORKDIR /usr/src/app
+# create application root folder
+RUN mkdir -p /app
 
-COPY package*.json ./
+# copy everything
+COPY . /app
+
+# cd on the /app and execute subquent npm commands
+WORKDIR /app
 
 RUN npm install
-
-COPY . .
 
 RUN npm run build
 
