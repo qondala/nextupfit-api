@@ -6,6 +6,35 @@ services:
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
+      - PORT=3000
+      - DATABASE_NAME=fitness_db
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=
+      - DATABASE_HOST=localhost
+      - DATABASE_DIALECT=postgres
+      - DATABASE_PORT=5432
+      - JWT_SECRET=fitness_coach_platform_jwt_secret
+      - JWT_REFRESH_SECRET=fitness_coach_platform_jwt_refresh_secret
+      - STRIPE_SECRET_KEY=
+      - MAIL_HOST=live.smtp.mailtrap.io
+      - MAIL_PORT=587
+      - MAIL_USER=api
+      - MAIL_PASS=c03c90bedb457d8a4578b30200743192
+      - MAIL_FROM=mailtrap@demomailtrap.com
+      - MAIL_SECURE=false
+      - APP_URL=http://localhost:3000
+      - APP_NAME=NextUpFit
+      - FB_TYPE=service_account,
+      - FB_PROJECT_ID=nextupfit-8f1e6
+      - FB_PRIVATE_KEY_ID=c9a36a20706d3b30c80b1f8f9f9f468cd8c94fba
+      - FB_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvg11YmWEDlgLv\nOYWaT/6VLBLErGfsioM6D+3LLZG7mVK6NAs80/tob5rtlge0bU8zOlcZeFnc7Adj\nwpDvOvJ4AOZf1AN0Un0VCDyFBNhpIwLW7E>
+      - FB_CLIENT_EMAIL=firebase-adminsdk-fwdqs@nextupfit-8f1e6.iam.gserviceaccount.com
+      - FB_CLIENT_ID=104096796052252345936
+      - FB_AUTH_URI=https://accounts.google.com/o/oauth2/auth
+      - FB_TOKEN_URI=https://oauth2.googleapis.com/token
+      - AUTH_PROVIDE_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+      - FB_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fwdqs%40nextupfit-8f1e6.iam.gserviceaccount.com
+      - FB_UNIVERSE_DOMAIN=googleapis.com
     container_name: postgres-demo
     volumes:
       - /usr/local/pgsql/data:/var/lib/postgresql/data
