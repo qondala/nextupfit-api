@@ -6,6 +6,18 @@ services:
     restart: always
     environment:
       - POSTGRES_PASSWORD=postgres
+    container_name: postgres-demo
+    volumes:
+      - /usr/local/pgsql/data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nextupfit
+    environment:
       - PORT=3000
       - DATABASE_NAME=fitness_db
       - DATABASE_USERNAME=postgres
@@ -35,19 +47,6 @@ services:
       - AUTH_PROVIDE_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
       - FB_CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fwdqs%40nextupfit-8f1e6.iam.gserviceaccount.com
       - FB_UNIVERSE_DOMAIN=googleapis.com
-    container_name: postgres-demo
-    volumes:
-      - /usr/local/pgsql/data:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nextupfit
-    environment:
-      - PORT=3000
     ports:
       - '3000:3000'
     depends_on:

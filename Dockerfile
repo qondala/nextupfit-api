@@ -1,21 +1,25 @@
 FROM node:20-alpine
 
-# install PM2
-RUN npm install pm2 -g
+# Create app directory
+WORKDIR /usr/src/app
 
-# create application root folder
-RUN mkdir -p /app
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
-# cd on the /app and execute subquent npm commands
-WORKDIR /app
-
-# copy everything
-COPY . .
-
+# Install app dependencies
 RUN npm install
 
+# Bundle app source
+COPY . .
+
+# Copy the .env and .env.development files
+COPY .env ./
+
+# Creates a "dist" folder with the production build
 RUN npm run build
 
-EXPOSE 3000
+# Expose the port on which the app will run
+EXPOSE 3001
 
-CMD ["pm2-runtime", "start", "./dist/src/main.js"]
+# Start the server using the production build
+CMD ["npm", "run", "start:prod"]
