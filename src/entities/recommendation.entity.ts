@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Coach } from "./coach.entity";
 
@@ -8,12 +14,15 @@ export class Recommendation {
   id: number;
 
   @ManyToOne(() => User, (user) => user.recommendations)
+  @JoinColumn()
   recommender: User;
 
   @ManyToOne(() => Coach, (coach) => coach.recommendations)
+  @JoinColumn()
   recommendedCoach: Coach;
 
   @ManyToOne(() => User, (user) => user.recommendationsReceived)
+  @JoinColumn()
   recommendedToUser: User;
 
   @Column({ default: () => "CURRENT_TIMESTAMP" })

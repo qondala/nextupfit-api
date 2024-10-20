@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Content } from "./content.entity";
 import { AffiliateLink } from "./affiliate-link.entity";
@@ -14,6 +15,7 @@ export class AffiliateProgram {
   id: number;
 
   @ManyToOne(() => Content, (content) => content.affiliatePrograms)
+  @JoinColumn()
   content: Content;
 
   @Column({ type: "decimal", precision: 5, scale: 2 })

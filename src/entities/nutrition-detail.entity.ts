@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { NutritionProgram } from "./nutrition-program.entity";
 
 @Entity()
@@ -10,6 +16,7 @@ export class NutritionDetail {
     () => NutritionProgram,
     (nutritionProgram) => nutritionProgram.nutritionDetails,
   )
+  @JoinColumn()
   nutritionProgram: NutritionProgram;
 
   @Column(/*{ type: 'enum', enum: ['breakfast', 'lunch', 'dinner', 'snack'] }*/)
@@ -24,12 +31,12 @@ export class NutritionDetail {
   @Column({ nullable: true })
   calories: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   proteins: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   carbs: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   fats: number;
 }

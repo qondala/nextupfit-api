@@ -12,4 +12,8 @@ export class UpdateCoachQualificationDto {
   @IsOptional()
   @IsNumber()
   yearObtained?: number;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }

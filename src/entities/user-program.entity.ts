@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Content } from "./content.entity";
@@ -15,9 +16,11 @@ export class UserProgram {
   id: number;
 
   @ManyToOne(() => User, (user) => user.userPrograms)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Content, (content) => content.userPrograms)
+  @JoinColumn()
   content: Content;
 
   @Column({ type: "date", nullable: true })
@@ -33,5 +36,5 @@ export class UserProgram {
     () => PerformanceRecord,
     (performanceRecors) => performanceRecors.userProgram,
   )
-  performanceRecords: any;
+  performanceRecords: PerformanceRecord[];
 }

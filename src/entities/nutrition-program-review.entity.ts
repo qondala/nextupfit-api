@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { NutritionProgram } from "./nutrition-program.entity";
 
@@ -14,6 +20,7 @@ export class NutritionProgramReview {
     () => NutritionProgram,
     (nutritionProgram) => nutritionProgram.nutritionProgramReviews,
   )
+  @JoinColumn()
   nutritionProgram: NutritionProgram;
 
   @Column()

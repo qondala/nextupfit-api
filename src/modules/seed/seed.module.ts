@@ -11,13 +11,9 @@ import { CoachQualification } from "../../entities/coach-qualification.entity";
 import { CoachRating } from "../../entities/coach-rating.entity";
 import { CoachSpecialization } from "../../entities/coach-specialization.entity";
 import { Coach } from "../../entities/coach.entity";
-import { ContentGoal } from "../../entities/content-goal.entity";
-import { ContentNutrition } from "../../entities/content-nutrition.entity";
 import { ContentRating } from "../../entities/content-rating.entity";
 import { ContentReview } from "../../entities/content-review.entity";
 import { Content } from "../../entities/content.entity";
-import { ExerciseGoal } from "../../entities/exercise-goal.entity";
-import { ExerciseNutrition } from "../../entities/exercise-nutrition.entity";
 import { Exercise } from "../../entities/exercise.entity";
 import { FitnessGoal } from "../../entities/fitness-goal.entity";
 import { News } from "../../entities/news.entity";
@@ -39,16 +35,18 @@ import { User } from "../../entities/user.entity";
 import * as s from "../../entities/session.entity";
 import { Notification } from "../../entities/notification.entity";
 import { AppDataSource } from "../../database/data-source";
+import { Challenge } from "../../entities/challenge.entity";
+import { DatabaseModule } from "src/database/database.module";
 
 @Module({
   imports: [
+    DatabaseModule,
     TypeOrmModule.forFeature(
       [
         User,
         Coach,
         Content,
         FitnessGoal,
-        ContentGoal,
         Category,
         BodyMeasurement,
         ContentRating,
@@ -68,10 +66,7 @@ import { AppDataSource } from "../../database/data-source";
         UserProgram,
         TrainingContentLink,
         TrainingSession,
-        ExerciseGoal,
         Exercise,
-        ExerciseNutrition,
-        ContentNutrition,
         NutritionProgram,
         NutritionDetail,
         NutritionProgramReview,
@@ -81,8 +76,9 @@ import { AppDataSource } from "../../database/data-source";
         SubscriptionPlan,
         UserSubscription,
         PerformanceRecord,
+        Challenge,
       ],
-      AppDataSource,
+      AppDataSource.options,
     ),
   ],
   providers: [SeedingService],

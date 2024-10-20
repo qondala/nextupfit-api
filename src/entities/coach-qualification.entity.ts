@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { Coach } from "./coach.entity";
 
 @Entity()
@@ -7,6 +13,7 @@ export class CoachQualification {
   id: number;
 
   @ManyToOne(() => Coach, (coach) => coach.qualifications)
+  @JoinColumn()
   coach: Coach;
 
   @Column()
@@ -17,4 +24,7 @@ export class CoachQualification {
 
   @Column({ nullable: true })
   yearObtained: number;
+
+  @Column({ nullable: true })
+  imageUrl?: string;
 }

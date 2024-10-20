@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DatabaseModule } from "./database/database.module";
@@ -14,6 +14,7 @@ import { CoachesModule } from "./modules/coaches/coaches.module";
 import { CoachQualificationsModule } from "./modules/coachqualifications/coachqualifications.module";
 import { CoachRatingsModule } from "./modules/coachratings/coachratings.module";
 import { CoachSpecializationsModule } from "./modules/coachspecializations/coachspecializations.module";
+import { CoachFollowsModule } from "./modules/coachfollows/coachfollows.module";
 import { ContentModule } from "./modules/content/content.module";
 import { ContentRatingsModule } from "./modules/contentratings/contentratings.module";
 import { ContentReviewsModule } from "./modules/contentreviews/contentreviews.module";
@@ -39,7 +40,12 @@ import { SharedModule } from "./shared/shared.module";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { mailerConfig } from "./shared/services/mailer.config";
 import { SeedModule } from "./modules/seed/seed.module";
-import { SeedingService } from "./modules/seed/seed.service";
+import { UserChallengesModule } from "./modules/userchallenges/userchallenges.module";
+import { HomeModule } from "./modules/home/home.module";
+import { AdminModule } from "./modules/admin/admin.module";
+import { CoachTransfersModule } from "./modules/coachtransfers/coachtransfers.module";
+import { NutritionProgram } from "./entities/nutrition-program.entity";
+import { NutritionProgramsModule } from "./modules/nutritionprograms/nutritionprogram.module";
 
 @Module({
   imports: [
@@ -64,12 +70,14 @@ import { SeedingService } from "./modules/seed/seed.service";
     NotificationsModule,
     CoachQualificationsModule,
     CoachSpecializationsModule,
+    CoachFollowsModule,
     CoachRatingsModule,
     ContentRatingsModule,
     ContentReviewsModule,
     PrivateDiscussionsModule,
     RecommendationsModule,
     SessionReviewsModule,
+    NutritionProgramsModule,
     UserNutritionModule,
     UserNutritionProgressModule,
     UserProgramsModule,
@@ -82,14 +90,12 @@ import { SeedingService } from "./modules/seed/seed.service";
     SubscriptionPlansModule,
     UserSubscriptionsModule,
     SeedModule,
+    UserChallengesModule,
+    AdminModule,
+    HomeModule,
+    CoachTransfersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements OnModuleInit {
-  constructor(private readonly seedingService: SeedingService) {}
-
-  async onModuleInit() {
-    await this.seedingService.seed();
-  }
-}
+export class AppModule {}

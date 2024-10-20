@@ -4,11 +4,13 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinTable,
+  ManyToMany,
 } from "typeorm";
 import { Content } from "./content.entity";
-import { ExerciseGoal } from "./exercise-goal.entity";
-import { ExerciseNutrition } from "./exercise-nutrition.entity";
 import { Progress } from "./progress.entity";
+import { FitnessGoal } from "./fitness-goal.entity";
+import { NutritionProgram } from "./nutrition-program.entity";
 
 @Entity()
 export class Exercise {
@@ -33,14 +35,16 @@ export class Exercise {
   @Column({ nullable: true })
   goalSpecifics: string;
 
-  @OneToMany(() => ExerciseGoal, (exerciseGoal) => exerciseGoal.exercise)
-  exerciseGoals: ExerciseGoal[];
+  @ManyToMany(() => FitnessGoal, (fitnessGoal) => fitnessGoal.exercises)
+  @JoinTable()
+  goals: FitnessGoal[];
 
   @OneToMany(
-    () => ExerciseNutrition,
-    (exerciseNutrition) => exerciseNutrition.exercise,
+    () => NutritionProgram,
+    (nutritionProgram) => nutritionProgram.exercises,
   )
-  exerciseNutrition: ExerciseNutrition[];
+  @JoinTable()
+  nutritionPrograms: NutritionProgram[];
 
   @OneToMany(() => Progress, (progress) => progress.exercise)
   progress: Progress[];

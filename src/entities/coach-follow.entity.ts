@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Coach } from "./coach.entity";
 
@@ -8,9 +14,11 @@ export class CoachFollow {
   id: number;
 
   @ManyToOne(() => User, (user) => user.coachFollows)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Coach, (coach) => coach.coachFollows)
+  @JoinColumn()
   coach: Coach;
 
   @Column({ type: "date" })

@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 
 @Entity()
@@ -7,6 +13,7 @@ export class BodyMeasurement {
   id: number;
 
   @ManyToOne(() => User, (user) => user.bodyMeasurements)
+  @JoinColumn()
   user: User;
 
   @Column({ type: "date" })
@@ -23,4 +30,7 @@ export class BodyMeasurement {
 
   @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
   muscleMass: number;
+
+  @Column({ type: "json", nullable: true }) // Ajout du champ pour les macros
+  macros: string;
 }

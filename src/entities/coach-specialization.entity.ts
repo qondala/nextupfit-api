@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { Coach } from "./coach.entity";
 
 @Entity()
@@ -7,6 +13,7 @@ export class CoachSpecialization {
   id: number;
 
   @ManyToOne(() => Coach, (coach) => coach.specializations)
+  @JoinColumn()
   coach: Coach;
 
   @Column()

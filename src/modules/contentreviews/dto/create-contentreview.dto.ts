@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateContentReviewDto {
@@ -7,6 +8,7 @@ export class CreateContentReviewDto {
 
   @IsNotEmpty()
   @IsNumber()
+  @Optional()
   rating: number;
 
   @IsOptional()

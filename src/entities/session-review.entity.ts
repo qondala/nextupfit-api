@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Session } from "./session.entity";
 
@@ -8,9 +14,11 @@ export class SessionReview {
   id: number;
 
   @ManyToOne(() => User, (user) => user.sessionReviews)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Session, (session) => session.sessionReviews)
+  @JoinColumn()
   session: Session;
 
   @Column()

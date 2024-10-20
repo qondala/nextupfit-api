@@ -9,6 +9,8 @@ import {
   UseGuards,
   Req,
   Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from "@nestjs/common";
 
 import { Request } from "express";
@@ -56,8 +58,38 @@ export class ChallengesController {
   @Get()
   @ApiOkResponse({ description: "List of all challenges", type: [Challenge] })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch challenges" })
-  findAll() {
-    return this.challengesService.findAll();
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  findAll(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Challenge>> {
+    return this.challengesService.findAll(page, pageSize);
+  }
+
+  @Get("search")
+  @ApiQuery({ name: "query", description: "Search query", required: true })
+  @ApiOkResponse({
+    description: "List of challenges matching the search query",
+    type: [Challenge],
+  })
+  @ApiInternalServerErrorResponse({
+    description: "Failed to search challenges",
+  })
+  searchChallenges(@Query("query") query: string) {
+    return this.challengesService.searchChallenges(query);
   }
 
   @Get(":id")
@@ -104,19 +136,6 @@ export class ChallengesController {
     return this.challengesService.remove(+id, request.user.id);
   }
 
-  @Get("search")
-  @ApiQuery({ name: "query", description: "Search query", required: true })
-  @ApiOkResponse({
-    description: "List of challenges matching the search query",
-    type: [Challenge],
-  })
-  @ApiInternalServerErrorResponse({
-    description: "Failed to search challenges",
-  })
-  searchChallenges(@Query("query") query: string) {
-    return this.challengesService.searchChallenges(query);
-  }
-
   @Get("content/:contentId")
   @ApiParam({
     name: "contentId",
@@ -134,7 +153,6 @@ export class ChallengesController {
   findByContent(@Param("contentId") contentId: string) {
     return this.challengesService.findByContent(+contentId);
   }
-
 
   @Get("category/:categoryId")
   @ApiParam({

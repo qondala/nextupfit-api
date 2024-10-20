@@ -5,7 +5,7 @@ import Stripe from "stripe";
 import { PaymentsController } from "./payments.controller";
 import { PaymentsService } from "./payments.service";
 
-class StripeModule {
+export class StripeModule {
   static forRoot(): DynamicModule {
     return {
       module: StripeModule,
@@ -26,4 +26,5 @@ class StripeModule {
   providers: [PaymentsService],
   exports: [PaymentsService],
 })
+
 export class PaymentsModule {}

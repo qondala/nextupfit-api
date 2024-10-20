@@ -3,11 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
-  OneToMany,
+  ManyToMany,
 } from "typeorm";
 import { User } from "./user.entity";
-import { ContentGoal } from "./content-goal.entity";
-import { ExerciseGoal } from "./exercise-goal.entity";
+import { Content } from "./content.entity";
+import { Exercise } from "./exercise.entity";
 
 @Entity()
 export class FitnessGoal {
@@ -26,9 +26,9 @@ export class FitnessGoal {
   @ManyToOne(() => User, (user) => user.goals)
   user: User;
 
-  @OneToMany(() => ContentGoal, (contentGoal) => contentGoal.goal)
-  contentGoals: ContentGoal[];
+  @ManyToMany(() => Content, (content) => content.goals)
+  contents: Content[];
 
-  @OneToMany(() => ExerciseGoal, (exerciseGoal) => exerciseGoal.goal)
-  exerciseGoals: ExerciseGoal[];
+  @ManyToMany(() => Exercise, (exercise) => exercise.goals)
+  exercises: Exercise[];
 }

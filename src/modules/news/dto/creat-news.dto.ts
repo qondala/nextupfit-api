@@ -7,5 +7,5 @@ export class CreateNewsDto {
 
   @IsNotEmpty()
   @IsString()
-  content: string;
+  contentId: number;
 }

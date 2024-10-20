@@ -28,4 +28,12 @@ export class UpdateChallengeDto {
   @IsOptional()
   @IsDate()
   endDate?: Date;
+
+  @IsOptional()
+  @IsString()
+  status?: "unpublished" | "pending" | "approved" | "rejected";
+
+  @IsOptional()
+  @IsString()
+  statusReason?: string;
 }

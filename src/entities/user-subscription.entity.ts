@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { SubscriptionPlan } from "./subscription-plan.entity";
 
@@ -8,12 +14,14 @@ export class UserSubscription {
   id: number;
 
   @ManyToOne(() => User, (user) => user.userSubscriptions)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(
     () => SubscriptionPlan,
     (subscriptionPlan) => subscriptionPlan.userSubscriptions,
   )
+  @JoinColumn()
   subscriptionPlan: SubscriptionPlan;
 
   @Column({ default: () => "CURRENT_TIMESTAMP" })

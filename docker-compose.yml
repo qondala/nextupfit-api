@@ -1,17 +1,34 @@
-version: '3.9'
-
 services:
   db:
-    image: postgres
+    image: postgres:16
     restart: always
+    container_name: postgres-db
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    container_name: postgres-demo
-    volumes:
-      - /usr/local/pgsql/data:/var/lib/postgresql/data
+      - POSTGRES_DB=nextupfit_db
+      - POSTGRES_SHARED_BUFFERS=1GB  # Increase shared buffers to 1GB
+      - POSTGRES_WORK_MEM=128MB      # Allocate 128MB for work_mem
+      - POSTGRES_MAX_CONNECTIONS=200 # Increase max connections to 200
+      - POSTGRES_CHECKPOINT_TIMEOUT=10min  # Adjust checkpoint frequency
+      - POSTGRES_CHECKPOINT_COMPLETION_TARGET=0.7  # Allow 70% time for checkpoint completion
+      - POSTGRES_WAL_BUFFERS=16MB    # Set WAL buffers to 16MB
     ports:
-      - '5432:5432'
-
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    networks:
+      - nest-net
+    #deploy:
+     # resources:
+      #c
+#  limits:
+ #         cpus: "4.0"  # Increase the CPU limit
+  #        memory: "3G"  # Allocate more memory
+   #     reservations:
+    #      cpus: "2.0"  # Reserve a minimum amount of CPU
+     #     memory: "2G"  # Reserve a minimum amount of memory
   app:
     build:
       context: .
@@ -19,15 +36,15 @@ services:
     container_name: nextupfit
     environment:
       - PORT=3000
-      - DATABASE_NAME=fitness_db
+      - DATABASE_NAME=nextupfit_db
       - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=
-      - DATABASE_HOST=localhost
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=db
       - DATABASE_DIALECT=postgres
       - DATABASE_PORT=5432
       - JWT_SECRET=fitness_coach_platform_jwt_secret
       - JWT_REFRESH_SECRET=fitness_coach_platform_jwt_refresh_secret
-      - STRIPE_SECRET_KEY=
+      - STRIPE_SECRET_KEY=sk_test_51PlrNnAyVkDWU93S1gjnZZkhjHqKPvI3Iq8IZAHsC4T8UZsAB3w58dMTNNFaipfbS7fRsuq7UsPyWxIwzNBLKh4N00BWY54Dzp
       - MAIL_HOST=live.smtp.mailtrap.io
       - MAIL_PORT=587
       - MAIL_USER=api
@@ -36,10 +53,10 @@ services:
       - MAIL_SECURE=false
       - APP_URL=http://localhost:3000
       - APP_NAME=NextUpFit
-      - FB_TYPE=service_account,
+      - FB_TYPE=service_account
       - FB_PROJECT_ID=nextupfit-8f1e6
       - FB_PRIVATE_KEY_ID=c9a36a20706d3b30c80b1f8f9f9f468cd8c94fba
-      - FB_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvg11YmWEDlgLv\nOYWaT/6VLBLErGfsioM6D+3LLZG7mVK6NAs80/tob5rtlge0bU8zOlcZeFnc7Adj\nwpDvOvJ4AOZf1AN0Un0VCDyFBNhpIwLW7E>
+      - FB_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvg11YmWEDlgLv\nOYWaT/6VLBLErGfsioM6D+3LLZG7mVK6NAs80/tob5rtlge0bU8zOl...
       - FB_CLIENT_EMAIL=firebase-adminsdk-fwdqs@nextupfit-8f1e6.iam.gserviceaccount.com
       - FB_CLIENT_ID=104096796052252345936
       - FB_AUTH_URI=https://accounts.google.com/o/oauth2/auth
@@ -85,3 +102,7 @@ services:
 networks:
   nest-net:
     driver: bridge
+
+volumes:
+  postgres-data:
+

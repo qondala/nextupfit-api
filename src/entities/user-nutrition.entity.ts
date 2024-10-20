@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { NutritionProgram } from "./nutrition-program.entity";
 
@@ -8,17 +14,20 @@ export class UserNutrition {
   id: number;
 
   @ManyToOne(() => User, (user) => user.userNutrition)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(
     () => NutritionProgram,
     (nutritionProgram) => nutritionProgram.userNutrition,
+    { nullable: true },
   )
-  nutritionProgram: NutritionProgram;
+  @JoinColumn()
+  nutritionProgram?: NutritionProgram;
 
-  @Column({ type: "date", nullable: true })
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
   startDate: Date;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, default: 100.0 })
+  @Column({ type: "float", default: 100.0 })
   adherencePercentage: number;
 }

@@ -4,14 +4,16 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
-import { ContentNutrition } from "./content-nutrition.entity";
 import { NutritionDetail } from "./nutrition-detail.entity";
 import { NutritionProgramReview } from "./nutrition-program-review.entity";
 import { UserNutrition } from "./user-nutrition.entity";
 import { UserNutritionProgress } from "./user-nutrition-progress.entity";
-import { ExerciseNutrition } from "./exercise-nutrition.entity";
 import { Coach } from "./coach.entity";
+import { Exercise } from "./exercise.entity";
+import { Content } from "./content.entity";
 
 @Entity()
 export class NutritionProgram {
@@ -27,11 +29,9 @@ export class NutritionProgram {
   @Column({ default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
-  @OneToMany(
-    () => ContentNutrition,
-    (contentNutrition) => contentNutrition.nutritionProgram,
-  )
-  contentNutrition: ContentNutrition[];
+  @ManyToMany(() => Content, (content) => content.nutritionPrograms)
+  @JoinTable()
+  contents: Content[];
 
   @OneToMany(
     () => NutritionDetail,
@@ -57,11 +57,8 @@ export class NutritionProgram {
   )
   userNutritionProgress: UserNutritionProgress[];
 
-  @OneToMany(
-    () => ExerciseNutrition,
-    (exerciseNutrition) => exerciseNutrition.nutritionProgram,
-  )
-  exerciseNutrition: ExerciseNutrition[];
+  @ManyToMany(() => Exercise, (exercise) => exercise.nutritionPrograms)
+  exercises: Exercise[];
 
   @ManyToOne(() => Coach, (coach) => coach.nutritionPrograms)
   coach: Coach;

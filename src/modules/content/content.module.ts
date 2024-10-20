@@ -6,7 +6,6 @@ import { AffiliateProgram } from "../../entities/affiliate-program.entity";
 import { Category } from "../../entities/category.entity";
 import { Challenge } from "../../entities/challenge.entity";
 import { Coach } from "../../entities/coach.entity";
-import { ContentGoal } from "../../entities/content-goal.entity";
 import { Content } from "../../entities/content.entity";
 import { Exercise } from "../../entities/exercise.entity";
 import { Stage } from "../../entities/stage.entity";
@@ -19,7 +18,6 @@ import { Session } from "../../entities/session.entity";
       Content,
       Coach,
       Category,
-      ContentGoal,
       Exercise,
       Stage,
       Challenge,

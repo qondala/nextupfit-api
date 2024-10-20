@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { NutritionProgram } from "./nutrition-program.entity";
 
@@ -8,13 +14,16 @@ export class UserNutritionProgress {
   id: number;
 
   @ManyToOne(() => User, (user) => user.userNutritionProgress)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(
     () => NutritionProgram,
     (nutritionProgram) => nutritionProgram.userNutritionProgress,
+    { nullable: true },
   )
-  nutritionProgram: NutritionProgram;
+  @JoinColumn()
+  nutritionProgram?: NutritionProgram;
 
   @Column({ type: "date" })
   dateLogged: Date;
@@ -25,15 +34,22 @@ export class UserNutritionProgress {
   @Column({ nullable: true })
   caloriesIntake: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   proteinIntake: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   carbsIntake: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   fatsIntake: number;
 
-  @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })
+  @Column({ type: "float", nullable: true })
   adherenceScore: number;
+
+  @Column({
+    type: "enum",
+    enum: ["breakfast", "lunch", "dinner", "snack"],
+    default: "breakfast",
+  })
+  mealType: string;
 }

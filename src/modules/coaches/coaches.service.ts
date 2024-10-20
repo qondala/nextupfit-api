@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, SelectQueryBuilder } from "typeorm";
 import { CreateCoachDto } from "./dto/create-coach.dto";
 import { UpdateCoachDto } from "./dto/update-coach.dto";
 import { Coach } from "../../entities/coach.entity";
@@ -17,41 +17,30 @@ export class CoachesService {
     return this.coachesRepository.save(coach);
   }
 
-  async findAll(): Promise<Coach[]> {
-    return this.coachesRepository.find({
-      relations: [
-        "user",
-        "content",
-        "qualifications",
-        "specializations",
-        "ratings",
-        "privateDiscussions",
-        "news",
-        "recommendations",
-        "coachFollows",
-      ],
+  async findAll(
+    page: number,
+    pageSize: number,
+  ): Promise<PaginationResult<Coach>> {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await this.coachesRepository.findAndCount({
+      skip,
+      take: pageSize,
     });
+    return { items, total };
   }
 
   async findOne(id: number): Promise<Coach> {
-    const coach = await this.coachesRepository.findOne({
-      where: { id },
-      relations: [
-        "user",
-        "content",
-        "qualifications",
-        "specializations",
-        "ratings",
-        "privateDiscussions",
-        "news",
-        "recommendations",
-        "coachFollows",
-      ],
-    });
+    const coach = await this.buildCoachFindOneQuery(id).getOne();
     if (!coach) {
       throw new NotFoundException(`Coach with ID ${id} not found`);
     }
     return coach;
+  }
+
+  private buildCoachFindOneQuery(id: number): SelectQueryBuilder<Coach> {
+    const qb = this.coachesRepository.createQueryBuilder("coach");
+    this.addRelations(qb);
+    return qb.where("coach.id = :id", { id });
   }
 
   async update(id: number, updateCoachDto: UpdateCoachDto): Promise<Coach> {
@@ -66,29 +55,36 @@ export class CoachesService {
   }
 
   async remove(id: number) {
-    return this.coachesRepository.delete(id);
+    await this.coachesRepository.delete(id);
+    return { message: "Coach successfully deleted" };
   }
 
   async searchCoaches(query: string): Promise<Coach[]> {
-    const coaches = await this.coachesRepository.find({
-      where: [
-        { user: { firstName: `%${query}%` } },
-        { user: { lastName: `%${query}%` } },
-        { user: { email: `%${query}%` } },
-        { bio: `%${query}%` },
-      ],
-      relations: [
-        "user",
-        "content",
-        "qualifications",
-        "specializations",
-        "ratings",
-        "privateDiscussions",
-        "news",
-        "recommendations",
-        "coachFollows",
-      ],
-    });
-    return coaches;
+    return this.buildCoachSearchQuery(query).getMany();
+  }
+
+  private buildCoachSearchQuery(query: string): SelectQueryBuilder<Coach> {
+    const qb = this.coachesRepository.createQueryBuilder("coach");
+    this.addRelations(qb);
+
+    qb.leftJoinAndSelect("coach.user", "users") // Jointure pour accéder aux propriétés de l'utilisateur
+      .where("users.firstName LIKE :query", { query: `%${query}%` })
+      .orWhere("users.lastName LIKE :query", { query: `%${query}%` })
+      .orWhere("users.email LIKE :query", { query: `%${query}%` })
+      .orWhere("coach.bio LIKE :query", { query: `%${query}%` });
+
+    return qb;
+  }
+
+  private addRelations(qb: SelectQueryBuilder<Coach>) {
+    qb.leftJoinAndSelect("coach.user", "user")
+      .leftJoinAndSelect("coach.content", "content")
+      .leftJoinAndSelect("coach.qualifications", "qualifications")
+      .leftJoinAndSelect("coach.specializations", "specializations")
+      .leftJoinAndSelect("coach.ratings", "ratings")
+      .leftJoinAndSelect("coach.privateDiscussions", "privateDiscussions")
+      .leftJoinAndSelect("coach.news", "news")
+      .leftJoinAndSelect("coach.recommendations", "recommendations")
+      .leftJoinAndSelect("coach.coachFollows", "coachFollows");
   }
 }

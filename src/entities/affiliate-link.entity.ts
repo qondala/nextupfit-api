@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { AffiliateProgram } from "./affiliate-program.entity";
 import { User } from "./user.entity";
@@ -18,9 +19,11 @@ export class AffiliateLink {
     () => AffiliateProgram,
     (affiliateProgram) => affiliateProgram.affiliateLinks,
   )
+  @JoinColumn()
   affiliateProgram: AffiliateProgram;
 
   @ManyToOne(() => User, (user) => user.affiliateLinks)
+  @JoinColumn()
   user: User;
 
   @Column()

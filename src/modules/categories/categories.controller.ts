@@ -7,13 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
   Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-import { Request } from "express";
 import {
   ApiTags,
   ApiBearerAuth,
@@ -52,8 +52,25 @@ export class CategoriesController {
   @Get()
   @ApiOkResponse({ description: "List of all categories", type: [Category] })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch categories" })
-  findAll() {
-    return this.categoriesService.findAll();
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  findAll(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Category>> {
+    return this.categoriesService.findAll(page, pageSize);
   }
 
   @Get(":id")

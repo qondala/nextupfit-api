@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Content } from "./content.entity";
 
@@ -8,9 +15,11 @@ export class ContentRating {
   id: number;
 
   @ManyToOne(() => User, (user) => user.contentRatings)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Content, (content) => content.ratings)
+  @JoinColumn()
   content: Content;
 
   @Column()
@@ -19,7 +28,7 @@ export class ContentRating {
   @Column({ nullable: true })
   comment: string;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
   ratingDate: Date;
 
   @Column({ nullable: true })

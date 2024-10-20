@@ -1,25 +1,22 @@
 FROM node:20-alpine
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
 
-# Install app dependencies
 RUN npm install
 
-# Bundle app source
 COPY . .
 
-# Copy the .env and .env.development files
-COPY .env ./
-
-# Creates a "dist" folder with the production build
 RUN npm run build
 
-# Expose the port on which the app will run
-EXPOSE 3001
+RUN npm install pm2 -g
 
-# Start the server using the production build
-CMD ["npm", "run", "start:prod"]
+COPY entrypoint.sh /usr/app/entrypoint.sh
+
+EXPOSE 3000
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+CMD ["pm2-runtime", "start", "dist/src/main.js"]
+

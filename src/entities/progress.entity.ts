@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Exercise } from "./exercise.entity";
 
@@ -8,9 +14,11 @@ export class Progress {
   id: number;
 
   @ManyToOne(() => User, (user) => user.progress)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Exercise, (exercise) => exercise.progress)
+  @JoinColumn()
   exercise: Exercise;
 
   @Column({ default: false })

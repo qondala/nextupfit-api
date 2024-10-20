@@ -98,12 +98,8 @@ export class ContentController {
   @ApiOkResponse({ description: "Content updated successfully", type: Content })
   @ApiNotFoundResponse({ description: "Content not found" })
   @ApiInternalServerErrorResponse({ description: "Failed to update content" })
-  update(
-    @Param("id") id: string,
-    @Body() updateContentDto: UpdateContentDto,
-    @Req() request: Request,
-  ) {
-    return this.contentService.update(+id, updateContentDto, request.user.id);
+  update(@Param("id") id: string, @Body() updateContentDto: UpdateContentDto) {
+    return this.contentService.update(+id, updateContentDto);
   }
 
   @Delete(":id")
@@ -143,5 +139,40 @@ export class ContentController {
   })
   findByCategory(@Param("categoryId") categoryId: string) {
     return this.contentService.findByCategory(+categoryId);
+  }
+
+  @Patch(":id/approve")
+  @Roles(UserRole.ADMIN)
+  async approveContent(@Param("id") id: string) {
+    return this.contentService.update(parseInt(id), { status: "approved" });
+  }
+
+  @Patch(":id/reject")
+  @Roles(UserRole.ADMIN)
+  async rejectContent(@Param("id") id: string) {
+    return this.contentService.update(parseInt(id), { status: "rejected" });
+  }
+
+  @Get("pending")
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  @Roles(UserRole.ADMIN)
+  async findPendingContents(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Content>> {
+    return this.contentService.findPendingContents(page, pageSize);
   }
 }

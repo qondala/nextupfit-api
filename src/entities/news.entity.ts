@@ -1,5 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToOne,
+} from "typeorm";
 import { Coach } from "./coach.entity";
+import { Content } from "./content.entity";
 
 @Entity()
 export class News {
@@ -7,13 +15,15 @@ export class News {
   id: number;
 
   @ManyToOne(() => Coach, (coach) => coach.news)
+  @JoinColumn()
   coach: Coach;
 
   @Column({ nullable: true })
   title: string;
 
-  @Column({ nullable: true, type: "text" })
-  content: string;
+  @OneToOne(() => Content, (content) => content.news)
+  @JoinColumn()
+  content: Content;
 
   @Column({ default: () => "CURRENT_TIMESTAMP" })
   publishedDate: Date;

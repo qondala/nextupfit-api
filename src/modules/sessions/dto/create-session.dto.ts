@@ -16,6 +16,10 @@ export class CreateSessionDto {
   @IsNumber()
   contentId: number;
 
+  @IsNotEmpty()
+  @IsNumber()
+  challengeId: number;
+
   @ApiProperty({
     description: "Date et heure de la session",
     example: "2024-05-20T18:00:00",

@@ -17,16 +17,21 @@ export class CategoriesService {
     return this.categoriesRepository.save(category);
   }
 
-  async findAll(): Promise<Category[]> {
-    return this.categoriesRepository.find({
-      relations: ["content"],
+  async findAll(
+    page: number,
+    pageSize: number,
+  ): Promise<PaginationResult<Category>> {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await this.categoriesRepository.findAndCount({
+      skip,
+      take: pageSize,
     });
+    return { items, total };
   }
 
   async findOne(id: number): Promise<Category> {
     const category = await this.categoriesRepository.findOne({
       where: { id },
-      relations: ["content"],
     });
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
@@ -64,7 +69,6 @@ export class CategoriesService {
         { categoryName: `%${query}%` },
         { categoryDescription: `%${query}%` },
       ],
-      relations: ["content"],
     });
     return categories;
   }

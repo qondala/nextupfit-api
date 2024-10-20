@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { UserProgram } from "./user-program.entity";
 
 @Entity()
@@ -7,6 +13,7 @@ export class PerformanceRecord {
   id: number;
 
   @ManyToOne(() => UserProgram, (userProgram) => userProgram.performanceRecords)
+  @JoinColumn()
   userProgram: UserProgram;
 
   @Column({ nullable: true })

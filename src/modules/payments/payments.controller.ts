@@ -62,10 +62,14 @@ export class PaymentsController {
       const paymentIntent = await this.stripe.paymentIntents.create({
         amount: createPaymentDto.amount * 100, // Convert to cents
         currency: createPaymentDto.currency, // Choose your currency
-        payment_method_types: ["card"], // Allow card payments
+        payment_method_types: ["card", "paypal"], // Allow card payments
         metadata: {
           userId: request.user.id,
-          contentId: createPaymentDto.contentId,
+          contents: JSON.stringify(
+            createPaymentDto.contents.map<{ id: number }>((contentId) => {
+              return { id: contentId };
+            }),
+          ),
         },
       });
 
@@ -189,5 +193,17 @@ export class PaymentsController {
         "Payment not found or not eligible for refund",
       );
     }
+  }
+
+  @Get("contents") // Nouvelle route
+  @ApiOkResponse({
+    description: "List of payments for the given content IDs",
+    type: [Payment],
+  })
+  @ApiNotFoundResponse({ description: "Payments not found" })
+  @ApiInternalServerErrorResponse({ description: "Failed to fetch payments" })
+  findByContentIds(@Query("contentIds") contentIds: string) {
+    const ids = contentIds.split(",").map((id) => parseInt(id)); // Convertir la chaîne en tableau de nombres
+    return this.paymentsService.findByContentIds(ids);
   }
 }

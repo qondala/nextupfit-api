@@ -69,6 +69,7 @@ export class ContentRatingsService {
   async remove(id: number, userId: number): Promise<void> {
     const contentRating = await this.contentRatingsRepository.findOne({
       where: { id },
+      relations: ["user"],
     });
     if (!contentRating) {
       throw new NotFoundException(`Content rating with ID ${id} not found`);

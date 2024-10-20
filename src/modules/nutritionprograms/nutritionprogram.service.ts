@@ -29,11 +29,10 @@ export class NutritionProgramsService {
   async findAll(): Promise<NutritionProgram[]> {
     return this.nutritionProgramsRepository.find({
       relations: [
-        "contentNutrition",
-        "userNutrition",
         "userNutritionProgress",
         "nutritionDetails",
         "reviews",
+        "coach",
       ],
     });
   }
@@ -41,13 +40,7 @@ export class NutritionProgramsService {
   async findOne(id: number): Promise<NutritionProgram> {
     const nutritionProgram = await this.nutritionProgramsRepository.findOne({
       where: { id },
-      relations: [
-        "contentNutrition",
-        "userNutrition",
-        "userNutritionProgress",
-        "nutritionDetails",
-        "reviews",
-      ],
+      relations: ["contents", "nutritionDetails", "reviews", "coach"],
     });
     if (!nutritionProgram) {
       throw new NotFoundException(`Nutrition program with ID ${id} not found`);

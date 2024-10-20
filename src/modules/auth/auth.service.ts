@@ -2,7 +2,6 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
-  BadRequestException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as argon2 from "argon2";
@@ -15,7 +14,6 @@ import { LoginDto } from "./dto/login.dto";
 import { RefreshTokenDto } from "./dto/refresh-token.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
-import { config } from "process";
 import { FirebaseAuthService } from "./firebaseauth.service";
 
 @Injectable()
@@ -52,23 +50,19 @@ export class AuthService {
     return user;
   }
 
-  async signUpWithIdToken(idToken: string): Promise<User> {
+  async signUpWithIdToken(idToken: string) {
     const decoded = await this.firebaseAuthService.verifyToken(idToken);
-
     const userExists = await this.usersService.findByEmail(decoded.email);
-    if (userExists) {
-      throw new ConflictException("Email already exists");
+    if (!userExists) {
+      await this.usersService.create({
+        email: decoded.email,
+        profileImageUrl: decoded.picture,
+        firstName: decoded.displayName,
+        lastName: "",
+        password: decoded.uid,
+      });
     }
-
-    const user = await this.usersService.create({
-      email: decoded.email,
-      profileImageUrl: decoded.picture,
-      firstName: decoded.displayName,
-      lastName: "",
-      password: decoded.uid,
-    });
-
-    return user;
+    return await this.signInWithIdToken(idToken);
   }
 
   async signInWithIdToken(
@@ -77,7 +71,8 @@ export class AuthService {
     const decoded = await this.firebaseAuthService.verifyToken(idToken);
     const user = await this.usersService.findByEmail(decoded.email);
     if (!user) {
-      throw new UnauthorizedException("Invalid credentials");
+      return await this.signUpWithIdToken(idToken);
+      // throw new UnauthorizedException("Invalid credentials");
     }
 
     const passwordMatch = await argon2.verify(user.passwordHash, decoded.uid);

@@ -45,7 +45,7 @@ import { FirebaseAuthService } from "./firebaseauth.service";
     JwtStrategy,
     JwtRefreshTokenStrategy,
     PublicGuard,
-    FirebaseAuthService
+    FirebaseAuthService,
   ],
   exports: [AuthService, JwtModule],
 })

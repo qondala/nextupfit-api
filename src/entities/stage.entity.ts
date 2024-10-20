@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import { Content } from "./content.entity";
 
 @Entity()
@@ -7,6 +13,7 @@ export class Stage {
   id: number;
 
   @ManyToOne(() => Content, (content) => content.stages)
+  @JoinColumn()
   content: Content;
 
   @Column({ nullable: true })

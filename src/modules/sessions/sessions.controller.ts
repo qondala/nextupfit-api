@@ -9,7 +9,8 @@ import {
   UseGuards,
   Req,
   Query,
-  Session,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from "@nestjs/common";
 import { Request } from "express";
 import {
@@ -29,6 +30,7 @@ import { CreateSessionDto } from "./dto/create-session.dto";
 import { UpdateSessionDto } from "./dto/update-session.dto";
 import { SessionsService } from "./sessions.service";
 import { JwtAuthGuard } from "../../shared/guards/jwt-auth.guard";
+import { Session } from "src/entities/session.entity";
 
 @ApiTags("Sessions")
 @ApiBearerAuth()
@@ -52,8 +54,36 @@ export class SessionsController {
   @Get()
   @ApiOkResponse({ description: "List of all sessions", type: [Session] })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch sessions" })
-  findAll() {
-    return this.sessionsService.findAll();
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  findAll(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Session>> {
+    return this.sessionsService.findAll(page, pageSize);
+  }
+
+  @Get("/search/")
+  @ApiQuery({ name: "query", description: "Search query", required: true })
+  @ApiOkResponse({
+    description: "List of sessions matching the search query",
+    type: [Session],
+  })
+  @ApiInternalServerErrorResponse({ description: "Failed to search sessions" })
+  searchSessions(@Query("query") query: string) {
+    return this.sessionsService.searchSessions(query);
   }
 
   @Get(":id")
@@ -90,17 +120,6 @@ export class SessionsController {
     return this.sessionsService.remove(+id, request.user.id);
   }
 
-  @Get("search")
-  @ApiQuery({ name: "query", description: "Search query", required: true })
-  @ApiOkResponse({
-    description: "List of sessions matching the search query",
-    type: [Session],
-  })
-  @ApiInternalServerErrorResponse({ description: "Failed to search sessions" })
-  searchSessions(@Query("query") query: string) {
-    return this.sessionsService.searchSessions(query);
-  }
-
   @Get("content/:contentId")
   @ApiParam({
     name: "contentId",
@@ -117,5 +136,22 @@ export class SessionsController {
   })
   findByContent(@Param("contentId") contentId: string) {
     return this.sessionsService.findByContent(+contentId);
+  }
+
+  @ApiParam({
+    name: "categoryId",
+    description: "ID of the category",
+    type: "number",
+  })
+  @ApiOkResponse({
+    description: "List of sessions for the category",
+    type: [Session],
+  })
+  @ApiNotFoundResponse({ description: "category not found" })
+  @ApiInternalServerErrorResponse({
+    description: "Failed to fetch sessions for the category",
+  })
+  findByCategory(@Param("categoryId") categoryId: string) {
+    return this.sessionsService.findByCategory(+categoryId);
   }
 }

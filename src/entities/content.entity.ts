@@ -4,9 +4,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToOne,
 } from "typeorm";
 import { Coach } from "./coach.entity";
-import { ContentGoal } from "./content-goal.entity";
 import { Category } from "./category.entity";
 import { ContentRating } from "./content-rating.entity";
 import { ContentReview } from "./content-review.entity";
@@ -17,7 +20,9 @@ import { UserProgram } from "./user-program.entity";
 import { TrainingContentLink } from "./training-content-link.entity";
 import { Stage } from "./stage.entity";
 import { Exercise } from "./exercise.entity";
-import { ContentNutrition } from "./content-nutrition.entity";
+import { FitnessGoal } from "./fitness-goal.entity";
+import { NutritionProgram } from "./nutrition-program.entity";
+import { News } from "./news.entity";
 
 @Entity()
 export class Content {
@@ -40,19 +45,13 @@ export class Content {
   @Column()
   isPaid: boolean;
 
-  /*@Column()
-  type: "challenge" | "program" | "session";*/
-
-  @Column({ nullable: true })
-  recipeCount: number;
-  @Column({ nullable: true })
-  caloriesToBurn: number;
-  @Column({ nullable: true })
-  mealType: "breakfast" | "lunch" | "dinner";
   @Column({ nullable: true })
   isBookmarked: boolean;
   @Column({ type: "json", nullable: true })
   tags: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
 
   @Column({ nullable: true })
   videoUrl: string;
@@ -69,23 +68,50 @@ export class Content {
   @Column({ nullable: true })
   contentType: string;
 
+  @Column({
+    type: "enum",
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  })
+  status: "unpublished" | "pending" | "approved" | "rejected";
+
+  @Column({ nullable: true })
+  statusReason: string;
+
   @ManyToOne(() => Coach, (coach) => coach.content)
+  @JoinColumn()
   coach: Coach;
 
-  @ManyToOne(() => Category, (category) => category.content)
+  @ManyToOne(() => Category, (category) => category.content, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
   category: Category;
 
-  @OneToMany(() => ContentGoal, (contentGoal) => contentGoal.content)
-  goals: ContentGoal[];
+  @ManyToMany(() => FitnessGoal, (fitnessGoal) => fitnessGoal.contents, {})
+  @JoinTable()
+  goals: FitnessGoal[];
 
-  @OneToMany(() => ContentRating, (contentRating) => contentRating.content)
+  @OneToMany(() => ContentRating, (contentRating) => contentRating.content, {
+    eager: true,
+    cascade: true,
+  })
   ratings: ContentRating[];
 
-  @OneToMany(() => ContentReview, (contentReview) => contentReview.content)
+  @OneToMany(() => ContentReview, (contentReview) => contentReview.content, {
+    eager: true,
+    cascade: true,
+  })
   reviews: ContentReview[];
 
-  @OneToMany(() => Session, (session) => session.content)
+  @OneToMany(() => Session, (session) => session.content, {
+    cascade: true,
+  })
   sessions: Session[];
+
+  @OneToOne(() => News, (news) => news.content)
+  news: News;
 
   @OneToMany(
     () => AffiliateProgram,
@@ -93,7 +119,7 @@ export class Content {
   )
   affiliatePrograms: AffiliateProgram[];
 
-  @OneToMany(() => Payment, (payment) => payment.content)
+  @ManyToMany(() => Payment, (payment) => payment.contents)
   payments: Payment[];
 
   @OneToMany(() => UserProgram, (userProgram) => userProgram.content)
@@ -111,9 +137,9 @@ export class Content {
   @OneToMany(() => Exercise, (exercise) => exercise.content)
   exercises: Exercise[];
 
-  @OneToMany(
-    () => ContentNutrition,
-    (contentNutrition) => contentNutrition.content,
+  @ManyToMany(
+    () => NutritionProgram,
+    (nutritionProgram) => nutritionProgram.contents,
   )
-  contentNutrition: ContentNutrition[];
+  nutritionPrograms: NutritionProgram[];
 }

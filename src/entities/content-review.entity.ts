@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  CreateDateColumn,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Content } from "./content.entity";
 
@@ -8,17 +15,19 @@ export class ContentReview {
   id: number;
 
   @ManyToOne(() => User, (user) => user.contentReviews)
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Content, (content) => content.reviews)
+  @JoinColumn()
   content: Content;
 
-  @Column()
-  rating: number;
+  @Column({ nullable: true })
+  rating?: number;
 
   @Column({ nullable: true })
   reviewText: string;
 
-  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  @CreateDateColumn({ default: () => "CURRENT_TIMESTAMP" })
   reviewDate: Date;
 }

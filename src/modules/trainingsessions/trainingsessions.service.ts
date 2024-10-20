@@ -50,9 +50,9 @@ export class TrainingSessionsService {
     updateTrainingSessionDto: UpdateTrainingSessionDto,
     userId: number,
   ): Promise<TrainingSession> {
-    const trainingSession = await this.trainingSessionsRepository.preload({
-      id,
-      ...updateTrainingSessionDto,
+    let trainingSession = await this.trainingSessionsRepository.findOne({
+      where: { id },
+      relations: ["user"],
     });
     if (!trainingSession) {
       throw new NotFoundException(`Training session with ID ${id} not found`);
@@ -63,6 +63,10 @@ export class TrainingSessionsService {
         "You are not authorized to update this training session",
       );
     }
+    trainingSession = await this.trainingSessionsRepository.preload({
+      id,
+      ...updateTrainingSessionDto,
+    });
     return this.trainingSessionsRepository.save(trainingSession);
   }
 

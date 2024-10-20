@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   OneToOne,
+  CreateDateColumn,
 } from "typeorm";
 import { Coach } from "./coach.entity";
+import { Admin } from "./admin.entity";
 import { FitnessGoal } from "./fitness-goal.entity";
 import { BodyMeasurement } from "./body-measurement.entity";
 import { ContentRating } from "./content-rating.entity";
@@ -25,6 +27,8 @@ import { Payment } from "./payment.entity";
 import { NutritionProgramReview } from "./nutrition-program-review.entity";
 import { CoachRating } from "./coach-rating.entity";
 import { Progress } from "./progress.entity";
+import { UserChallenge } from "./user-challenge.entity";
+import { Employee } from "./employee.entity";
 
 @Entity()
 export class User {
@@ -39,6 +43,12 @@ export class User {
 
   @Column({ nullable: true })
   lastName: string;
+
+  @Column({ nullable: true })
+  phoneNumber: string;
+
+  @CreateDateColumn({ nullable: true })
+  birthDate: Date;
 
   @Column()
   passwordHash: string;
@@ -66,27 +76,50 @@ export class User {
   })
   coach: Coach;
 
-  @OneToMany(() => FitnessGoal, (goal) => goal.user)
+  @OneToOne(() => Admin, (admin) => admin.user, {
+    nullable: true,
+  })
+  admin: Admin;
+
+  @OneToOne(() => Admin, (employee) => employee.user, {
+    nullable: true,
+  })
+  employee: Employee;
+
+  @OneToMany(() => FitnessGoal, (goal) => goal.user, {
+    cascade: true,
+  })
   goals: FitnessGoal[];
 
-  @OneToMany(() => BodyMeasurement, (measurement) => measurement.user)
+  @OneToMany(() => BodyMeasurement, (measurement) => measurement.user, {
+    cascade: true,
+  })
   bodyMeasurements: BodyMeasurement[];
 
-  @OneToMany(() => ContentRating, (rating) => rating.user)
+  @OneToMany(() => ContentRating, (rating) => rating.user, {
+    cascade: true,
+  })
   contentRatings: ContentRating[];
 
-  @OneToMany(() => ContentReview, (review) => review.user)
+  @OneToMany(() => ContentReview, (review) => review.user, {
+    cascade: true,
+  })
   contentReviews: ContentReview[];
 
-  @OneToMany(() => Notification, (notification) => notification.user)
+  @OneToMany(() => Notification, (notification) => notification.user, {
+    cascade: true,
+  })
   notifications: Notification[];
 
-  @OneToMany(() => CoachFollow, (follow) => follow.user)
+  @OneToMany(() => CoachFollow, (follow) => follow.user, {
+    cascade: true,
+  })
   coachFollows: CoachFollow[];
 
   @OneToMany(
     () => Recommendation,
     (recommendation) => recommendation.recommender,
+    { cascade: true },
   )
   recommendations: Recommendation[];
 
@@ -96,10 +129,14 @@ export class User {
   )
   recommendationsReceived: Recommendation[];
 
-  @OneToMany(() => UserProgram, (userProgram) => userProgram.user)
+  @OneToMany(() => UserProgram, (userProgram) => userProgram.user, {})
   userPrograms: UserProgram[];
 
-  @OneToMany(() => TrainingSession, (trainingSession) => trainingSession.user)
+  @OneToMany(
+    () => TrainingSession,
+    (trainingSession) => trainingSession.user,
+    {},
+  )
   trainingSessions: TrainingSession[];
 
   @OneToMany(() => UserNutrition, (userNutrition) => userNutrition.user)
@@ -108,39 +145,58 @@ export class User {
   @OneToMany(
     () => UserNutritionProgress,
     (userNutritionProgress) => userNutritionProgress.user,
+    { cascade: true },
   )
   userNutritionProgress: UserNutritionProgress[];
 
-  @OneToMany(() => AffiliateLink, (affiliateLink) => affiliateLink.user)
+  @OneToMany(() => AffiliateLink, (affiliateLink) => affiliateLink.user, {
+    cascade: true,
+  })
   affiliateLinks: AffiliateLink[];
 
   @OneToMany(
     () => UserSubscription,
     (userSubscription) => userSubscription.user,
+    { cascade: true },
   )
   userSubscriptions: UserSubscription[];
 
-  @OneToMany(() => SessionReview, (sessionReview) => sessionReview.user)
+  @OneToMany(() => SessionReview, (sessionReview) => sessionReview.user, {
+    cascade: true,
+  })
   sessionReviews: SessionReview[];
 
   @OneToMany(
     () => PrivateDiscussion,
     (privateDiscussion) => privateDiscussion.user,
+    { cascade: true },
   )
   privateDiscussions: PrivateDiscussion[];
 
-  @OneToMany(() => Payment, (payment) => payment.user)
+  @OneToMany(() => Payment, (payment) => payment.user, {
+    cascade: true,
+  })
   payments: Payment[];
 
   @OneToMany(
     () => NutritionProgramReview,
     (nutritionProgramReview) => nutritionProgramReview.user,
+    { cascade: true },
   )
   nutritionProgramReviews: any;
 
-  @OneToMany(() => CoachRating, (coachRating) => coachRating.user)
+  @OneToMany(() => CoachRating, (coachRating) => coachRating.user, {
+    cascade: true,
+  })
   coachRatings: CoachRating[];
 
-  @OneToMany(() => Progress, (progress) => progress.user)
+  @OneToMany(() => Progress, (progress) => progress.user, {
+    cascade: true,
+  })
   progress: Progress[];
+
+  @OneToMany(() => UserChallenge, (challenge) => challenge.user, {
+    cascade: true,
+  })
+  challenges: UserChallenge[];
 }

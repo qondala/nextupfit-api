@@ -4,42 +4,39 @@ import { Repository } from "typeorm";
 import { Notification } from "../../entities/notification.entity";
 import * as seedData from "./seed-data.json";
 import * as argon2 from "argon2";
-import * as s from "src/entities/session.entity";
-import { AffiliateLink } from "src/entities/affiliate-link.entity";
-import { AffiliateProgram } from "src/entities/affiliate-program.entity";
-import { AffiliateSale } from "src/entities/affiliate-sale.entity";
-import { BodyMeasurement } from "src/entities/body-measurement.entity";
-import { Category } from "src/entities/category.entity";
-import { CoachFollow } from "src/entities/coach-follow.entity";
-import { CoachQualification } from "src/entities/coach-qualification.entity";
-import { CoachRating } from "src/entities/coach-rating.entity";
-import { CoachSpecialization } from "src/entities/coach-specialization.entity";
-import { ContentGoal } from "src/entities/content-goal.entity";
-import { ContentNutrition } from "src/entities/content-nutrition.entity";
-import { ContentRating } from "src/entities/content-rating.entity";
-import { ContentReview } from "src/entities/content-review.entity";
-import { ExerciseGoal } from "src/entities/exercise-goal.entity";
-import { ExerciseNutrition } from "src/entities/exercise-nutrition.entity";
-import { Exercise } from "src/entities/exercise.entity";
-import { FitnessGoal } from "src/entities/fitness-goal.entity";
-import { News } from "src/entities/news.entity";
-import { NutritionDetail } from "src/entities/nutrition-detail.entity";
-import { NutritionProgramReview } from "src/entities/nutrition-program-review.entity";
-import { NutritionProgram } from "src/entities/nutrition-program.entity";
-import { Payment } from "src/entities/payment.entity";
-import { PerformanceRecord } from "src/entities/performance-record.entity";
-import { PrivateDiscussion } from "src/entities/private-discussion.entity";
-import { SessionReview } from "src/entities/session-review.entity";
-import { SubscriptionPlan } from "src/entities/subscription-plan.entity";
-import { TrainingContentLink } from "src/entities/training-content-link.entity";
-import { TrainingSession } from "src/entities/training-session.entity";
-import { UserNutritionProgress } from "src/entities/user-nutrition-progress.entity";
-import { UserNutrition } from "src/entities/user-nutrition.entity";
-import { UserProgram } from "src/entities/user-program.entity";
-import { UserSubscription } from "src/entities/user-subscription.entity";
-import { User } from "src/entities/user.entity";
-import { Content } from "src/entities/content.entity";
-import { Coach } from "src/entities/coach.entity";
+import * as s from "../../entities/session.entity";
+import { AffiliateLink } from "../../entities/affiliate-link.entity";
+import { AffiliateProgram } from "../../entities/affiliate-program.entity";
+import { AffiliateSale } from "../../entities/affiliate-sale.entity";
+import { BodyMeasurement } from "../../entities/body-measurement.entity";
+import { Category } from "../../entities/category.entity";
+import { CoachFollow } from "../../entities/coach-follow.entity";
+import { CoachQualification } from "../../entities/coach-qualification.entity";
+import { CoachRating } from "../../entities/coach-rating.entity";
+import { CoachSpecialization } from "../../entities/coach-specialization.entity";
+import { ContentRating } from "../../entities/content-rating.entity";
+import { ContentReview } from "../../entities/content-review.entity";
+import { Exercise } from "../../entities/exercise.entity";
+import { FitnessGoal } from "../../entities/fitness-goal.entity";
+import { News } from "../../entities/news.entity";
+import { NutritionDetail } from "../../entities/nutrition-detail.entity";
+import { NutritionProgramReview } from "../../entities/nutrition-program-review.entity";
+import { NutritionProgram } from "../../entities/nutrition-program.entity";
+import { Payment } from "../../entities/payment.entity";
+import { PerformanceRecord } from "../../entities/performance-record.entity";
+import { PrivateDiscussion } from "../../entities/private-discussion.entity";
+import { SessionReview } from "../../entities/session-review.entity";
+import { SubscriptionPlan } from "../../entities/subscription-plan.entity";
+import { TrainingContentLink } from "../../entities/training-content-link.entity";
+import { TrainingSession } from "../../entities/training-session.entity";
+import { UserNutritionProgress } from "../../entities/user-nutrition-progress.entity";
+import { UserNutrition } from "../../entities/user-nutrition.entity";
+import { UserProgram } from "../../entities/user-program.entity";
+import { UserSubscription } from "../../entities/user-subscription.entity";
+import { User } from "../../entities/user.entity";
+import { Content } from "../../entities/content.entity";
+import { Coach } from "../../entities/coach.entity";
+import { Challenge } from "../../entities/challenge.entity";
 
 @Injectable()
 export class SeedingService {
@@ -50,12 +47,12 @@ export class SeedingService {
     private usersRepository: Repository<User>,
     @InjectRepository(Content)
     private contentRepository: Repository<Content>,
+    @InjectRepository(Challenge)
+    private challengeRepository: Repository<Challenge>,
     @InjectRepository(Coach)
     private coachRepository: Repository<Coach>,
     @InjectRepository(FitnessGoal)
     private fitnessGoalsRepository: Repository<FitnessGoal>,
-    @InjectRepository(ContentGoal)
-    private contentGoalsRepository: Repository<ContentGoal>,
     @InjectRepository(BodyMeasurement)
     private bodyMeasurementsRepository: Repository<BodyMeasurement>,
     @InjectRepository(ContentRating)
@@ -92,14 +89,8 @@ export class SeedingService {
     private trainingContentLinkRepository: Repository<TrainingContentLink>,
     @InjectRepository(TrainingSession)
     private trainingSessionRepository: Repository<TrainingSession>,
-    @InjectRepository(ExerciseGoal)
-    private exerciseGoalRepository: Repository<ExerciseGoal>,
     @InjectRepository(Exercise)
     private exerciseRepository: Repository<Exercise>,
-    @InjectRepository(ExerciseNutrition)
-    private exerciseNutritionRepository: Repository<ExerciseNutrition>,
-    @InjectRepository(ContentNutrition)
-    private contentNutritionRepository: Repository<ContentNutrition>,
     @InjectRepository(NutritionProgram)
     private nutritionProgramRepository: Repository<NutritionProgram>,
     @InjectRepository(NutritionDetail)
@@ -124,13 +115,13 @@ export class SeedingService {
     await this.seedCategories();
     await this.seedUsers();
     await this.seedCoaches();
-    await this.seedContent();
     await this.seedFitnessGoals();
-    await this.seedContentGoals();
+    await this.seedContent();
     await this.seedBodyMeasurements();
     await this.seedContentRatings();
     await this.seedContentReviews();
     await this.seedNotifications();
+    await this.seedChallenges();
     await this.seedCoachFollows();
     await this.seedCoachQualifications();
     await this.seedCoachSpecializations();
@@ -142,14 +133,11 @@ export class SeedingService {
     await this.seedAffiliateLinks();
     await this.seedAffiliateSales();
     await this.seedPayments();
+    await this.seedNutritionPrograms();
     await this.seedUserPrograms();
     await this.seedTrainingContentLinks();
     await this.seedTrainingSessions();
-    await this.seedExerciseGoals();
     await this.seedExercises();
-    await this.seedExerciseNutrition();
-    await this.seedContentNutrition();
-    await this.seedNutritionPrograms();
     await this.seedNutritionDetails();
     await this.seedNutritionProgramReviews();
     await this.seedSessionReviews();
@@ -192,9 +180,9 @@ export class SeedingService {
   }
 
   private async seedContent() {
-    const content =
+    const contents =
       seedData.find((data) => data.table === "content")?.data || [];
-    for (const contentItem of content) {
+    for (const contentItem of contents) {
       await this.contentRepository.save(contentItem as any);
     }
   }
@@ -204,14 +192,6 @@ export class SeedingService {
       seedData.find((data) => data.table === "fitnessgoals")?.data || [];
     for (const fitnessGoal of fitnessGoals) {
       await this.fitnessGoalsRepository.save(fitnessGoal as any);
-    }
-  }
-
-  private async seedContentGoals() {
-    const contentGoals =
-      seedData.find((data) => data.table === "contentgoals")?.data || [];
-    for (const contentGoal of contentGoals) {
-      await this.contentGoalsRepository.save(contentGoal as any);
     }
   }
 
@@ -291,7 +271,7 @@ export class SeedingService {
   }
 
   private async seedNews() {
-    const news = seedData.find((data) => data.table === "news")?.data || [];
+    const news = seedData.find((data) => data.table === "news").data || [];
     for (const newsItem of news) {
       await this.newsRepository.save(newsItem as any);
     }
@@ -302,6 +282,14 @@ export class SeedingService {
       seedData.find((data) => data.table === "sessions")?.data || [];
     for (const session of sessions) {
       await this.sessionRepository.save(session as any);
+    }
+  }
+
+  private async seedChallenges() {
+    const challenges =
+      seedData.find((data) => data.table === "challenges")?.data || [];
+    for (const session of challenges) {
+      await this.challengeRepository.save(session as any);
     }
   }
 
@@ -362,35 +350,31 @@ export class SeedingService {
     }
   }
 
-  private async seedExerciseGoals() {
-    const exerciseGoals =
-      seedData.find((data) => data.table === "exercisegoals")?.data || [];
-    for (const exerciseGoal of exerciseGoals) {
-      await this.exerciseGoalRepository.save(exerciseGoal as any);
-    }
-  }
-
   private async seedExercises() {
     const exercises =
       seedData.find((data) => data.table === "exercises")?.data || [];
-    for (const exercise of exercises) {
+    for (const exerciseItem of exercises) {
+      const goals = seedData.find(
+        (item) =>
+          item.table == "exercisegoals" &&
+          item.data
+            .map((e) => e.exerciseId)
+            .includes(exercises.indexOf(exerciseItem as any)),
+      );
+      const nutritionPrograms =
+        seedData.find(
+          (item) =>
+            item.table == "exercisenutritions" &&
+            item.data
+              .map((e) => e.exerciseId)
+              .includes(exercises.indexOf(exerciseItem as any)),
+        ) || [];
+      const exercise: Exercise = {
+        ...exerciseItem,
+        nutritionPrograms: nutritionPrograms as any,
+        goals: goals as any,
+      } as any;
       await this.exerciseRepository.save(exercise as any);
-    }
-  }
-
-  private async seedExerciseNutrition() {
-    const exerciseNutrition =
-      seedData.find((data) => data.table === "exercisenutrition")?.data || [];
-    for (const exerciseNutritionItem of exerciseNutrition) {
-      await this.exerciseNutritionRepository.save(exerciseNutritionItem as any);
-    }
-  }
-
-  private async seedContentNutrition() {
-    const contentNutrition =
-      seedData.find((data) => data.table === "contentnutrition")?.data || [];
-    for (const contentNutritionItem of contentNutrition) {
-      await this.contentNutritionRepository.save(contentNutritionItem as any);
     }
   }
 
@@ -400,6 +384,11 @@ export class SeedingService {
     for (const nutritionProgram of nutritionPrograms) {
       await this.nutritionProgramRepository.save(nutritionProgram as any);
     }
+    const np = await this.nutritionProgramRepository.find({
+      relations: ["contents"],
+    });
+    console.log(np);
+    console.table(np.map((n) => n.contents));
   }
 
   private async seedNutritionDetails() {

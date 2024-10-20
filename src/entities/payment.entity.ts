@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
 import { User } from "./user.entity";
 import { Content } from "./content.entity";
 
@@ -8,10 +16,12 @@ export class Payment {
   id: number;
 
   @ManyToOne(() => User, (user) => user.payments)
+  @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Content, (content) => content.payments)
-  content: Content;
+  @ManyToMany(() => Content, (content) => content.payments)
+  @JoinTable()
+  contents: Content[];
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
   amountPaid: number;

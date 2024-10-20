@@ -4,8 +4,4 @@ export class UpdateNewsDto {
   @IsOptional()
   @IsString()
   title?: string;
-
-  @IsOptional()
-  @IsString()
-  content?: string;
 }

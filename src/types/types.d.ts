@@ -6,3 +6,8 @@ declare namespace Express {
     user: any;
   }
 }
+
+interface PaginationResult<T> {
+  items: T[];
+  total: number;
+}

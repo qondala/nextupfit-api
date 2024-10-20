@@ -1,5 +1,6 @@
 import { IsNotEmpty, IsString, IsEmail, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Optional } from "@nestjs/common";
 
 export class CreateUserDto {
   @ApiProperty({
@@ -21,6 +22,19 @@ export class CreateUserDto {
   lastName: string;
 
   @ApiProperty({
+    description: "Numero de telephone",
+    example: "23765053248552",
+  })
+  @Optional()
+  @IsString()
+  phoneNumber?: string;
+
+  @ApiProperty({ description: "Date de naissance", example: "23-10-2003" })
+  @Optional()
+  @IsString()
+  birthDate?: Date;
+
+  @ApiProperty({
     description: "Mot de passe de l'utilisateur",
     example: "Password123",
   })
@@ -36,4 +50,13 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   profileImageUrl?: string;
+
+  @ApiProperty({
+    description: "URL de l'image de profil",
+    example: "https://example.com/profile-picture.jpg",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  coverImageUrl?: string;
 }

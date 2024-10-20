@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   UseGuards,
-  Req,
   Delete,
   Query,
 } from "@nestjs/common";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { Request } from "express";
 import {
   ApiTags,
   ApiBearerAuth,
@@ -49,7 +47,7 @@ export class UsersController {
   @Get()
   @ApiOkResponse({ description: "List of all users", type: [User] })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch users" })
-  findAll(@Req() request: Request) {
+  findAll() {
     return this.usersService.findAll();
   }
 

@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from "@nestjs/common";
 
 import {
@@ -50,8 +52,36 @@ export class CoachesController {
   @Get()
   @ApiOkResponse({ description: "List of all coaches", type: [Coach] })
   @ApiInternalServerErrorResponse({ description: "Failed to fetch coaches" })
-  findAll() {
-    return this.coachesService.findAll();
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: Number,
+    example: 1,
+  })
+  @ApiQuery({
+    name: "pageSize",
+    description: "Page size",
+    required: false,
+    type: Number,
+    example: 10,
+  })
+  findAll(
+    @Query("page", new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query("pageSize", new DefaultValuePipe(10), ParseIntPipe) pageSize: number,
+  ): Promise<PaginationResult<Coach>> {
+    return this.coachesService.findAll(page, pageSize);
+  }
+
+  @Get("search")
+  @ApiQuery({ name: "query", description: "Search query", required: true })
+  @ApiOkResponse({
+    description: "List of coaches matching the search query",
+    type: [Coach],
+  })
+  @ApiInternalServerErrorResponse({ description: "Failed to search coaches" })
+  searchCoaches(@Query("query") query: string) {
+    return this.coachesService.searchCoaches(query);
   }
 
   @Get(":id")
@@ -82,16 +112,5 @@ export class CoachesController {
   @ApiInternalServerErrorResponse({ description: "Failed to delete coach" })
   remove(@Param("id") id: string) {
     return this.coachesService.remove(+id);
-  }
-
-  @Get("search")
-  @ApiQuery({ name: "query", description: "Search query", required: true })
-  @ApiOkResponse({
-    description: "List of coaches matching the search query",
-    type: [Coach],
-  })
-  @ApiInternalServerErrorResponse({ description: "Failed to search coaches" })
-  searchCoaches(@Query("query") query: string) {
-    return this.coachesService.searchCoaches(query);
   }
 }
