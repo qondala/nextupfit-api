@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "typeorm-ts-node-commonjs",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
     "migration:generate": "npm run typeorm migration:generate -- -d ./src/database/data-source.ts",
     "migration:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts",
     "migration:revert": "npm run typeorm migration:revert -- -d ./src/database/data-source.ts",
@@ -49,7 +49,8 @@
     "rxjs": "^7.8.1",
     "sqlite3": "^5.1.7",
     "stripe": "^15.7.0",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
@@ -71,7 +72,6 @@
     "source-map-support": "^0.5.21",
     "ts-jest": "^29.1.4",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },

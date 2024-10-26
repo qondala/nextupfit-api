@@ -10,9 +10,12 @@ COPY . .
 
 RUN npm run build
 
+RUN npm install -g ts-node
+RUN npm install -g tslib @types/node
 RUN npm install pm2 -g
 
 COPY entrypoint.sh /usr/app/entrypoint.sh
+RUN chmod +x /usr/app/entrypoint.sh
 
 EXPOSE 3000
 

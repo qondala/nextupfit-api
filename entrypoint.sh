@@ -1,11 +1,5 @@
 #!/bin/sh
-
-# Attendre que PostgreSQL soit prêt
-until nc -z -v -w30 $DATABASE_HOST $DATABASE_PORT
-do
-  echo "Waiting for database connection..."
-  sleep 1
-done
+set -e
 
 # Synchroniser le schéma
 npm run schema:sync
