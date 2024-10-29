@@ -37,6 +37,7 @@ import { Notification } from "../../entities/notification.entity";
 import { AppDataSource } from "../../database/data-source";
 import { Challenge } from "../../entities/challenge.entity";
 import { DatabaseModule } from "src/database/database.module";
+import { Admin } from "../../entities/admin.entity";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { DatabaseModule } from "src/database/database.module";
       [
         User,
         Coach,
+        Admin,
         Content,
         FitnessGoal,
         Category,

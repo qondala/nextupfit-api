@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { EventEmitter } from "typeorm/platform/PlatformTools";
+import { AppDataSource } from "./database/data-source";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,14 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
 
   EventEmitter.defaultMaxListeners = 1000;
+
+  AppDataSource.initialize()
+    .then(() => {
+      console.log("Data Source has been initialized!");
+    })
+    .catch((err) => {
+      console.error("Error during Data Source initialization", err);
+    });
 
   // Démarrage de l'application sur le port 3000
   await app.listen(3000);

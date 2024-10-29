@@ -26,5 +26,4 @@ export class StripeModule {
   providers: [PaymentsService],
   exports: [PaymentsService],
 })
-
 export class PaymentsModule {}

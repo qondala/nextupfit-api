@@ -37,6 +37,7 @@ import { User } from "../../entities/user.entity";
 import { Content } from "../../entities/content.entity";
 import { Coach } from "../../entities/coach.entity";
 import { Challenge } from "../../entities/challenge.entity";
+import { Admin } from "../../entities/admin.entity";
 
 @Injectable()
 export class SeedingService {
@@ -45,6 +46,8 @@ export class SeedingService {
     private categoriesRepository: Repository<Category>,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Admin)
+    private adminsRepository: Repository<Admin>,
     @InjectRepository(Content)
     private contentRepository: Repository<Content>,
     @InjectRepository(Challenge)
@@ -115,6 +118,7 @@ export class SeedingService {
     await this.seedCategories();
     await this.seedUsers();
     await this.seedCoaches();
+    await this.seedAdmins();
     await this.seedFitnessGoals();
     await this.seedContent();
     await this.seedBodyMeasurements();
@@ -176,6 +180,13 @@ export class SeedingService {
       seedData.find((data) => data.table === "coaches")?.data || [];
     for (const coach of coaches) {
       await this.coachRepository.save(coach as any);
+    }
+  }
+
+  private async seedAdmins() {
+    const admins = seedData.find((data) => data.table === "admins")?.data || [];
+    for (const admin of admins) {
+      await this.adminsRepository.save(admin as any);
     }
   }
 

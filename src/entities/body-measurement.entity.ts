@@ -16,7 +16,7 @@ export class BodyMeasurement {
   @JoinColumn()
   user: User;
 
-  @Column({ type: "date" })
+  @Column({ type: "date", default: () => "CURRENT_TIMESTAMP" })
   dateRecorded: Date;
 
   @Column({ type: "decimal", precision: 5, scale: 2, nullable: true })

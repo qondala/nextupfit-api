@@ -9,6 +9,7 @@ import {
 import { User } from "./user.entity";
 import { CoachTransfer } from "./coach-transfer.entity";
 import { AdminTransfer } from "./admin-transfer.entity";
+import { Coach } from "./coach.entity";
 
 @Entity()
 export class Admin {
@@ -28,6 +29,13 @@ export class Admin {
 
   @OneToMany(() => AdminTransfer, (transfer) => transfer.admin)
   transfers: CoachTransfer[];
+
+  @OneToOne(() => Coach, (coach) => coach.admin)
+  @JoinColumn()
+  coach: Coach;
+
+  @OneToMany(() => Coach, (coach) => coach.manager)
+  employees: Coach[];
 
   @OneToOne(() => User, (user) => user.coach, {
     cascade: true,

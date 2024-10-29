@@ -125,6 +125,5 @@ export class NewsService {
       .leftJoinAndSelect("content.category", "category")
       .leftJoinAndSelect("reviews.user", "reviewuser")
       .leftJoinAndSelect("ratings.user", "ratinguser");
-
   }
 }

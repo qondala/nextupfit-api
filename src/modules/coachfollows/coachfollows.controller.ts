@@ -39,7 +39,7 @@ export class CoachFollowsController {
   constructor(private readonly coachFollowsService: CoachFollowsService) {}
 
   @Post()
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiBody({ type: CreateCoachFollowDto })
   @ApiCreatedResponse({
     description: "Coach rating created successfully",
@@ -89,7 +89,7 @@ export class CoachFollowsController {
   }
 
   @Patch(":id")
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiParam({
     name: "id",
     description: "ID of the coach rating",
@@ -117,7 +117,7 @@ export class CoachFollowsController {
   }
 
   @Delete(":id")
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiParam({
     name: "id",
     description: "ID of the coach rating",

@@ -15,7 +15,7 @@ export class Employee {
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => Admin, (user) => user.createBy, {
+  @OneToOne(() => Admin, (user) => user.employees, {
     cascade: true,
     onDelete: "CASCADE",
     nullable: true,

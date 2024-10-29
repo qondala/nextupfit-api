@@ -29,7 +29,7 @@ export class UserNutritionProgress {
   dateLogged: Date;
 
   @Column({ type: "json", nullable: true })
-  mealsConsumed: string;
+  mealsConsumed: any;
 
   @Column({ nullable: true })
   caloriesIntake: number;

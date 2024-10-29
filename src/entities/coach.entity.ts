@@ -5,6 +5,7 @@ import {
   OneToOne,
   OneToMany,
   JoinColumn,
+  ManyToOne,
 } from "typeorm";
 import { User } from "./user.entity";
 import { Content } from "./content.entity";
@@ -19,6 +20,7 @@ import { NutritionProgram } from "./nutrition-program.entity";
 import { Challenge } from "./challenge.entity";
 import { Session } from "./session.entity";
 import { CoachTransfer } from "./coach-transfer.entity";
+import { Admin } from "./admin.entity";
 
 @Entity()
 export class Coach {
@@ -107,4 +109,18 @@ export class Coach {
 
   @OneToMany(() => CoachTransfer, (transfer) => transfer.coach)
   transfers: CoachTransfer[];
+
+  @OneToOne(() => Admin, (admin) => admin.coach, {
+    cascade: true,
+    onDelete: "CASCADE",
+    eager: true,
+  })
+  admin: Admin;
+
+  @ManyToOne(() => Admin, (admin) => admin.employees, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn()
+  manager: Admin;
 }

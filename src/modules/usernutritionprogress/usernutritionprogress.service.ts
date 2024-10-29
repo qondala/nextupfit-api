@@ -65,8 +65,14 @@ export class UserNutritionProgressService {
         `User nutrition progress with ID ${id} not found`,
       );
     }
+    const user = (
+      await this.userNutritionProgressRepository.findOne({
+        where: { id },
+        relations: ["user"],
+      })
+    ).user;
     // Vérifier que l'utilisateur est autorisé à modifier sa progression nutritionnelle
-    if (userNutritionProgress.user.id !== userId) {
+    if (user.id !== userId) {
       throw new UnauthorizedException(
         "You are not authorized to update this user nutrition progress",
       );

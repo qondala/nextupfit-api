@@ -75,10 +75,10 @@ export class AuthService {
       // throw new UnauthorizedException("Invalid credentials");
     }
 
-    const passwordMatch = await argon2.verify(user.passwordHash, decoded.uid);
-    if (!passwordMatch) {
-      throw new UnauthorizedException("Invalid credentials");
-    }
+    // const passwordMatch = await argon2.verify(user.passwordHash, decoded.uid);
+    // if (!passwordMatch) {
+    //   throw new UnauthorizedException("Invalid credentials");
+    // }
 
     const payload = { sub: user.id, email: user.email };
     return {

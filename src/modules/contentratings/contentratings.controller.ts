@@ -38,7 +38,7 @@ export class ContentRatingsController {
   constructor(private readonly contentRatingsService: ContentRatingsService) {}
 
   @Post()
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiBody({ type: CreateContentRatingDto })
   @ApiCreatedResponse({
     description: "Content rating created successfully",
@@ -88,7 +88,7 @@ export class ContentRatingsController {
   }
 
   @Patch(":id")
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiParam({
     name: "id",
     description: "ID of the content rating",
@@ -116,7 +116,7 @@ export class ContentRatingsController {
   }
 
   @Delete(":id")
-  @Roles(UserRole.USER)
+  @Roles(UserRole.USER, UserRole.COACH, UserRole.ADMIN)
   @ApiParam({
     name: "id",
     description: "ID of the content rating",

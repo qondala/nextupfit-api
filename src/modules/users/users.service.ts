@@ -45,6 +45,7 @@ export class UsersService {
     return this.usersRepository
       .createQueryBuilder("user")
       .leftJoinAndSelect("user.trainingSessions", "trainingSessions")
+      .leftJoinAndSelect("user.coach", "coachs")
       .leftJoinAndSelect("trainingSessions.session", "session")
       .leftJoinAndSelect("user.challenges", "challenges")
       .leftJoinAndSelect(
@@ -52,14 +53,12 @@ export class UsersService {
         "challenge",
         "challenge.id = challenges.challengeId",
       )
-      .leftJoinAndSelect(
-        "challenge.sessions",
-        "challengeSessions",
-        // "challengeSessions.id = challenge.sessionId",
-      ).leftJoinAndSelect("challenge.coach", "coach")
+      .leftJoinAndSelect("challenge.sessions", "challengeSessions")
+      .leftJoinAndSelect("challenge.coach", "coach")
       .leftJoinAndSelect("user.coachFollows", "coachFollows")
       .leftJoinAndSelect("coachFollows.coach", "coaches")
       .leftJoinAndSelect("user.coachRatings", "coachRatings")
+      .leftJoinAndSelect("user.bodyMeasurements", "bodyMeasurements")
       .leftJoinAndSelect("user.userSubscriptions", "userSubscriptions")
       .leftJoinAndSelect("user.affiliateLinks", "affiliateLinks")
       .leftJoinAndSelect("user.userNutritionProgress", "userNutritionProgress")

@@ -7,7 +7,6 @@ import {
   CreateDateColumn,
 } from "typeorm";
 import { Coach } from "./coach.entity";
-import { Admin } from "./admin.entity";
 import { FitnessGoal } from "./fitness-goal.entity";
 import { BodyMeasurement } from "./body-measurement.entity";
 import { ContentRating } from "./content-rating.entity";
@@ -28,7 +27,6 @@ import { NutritionProgramReview } from "./nutrition-program-review.entity";
 import { CoachRating } from "./coach-rating.entity";
 import { Progress } from "./progress.entity";
 import { UserChallenge } from "./user-challenge.entity";
-import { Employee } from "./employee.entity";
 
 @Entity()
 export class User {
@@ -75,16 +73,6 @@ export class User {
     nullable: true,
   })
   coach: Coach;
-
-  @OneToOne(() => Admin, (admin) => admin.user, {
-    nullable: true,
-  })
-  admin: Admin;
-
-  @OneToOne(() => Admin, (employee) => employee.user, {
-    nullable: true,
-  })
-  employee: Employee;
 
   @OneToMany(() => FitnessGoal, (goal) => goal.user, {
     cascade: true,

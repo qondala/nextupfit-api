@@ -46,4 +46,20 @@ export class UpdateUserNutritionProgressDto {
   @IsOptional()
   @IsNumber()
   adherenceScore?: number;
+
+  @ApiProperty({
+    description: "Type de repas",
+    example: "breakfast",
+    required: false,
+  })
+  @IsOptional()
+  mealType: "breakfast" | "lunch" | "dinner" | "snack";
+
+  @ApiProperty({
+    description: "Aliments consommés",
+    example: "Eggs",
+    required: false,
+  })
+  @IsOptional()
+  mealsConsumed: any;
 }

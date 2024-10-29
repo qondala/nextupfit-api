@@ -7,12 +7,23 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Payment } from "src/entities/payment.entity";
-import { Like, Not, Repository } from "typeorm";
+import { Between, Like, Repository } from "typeorm";
 import { CreateAdminDto } from "./dto/create-admin.dto";
 import { UpdateAdminDto } from "./dto/update-admin.dto";
 import { User } from "src/entities/user.entity";
 import { Admin } from "src/entities/admin.entity";
 import * as argon2 from "argon2";
+import { Coach } from "src/entities/coach.entity";
+import {
+  startOfDay,
+  subDays,
+  startOfWeek,
+  subWeeks,
+  startOfMonth,
+  subMonths,
+  startOfYear,
+  subYears,
+} from "date-fns";
 
 @Injectable()
 export class AdminService {
@@ -25,6 +36,8 @@ export class AdminService {
     private usersRepository: Repository<User>,
     @InjectRepository(Admin)
     private adminsRepository: Repository<Admin>,
+    @InjectRepository(Coach)
+    private coachesRepository: Repository<Coach>,
   ) {
     // Récupérer le pourcentage de commission depuis les variables d'environnement
     this.commissionRate = parseFloat(
@@ -110,31 +123,183 @@ export class AdminService {
     return `${year}-${month}-${day}`;
   }
 
-  async create(createAdminDto: CreateAdminDto) {
-    const existingAdmin = await this.usersRepository.findOne({
-      where: { email: createAdminDto.email },
+  async getDailyUsers(days: number): Promise<number[]> {
+    const dailyUsers = [];
+    for (let i = 0; i < days; i++) {
+      const startDate = startOfDay(subDays(new Date(), i));
+      const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000 - 1); //  Fin de la journée
+
+      const count = await this.usersRepository.count({
+        where: { createdAt: Between(startDate, endDate) },
+      });
+      dailyUsers.push(count);
+    }
+    return dailyUsers.reverse(); // Inverser le tableau pour avoir les dates dans l'ordre croissant
+  }
+
+  async getWeeklyUsers(weeks: number): Promise<number[]> {
+    const weeklyUsers = [];
+    for (let i = 0; i < weeks; i++) {
+      const startDate = startOfWeek(subWeeks(new Date(), i));
+      const endDate = new Date(
+        startDate.getTime() + 7 * 24 * 60 * 60 * 1000 - 1,
+      ); // Fin de la semaine
+
+      const count = await this.usersRepository.count({
+        where: { createdAt: Between(startDate, endDate) },
+      });
+      weeklyUsers.push(count);
+    }
+    return weeklyUsers.reverse();
+  }
+
+  async getMonthlyUsers(months: number): Promise<number[]> {
+    const monthlyUsers = [];
+    for (let i = 0; i < months; i++) {
+      const startDate = startOfMonth(subMonths(new Date(), i));
+      const endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth() + 1,
+        0,
+        23,
+        59,
+        59,
+      ); // Fin du mois
+
+      const count = await this.usersRepository.count({
+        where: { createdAt: Between(startDate, endDate) },
+      });
+      monthlyUsers.push(count);
+    }
+    return monthlyUsers.reverse();
+  }
+
+  async getYearlyUsers(years: number): Promise<number[]> {
+    const yearlyUsers = [];
+    for (let i = 0; i < years; i++) {
+      const startDate = startOfYear(subYears(new Date(), i));
+      const endDate = new Date(startDate.getFullYear() + 1, 0, 0, 23, 59, 59);
+
+      const count = await this.usersRepository.count({
+        where: { createdAt: Between(startDate, endDate) },
+      });
+      yearlyUsers.push(count);
+    }
+    return yearlyUsers.reverse();
+  }
+
+  async getLastYearUsers(years: number): Promise<number[]> {
+    const lastYearUsers = [];
+    for (let i = 1; i <= years; i++) {
+      // Commence à 1 pour l'année précédente
+      const startDate = startOfYear(subYears(new Date(), i));
+      const endDate = new Date(startDate.getFullYear() + 1, 0, 0, 23, 59, 59);
+
+      const count = await this.usersRepository.count({
+        where: { createdAt: Between(startDate, endDate) },
+      });
+      lastYearUsers.push(count);
+    }
+    return lastYearUsers.reverse();
+  }
+
+  // async getDailyEarnings(days: number): Promise<number[]> {
+  //   const dailyEarnings = [];
+  //   for (let i = 0; i < days; i++) {
+  //     const startDate = startOfDay(subDays(new Date(), i));
+  //     const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000 - 1);
+
+  //     const payments = await this.paymentsRepository.find({
+  //       where: { paymentDate: Between(startDate, endDate) },
+  //     });
+  //     const totalEarnings = payments.reduce(
+  //       (sum, payment) => sum + payment.amountPaid,
+  //       0,
+  //     );
+  //     dailyEarnings.push(totalEarnings);
+  //   }
+  //   return dailyEarnings.reverse();
+  // }
+
+  async getWeeklyEarnings(weeks: number): Promise<number[]> {
+    const weeklyEarnings = [];
+    for (let i = 0; i < weeks; i++) {
+      const startDate = startOfWeek(subWeeks(new Date(), i));
+      const endDate = new Date(
+        startDate.getTime() + 7 * 24 * 60 * 60 * 1000 - 1,
+      ); // Fin de la semaine
+
+      const payments = await this.paymentsRepository.find({
+        where: { paymentDate: Between(startDate, endDate) },
+      });
+      const totalEarnings = payments.reduce(
+        (sum, payment) => sum + payment.amountPaid,
+        0,
+      );
+      weeklyEarnings.push(totalEarnings);
+    }
+    return weeklyEarnings.reverse();
+  }
+
+  // async getMonthlyEarnings(months: number): Promise<number[]> {
+  //   const monthlyEarnings = [];
+  //   for (let i = 0; i < months; i++) {
+  //     const startDate = startOfMonth(subMonths(new Date(), i));
+  //     const endDate = new Date(
+  //       startDate.getFullYear(),
+  //       startDate.getMonth() + 1,
+  //       0,
+  //       23,
+  //       59,
+  //       59,
+  //     ); // Fin du mois
+
+  //     const payments = await this.paymentsRepository.find({
+  //       where: { paymentDate: Between(startDate, endDate) },
+  //     });
+  //     const totalEarnings = payments.reduce(
+  //       (sum, payment) => sum + payment.amountPaid,
+  //       0,
+  //     );
+  //     monthlyEarnings.push(totalEarnings);
+  //   }
+  //   return monthlyEarnings.reverse();
+  // }
+
+  async getAdminBalance(): Promise<number> {
+    const payments = await this.paymentsRepository.find();
+    const adminCommissionRate = 0.1;
+    let adminBalance = 0;
+    for (const payment of payments) {
+      adminBalance += payment.amountPaid * adminCommissionRate;
+    }
+    return adminBalance;
+  }
+
+  async create(createAdminDto: CreateAdminDto): Promise<Admin> {
+    const existingAdmin = await this.adminsRepository.findOne({
+      where: { coach: { id: createAdminDto.caochId } },
     });
     if (existingAdmin) {
       throw new BadRequestException("Admin with this email already exists");
     }
-    const passwordHash = await argon2.hash(createAdminDto.password);
-
-    const user = this.usersRepository.create({
-      ...createAdminDto,
-      passwordHash,
+    const admin = this.adminsRepository.create({
+      coach: { id: createAdminDto.caochId },
     });
-    return this.adminsRepository.create({ user });
+    return admin;
   }
 
   async findAll(): Promise<Admin[]> {
-    return await this.adminsRepository.find();
+    return await this.adminsRepository.find({
+      relations: ["coach", "coach.user"],
+    });
   }
 
   async findOne(id: number): Promise<Admin> {
     const admin = await this.adminsRepository.findOne({
       where: { id },
+      relations: ["coach", "coach.sessions", "coach.user", "employees"],
     });
-
     if (!admin) {
       throw new NotFoundException(`Admin with ID ${id} not found`);
     }
@@ -142,20 +307,30 @@ export class AdminService {
   }
 
   async update(id: number, updateAdminDto: UpdateAdminDto) {
-    const user = await this.usersRepository.findOneBy({ admin: { id } });
-    if (!user) {
+    const admin = await this.findOne(id);
+    if (!admin) {
       throw new NotFoundException(`Admin with ID ${id} not found`);
     }
 
+    const coach = await this.coachesRepository.findOneBy({
+      id: admin.coach.id,
+    });
+
+    if (!coach) {
+      throw new NotFoundException(`Coach with ID ${admin.coach.id} not found`);
+    }
+
     // Update the admin's data
-    Object.assign(user, updateAdminDto);
+    Object.assign(coach.user, updateAdminDto);
 
     // If a new password is provided, hash it
     if (updateAdminDto.password) {
-      user.passwordHash = await argon2.hash(updateAdminDto.password);
+      coach.user.passwordHash = await argon2.hash(updateAdminDto.password);
     }
 
-    return this.usersRepository.save(user);
+    await this.coachesRepository.save(coach);
+
+    return admin;
   }
 
   async remove(id: number): Promise<void> {
@@ -167,15 +342,13 @@ export class AdminService {
   }
 
   async searchAdmins(query: string): Promise<Admin[]> {
-    const users = await this.usersRepository.find({
+    return await this.adminsRepository.find({
       where: [
-        { firstName: Like(`%${query}%`) },
-        { lastName: Like(`%${query}%`) },
-        { email: Like(`%${query}%`) },
-        { admin: Not(null) },
+        { coach: { user: { firstName: Like(`%${query}%`) } } },
+        { coach: { user: { lastName: Like(`%${query}%`) } } },
+        { coach: { user: { email: Like(`%${query}%`) } } },
       ],
-      relations: ["admin"],
+      relations: ["coach", "coach.user"],
     });
-    return users.map((u) => u.admin);
   }
 }

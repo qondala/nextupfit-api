@@ -37,7 +37,11 @@ export class UserNutritionService {
   async findOne(id: number): Promise<UserNutrition> {
     const userNutrition = await this.userNutritionRepository.findOne({
       where: { id },
-      relations: ["user", "nutritionProgram"],
+      relations: [
+        "user",
+        "nutritionProgram",
+        "nutritionProgram.nutritionDetails",
+      ],
     });
     if (!userNutrition) {
       throw new NotFoundException(`User nutrition with ID ${id} not found`);

@@ -87,4 +87,13 @@ export class CoachesService {
       .leftJoinAndSelect("coach.recommendations", "recommendations")
       .leftJoinAndSelect("coach.coachFollows", "coachFollows");
   }
+
+  async findByAdmin(adminId: number): Promise<Coach[]> {
+    return this.coachesRepository.find({
+      where: { manager: { id: adminId } },
+      relations: ["user"],
+      order: { ratingAvg: "DESC" },
+      take: 12,
+    });
+  }
 }

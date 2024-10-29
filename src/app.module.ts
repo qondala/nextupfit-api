@@ -44,16 +44,17 @@ import { UserChallengesModule } from "./modules/userchallenges/userchallenges.mo
 import { HomeModule } from "./modules/home/home.module";
 import { AdminModule } from "./modules/admin/admin.module";
 import { CoachTransfersModule } from "./modules/coachtransfers/coachtransfers.module";
-import { NutritionProgram } from "./entities/nutrition-program.entity";
 import { NutritionProgramsModule } from "./modules/nutritionprograms/nutritionprogram.module";
+import { DashboardModule } from "./modules/dashboard/dashboard.module";
+import { AdminTransfer } from "./entities/admin-transfer.entity";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Permet d'accéder aux variables d'environnement dans l'application entière
+      isGlobal: true,
     }),
-    DatabaseModule, // Import du module de base de données (TypeORM)
-    SharedModule, // Import du module partagé
+    DatabaseModule,
+    SharedModule,
     MailerModule.forRoot(mailerConfig),
     CoachesModule,
     UsersModule,
@@ -92,8 +93,10 @@ import { NutritionProgramsModule } from "./modules/nutritionprograms/nutritionpr
     SeedModule,
     UserChallengesModule,
     AdminModule,
+    AdminTransfer,
     HomeModule,
     CoachTransfersModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

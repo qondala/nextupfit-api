@@ -16,7 +16,6 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
 } from "@nestjs/swagger";
-import { AuthGuard } from "@nestjs/passport";
 import { CoachTransfer } from "src/entities/coach-transfer.entity";
 import { UserRole } from "src/shared/constants/roles";
 import { Roles } from "src/shared/guards/roles.guards";

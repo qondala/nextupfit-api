@@ -113,4 +113,14 @@ export class CoachesController {
   remove(@Param("id") id: string) {
     return this.coachesService.remove(+id);
   }
+
+  @Delete(":id")
+  @Roles(UserRole.ADMIN)
+  @ApiNotFoundResponse({ description: "Admin not found" })
+  @ApiInternalServerErrorResponse({
+    description: "Failed to fetch admin for the category",
+  })
+  findByAdmin(@Param("adminId") adminId: string) {
+    return this.coachesService.findByAdmin(+adminId);
+  }
 }

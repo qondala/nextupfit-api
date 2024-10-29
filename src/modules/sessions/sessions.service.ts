@@ -132,7 +132,7 @@ export class SessionsService {
   async findByCategory(categoryId: number): Promise<Session[]> {
     const qb = this.sessionsRepository.createQueryBuilder("session");
     this.addRelations(qb);
-    qb.where("session.content.cotegory.id = :categoryId", { categoryId });
+    qb.where("session.content.category.id = :categoryId", { categoryId });
 
     const sessions = await qb.getMany();
     if (!sessions.length) {

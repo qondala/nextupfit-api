@@ -138,6 +138,7 @@ export class SessionsController {
     return this.sessionsService.findByContent(+contentId);
   }
 
+  @Get("category/:categoryId")
   @ApiParam({
     name: "categoryId",
     description: "ID of the category",
