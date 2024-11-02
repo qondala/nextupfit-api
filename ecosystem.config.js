@@ -2,10 +2,11 @@ module.exports = {
   apps: [
     {
       name: "nextupfit",
-      script: "dist/src/main.js",
-      instances: "max",
-      exec_mode: "cluster",
-      watch: true,
+      script: "dist/main.js",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      error_file: "err.log",
     },
   ],
 };

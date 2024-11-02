@@ -17,39 +17,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.admin (id, "coachId") FROM stdin;
-1	1
-2	2
-3	3
-\.
-
-
---
--- Data for Name: admin_transfer; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.admin_transfer (id, amount, currency, "paymentMethod", "stripeTransferId", "createdAt", "adminId") FROM stdin;
-\.
-
-
---
--- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.category (id, "categoryName", "categoryDescription") FROM stdin;
-1	Cardio	Cardio workouts and challenges.
-2	Gym	Gym-based training and workouts.
-3	Strength	Strength training exercises and challenges.
-4	Yoga	Yoga routines and classes.
-5	Diet	Diet plans and tips.
-6	HIIT	High-intensity interval training.
-\.
-
-
---
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -77,6 +44,17 @@ COPY public."user" (id, email, "firstName", "lastName", "phoneNumber", "birthDat
 
 
 --
+-- Data for Name: admin; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin (id, "coachId") FROM stdin;
+1	1
+2	2
+3	3
+\.
+
+
+--
 -- Data for Name: coach; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -87,6 +65,28 @@ COPY public.coach (id, bio, "ratingAvg", "stripeAccountId", type, "coverImageUrl
 3	Motivational fitness coach specializing in HIIT workouts and endurance training.	4.7	\N	Fitness Trainer	\N	4	1
 5	Nutritionist specializing in personalized diet plans and meal preparation.	4.5	\N	Nutritionist	\N	6	2
 6	Nutritionist specializing in personalized diet plans and meal preparation.	4.5	\N	Nutritionist	\N	7	3
+\.
+
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.category (id, "categoryName", "categoryDescription") FROM stdin;
+1	Cardio	Cardio workouts and challenges.
+2	Gym	Gym-based training and workouts.
+3	Strength	Strength training exercises and challenges.
+4	Yoga	Yoga routines and classes.
+5	Diet	Diet plans and tips.
+6	HIIT	High-intensity interval training.
+\.
+
+
+--
+-- Data for Name: admin_transfer; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.admin_transfer (id, amount, currency, "paymentMethod", "stripeTransferId", "createdAt", "adminId") FROM stdin;
 \.
 
 
