@@ -502,3 +502,12 @@ fitness-platform
 ├── .gitignore
 └── README.md
 ```
+
+# Certificates
+
+# Pgadmin certificates
+cd /docker/pgadmin/certs
+certbot certonly --standalone -d pgadmin.moneydey.ltd --staple-ocsp -m ntbryze@gmail.com --agree-tos
+cp /etc/letsencrypt/live/pgadmin.moneydey.ltd/privkey.pem server.key
+cp /etc/letsencrypt/live/pgadmin.moneydey.ltd/fullchain.pem server.cert
+

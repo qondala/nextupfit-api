@@ -1,11 +1,18 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { EventEmitter } from "typeorm/platform/PlatformTools";
 import { AppDataSource } from "./database/data-source";
+import { readFileSync } from 'node:fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+
+  // Enable HTTPS protocol
+  const httpsOptions = {
+    key: readFileSync('./docker/ngnix/ssl/private/privkey.pem'),
+    cert: readFileSync('./docker/ngnix/ssl/certs/fullchain.pem'),
+  };
+
+  const app = await NestFactory.create(AppModule, {httpsOptions});
 
   // Configuration de Swagger
   const config = new DocumentBuilder()
@@ -14,10 +21,9 @@ async function bootstrap() {
     .setVersion("1.0")
     .addBearerAuth()
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, document);
-
-  EventEmitter.defaultMaxListeners = 1000;
 
   AppDataSource.initialize()
     .then(() => {
@@ -27,8 +33,9 @@ async function bootstrap() {
       console.error("Error during Data Source initialization", err);
     });
 
-  // Démarrage de l'application sur le port 3000
-  await app.listen(3000);
-  console.log(`Application is running on: http://localhost:3000`);
+  await app.listen(443);
+
+  console.log(`Application is running on: https://moneydey-npf-api`);
 }
+
 bootstrap();
