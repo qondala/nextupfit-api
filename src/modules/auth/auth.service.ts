@@ -5,6 +5,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as argon2 from "argon2";
+
 import { MailService } from "../../shared/services/mail.service";
 
 import { User } from "../../entities/user.entity";
@@ -15,6 +16,7 @@ import { RefreshTokenDto } from "./dto/refresh-token.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { ResetPasswordDto } from "./dto/reset-password.dto";
 import { FirebaseAuthService } from "./firebaseauth.service";
+import { IdTokenDto } from "./dto/id-token.dto";
 
 @Injectable()
 export class AuthService {
@@ -50,35 +52,34 @@ export class AuthService {
     return user;
   }
 
-  async signUpWithIdToken(idToken: string) {
-    const decoded = await this.firebaseAuthService.verifyToken(idToken);
+  async signUpWithIdToken(idTokenDto: IdTokenDto) {
+    console.log("Signin up with id token :", idTokenDto);
+    const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
+
+    console.log("Decoded id token:", {...decoded});
+    console.log("Frontend id token:", {...idTokenDto});
     const userExists = await this.usersService.findByEmail(decoded.email);
     if (!userExists) {
       await this.usersService.create({
-        email: decoded.email,
-        profileImageUrl: decoded.picture,
-        firstName: decoded.displayName,
-        lastName: "",
+        email: decoded.email ?? idTokenDto.userData.email,
+        profileImageUrl: decoded.picture ?? idTokenDto.userData.profileImageUrl ?? "",
+        firstName: idTokenDto.userData.firstName ?? decoded.displayName ?? "",
+        lastName: idTokenDto.userData.lastName ?? "",
         password: decoded.uid,
       });
     }
-    return await this.signInWithIdToken(idToken);
+    return await this.signInWithIdToken(idTokenDto);
   }
 
   async signInWithIdToken(
-    idToken: string,
+    idTokenDto: IdTokenDto,
   ): Promise<{ uid: number; accessToken: string; refreshToken: string }> {
-    const decoded = await this.firebaseAuthService.verifyToken(idToken);
+    console.log("Login with token data : ", idTokenDto);
+    const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
     const user = await this.usersService.findByEmail(decoded.email);
     if (!user) {
-      return await this.signUpWithIdToken(idToken);
-      // throw new UnauthorizedException("Invalid credentials");
+      return await this.signUpWithIdToken(idTokenDto);
     }
-
-    // const passwordMatch = await argon2.verify(user.passwordHash, decoded.uid);
-    // if (!passwordMatch) {
-    //   throw new UnauthorizedException("Invalid credentials");
-    // }
 
     const payload = { sub: user.id, email: user.email };
     return {
@@ -211,4 +212,5 @@ export class AuthService {
     }
     return null;
   }
+
 }

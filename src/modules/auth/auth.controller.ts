@@ -50,15 +50,15 @@ export class AuthController {
   @ApiBody({ type: IdTokenDto })
   @ApiCreatedResponse({ description: "User registered successfully" })
   async signupWithIdToken(@Body() idTokenDto: IdTokenDto) {
-    return this.authService.signUpWithIdToken(idTokenDto.idToken);
+    return this.authService.signUpWithIdToken(idTokenDto);
   }
 
   @Public()
   @Post("signin/id-token")
   @ApiBody({ type: IdTokenDto })
-  @ApiCreatedResponse({ description: "User registered successfully" })
+  @ApiCreatedResponse({ description: "User signed in successfully" })
   async signinWithIdToken(@Body() idTokenDto: IdTokenDto) {
-    return this.authService.signInWithIdToken(idTokenDto.idToken);
+    return this.authService.signInWithIdToken(idTokenDto);
   }
 
   @Public()
@@ -113,5 +113,11 @@ export class AuthController {
     const refreshToken = req.body.refresh_token;
     const newAccessToken = await this.authService.refreshToken(refreshToken);
     return res.send({ access_token: newAccessToken });
+  }
+
+  @Public()
+  @Post("callback/apple-signin")
+  async appleSignIn(@Req() req: Request) {
+    console.log("Apple callback has been called with parameter: ", req);
   }
 }

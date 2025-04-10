@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import * as admin from "firebase-admin";
-import * as serviceAccount from "./nextupfit-8f1e6-firebase-adminsdk-fwdqs-6df8e79369.json";
+import * as serviceAccount from "./nextupfit-qondala-firebase-adminsdk-fbsvc-3424da1144.json";
 
 @Injectable()
 export class FirebaseAuthService {
   constructor() {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-      databaseURL: process.env.FB_DATABASE_URL,
+      // databaseURL: process.env.FB_DATABASE_URL,
     });
   }
 

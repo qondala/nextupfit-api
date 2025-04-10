@@ -1,5 +1,6 @@
-import { IsNotEmpty, IsEmail } from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { IdTokenUserData } from "./id-token-user-data.dto";
 
 export class IdTokenDto {
   @ApiProperty({
@@ -7,4 +8,10 @@ export class IdTokenDto {
   })
   @IsNotEmpty()
   idToken: string;
+
+  @ApiProperty({
+    description: "Basic user data obtained from firebase auth on client side",
+  })
+  @IsNotEmpty()
+  userData: IdTokenUserData;
 }
