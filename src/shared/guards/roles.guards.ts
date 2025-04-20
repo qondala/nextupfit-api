@@ -6,9 +6,12 @@ import {
   SetMetadata,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
+
+
 import { ROLES_KEY } from "../constants/roles";
-import { User } from "../../entities/user.entity";
-import { AppDataSource } from "src/database/data-source";
+import { UserEntity } from "@app/module/user/entity";
+import { AppDataSource } from "../../database/data-source";
+import { UserProfileTypeEnum } from "@app/module/user/types";
 
 export const Roles = (...roles: string[]) => SetMetadata(ROLES_KEY, roles);
 
@@ -17,7 +20,7 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.get<string[]>(
+    const requiredRoles = this.reflector.get<UserProfileTypeEnum[]>(
       ROLES_KEY,
       context.getHandler(),
     );
@@ -32,25 +35,27 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException("User not found"); // Gérez le cas où l'utilisateur n'est pas trouvé
     }
 
-    const userRepository = AppDataSource.getRepository(User);
+    const userRepository = AppDataSource.getRepository(UserEntity);
     const fetchedUser = await userRepository.findOne({
       where: { id: user.id },
-      relations: ["coach", "coach.admin"],
+
     });
 
     if (!fetchedUser) {
       throw new UnauthorizedException("User not found");
     }
 
-    const userRole = fetchedUser.coach?.admin
-      ? "admin"
-      : fetchedUser.coach
-        ? "coach"
-        : "user";
+    const userRoles = fetchedUser.userProfile;
 
-    if (!requiredRoles.includes(userRole)) {
+    // Check if user's profile is part of authorized app roles
+    const countRoles = userRoles.reduce(
+      (acc, role) => acc + (requiredRoles.includes(role) ? 1 : 0), 0);
+
+
+    if (countRoles == 0) {
       throw new UnauthorizedException("Unauthorized");
     }
+
     return true;
   }
 }

@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class VerifyEmailDto {
   @ApiProperty({
-    description: "Token de vérification d'email",
+    description: "Verification token of the email",
     example: "your_verification_token",
   })
   @IsNotEmpty()

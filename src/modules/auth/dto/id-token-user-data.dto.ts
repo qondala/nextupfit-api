@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEmail, IsOptional } from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, IsOptional, IsBoolean } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class IdTokenUserData {
@@ -10,6 +10,13 @@ export class IdTokenUserData {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @ApiProperty({
+    description: "Wether user's email is verified",
+  })
+  @IsNotEmpty()
+  @IsBoolean()
+  emailVerified: boolean;
 
   @ApiProperty({ description: "User's first name", example: "John" })
   @IsOptional()

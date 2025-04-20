@@ -1,4 +1,3 @@
-// shared/dtos/card.dto.ts
 import { IsNotEmpty, IsString, IsNumber, IsOptional } from "class-validator";
 
 export class CardDto {

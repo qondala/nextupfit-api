@@ -4,30 +4,30 @@ import { Optional } from "@nestjs/common";
 
 export class RegisterDto {
   @ApiProperty({
-    description: "Email de l'utilisateur",
+    description: "User's email",
     example: "test@example.com",
   })
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
-  @ApiProperty({ description: "Prénom de l'utilisateur", example: "John" })
+  @ApiProperty({ description: "User's first name", example: "John" })
   @IsNotEmpty()
   @IsString()
   firstName: string;
 
-  @ApiProperty({ description: "Nom de l'utilisateur", example: "Doe" })
+  @ApiProperty({ description: "User's last name", example: "Doe" })
   @IsNotEmpty()
   @IsString()
   lastName: string;
 
-  @ApiProperty({ description: "Date de naissance", example: "23-10-2003" })
+  @ApiProperty({ description: "User's birthdate", example: "23-10-2003" })
   @Optional()
   @IsString()
   birthDate?: Date;
 
   @ApiProperty({
-    description: "Numero de telephone",
+    description: "User's phone number",
     example: "52254515155155",
   })
   @Optional()
@@ -35,7 +35,7 @@ export class RegisterDto {
   phoneNumber?: string;
 
   @ApiProperty({
-    description: "Mot de passe de l'utilisateur",
+    description: "User's password",
     example: "Password123",
   })
   @IsNotEmpty()
@@ -43,7 +43,7 @@ export class RegisterDto {
   password: string;
 
   @ApiProperty({
-    description: "URL de l'image de profil",
+    description: "URL of the profile image",
     example: "https://example.com/profile-picture.jpg",
   })
   @IsOptional()

@@ -1,16 +1,24 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { Request, Response } from "express";
-import { AuthController } from "src/modules/auth/auth.controller";
-import { AuthService } from "src/modules/auth/auth.service";
-import { ForgotPasswordDto } from "src/modules/auth/dto/forgot-password.dto";
-import { LoginDto } from "src/modules/auth/dto/login.dto";
-import { RefreshTokenDto } from "src/modules/auth/dto/refresh-token.dto";
-import { RegisterDto } from "src/modules/auth/dto/register.dto";
-import { ResetPasswordDto } from "src/modules/auth/dto/reset-password.dto";
-import { VerifyEmailDto } from "src/modules/auth/dto/verifyemail.dto";
-import { JwtAuthGuard } from "src/shared/guards/jwt-auth.guard";
-import { JwtRefreshTokenAuthGuard } from "src/shared/guards/jwt-refreh-token-auth.guard";
-import { LocalAuthGuard } from "src/shared/guards/local-auth.guard";
+
+import { AuthController } from "@app/module/auth/auth.controller";
+import { AuthService } from "@app/module/auth/auth.service";
+
+import {
+  LoginDto,
+  ForgotPasswordDto,
+  RefreshTokenDto,
+  RegisterDto,
+  ResetPasswordDto,
+  VerifyEmailDto,
+} from "@app/module/auth/dto";
+
+import {
+  JwtAuthGuard,
+  JwtRefreshTokenAuthGuard,
+  LocalAuthGuard,
+} from "@app/common/guards";
+
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -70,7 +78,7 @@ describe("AuthController", () => {
         password: "password",
       };
       jest.spyOn(authService, "login").mockResolvedValue({} as any);
-      await controller.login({ user: { id: 1 } } as Request);
+      await controller.login({ user: { id: 1 } } as unknown as Request);
       expect(authService.login).toHaveBeenCalled();
     });
   });

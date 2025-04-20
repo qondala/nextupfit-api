@@ -1,10 +1,6 @@
-export enum UserRole {
-  USER = "user",
-  ADMIN = "admin",
-  COACH = "coach",
-  EMPLOYEE = "employee",
-  SUPER_ADMIN = "super_admin",
-}
+import { UserProfileTypeEnum } from "@app/module/user/types";
+
+export const UserRole = UserProfileTypeEnum;
 
 export const ROLES_KEY = "roles";
 

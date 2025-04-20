@@ -1,0 +1,15 @@
+export enum BaseExerciseTargetEnum {
+  cardio = "cardio",
+  weight = "weight",
+  muscle = "muscle",
+  hygiene = "hygiene",
+  relaxing = "relaxing",
+  mindfulness = "mindfulness",
+  respiration = "respiration",
+  emotions = "emotions",
+  flexibility = "flexibility",
+  concentration = "concentration",
+  strength = "strength",
+  endurance = "endurance",
+  resistance = "resistance",
+}

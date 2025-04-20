@@ -18,9 +18,35 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/types/types.d.ts"]
-
+    "typeRoots": ["./node_modules/@types", "./src/shared/types/types.d.ts"],
+    "paths": {
+      "@app/common/*": [
+        "src/shared/*"
+      ],
+      "@app/module/auth/*": [
+        "src/modules/auth/*"
+      ],
+      "@app/module/base/*": [
+        "src/modules/base/*"
+      ],
+      "@app/module/user/*": [
+        "src/modules/user/*"
+      ],
+      "@app/module/gym/*": [
+        "src/modules/gym/*"
+      ],
+      "@app/module/program/*": [
+        "src/modules/program/*"
+      ],
+      "@app/module/social/*": [
+        "src/modules/social/*"
+      ],
+      "@app/module/payment/*": [
+        "src/modules/payment/*"
+      ],
+      "@app/module/map/*": [
+        "src/modules/map/*"
+      ],
+    },
   },
-
-
 }

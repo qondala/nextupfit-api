@@ -1,8 +1,10 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { AppDataSource } from "./database/data-source";
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from "@nestjs/swagger";
 import { readFileSync } from 'node:fs';
+
+import { AppDataSource } from "./database/data-source";
+import { AppModule } from "./app.module";
+
 
 async function bootstrap() {
 
@@ -19,11 +21,12 @@ async function bootstrap() {
     .setTitle("NextUpFit Platform 🏋️‍♀️ - API")
     .setDescription("API documentation for the NextUpFit application.")
     .setVersion("1.0")
+    .addServer("https://api.npf.moneydey.ltd", "Production")
     .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+  SwaggerModule.setup("doc", app, document);
 
   AppDataSource.initialize()
     .then(() => {
@@ -35,7 +38,7 @@ async function bootstrap() {
 
   await app.listen(443);
 
-  console.log(`Application is running on: https://moneydey-npf-api`);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();

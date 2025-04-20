@@ -6,34 +6,44 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import * as argon2 from "argon2";
 
-import { MailService } from "../../shared/services/mail.service";
+import { MailService } from "@app/common/service";
 
-import { User } from "../../entities/user.entity";
-import { UsersService } from "../users/users.service";
-import { ForgotPasswordDto } from "./dto/forgot-password.dto";
-import { LoginDto } from "./dto/login.dto";
-import { RefreshTokenDto } from "./dto/refresh-token.dto";
-import { RegisterDto } from "./dto/register.dto";
-import { ResetPasswordDto } from "./dto/reset-password.dto";
+import { UserService } from "@app/module/user/service";
+import { UserEntity } from "@app/module/user/entity";
+
+import {
+  LoginDto,
+  ForgotPasswordDto,
+  RefreshTokenDto,
+  RegisterDto,
+  ResetPasswordDto,
+  IdTokenDto,
+  AuthTokenDto,
+  AccessTokenDto
+} from "./dto";
+
+
 import { FirebaseAuthService } from "./firebaseauth.service";
-import { IdTokenDto } from "./dto/id-token.dto";
+import { DetailsUserDto } from "../user/dto";
+
+
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
     private mailService: MailService,
     private firebaseAuthService: FirebaseAuthService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<User> {
-    const userExists = await this.usersService.findByEmail(registerDto.email);
-    if (userExists) {
+  async register(registerDto: RegisterDto): Promise<UserEntity> {
+
+    if (await this.userService.userWithEmailExists(registerDto.email)) {
       throw new ConflictException("Email already exists");
     }
 
-    const user = await this.usersService.create(registerDto);
+    const user = await this.userService.create(registerDto);
 
     // Generate a verification token (e.g., using JWT)
     const verificationToken = this.jwtService.sign(
@@ -58,9 +68,11 @@ export class AuthService {
 
     console.log("Decoded id token:", {...decoded});
     console.log("Frontend id token:", {...idTokenDto});
-    const userExists = await this.usersService.findByEmail(decoded.email);
+
+    const userExists = await this.userService.userWithEmailExists(decoded.email);
+
     if (!userExists) {
-      await this.usersService.create({
+      await this.userService.create({
         email: decoded.email ?? idTokenDto.userData.email,
         profileImageUrl: decoded.picture ?? idTokenDto.userData.profileImageUrl ?? "",
         firstName: idTokenDto.userData.firstName ?? decoded.displayName ?? "",
@@ -68,15 +80,18 @@ export class AuthService {
         password: decoded.uid,
       });
     }
+
     return await this.signInWithIdToken(idTokenDto);
   }
 
   async signInWithIdToken(
     idTokenDto: IdTokenDto,
-  ): Promise<{ uid: number; accessToken: string; refreshToken: string }> {
+  ): Promise<AuthTokenDto> {
     console.log("Login with token data : ", idTokenDto);
     const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
-    const user = await this.usersService.findByEmail(decoded.email);
+
+    const user = await this.userService.findByEmail(decoded.email);
+
     if (!user) {
       return await this.signUpWithIdToken(idTokenDto);
     }
@@ -99,7 +114,7 @@ export class AuthService {
       });
 
       const userId = decoded.userId;
-      const user = await this.usersService.findOne(userId);
+      const user = await this.userService.findOne(userId);
 
       if (!user) {
         throw new UnauthorizedException("Invalid verification token");
@@ -107,7 +122,7 @@ export class AuthService {
 
       if (!user.isEmailVerified) {
         user.isEmailVerified = true;
-        await this.usersService.update(userId, user);
+        await this.userService.update(userId, user);
       } else {
         console.log("User already verified");
       }
@@ -115,10 +130,11 @@ export class AuthService {
       throw new UnauthorizedException("Invalid verification token");
     }
   }
+
   async login(
     loginDto: LoginDto,
-  ): Promise<{ uid: number; accessToken: string; refreshToken: string }> {
-    const user = await this.usersService.findByEmail(loginDto.email);
+  ): Promise<AuthTokenDto> {
+    const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException("Invalid credentials");
     }
@@ -143,7 +159,7 @@ export class AuthService {
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
-    const user = await this.usersService.findByEmail(forgotPasswordDto.email);
+    const user = await this.userService.findByEmail(forgotPasswordDto.email);
     if (!user) {
       throw new UnauthorizedException("Invalid email");
     }
@@ -173,14 +189,14 @@ export class AuthService {
       });
 
       const userId = decoded.userId;
-      const user = await this.usersService.findOne(userId);
+      const user = await this.userService.findOne(userId);
       if (!user) {
         throw new UnauthorizedException("Invalid reset token");
       }
 
       const hashedPassword = await argon2.hash(resetPasswordDto.password);
       user.passwordHash = hashedPassword;
-      await this.usersService.update(user.id, user);
+      await this.userService.update(user.id, user);
     } catch (err) {
       throw new UnauthorizedException("Invalid reset token");
     }
@@ -188,7 +204,7 @@ export class AuthService {
 
   async refreshToken(
     refreshTokenDto: RefreshTokenDto,
-  ): Promise<{ accessToken: string }> {
+  ): Promise<AccessTokenDto> {
     // Validate refresh token
     try {
       const decoded = this.jwtService.verify(refreshTokenDto.refreshToken, {
@@ -204,12 +220,14 @@ export class AuthService {
     }
   }
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByEmail(email);
+  async validateUser(email: string, pass: string): Promise<DetailsUserDto> {
+    const user = await this.userService.findByEmail(email);
+
     if (user && (await argon2.verify(user.passwordHash, pass))) {
-      const { passwordHash, ...result } = user; // Exclure passwordHash du résultat
-      return result;
+      // const { passwordHash, ...result } = user; // Exclude passwordHash from result
+      return user;
     }
+
     return null;
   }
 

@@ -1,0 +1,1 @@
+export * from './paginated.details.base.workout.dto';
