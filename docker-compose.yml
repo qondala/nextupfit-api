@@ -32,6 +32,8 @@ services:
         condition: service_started
     volumes:
       - .:/usr/app
+      - /home/moneydey/certs/letsencrypt/fullchain.pem:/usr/app/certs/fullchain.pem
+      - /home/moneydey/certs/letsencrypt/privkey.pem:/usr/app/certs/privkey.pem
     networks:
       - moneydey-infra-network
 

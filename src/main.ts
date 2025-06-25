@@ -10,8 +10,8 @@ async function bootstrap() {
 
   // Enable HTTPS protocol
   const httpsOptions = {
-    key: readFileSync('./docker/ngnix/ssl/private/privkey.pem'),
-    cert: readFileSync('./docker/ngnix/ssl/certs/fullchain.pem'),
+    key: readFileSync('./certs/privkey.pem'),
+    cert: readFileSync('./certs/fullchain.pem'),
   };
 
   const app = await NestFactory.create(AppModule, {httpsOptions});
