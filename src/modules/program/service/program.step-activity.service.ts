@@ -2,9 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+
 import { ProgramStepActivityEntity } from "../entity";
 import { CreateProgramStepActivityDto, UpdateProgramStepActivityDto } from "../dto";
+
 
 @Injectable()
 export class ProgramStepActivityService {
@@ -18,17 +20,30 @@ export class ProgramStepActivityService {
     return await this.programStepActivityRepository.save(programStepActivity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[ProgramStepActivityEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.programStepActivityRepository.findAndCount({
-      skip,
-      take: limit,
-      order: {
-        createdAt: "DESC",
-      },
-    });
+    const queryBuilder = this.programStepActivityRepository.createQueryBuilder("programStepActivity");
+
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(limit)
+      .orderBy("programStepActivity.createdAt", "DESC")
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
 
   async findOne(id: number): Promise<ProgramStepActivityEntity> {
@@ -50,32 +65,59 @@ export class ProgramStepActivityService {
     await this.programStepActivityRepository.remove(programStepActivity);
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<[ProgramStepActivityEntity[], number]> {
+  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    const [programStepActivities, total] = await this.programStepActivityRepository
-      .createQueryBuilder("programStepActivity")
+    const queryBuilder = this.programStepActivityRepository.createQueryBuilder("programStepActivity");
+
+    const [items, totalItems] = await queryBuilder
       .where("programStepActivity.name ILIKE :query", { query: `%${query}%` })
       .skip(skip)
       .take(limit)
-      .orderBy("programStepActivity.createdAt", "DESC")
+      .orderBy("programStepActivity.ratingsAvg", "ASC")
+      .orderBy("programStepActivity.attendeesCount", "ASC")
       .getManyAndCount();
 
-    return [programStepActivities, total];
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
 
-  async findByProgramStepId(programStepId: number, options: PaginationOptionsDto): Promise<[ProgramStepActivityEntity[], number]> {
+  async findByStepId(programStepId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.programStepActivityRepository.findAndCount({
-      where: { programStepId },
-      skip,
-      take: limit,
-      order: {
-        createdAt: "DESC",
-      },
-    });
+    const queryBuilder = this.programStepActivityRepository.createQueryBuilder("programStepActivity");
+
+    const [items, totalItems] = await queryBuilder
+      .where({ programStepId })
+      .skip(skip)
+      .take(limit)
+      .orderBy("programStepActivity.position", "ASC")
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
 }
+

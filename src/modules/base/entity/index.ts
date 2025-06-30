@@ -13,3 +13,6 @@ export * from "./base.workout-nutrient-burn.entity";
 export * from "./base.workout-recommended-repetition.entity";
 export * from "./base.workout.entity";
 export * from "./base.nutrient.entity";
+export * from "./base.sociology.entity";
+export * from "./base.sociology-group.entity";
+

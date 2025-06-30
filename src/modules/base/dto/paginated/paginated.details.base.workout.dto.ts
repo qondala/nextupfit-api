@@ -5,6 +5,7 @@ import { Type } from "class-transformer";
 import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsBaseWorkoutDto } from "../details";
 
+
 export class PaginatedDetailsBaseWorkoutDto extends PaginatedResponseDto<DetailsBaseWorkoutDto> {
   @ApiProperty({
     type: () => DetailsBaseWorkoutDto,

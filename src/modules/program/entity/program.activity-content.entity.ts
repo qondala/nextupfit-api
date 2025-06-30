@@ -1,5 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ActivityContent, ProgramActivityContentTypeEnum } from "../types";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+
+import {
+  ActivityContent,
+  ProgramActivityContentTypeEnum,
+  ProgramItemTypeEnum
+} from "../types";
 
 
 @Entity("program_activity_content")
@@ -26,8 +37,23 @@ export class ProgramActivityContentEntity {
   })
   type: ProgramActivityContentTypeEnum;
 
-  @Column({ type: "jsonb" })
+  @Column({ type: "json" })
   content: ActivityContent;
+
+  @Column()
+  containerId: number;
+
+
+  @Column({
+    type: "enum",
+    enum: ProgramItemTypeEnum,
+    default: ProgramItemTypeEnum.activity,
+  })
+  containerType: ProgramItemTypeEnum;
+
+
+  @Column({ default: 0 })
+  position: number;
 
   @CreateDateColumn()
   createdAt: Date;

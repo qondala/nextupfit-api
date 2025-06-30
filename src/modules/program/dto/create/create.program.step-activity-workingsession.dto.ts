@@ -161,4 +161,25 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsOptional()
   @IsNumber()
   ratingsCount: number;
+
+
+  @ApiProperty({
+    description: "Difficulty level on a scale of 10",
+    example: 0,
+    required: false,
+    default: 0
+  })
+  @IsOptional()
+  @IsNumber()
+  difficultyLevel?: number;
+
+
+  @ApiProperty({
+    description: "Position of the Workingsession inside the Program Step Activity",
+    example: 0,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  position: number;
 }

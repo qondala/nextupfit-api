@@ -47,17 +47,17 @@ export class GymManagerEntity {
 
   @OneToOne(() => GymManagerOverviewEntity)
   @JoinColumn({ name: 'managerOverviewId' })
-  overview: GymManagerOverviewEntity;
+  overview?: GymManagerOverviewEntity;
 
   @ManyToOne(() => GymEntity, gym => gym.managers)
   @JoinColumn({ name: "gymId" })
-  gym: GymEntity;
+  gym?: GymEntity;
 
   @OneToMany(() => GymManagerQualificationEntity, qualification => qualification.manager)
-  qualifications: GymManagerQualificationEntity[];
+  qualifications?: GymManagerQualificationEntity[];
 
   @OneToMany(() => GymManagerSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.manager)
-  specializedWorkouts: GymManagerSpecializedInWorkoutEntity[];
+  specializedWorkouts?: GymManagerSpecializedInWorkoutEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

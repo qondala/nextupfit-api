@@ -9,14 +9,20 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
+
 import { ProgramWorkoutNutrientBurnService } from "../service";
-import { ProgramWorkoutNutrientBurnEntity } from "../entity";
-import { CreateProgramWorkoutNutrientBurnDto, UpdateProgramWorkoutNutrientBurnDto } from "../dto";
+import {
+    CreateProgramWorkoutNutrientBurnDto,
+    UpdateProgramWorkoutNutrientBurnDto,
+    DetailsProgramWorkoutNutrientBurnDto,
+    PaginatedDetailsProgramWorkoutNutrientBurnDto
+} from "../dto";
 
 
 @ApiTags("Programs")
@@ -27,70 +33,88 @@ export class ProgramWorkoutNutrientBurnController {
   constructor(private readonly programWorkoutNutrientBurnService: ProgramWorkoutNutrientBurnService) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new program workout nutrient burn" })
-  @ApiResponse({
-    status: 201,
-    description: "The program workout nutrient burn has been successfully created.",
-    type: ProgramWorkoutNutrientBurnEntity,
+  @ApiOperation({
+    summary: "Create a new program workout nutrient burn",
+    operationId: "createProgramWorkoutNutrientBurn"
   })
-  create(@Body() createProgramWorkoutNutrientBurnDto: CreateProgramWorkoutNutrientBurnDto): Promise<ProgramWorkoutNutrientBurnEntity> {
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "The program workout nutrient burn has been successfully created.",
+    type: DetailsProgramWorkoutNutrientBurnDto,
+  })
+  create(@Body() createProgramWorkoutNutrientBurnDto: CreateProgramWorkoutNutrientBurnDto): Promise<DetailsProgramWorkoutNutrientBurnDto> {
     return this.programWorkoutNutrientBurnService.create(createProgramWorkoutNutrientBurnDto);
   }
 
   @Get()
-  @ApiOperation({ summary: "Get all program workout nutrient burns with pagination" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all program workout nutrient burns with pagination.",
-    type: [ProgramWorkoutNutrientBurnEntity],
+  @ApiOperation({
+    summary: "Get all program workout nutrient burns with pagination",
+    operationId: "findAllProgramWorkoutNutrientBurns"
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<[ProgramWorkoutNutrientBurnEntity[], number]> {
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all program workout nutrient burns with pagination.",
+    type: PaginatedDetailsProgramWorkoutNutrientBurnDto,
+  })
+  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramWorkoutNutrientBurnDto> {
     return this.programWorkoutNutrientBurnService.findAll(options);
   }
 
   @Get("program-step-activity/:programStepActivityId")
-  @ApiOperation({ summary: "Get all program workout nutrient burns for a specific program step activity" })
+  @ApiOperation({
+    summary: "Get all program workout nutrient burns for a specific program step activity",
+    operationId: "findByProgramStepActivityIdProgramWorkoutNutrientBurns"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return all program workout nutrient burns for the specified program step activity.",
-    type: [ProgramWorkoutNutrientBurnEntity],
+    type: PaginatedDetailsProgramWorkoutNutrientBurnDto,
   })
   findByProgramStepActivityId(
     @Param("programStepActivityId", ParseIntPipe) programStepActivityId: number,
     @Query() options: PaginationOptionsDto
-  ): Promise<[ProgramWorkoutNutrientBurnEntity[], number]> {
+  ): Promise<PaginatedDetailsProgramWorkoutNutrientBurnDto> {
     return this.programWorkoutNutrientBurnService.findByProgramStepActivityId(programStepActivityId, options);
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a program workout nutrient burn by id" })
-  @ApiResponse({
-    status: 200,
-    description: "Return the program workout nutrient burn.",
-    type: ProgramWorkoutNutrientBurnEntity,
+  @ApiOperation({
+    summary: "Get a program workout nutrient burn by id",
+    operationId: "findOneProgramWorkoutNutrientBurn"
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<ProgramWorkoutNutrientBurnEntity> {
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the program workout nutrient burn.",
+    type: DetailsProgramWorkoutNutrientBurnDto,
+  })
+  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramWorkoutNutrientBurnDto> {
     return this.programWorkoutNutrientBurnService.findOne(id);
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a program workout nutrient burn" })
+  @ApiOperation({
+    summary: "Update a program workout nutrient burn",
+    operationId: "updateProgramWorkoutNutrientBurn"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The program workout nutrient burn has been successfully updated.",
-    type: ProgramWorkoutNutrientBurnEntity,
+    type: DetailsProgramWorkoutNutrientBurnDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateProgramWorkoutNutrientBurnDto: UpdateProgramWorkoutNutrientBurnDto
-  ): Promise<ProgramWorkoutNutrientBurnEntity> {
+  ): Promise<DetailsProgramWorkoutNutrientBurnDto> {
     return this.programWorkoutNutrientBurnService.update(id, updateProgramWorkoutNutrientBurnDto);
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a program workout nutrient burn" })
+  @ApiOperation({
+    summary: "Delete a program workout nutrient burn",
+    operationId: "removeProgramWorkoutNutrientBurn"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.NO_CONTENT,
     description: "The program workout nutrient burn has been successfully deleted.",
   })
   remove(@Param("id", ParseIntPipe) id: number): Promise<void> {

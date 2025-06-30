@@ -20,7 +20,16 @@ export class SocialReviewEntity {
   itemType: SocialReviewItemTypeEnum;
 
   @Column()
+  itemId: number;
+
+  @Column()
   userId: number;
+
+  @Column()
+  easeOfUse: number;
+
+  @Column()
+  effectiveness: number;
 
   @CreateDateColumn()
   createdAt: Date;

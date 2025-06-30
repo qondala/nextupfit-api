@@ -1,29 +1,49 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
+import { BaseSociologyEntity } from "@app/module/base/entity";
+import { GymManagerEntity } from "@app/module/gym/entity";
+
 import {
+  ProgramActivityContentEntity,
   ProgramEntity,
+  ProgramPerSociologyEntity,
   ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramStepActivityWorkingsessionWorkoutEntity,
   ProgramStepEntity,
   ProgramSubscriptionPlanEntity,
-  ProgramWorkoutNutrientBurnEntity
+  ProgramWorkoutNutrientBurnEntity,
+  ProgramManagerEntity
 } from "./entity";
 
 import {
+  ProgramActivityContentController,
   ProgramController, 
+  ProgramManagerController, 
+  ProgramPerSociologyController, 
   ProgramStepActivityController,
+  ProgramStepActivityWorkingsessionController,
+  ProgramStepActivityWorkingsessionWorkoutController,
   ProgramStepController,
   ProgramSubscriptionPlanController,
   ProgramWorkoutNutrientBurnController
 } from "./controller";
 
 import {
+  ProgramActivityContentService,
+  ProgramManagerService,
+  ProgramPerSociologyService,
   ProgramService,
   ProgramStepActivityService,
+  ProgramStepActivityWorkingsessionService,
+  ProgramStepActivityWorkingsessionWorkoutService,
   ProgramStepService,
   ProgramSubscriptionPlanService,
   ProgramWorkoutNutrientBurnService
 } from "./service";
+
+
 
 
 @Module({
@@ -33,29 +53,53 @@ import {
       ProgramStepEntity,
       ProgramStepActivityEntity,
       ProgramSubscriptionPlanEntity,
-      ProgramWorkoutNutrientBurnEntity
+      ProgramWorkoutNutrientBurnEntity,
+      ProgramStepActivityWorkingsessionEntity,
+      ProgramStepActivityWorkingsessionWorkoutEntity,
+      ProgramActivityContentEntity,
+      ProgramPerSociologyEntity,
+      ProgramManagerEntity,
+
+      BaseSociologyEntity,
+      GymManagerEntity,
+
     ]),
   ],
   controllers: [
     ProgramController,
-    ProgramStepActivityController,
     ProgramStepController,
+    ProgramStepActivityController,
     ProgramSubscriptionPlanController,
-    ProgramWorkoutNutrientBurnController
+    ProgramWorkoutNutrientBurnController,
+    ProgramStepActivityWorkingsessionController,
+    ProgramStepActivityWorkingsessionWorkoutController,
+    ProgramActivityContentController,
+    ProgramPerSociologyController,
+    ProgramManagerController
   ],
   providers: [
     ProgramService,
     ProgramStepActivityService,
     ProgramStepService,
     ProgramSubscriptionPlanService,
-    ProgramWorkoutNutrientBurnService
+    ProgramWorkoutNutrientBurnService,
+    ProgramStepActivityWorkingsessionService,
+    ProgramStepActivityWorkingsessionWorkoutService,
+    ProgramActivityContentService,
+    ProgramPerSociologyService,
+    ProgramManagerService
   ],
   exports: [
     ProgramService,
     ProgramStepActivityService,
     ProgramStepService,
     ProgramSubscriptionPlanService,
-    ProgramWorkoutNutrientBurnService
+    ProgramWorkoutNutrientBurnService,
+    ProgramStepActivityWorkingsessionService,
+    ProgramStepActivityWorkingsessionWorkoutService,
+    ProgramActivityContentService,
+    ProgramPerSociologyService,
+    ProgramManagerService
   ],
 })
 export class ProgramModule {}

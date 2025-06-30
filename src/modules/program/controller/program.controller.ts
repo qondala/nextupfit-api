@@ -9,91 +9,193 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
+  NotFoundException,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse
+} from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
-import { ProgramService } from "../service";
-import { ProgramEntity } from "../entity";
-import { CreateProgramDto, UpdateProgramDto } from "../dto";
+
+import {
+  ProgramService,
+  ProgramManagerService,
+  ProgramPerSociologyService,
+  ProgramSubscriptionPlanService
+} from "../service";
+import {
+  CreateProgramDto,
+  UpdateProgramDto,
+  PaginatedDetailsProgramDto,
+  DetailsProgramDto
+} from "../dto";
+import { ProgramItemTypeEnum } from "../types";
 
 
 @ApiTags("Programs")
 @ApiBearerAuth()
-@Controller("program/program")
+@Controller("programs/program")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramController {
-  constructor(private readonly programService: ProgramService) {}
+  constructor(
+    private readonly programService: ProgramService,
+    private readonly programManagerService: ProgramManagerService,
+    private readonly programPerSociologyService: ProgramPerSociologyService,
+    private readonly programSubscriptionPlanService: ProgramSubscriptionPlanService,
+  ) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new program" })
-  @ApiResponse({
-    status: 201,
-    description: "The program has been successfully created.",
-    type: ProgramEntity,
+  @ApiOperation({
+    summary: "Create a new program",
+    operationId: "createProgram"
   })
-  create(@Body() createProgramDto: CreateProgramDto): Promise<ProgramEntity> {
-    return this.programService.create(createProgramDto);
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "The program has been successfully created.",
+    type: DetailsProgramDto,
+  })
+  async create(@Body() createProgramDto: CreateProgramDto): Promise<DetailsProgramDto> {
+    const record = await this.programService.create(createProgramDto);
+
+    const details: DetailsProgramDto = {
+      ...record,
+      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.program),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.program),
+      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(record.id),
+    };
+
+    return details;
   }
 
+
   @Get()
-  @ApiOperation({ summary: "Get all programs with pagination" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all programs with pagination.",
-    type: [ProgramEntity],
+  @ApiOperation({
+    summary: "Get all programs with pagination",
+    operationId: "findAllPrograms"
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<[ProgramEntity[], number]> {
-    return this.programService.findAll(options);
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all programs with pagination.",
+    type: PaginatedDetailsProgramDto,
+  })
+  async findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramDto> {
+    const result = await this.programService.findAll(options);
+
+    const details: DetailsProgramDto[] = await Promise.all(result.items.map(async (program) => ({
+      ...program,
+      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
+      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
+    })));
+
+    return {
+      ...result,
+      items: details
+    };
   }
 
   @Get("search")
-  @ApiOperation({ summary: "Search programs by name" })
-  @ApiResponse({
-    status: 200,
-    description: "Return programs matching the search query.",
-    type: [ProgramEntity],
+  @ApiOperation({
+    summary: "Search programs by name",
+    operationId: "searchPrograms"
   })
-  search(
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return programs matching the search query.",
+    type: PaginatedDetailsProgramDto,
+  })
+  async search(
     @Query("query") query: string,
     @Query() options: PaginationOptionsDto
-  ): Promise<[ProgramEntity[], number]> {
-    return this.programService.search(query, options);
+  ): Promise<PaginatedDetailsProgramDto> {
+    const result = await this.programService.search(query, options);
+
+    const details: DetailsProgramDto[] = await Promise.all(result.items.map(async (program) => ({
+      ...program,
+      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
+      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
+    })));
+
+    return {
+      ...result,
+      items: details
+    };
   }
 
+
+
   @Get(":id")
-  @ApiOperation({ summary: "Get a program by id" })
-  @ApiResponse({
-    status: 200,
-    description: "Return the program.",
-    type: ProgramEntity,
+  @ApiOperation({
+    summary: "Get a program by id",
+    operationId: "findOneProgram"
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<ProgramEntity> {
-    return this.programService.findOne(id);
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the program.",
+    type: DetailsProgramDto,
+  })
+  @ApiNotFoundResponse({
+    description: "Program not found",
+    type: NotFoundException,
+  })
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramDto> {
+    const program = await this.programService.findOne(id);
+    if (!program) {
+      throw new NotFoundException(`Program with ID ${id} not found`);
+    }
+
+    const details: DetailsProgramDto = {
+      ...program,
+      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
+      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
+    };
+
+    return details;
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a program" })
-  @ApiResponse({
-    status: 200,
-    description: "The program has been successfully updated.",
-    type: ProgramEntity,
+  @ApiOperation({
+    summary: "Update a program",
+    operationId: "updateProgram"
   })
-  update(
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "The program has been successfully updated.",
+    type: DetailsProgramDto,
+  })
+  async update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateProgramDto: UpdateProgramDto
-  ): Promise<ProgramEntity> {
-    return this.programService.update(id, updateProgramDto);
+  ): Promise<DetailsProgramDto> {
+    const record = await this.programService.update(id, updateProgramDto);
+    const details: DetailsProgramDto = {
+      ...record,
+      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.program),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.program),
+    };
+
+    return details;
   }
 
+
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a program" })
+  @ApiOperation({
+    summary: "Delete a program",
+    operationId: "removeProgram"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The program has been successfully deleted.",
   })
-  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.programService.remove(id);
   }
 }

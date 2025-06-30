@@ -1,6 +1,28 @@
-import { PartialType } from "@nestjs/mapped-types";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsNumber,
+  IsOptional,
+} from "class-validator";
+
+export class UpdateProgramPerSociologyDto {
+
+  @ApiProperty({
+    description: "Id of the program",
+    example: 43354534,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  programId?: number;
 
 
-import { CreateProgramPerSociologyDto } from "../create";
+  @ApiProperty({
+    description: "Id of the sociology",
+    example: 3,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  baseSociologyId?: number;
+}
 
-export class UpdateProgramPerSociologyDto extends PartialType(CreateProgramPerSociologyDto) {}

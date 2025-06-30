@@ -3,7 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { PaginationOptionsDto } from "@app/common/dto";
+
 import { ProgramSubscriptionPlanEntity } from "../entity";
+import { PaginatedResponseDto } from "@app/common/dto";
 import { CreateProgramSubscriptionPlanDto, UpdateProgramSubscriptionPlanDto } from "../dto";
 
 @Injectable()
@@ -18,17 +20,30 @@ export class ProgramSubscriptionPlanService {
     return await this.programSubscriptionPlanRepository.save(programSubscriptionPlan);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[ProgramSubscriptionPlanEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramSubscriptionPlanEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.programSubscriptionPlanRepository.findAndCount({
+    const [items, totalItems] = await this.programSubscriptionPlanRepository.findAndCount({
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
 
   async findOne(id: number): Promise<ProgramSubscriptionPlanEntity> {
@@ -50,7 +65,7 @@ export class ProgramSubscriptionPlanService {
     await this.programSubscriptionPlanRepository.remove(programSubscriptionPlan);
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<[ProgramSubscriptionPlanEntity[], number]> {
+  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramSubscriptionPlanEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -62,6 +77,34 @@ export class ProgramSubscriptionPlanService {
       .orderBy("programSubscriptionPlan.createdAt", "DESC")
       .getManyAndCount();
 
-    return [programSubscriptionPlans, total];
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      items: programSubscriptionPlans,
+      meta: {
+        totalItems: total,
+        itemCount: programSubscriptionPlans.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
+
+
+    /**
+     * Fetches program subscription plans.
+     * 
+     * @param programId The ID of the program.
+     * @returns An array of program subscription plans.
+     */
+    async fetchProgramSubscriptionPlans(programId: number): Promise<ProgramSubscriptionPlanEntity[]> {
+      const programSubscriptionPlans = await this.programSubscriptionPlanRepository.find({
+        where: {
+          programId
+        }
+      });
+
+      return programSubscriptionPlans;
+    }
 }

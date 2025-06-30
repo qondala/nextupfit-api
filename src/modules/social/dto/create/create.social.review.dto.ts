@@ -33,6 +33,14 @@ export class CreateSocialReviewDto {
   @IsEnum(SocialReviewItemTypeEnum)
   itemType: SocialReviewItemTypeEnum;
 
+  @ApiProperty({
+    description: "Item id to be rated",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  itemId: number;
 
   @ApiProperty({
     description: "User id performing rating",

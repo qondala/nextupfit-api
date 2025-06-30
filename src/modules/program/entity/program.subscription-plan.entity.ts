@@ -7,7 +7,7 @@ export class ProgramSubscriptionPlanEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   planName: string;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
@@ -31,6 +31,9 @@ export class ProgramSubscriptionPlanEntity {
 
   @Column({ default: 0 })
   trialNumberProgramActivities: number;
+
+  @Column({ nullable: false })
+  programId: number;
 
   @Column()
   planFeatures: string;

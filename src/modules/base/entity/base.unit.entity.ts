@@ -1,4 +1,10 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
 
 import { BaseUnitContainanceEnum } from "../types";
 
@@ -10,11 +16,11 @@ export class BaseUnitEntity {
   id: number;
 
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ nullable: false })
   name: string;
 
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ nullable: false })
   abbreviation: string;
 
 
@@ -27,10 +33,11 @@ export class BaseUnitEntity {
   containance: BaseUnitContainanceEnum;
 
 
-  @Column({ type: "int", nullable: true })
+  @Column({ nullable: true })
   order?: number;
 
-  @Column({ type: "varchar", nullable: true, unique: true })
+
+  @Column({ nullable: true, unique: true })
   code?: string;
 
 

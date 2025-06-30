@@ -12,3 +12,6 @@ export * from "./create.base.workout-howto-perform-step.dto";
 export * from "./create.base.workout-nutrient-burn.dto";
 export * from "./create.base.workout-recommended-repetition.dto";
 export * from "./create.base.workout.dto";
+export * from "./create.base.sociology-group.dto";
+export * from "./create.base.sociology.dto";
+

@@ -15,12 +15,12 @@ export interface AccordionContent {
 /**
  *  Carousel content type definition
  */
-export interface CacouselContentItem {
+export interface CarouselContentItem {
   title: string;
   text: string;
   mediaUrl?: string;
 }
 
-export interface CacouselContent {
-  elements: CacouselContentItem[]
+export interface CarouselContent {
+  elements: CarouselContentItem[]
 }

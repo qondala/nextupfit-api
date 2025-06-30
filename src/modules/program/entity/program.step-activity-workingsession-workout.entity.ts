@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { ProgramStepActivityStatusEnum } from "../types";
+import { ProgramStepActivityWorkingsessionEntity } from "./program.step-activity-workingsession.entity";
 
 
 @Entity("program_step_activity_workingsession_workout")
@@ -64,6 +65,16 @@ export class ProgramStepActivityWorkingsessionWorkoutEntity {
 
   @Column({ default: 0 })
   ratingsCount: number;
+
+  @Column({ default: 0 })
+  difficultyLevel: number;
+
+  @Column({ default: 0 })
+  position: number;
+
+  @ManyToOne(() => ProgramStepActivityWorkingsessionEntity, workingsession => workingsession.workouts)
+  @JoinColumn({ name: 'workingSessionId' })
+  workingsession: ProgramStepActivityWorkingsessionEntity;
 
   @CreateDateColumn()
   createdAt: Date;

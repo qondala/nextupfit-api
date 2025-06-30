@@ -5,12 +5,14 @@ import {
   IsString,
   IsEnum,
   IsObject,
+  IsOptional,
 } from "class-validator";
 
 import {
   ActivityContent,
   ActivityContentBuilder,
-  ProgramActivityContentTypeEnum
+  ProgramActivityContentTypeEnum,
+  ProgramItemTypeEnum
 } from "../../types";
 
 
@@ -72,5 +74,34 @@ export class CreateProgramActivityContentDto {
   })
   @IsObject()
   content: ActivityContent;
+
+
+  @ApiProperty({
+    description: "Program container id (program id or step id or activity id or workout id)",
+    example: 4335,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  containerId: number;
+
+
+  @ApiProperty({
+    description: "Program container type",
+    example: ProgramItemTypeEnum.activity,
+    required: true,
+  })
+  @IsEnum(ProgramItemTypeEnum)
+  containerType: ProgramItemTypeEnum;
+
+
+  @ApiProperty({
+    description: "Position of the content inside the holder (step, activity, working session, workout)",
+    example: 0,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  position: number;
 
 }

@@ -1,5 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
 import { ProgramStepStatusEnum } from "../types";
+import { ProgramEntity, ProgramStepActivityEntity } from ".";
 
 
 @Entity("program_step")
@@ -53,9 +63,19 @@ export class ProgramStepEntity {
   @Column({ default: 0 })
   difficultyLevel: number;
 
+  @Column({ default: 0 })
+  position: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => ProgramEntity, program => program.steps)
+  @JoinColumn({ name: 'programId' })
+  program: ProgramEntity;
+
+  @OneToMany(() => ProgramStepActivityEntity, activity => activity.step)
+  activities: ProgramStepActivityEntity[];
 }

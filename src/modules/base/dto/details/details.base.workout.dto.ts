@@ -1,9 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsOptional, IsString, IsArray, IsEnum, IsDate } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsArray,
+  IsEnum,
+  IsDate
+} from "class-validator";
 
-import { 
+import {
   BaseExerciseTargetEnum,
-  BaseWorkoutDisciplineEnum } from "../../types";
+  BaseWorkoutDisciplineEnum
+} from "../../types";
 
 
 export class DetailsBaseWorkoutDto {

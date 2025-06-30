@@ -161,4 +161,13 @@ export class CreateProgramStepDto {
   @IsOptional()
   @IsNumber()
   difficultyLevel?: number;
+
+  @ApiProperty({
+    description: "Position of the Step inside the Program",
+    example: 0,
+    required: false
+  })
+  @IsOptional()
+  @IsNumber()
+  position: number;
 }

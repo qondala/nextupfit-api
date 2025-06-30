@@ -6,4 +6,5 @@ export * from "./update.program.workout-nutrient-burn.dto";
 export * from "./update.program.step-activity-workingsession-workout.dto";
 export * from "./update.program.step-activity-workingsession.dto";
 export * from "./update.program.activity-content.dto";
-export * from "./update.program.per-sociology.dto"; 
+export * from "./update.program.per-sociology.dto";
+export * from "./update.program.manager.dto";
