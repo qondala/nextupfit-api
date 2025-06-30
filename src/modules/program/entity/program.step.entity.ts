@@ -53,6 +53,9 @@ export class ProgramStepEntity {
   @Column({ default: 0 })
   difficultyLevel: number;
 
+  @Column({ default: 0 })
+  position: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

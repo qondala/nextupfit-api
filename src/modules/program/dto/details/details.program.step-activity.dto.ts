@@ -10,9 +10,21 @@ import {
 import { ProgramStepActivityStatusEnum } from "../../types";
 
 
-export class CreateProgramStepActivityWorkingsessionDto {
+export class DetailsProgramStepActivityDto {
+
   @ApiProperty({
-    description: "Program step activity Working session name",
+    type: Number,
+    description: "record id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+
+  @ApiProperty({
+    description: "Program step activity name",
     example: "Daily workout",
     required: true,
   })
@@ -21,7 +33,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   name: string;
 
   @ApiProperty({
-    description: "Program step activity Working session description",
+    description: "Program step activity description",
     example: "Here a sample description of the step",
     required: false,
   })
@@ -57,15 +69,6 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   programStepId: number;
 
-  @ApiProperty({
-    description: "Id of the program step acitivity",
-    example: 45645,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  programStepActivityId: number;
-
 
   @ApiProperty({
     description: "Id of the gym manager owning the program",
@@ -76,7 +79,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   ownerUserId: number;
   
-	;
+
   @ApiProperty({
     description: "Date the program step activity was created",
     example: Date(),
@@ -86,22 +89,14 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsDate()
   createdDate?: Date;
 
-  
   @ApiProperty({
     description: "Step icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
   @IsString()
-  imagerUrl?: string;
+  iconUrl?: string;
 
-  @ApiProperty({
-    description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
-    required: false,
-  })
-  @IsString()
-  coverUrl?: string;
 
   @ApiProperty({
     description: "Program step activity status",
@@ -114,7 +109,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
-    description: "Number points gained after passing this Workingsession",
+    description: "Number points gained after passing this activity",
     example: 10,
     required: false,
   })
@@ -124,9 +119,10 @@ export class CreateProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
-    description: "Workingsession attendees count",
+    description: "Activity attendees count",
     example: 5000,
-    required: false
+    required: false,
+    default: 0
   })
   @IsOptional()
   @IsNumber()
@@ -136,31 +132,56 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @ApiProperty({
     description: "Views count",
     example: 1000,
-    required: false
+    required: false,
+    default: 0
   })
   @IsOptional()
   @IsNumber()
-  viewsCount: number;
+  viewsCount?: number;
 
 
   @ApiProperty({
     description: "Ratings average",
     example: 4.5,
-    required: false
+    required: false,
+    default: 0
   })
   @IsOptional()
   @IsNumber()
-  ratingsAvg: number;
+  ratingsAvg?: number;
 
 
   @ApiProperty({
-    description: "Number times Workingsession was rated",
+    description: "Number times activity was rated",
     example: 3000,
-    required: false
+    required: false,
+    default: 0
   })
   @IsOptional()
   @IsNumber()
-  ratingsCount: number;
+  ratingsCount?: number;
+
+
+  @ApiProperty({
+    description: "Duration of the step",
+    example: 2,
+    required: false,
+    default: 2
+  })
+  @IsOptional()
+  @IsNumber()
+  duration?: number;
+
+
+  @ApiProperty({
+    description: "Duration unit",
+    example: 16,
+    required: false,
+    default: 16
+  })
+  @IsOptional()
+  @IsNumber()
+  durationUnitId?: number;
 
 
   @ApiProperty({
@@ -175,7 +196,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
-    description: "Position of the Workingsession inside the Program Step Activity",
+    description: "Position of the Step inside the Program",
     example: 0,
     required: false
   })

@@ -10,27 +10,61 @@ import {
 import { ProgramStepActivityStatusEnum } from "../../types";
 
 
-export class CreateProgramStepActivityWorkingsessionDto {
+export class DetailsProgramStepActivityWorkingsessionWorkoutDto {
+
   @ApiProperty({
-    description: "Program step activity Working session name",
-    example: "Daily workout",
+    type: Number,
+    description: "record id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+
+  @ApiProperty({
+    description: "Workingsession's id",
+    example: 6789,
+    required: false,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  workingSessionId?: number;
+
+
+  @ApiProperty({
+    description: "Base workout's id",
+    example: 12,
+    required: false,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  baseWorkoutId: number;
+
+
+  @ApiProperty({
+    description: "Working session's title",
+    example: "Simple Pillates workout",
     required: true,
   })
   @IsNotEmpty()
   @IsString()
-  name: string;
+  title: string;
+
 
   @ApiProperty({
-    description: "Program step activity Working session description",
-    example: "Here a sample description of the step",
+    description: "Workingsession's description",
+    example: "Here's a sample description of the workout",
     required: false,
   })
   @IsOptional()
   @IsString()
-  description: string;
+  description?: string;
+
 
   @ApiProperty({
-    description: "Id of the gym promoting the program",
+    description: "Id of the gym promoting the Workingession",
     example: 4335,
     required: true,
   })
@@ -57,6 +91,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   programStepId: number;
 
+
   @ApiProperty({
     description: "Id of the program step acitivity",
     example: 45645,
@@ -68,7 +103,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
-    description: "Id of the gym manager owning the program",
+    description: "Id of the gym manager owning the program workout",
     example: 4335,
     required: true,
   })
@@ -76,7 +111,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   ownerUserId: number;
   
-	;
+
   @ApiProperty({
     description: "Date the program step activity was created",
     example: Date(),
@@ -86,22 +121,36 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsDate()
   createdDate?: Date;
 
-  
-  @ApiProperty({
-    description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
-    required: false,
-  })
-  @IsString()
-  imagerUrl?: string;
 
   @ApiProperty({
-    description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    description: "Workout image URL",
+    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
     required: false,
   })
+  @IsOptional()
   @IsString()
-  coverUrl?: string;
+  imageUrl?: string;
+
+
+  @ApiProperty({
+    description: "Workout illustration URL",
+    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  illustrationUrl?: string;
+
+
+  @ApiProperty({
+    description: "Workout illustration URL",
+    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
+  
 
   @ApiProperty({
     description: "Program step activity status",
@@ -175,7 +224,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
-    description: "Position of the Workingsession inside the Program Step Activity",
+    description: "Position of the Workout inside the Program Activity Workingsession",
     example: 0,
     required: false
   })

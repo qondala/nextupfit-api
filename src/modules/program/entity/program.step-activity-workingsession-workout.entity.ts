@@ -65,6 +65,12 @@ export class ProgramStepActivityWorkingsessionWorkoutEntity {
   @Column({ default: 0 })
   ratingsCount: number;
 
+  @Column({ default: 0 })
+  difficultyLevel: number;
+
+  @Column({ default: 0 })
+  position: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

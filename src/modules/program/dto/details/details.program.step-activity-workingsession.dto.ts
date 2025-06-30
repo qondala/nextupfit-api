@@ -10,7 +10,19 @@ import {
 import { ProgramStepActivityStatusEnum } from "../../types";
 
 
-export class CreateProgramStepActivityWorkingsessionDto {
+export class DetailsProgramStepActivityWorkingsessionDto {
+
+  @ApiProperty({
+    type: Number,
+    description: "record id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+
   @ApiProperty({
     description: "Program step activity Working session name",
     example: "Daily workout",

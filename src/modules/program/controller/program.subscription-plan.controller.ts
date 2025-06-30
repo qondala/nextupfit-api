@@ -14,10 +14,14 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagg
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
-import { ProgramSubscriptionPlanService } from "../service";
-import { ProgramSubscriptionPlanEntity } from "../entity";
-import { CreateProgramSubscriptionPlanDto, UpdateProgramSubscriptionPlanDto } from "../dto";
 
+import { ProgramSubscriptionPlanService } from "../service";
+import {
+  CreateProgramSubscriptionPlanDto,
+  UpdateProgramSubscriptionPlanDto,
+  DetailsProgramSubscriptionPlanDto,
+  PaginatedDetailsProgramSubscriptionPlanDto
+} from "../dto";
 
 @ApiTags("Programs")
 @ApiBearerAuth()
@@ -31,9 +35,9 @@ export class ProgramSubscriptionPlanController {
   @ApiResponse({
     status: 201,
     description: "The program subscription plan has been successfully created.",
-    type: ProgramSubscriptionPlanEntity,
+    type: DetailsProgramSubscriptionPlanDto,
   })
-  create(@Body() createProgramSubscriptionPlanDto: CreateProgramSubscriptionPlanDto): Promise<ProgramSubscriptionPlanEntity> {
+  create(@Body() createProgramSubscriptionPlanDto: CreateProgramSubscriptionPlanDto): Promise<DetailsProgramSubscriptionPlanDto> {
     return this.programSubscriptionPlanService.create(createProgramSubscriptionPlanDto);
   }
 
@@ -42,9 +46,9 @@ export class ProgramSubscriptionPlanController {
   @ApiResponse({
     status: 200,
     description: "Return all program subscription plans with pagination.",
-    type: [ProgramSubscriptionPlanEntity],
+    type: PaginatedDetailsProgramSubscriptionPlanDto,
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<[ProgramSubscriptionPlanEntity[], number]> {
+  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramSubscriptionPlanDto> {
     return this.programSubscriptionPlanService.findAll(options);
   }
 
@@ -53,12 +57,12 @@ export class ProgramSubscriptionPlanController {
   @ApiResponse({
     status: 200,
     description: "Return program subscription plans matching the search query.",
-    type: [ProgramSubscriptionPlanEntity],
+    type: PaginatedDetailsProgramSubscriptionPlanDto,
   })
   search(
     @Query("query") query: string,
     @Query() options: PaginationOptionsDto
-  ): Promise<[ProgramSubscriptionPlanEntity[], number]> {
+  ): Promise<PaginatedDetailsProgramSubscriptionPlanDto> {
     return this.programSubscriptionPlanService.search(query, options);
   }
 
@@ -67,9 +71,9 @@ export class ProgramSubscriptionPlanController {
   @ApiResponse({
     status: 200,
     description: "Return the program subscription plan.",
-    type: ProgramSubscriptionPlanEntity,
+    type: DetailsProgramSubscriptionPlanDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<ProgramSubscriptionPlanEntity> {
+  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramSubscriptionPlanDto> {
     return this.programSubscriptionPlanService.findOne(id);
   }
 
@@ -78,12 +82,12 @@ export class ProgramSubscriptionPlanController {
   @ApiResponse({
     status: 200,
     description: "The program subscription plan has been successfully updated.",
-    type: ProgramSubscriptionPlanEntity,
+    type: DetailsProgramSubscriptionPlanDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateProgramSubscriptionPlanDto: UpdateProgramSubscriptionPlanDto
-  ): Promise<ProgramSubscriptionPlanEntity> {
+  ): Promise<DetailsProgramSubscriptionPlanDto> {
     return this.programSubscriptionPlanService.update(id, updateProgramSubscriptionPlanDto);
   }
 

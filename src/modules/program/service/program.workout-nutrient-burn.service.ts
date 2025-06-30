@@ -3,8 +3,11 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto } from "@app/common/dto";
+
 import { ProgramWorkoutNutrientBurnEntity } from "../entity";
 import { CreateProgramWorkoutNutrientBurnDto, UpdateProgramWorkoutNutrientBurnDto } from "../dto";
+
 
 @Injectable()
 export class ProgramWorkoutNutrientBurnService {
@@ -18,17 +21,30 @@ export class ProgramWorkoutNutrientBurnService {
     return await this.programWorkoutNutrientBurnRepository.save(programWorkoutNutrientBurn);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[ProgramWorkoutNutrientBurnEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramWorkoutNutrientBurnEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.programWorkoutNutrientBurnRepository.findAndCount({
+    const [items, totalItems] = await this.programWorkoutNutrientBurnRepository.findAndCount({
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
   }
 
   async findOne(id: number): Promise<ProgramWorkoutNutrientBurnEntity> {
@@ -50,11 +66,11 @@ export class ProgramWorkoutNutrientBurnService {
     await this.programWorkoutNutrientBurnRepository.remove(programWorkoutNutrientBurn);
   }
 
-  async findByProgramStepActivityId(programStepActivityId: number, options: PaginationOptionsDto): Promise<[ProgramWorkoutNutrientBurnEntity[], number]> {
+  async findByProgramStepActivityId(programStepActivityId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramWorkoutNutrientBurnEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.programWorkoutNutrientBurnRepository.findAndCount({
+    const [items, totalItems] = await this.programWorkoutNutrientBurnRepository.findAndCount({
       where: { programStepActivityId },
       skip,
       take: limit,
@@ -62,5 +78,18 @@ export class ProgramWorkoutNutrientBurnService {
         createdAt: "DESC",
       },
     });
-  }
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
+    }
 }

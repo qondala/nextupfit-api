@@ -11,12 +11,22 @@ import {
 import {
   ActivityContent,
   ActivityContentBuilder,
-  ProgramActivityContentTypeEnum,
-  ProgramContentHolderTypeEnum
+  ProgramActivityContentTypeEnum
 } from "../../types";
 
 
-export class CreateProgramActivityContentDto {
+export class DetailsProgramActivityContentDto {
+
+  @ApiProperty({
+    type: Number,
+    description: "record id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
 
   @ApiProperty({
     description: "Program activity content title",
@@ -75,24 +85,6 @@ export class CreateProgramActivityContentDto {
   @IsObject()
   content: ActivityContent;
 
-
-  @ApiProperty({
-    description: "Content holder id",
-    example: 45645,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  contentHolderId: number;
-
-  @ApiProperty({
-    description: "Content holder type",
-    example: ProgramContentHolderTypeEnum.program_step,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsEnum(ProgramContentHolderTypeEnum)
-  contentHolderType: ProgramContentHolderTypeEnum;
 
   @ApiProperty({
     description: "Position of the content inside the holder (step, activity, working session, workout)",

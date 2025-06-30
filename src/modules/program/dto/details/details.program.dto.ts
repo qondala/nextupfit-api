@@ -3,31 +3,33 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsDate,
   IsString,
   IsEnum,
 } from "class-validator";
-import { ProgramStepActivityStatusEnum } from "../../types";
+import { ProgramStatusEnum, ProgramTypeEnum } from "../../types";
 
 
-export class CreateProgramStepActivityDto {
+export class DetailsProgramDto {
+
   @ApiProperty({
-    description: "Program step activity name",
+    type: Number,
+    description: "record id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
+
+  @ApiProperty({
+    description: "Program name",
     example: "Daily workout",
     required: true,
   })
   @IsNotEmpty()
   @IsString()
   name: string;
-
-  @ApiProperty({
-    description: "Program step activity description",
-    example: "Here a sample description of the step",
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  description: string;
 
   @ApiProperty({
     description: "Id of the gym promoting the program",
@@ -37,25 +39,6 @@ export class CreateProgramStepActivityDto {
   @IsNotEmpty()
   @IsNumber()
   gymId: number;
-
-
-  @ApiProperty({
-    description: "Id of the program",
-    example: 80,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  programId: number;
-
-  @ApiProperty({
-    description: "Id of the program step",
-    example: 789,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  programStepId: number;
 
 
   @ApiProperty({
@@ -69,16 +52,25 @@ export class CreateProgramStepActivityDto {
   
 
   @ApiProperty({
-    description: "Date the program step activity was created",
-    example: Date(),
-    required: false,
+    description: "Program type",
+    example: ProgramTypeEnum.nutrition,
+    required: true,
   })
-  @IsOptional()
-  @IsDate()
-  createdDate?: Date;
+  @IsEnum(ProgramTypeEnum)
+  type: ProgramTypeEnum;
+
 
   @ApiProperty({
-    description: "Step icon URL",
+    description: "Program status",
+    example: ProgramStatusEnum.published,
+    required: true,
+  })
+  @IsEnum(ProgramStatusEnum)
+  status: ProgramStatusEnum;
+
+
+  @ApiProperty({
+    description: "Program icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
@@ -87,27 +79,16 @@ export class CreateProgramStepActivityDto {
 
 
   @ApiProperty({
-    description: "Program step activity status",
-    example: ProgramStepActivityStatusEnum.published,
+    description: "Program icon URL",
+    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
     required: false,
   })
-  @IsOptional()
-  @IsEnum(ProgramStepActivityStatusEnum)
-  status: ProgramStepActivityStatusEnum;
+  @IsString()
+  coverUrl?: string;
 
 
   @ApiProperty({
-    description: "Number points gained after passing this activity",
-    example: 10,
-    required: false,
-  })
-  @IsOptional()
-  @IsNumber()
-  points: number;
-
-
-  @ApiProperty({
-    description: "Activity attendees count",
+    description: "Program attendees count",
     example: 5000,
     required: false,
     default: 0
@@ -140,7 +121,7 @@ export class CreateProgramStepActivityDto {
 
 
   @ApiProperty({
-    description: "Number times activity was rated",
+    description: "Number times program was rated",
     example: 3000,
     required: false,
     default: 0
@@ -151,7 +132,7 @@ export class CreateProgramStepActivityDto {
 
 
   @ApiProperty({
-    description: "Duration of the step",
+    description: "Duration of the program",
     example: 2,
     required: false,
     default: 2
@@ -181,13 +162,4 @@ export class CreateProgramStepActivityDto {
   @IsOptional()
   @IsNumber()
   difficultyLevel?: number;
-
-  @ApiProperty({
-    description: "Position of the Activity inside the Program Step",
-    example: 0,
-    required: false
-  })
-  @IsOptional()
-  @IsNumber()
-  position: number;
 }

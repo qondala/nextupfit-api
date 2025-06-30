@@ -9,88 +9,128 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
+  NotFoundException,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiNotFoundResponse
+} from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
+
 import { ProgramService } from "../service";
-import { ProgramEntity } from "../entity";
-import { CreateProgramDto, UpdateProgramDto } from "../dto";
+import {
+  CreateProgramDto,
+  UpdateProgramDto,
+  PaginatedDetailsProgramDto,
+  DetailsProgramDto
+} from "../dto";
 
 
 @ApiTags("Programs")
 @ApiBearerAuth()
-@Controller("program/program")
+@Controller("programs/program")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramController {
   constructor(private readonly programService: ProgramService) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new program" })
-  @ApiResponse({
-    status: 201,
-    description: "The program has been successfully created.",
-    type: ProgramEntity,
+  @ApiOperation({
+    summary: "Create a new program",
+    operationId: "createProgram"
   })
-  create(@Body() createProgramDto: CreateProgramDto): Promise<ProgramEntity> {
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "The program has been successfully created.",
+    type: DetailsProgramDto,
+  })
+  create(@Body() createProgramDto: CreateProgramDto): Promise<DetailsProgramDto> {
     return this.programService.create(createProgramDto);
   }
 
+
   @Get()
-  @ApiOperation({ summary: "Get all programs with pagination" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all programs with pagination.",
-    type: [ProgramEntity],
+  @ApiOperation({
+    summary: "Get all programs with pagination",
+    operationId: "findAllPrograms"
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<[ProgramEntity[], number]> {
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all programs with pagination.",
+    type: PaginatedDetailsProgramDto,
+  })
+  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramDto> {
     return this.programService.findAll(options);
   }
 
   @Get("search")
-  @ApiOperation({ summary: "Search programs by name" })
+  @ApiOperation({
+    summary: "Search programs by name",
+    operationId: "searchPrograms"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return programs matching the search query.",
-    type: [ProgramEntity],
+    type: PaginatedDetailsProgramDto,
   })
   search(
     @Query("query") query: string,
     @Query() options: PaginationOptionsDto
-  ): Promise<[ProgramEntity[], number]> {
+  ): Promise<PaginatedDetailsProgramDto> {
     return this.programService.search(query, options);
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a program by id" })
-  @ApiResponse({
-    status: 200,
-    description: "Return the program.",
-    type: ProgramEntity,
+  @ApiOperation({
+    summary: "Get a program by id",
+    operationId: "findOneProgram"
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<ProgramEntity> {
-    return this.programService.findOne(id);
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the program.",
+    type: DetailsProgramDto,
+  })
+  @ApiNotFoundResponse({
+    description: "Program not found",
+    type: NotFoundException,
+  })
+  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramDto> {
+    const program = this.programService.findOne(id);
+    if (!program) {
+      throw new NotFoundException(`Program with ID ${id} not found`);
+    }
+    return program;
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a program" })
+  @ApiOperation({
+    summary: "Update a program",
+    operationId: "updateProgram"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The program has been successfully updated.",
-    type: ProgramEntity,
+    type: DetailsProgramDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateProgramDto: UpdateProgramDto
-  ): Promise<ProgramEntity> {
+  ): Promise<DetailsProgramDto> {
     return this.programService.update(id, updateProgramDto);
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a program" })
+  @ApiOperation({
+    summary: "Delete a program",
+    operationId: "removeProgram"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The program has been successfully deleted.",
   })
   remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
