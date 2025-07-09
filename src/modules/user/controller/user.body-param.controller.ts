@@ -101,4 +101,5 @@ export class UserBodyParamController {
   remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.userBodyParamService.remove(id);
   }
+
 }

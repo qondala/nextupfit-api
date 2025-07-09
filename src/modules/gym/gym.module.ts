@@ -9,11 +9,12 @@ import {
   GymManagerQualificationController,
   GymManagerSpecializedInWorkoutController,
   GymMembershipPlanController,
-  GymMembershipPlanFeaturesController,
   GymManagerFollowerController,
   GymManagerRequestController,
   GymMembershipController,
   GymSpecializedInWorkoutController,
+  GymSpecializedInNutritionController,
+  GymManagerSpecializedInNutritionController,
 } from './controller';
 
 import {
@@ -24,11 +25,12 @@ import {
   GymManagerQualificationService,
   GymManagerSpecializedInWorkoutService,
   GymMembershipPlanService,
-  GymMembershipPlanFeaturesService,
   GymManagerFollowerService,
   GymManagerRequestService,
   GymMembershipService,
   GymSpecializedInWorkoutService,
+  GymSpecializedInNutritionService,
+  GymManagerSpecializedInNutritionService,
 } from './service';
 
 import {
@@ -39,11 +41,12 @@ import {
   GymManagerQualificationEntity,
   GymManagerSpecializedInWorkoutEntity,
   GymMembershipPlanEntity,
-  GymMembershipPlanFeaturesEntity,
   GymManagerFollowerEntity,
   GymManagerRequestEntity,
   GymMembershipEntity,
   GymSpecializedInWorkoutEntity,
+  GymSpecializedInNutritionEntity,
+      GymManagerSpecializedInNutritionEntity,
 } from './entity';
 
 @Module({
@@ -56,11 +59,12 @@ import {
       GymManagerQualificationEntity,
       GymManagerSpecializedInWorkoutEntity,
       GymMembershipPlanEntity,
-      GymMembershipPlanFeaturesEntity,
       GymManagerFollowerEntity,
       GymManagerRequestEntity,
       GymMembershipEntity,
       GymSpecializedInWorkoutEntity,
+   GymSpecializedInNutritionEntity,
+      GymManagerSpecializedInNutritionEntity,
     ]),
   ],
   controllers: [
@@ -71,11 +75,12 @@ import {
     GymManagerQualificationController,
     GymManagerSpecializedInWorkoutController,
     GymMembershipPlanController,
-    GymMembershipPlanFeaturesController,
     GymManagerFollowerController,
     GymManagerRequestController,
     GymMembershipController,
     GymSpecializedInWorkoutController,
+    GymSpecializedInNutritionController,
+  GymManagerSpecializedInNutritionController,
   ],
   providers: [
     GymService,
@@ -85,11 +90,12 @@ import {
     GymManagerQualificationService,
     GymManagerSpecializedInWorkoutService,
     GymMembershipPlanService,
-    GymMembershipPlanFeaturesService,
     GymManagerFollowerService,
     GymManagerRequestService,
     GymMembershipService,
     GymSpecializedInWorkoutService,
+    GymSpecializedInNutritionService,
+  GymManagerSpecializedInNutritionService,
   ],
   exports: [
     GymService,
@@ -99,11 +105,12 @@ import {
     GymManagerQualificationService,
     GymManagerSpecializedInWorkoutService,
     GymMembershipPlanService,
-    GymMembershipPlanFeaturesService,
     GymManagerFollowerService,
     GymManagerRequestService,
     GymMembershipService,
     GymSpecializedInWorkoutService,
+    GymSpecializedInNutritionService,
+  GymManagerSpecializedInNutritionService,
   ],
 })
 export class GymModule {}

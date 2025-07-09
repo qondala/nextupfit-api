@@ -11,16 +11,18 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 
-import { ProgramStepActivityStatusEnum } from "../../types";
-import { DetailsProgramPerSociologyDto, DetailsProgramStepActivityWorkingsessionWorkoutDto } from ".";
 import { DetailsGymManagerDto } from "@app/module/gym/dto";
 import { DetailsBaseSociologyDto } from "@app/module/base/dto";
+
+import { ProgramStepActivityStatusEnum } from "../../types";
+import { DetailsProgramStepActivityWorkingsessionWorkoutDto } from ".";
+import { SwaggerType } from "@app/common/types";
 
 
 export class DetailsProgramStepActivityWorkingsessionDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -31,6 +33,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step activity Working session name",
     example: "Daily workout",
     required: true,
@@ -40,6 +43,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   name: string;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step activity Working session description",
     example: "Here a sample description of the step",
     required: false,
@@ -49,6 +53,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   description: string;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the program",
     example: 4335,
     required: true,
@@ -59,6 +64,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program",
     example: 80,
     required: true,
@@ -68,6 +74,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   programId: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program step",
     example: 789,
     required: true,
@@ -77,6 +84,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   programStepId: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program step acitivity",
     example: 45645,
     required: true,
@@ -87,6 +95,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
     required: true,
@@ -95,8 +104,9 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   @IsNumber()
   ownerUserId: number;
   
-	;
+
   @ApiProperty({
+    type: SwaggerType.DATE,
     description: "Date the program step activity was created",
     example: Date(),
     required: false,
@@ -107,6 +117,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
   
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Step icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
@@ -115,6 +126,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   imagerUrl?: string;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Step icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
@@ -123,6 +135,9 @@ export class DetailsProgramStepActivityWorkingsessionDto {
   coverUrl?: string;
 
   @ApiProperty({
+    enum: ProgramStepActivityStatusEnum,
+    enumName: "ProgramStepActivityStatusEnum",
+    title: "ProgramStepActivityStatusEnum",
     description: "Program step activity status",
     example: ProgramStepActivityStatusEnum.published,
     required: false,
@@ -133,6 +148,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number points gained after passing this Workingsession",
     example: 10,
     required: false,
@@ -143,6 +159,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Workingsession attendees count",
     example: 5000,
     required: false
@@ -153,6 +170,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false
@@ -163,6 +181,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false
@@ -173,6 +192,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number times Workingsession was rated",
     example: 3000,
     required: false
@@ -183,6 +203,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
@@ -194,6 +215,7 @@ export class DetailsProgramStepActivityWorkingsessionDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Position of the Workingsession inside the Program Step Activity",
     example: 0,
     required: false

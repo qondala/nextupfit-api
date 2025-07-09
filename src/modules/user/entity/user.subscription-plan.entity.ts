@@ -1,5 +1,17 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { BaseSubscriptionPlanItemEnum, BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+import {
+  BaseSubscriptionPlanItemEnum,
+  BaseSubscriptionPlanStatusEnum
+} from "@app/module/base/types";
+import { UserEntity } from "./user.entity";
 
 
 @Entity("user_subscription_plan")
@@ -28,4 +40,8 @@ export class UserSubscriptionPlanEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: 'userId' })
+  user: UserEntity;
 }

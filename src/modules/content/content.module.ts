@@ -1,0 +1,145 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import {
+  ContentEntity,
+  ContentTextEntity,
+  ContentTextareaEntity,
+  ContentAccordionEntity,
+  ContentCarouselEntity,
+  ContentCommitmentEntity,
+  ContentConsumptionEntity,
+  ContentAccordionItemEntity,
+  ContentCarouselItemEntity,
+  ContentChallengesItemEntity,
+  ContentCommitmentItemEntity,
+  ContentConsumptionItemEntity,
+  ContentSusbcriptionPlanEntity,
+  ContentSusbcriptionPlanItemEntity,
+  ContentChatWithCoachEntity,
+  ContentChallengesEntity,
+} from './entity';
+
+import {
+  ContentAccordionItemService,
+  ContentAccordionService,
+  ContentCarouselItemService,
+  ContentCarouselService,
+  ContentChallengesItemService,
+  ContentChallengesService,
+  ContentChatWithCoachService,
+  ContentCommitmentItemService,
+  ContentCommitmentService,
+  ContentConsumptionItemService,
+  ContentConsumptionService,
+  ContentService,
+  ContentSusbcriptionPlanItemService,
+  ContentSusbcriptionPlanService,
+  ContentTextareaService,
+  ContentTextService,
+} from './service';
+
+import {
+  ContentAccordionController,
+  ContentAccordionItemController,
+  ContentCarouselController,
+  ContentCarouselItemController,
+  ContentChallengesController,
+  ContentChallengesItemController,
+  ContentChatWithCoachController,
+  ContentCommitmentController,
+  ContentCommitmentItemController,
+  ContentConsumptionController,
+  ContentConsumptionItemController,
+  ContentController,
+  ContentSusbcriptionPlanController,
+  ContentSusbcriptionPlanItemController,
+  ContentTextareaController,
+  ContentTextController,
+} from './controller';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([
+      // Core entities
+      ContentEntity,
+      ContentTextEntity,
+      ContentTextareaEntity,
+      ContentAccordionEntity,
+      ContentCarouselEntity,
+      ContentChallengesEntity,
+      ContentCommitmentEntity,
+      ContentConsumptionEntity,
+      ContentChatWithCoachEntity,
+      ContentSusbcriptionPlanEntity,
+      // Item entities
+      ContentAccordionItemEntity,
+      ContentCarouselItemEntity,
+      ContentChallengesItemEntity,
+      ContentCommitmentItemEntity,
+      ContentConsumptionItemEntity,
+      ContentSusbcriptionPlanItemEntity,
+    ]),
+  ],
+  controllers: [
+    // Core controllers
+    ContentController,
+    ContentTextController,
+    ContentTextareaController,
+    ContentAccordionController,
+    ContentCarouselController,
+    ContentChallengesController,
+    ContentCommitmentController,
+    ContentConsumptionController,
+    ContentChatWithCoachController,
+    ContentSusbcriptionPlanController,
+    // Item controllers
+    ContentAccordionItemController,
+    ContentCarouselItemController,
+    ContentChallengesItemController,
+    ContentCommitmentItemController,
+    ContentConsumptionItemController,
+    ContentSusbcriptionPlanItemController,
+  ],
+  providers: [
+    // Core services
+    ContentService,
+    ContentTextService,
+    ContentTextareaService,
+    ContentAccordionService,
+    ContentCarouselService,
+    ContentChallengesService,
+    ContentCommitmentService,
+    ContentConsumptionService,
+    ContentChatWithCoachService,
+    ContentSusbcriptionPlanService,
+    // Item services
+    ContentAccordionItemService,
+    ContentCarouselItemService,
+    ContentChallengesItemService,
+    ContentCommitmentItemService,
+    ContentConsumptionItemService,
+    ContentSusbcriptionPlanItemService,
+  ],
+  exports: [
+    // Core services
+    ContentService,
+    ContentTextService,
+    ContentTextareaService,
+    ContentAccordionService,
+    ContentCarouselService,
+    ContentChallengesService,
+    ContentCommitmentService,
+    ContentConsumptionService,
+    ContentChatWithCoachService,
+    ContentSusbcriptionPlanService,
+    // Item services
+    ContentAccordionItemService,
+    ContentCarouselItemService,
+    ContentChallengesItemService,
+    ContentCommitmentItemService,
+    ContentConsumptionItemService,
+    ContentSusbcriptionPlanItemService,
+  ],
+})
+export class ContentModule {}

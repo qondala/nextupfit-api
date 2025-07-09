@@ -1,13 +1,25 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsEnum, IsOptional, IsNumber, IsString } from "class-validator";
+import {
+  IsArray,
+  IsEnum,
+  IsOptional,
+  IsNumber,
+  IsString
+} from "class-validator";
 
-import { BaseExerciseTargetEnum, BaseWorkoutDisciplineEnum } from "../../types";
+
+import { SwaggerType } from "@app/common/types";
+
+import {
+  BaseExerciseTargetEnum,
+  BaseWorkoutDisciplineEnum
+} from "../../types";
 
 
 export class UpdateBaseWorkoutDto {
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Workout's name",
     example: "Pillated",
     required: false
@@ -18,7 +30,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Workout's brief description",
     example: "Pilates is a low-impact exercise method developed by Joseph Pilates in the early 20th century. It emphasizes Core strength, Posture and Flexibility",
     required: false
@@ -43,7 +55,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "UserId (Gym manager) who created the workout record.",
     example: 1368464,
     required: false,
@@ -66,7 +78,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Apple API code of the workout",
     example: "302",
     required: false,
@@ -77,7 +89,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Fitbit API code of the workout",
     example: "6402",
     required: false,
@@ -88,7 +100,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Withings API code of the workout",
     example: "24",
     required: false,
@@ -99,7 +111,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Workout image URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
     required: false,
@@ -110,7 +122,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Workout illustration URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
     required: false,
@@ -121,7 +133,7 @@ export class UpdateBaseWorkoutDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Workout video URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
     required: false,

@@ -1,6 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  JoinColumn,
+  ManyToOne
+} from "typeorm";
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
-
+import { ContentEntity } from "@app/module/content/entity";
+import { ProgramEntity } from "./program.entity";
 
 @Entity("program_subscription_plan")
 export class ProgramSubscriptionPlanEntity {
@@ -35,12 +44,20 @@ export class ProgramSubscriptionPlanEntity {
   @Column({ nullable: false })
   programId: number;
 
-  @Column()
-  planFeatures: string;
+  @Column({ nullable: false })
+  contentId: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => ContentEntity)
+  @JoinColumn({ name: 'contentId' })
+  content: ContentEntity;
+
+  @ManyToOne(() => ProgramEntity)
+  @JoinColumn({ name: 'programId' })
+  program: ProgramEntity;
 }

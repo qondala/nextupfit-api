@@ -12,7 +12,7 @@ import {
 import { GymEntity } from "@app/module/gym/entity";
 
 import { ProgramStatusEnum, ProgramTypeEnum } from "../types";
-import { ProgramStepEntity } from ".";
+import { ProgramStepEntity, ProgramSubscriptionPlanEntity } from ".";
 
 
 @Entity("program")
@@ -91,6 +91,10 @@ export class ProgramEntity {
 
   @OneToMany(() => ProgramStepEntity, step => step.program)
   steps: ProgramStepEntity[];
+
+
+  @OneToMany(() => ProgramSubscriptionPlanEntity, plan => plan.program)
+  subscriptionPlans: ProgramSubscriptionPlanEntity[];
 
 
   @CreateDateColumn()

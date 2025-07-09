@@ -5,7 +5,7 @@ import {
   BaseAppUpdateEntity,
   BaseBodyParamEntity,
   BaseFoodGroupEntity,
-  BaseFoodNutrientsEntity,
+  BaseFoodNutrientEntity,
   BaseFoodEntity,
   BaseMealFoodEntity,
   BaseMealEntity,
@@ -15,7 +15,11 @@ import {
   BaseWorkoutHowtoPerformStepEntity,
   BaseWorkoutNutrientBurnEntity,
   BaseWorkoutRecommendedRepetitionEntity,
-  BaseWorkoutEntity
+  BaseWorkoutEntity,
+  BaseNutritionTypeEntity,
+  BaseSociologyEntity,
+  BaseSociologyGroupEntity,
+  BaseNutritionEntity
 } from "./entity";
 
 
@@ -23,24 +27,28 @@ import {
   BaseAppUpdateService,
   BaseBodyParamService,
   BaseFoodGroupService,
-  BaseFoodNutrientsService,
+  BaseFoodNutrientService,
   BaseFoodService,
   BaseMealFoodService,
   BaseMealService,
   BaseMuscleService,
   BaseNutrientService,
+  BaseNutritionTypeService,
   BaseUnitService,
   BaseWorkoutHowtoPerformStepService,
   BaseWorkoutNutrientBurnService,
   BaseWorkoutRecommendedRepetitionService,
-  BaseWorkoutService
+  BaseWorkoutService,
+  BaseSociologyService,
+  BaseSociologyGroupService,
+  BaseNutritionService
 } from "./service";
 
 import {
   BaseAppUpdateController,
   BaseBodyParamController,
   BaseFoodGroupController,
-  BaseFoodNutrientsController,
+  BaseFoodNutrientController,
   BaseFoodController,
   BaseMealFoodController,
   BaseMealController,
@@ -50,7 +58,11 @@ import {
   BaseWorkoutHowtoPerformStepController,
   BaseWorkoutNutrientBurnController,
   BaseWorkoutRecommendedRepetitionController,
-  BaseWorkoutController
+  BaseWorkoutController,
+  BaseSociologyController,
+  BaseSociologyGroupController,
+  BaseNutritionController,
+  BaseNutritionTypeController
 
 } from "./controller";
 
@@ -61,65 +73,81 @@ import {
       BaseAppUpdateEntity,
       BaseBodyParamEntity,
       BaseFoodGroupEntity,
-      BaseFoodNutrientsEntity,
+      BaseFoodNutrientEntity,
       BaseFoodEntity,
       BaseMealFoodEntity,
       BaseMealEntity,
       BaseMuscleEntity,
       BaseNutrientEntity,
+      BaseNutritionEntity,
+      BaseNutritionTypeEntity,
       BaseUnitEntity,
       BaseWorkoutHowtoPerformStepEntity,
       BaseWorkoutNutrientBurnEntity,
       BaseWorkoutRecommendedRepetitionEntity,
-      BaseWorkoutEntity
+      BaseWorkoutEntity,
+      BaseSociologyEntity,
+      BaseSociologyGroupEntity,
     ])],
   controllers: [
     BaseAppUpdateController,
     BaseBodyParamController,
     BaseFoodGroupController,
-    BaseFoodNutrientsController,
+    BaseFoodNutrientController,
     BaseFoodController,
     BaseMealFoodController,
     BaseMealController,
     BaseMuscleController,
     BaseNutrientController,
+    BaseNutritionTypeController,
+    BaseNutritionController,
     BaseUnitController,
     BaseWorkoutHowtoPerformStepController,
     BaseWorkoutNutrientBurnController,
     BaseWorkoutRecommendedRepetitionController,
-    BaseWorkoutController
+    BaseWorkoutController,
+    BaseSociologyController,
+    BaseSociologyGroupController
   ],
   providers: [
     BaseAppUpdateService,
     BaseBodyParamService,
     BaseFoodGroupService,
-    BaseFoodNutrientsService,
+    BaseFoodNutrientService,
     BaseFoodService,
     BaseMealFoodService,
     BaseMealService,
     BaseMuscleService,
     BaseNutrientService,
+    BaseNutritionTypeService,
+    BaseNutritionService,
     BaseUnitService,
     BaseWorkoutHowtoPerformStepService,
     BaseWorkoutNutrientBurnService,
     BaseWorkoutRecommendedRepetitionService,
-    BaseWorkoutService
+    BaseWorkoutService,
+    BaseSociologyService,
+    BaseSociologyGroupService
   ],
   exports: [
     BaseAppUpdateService,
     BaseBodyParamService,
     BaseFoodGroupService,
-    BaseFoodNutrientsService,
+    BaseFoodNutrientService,
     BaseFoodService,
     BaseMealFoodService,
     BaseMealService,
     BaseMuscleService,
     BaseNutrientService,
+    BaseNutritionTypeService,
+    BaseNutritionService,
     BaseUnitService,
     BaseWorkoutHowtoPerformStepService,
     BaseWorkoutNutrientBurnService,
     BaseWorkoutRecommendedRepetitionService,
-    BaseWorkoutService
+    BaseWorkoutService,
+    BaseSociologyService,
+    BaseSociologyGroupService
   ],
 })
 export class BaseModule {}

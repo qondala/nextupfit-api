@@ -3,11 +3,16 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 
 import { User } from '@app/common/decorators';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginationOptionsDto } from '@app/common/dto';
 
-import { CreateGymManagerFollowerDto, UpdateGymManagerFollowerDto } from '../dto';
+import { 
+  CreateGymManagerFollowerDto, 
+  UpdateGymManagerFollowerDto, 
+  DetailsGymManagerFollowerDto,
+  PaginatedDetailsGymManagerFollowerDto
+} from '../dto';
 import { GymManagerFollowerService } from '../service';
-import { GymManagerFollowerEntity } from '../entity';
+
 
 @ApiTags('Gym module endpoints')
 @ApiBearerAuth()
@@ -18,51 +23,56 @@ export class GymManagerFollowerController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new gym manager follower' })
-  @ApiResponse({ status: 201, description: 'Gym manager follower created successfully.' })
-  create(
+  @ApiResponse({ status: 201, description: 'Gym manager follower created successfully.', type: DetailsGymManagerFollowerDto })
+  async create(
     @Body() createDto: CreateGymManagerFollowerDto,
     @User('id') userId: number
   ) {
-    return this.gymManagerFollowerService.create(createDto, userId);
+    return await this.gymManagerFollowerService.create(createDto, userId);
   }
 
   @Get('manager/:managerId')
   @ApiOperation({ summary: 'Get all followers of a manager' })
+  @ApiResponse({ status: 200, description: 'Paginated list of manager followers', type: PaginatedDetailsGymManagerFollowerDto })
   async findByManager(
     @Param('managerId') managerId: string,
     @Query() paginationOptions: PaginationOptionsDto
-  ): Promise<PaginatedResponseDto<GymManagerFollowerEntity>> {
+  ): Promise<PaginatedDetailsGymManagerFollowerDto> {
     return this.gymManagerFollowerService.findByManager(+managerId, paginationOptions);
   }
 
   @Get('user/:userId')
   @ApiOperation({ summary: 'Get all managers followed by a user' })
+  @ApiResponse({ status: 200, description: 'Paginated list of followed managers', type: PaginatedDetailsGymManagerFollowerDto })
   async findByUser(
     @Param('userId') userId: string,
     @Query() paginationOptions: PaginationOptionsDto
-  ): Promise<PaginatedResponseDto<GymManagerFollowerEntity>> {
+  ): Promise<PaginatedDetailsGymManagerFollowerDto> {
     return this.gymManagerFollowerService.findByUser(+userId, paginationOptions);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get gym manager follower by id' })
-  findOne(@Param('id') id: string) {
+  @ApiResponse({ status: 200, description: 'Gym manager follower details', type: DetailsGymManagerFollowerDto })
+  async findOne(@Param('id') id: string): Promise<DetailsGymManagerFollowerDto> {
     return this.gymManagerFollowerService.findOne(+id);
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update gym manager follower' })
-  update(
+  @ApiResponse({ status: 200, description: 'Updated gym manager follower details', type: DetailsGymManagerFollowerDto })
+  async update(
     @Param('id') id: string,
     @Body() updateDto: UpdateGymManagerFollowerDto,
     @User('id') userId: number
   ) {
-    return this.gymManagerFollowerService.update(+id, updateDto, userId);
+    return await this.gymManagerFollowerService.update(+id, updateDto, userId);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete gym manager follower' })
-  remove(@Param('id') id: string, @User('id') userId: number) {
+  @ApiResponse({ status: 204, description: 'Gym manager follower deleted successfully' })
+  async remove(@Param('id') id: string, @User('id') userId: number): Promise<void> {
     return this.gymManagerFollowerService.remove(+id, userId);
   }
 }

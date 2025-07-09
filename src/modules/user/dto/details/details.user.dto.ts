@@ -2,12 +2,13 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsDefined, IsEnum } from "class-validator";
 
 import { UserProfileTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class DetailsUserDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
@@ -15,7 +16,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User email",
     required: true,
   })
@@ -23,7 +24,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User first name",
     required: true,
   })
@@ -31,7 +32,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User last name",
     required: false,
   })
@@ -39,7 +40,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User phone number",
     required: false,
   })
@@ -47,7 +48,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
     description: "User birth date",
     example: "2025-05-02",
     required: false,
@@ -55,16 +56,9 @@ export class DetailsUserDto {
   birthDate?: Date;
 
 
-  @ApiProperty({
-    type: String,
-    description: "User password hash",
-    required: false,
-  })
-  passwordHash?: string;
-
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User profile image url",
     required: false,
   })
@@ -72,7 +66,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User cover image url",
     required: false,
   })
@@ -80,7 +74,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Boolean,
+    type: SwaggerType.BOOLEAN,
     description: "User email verified",
     required: true,
   })
@@ -88,7 +82,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
     description: "User last login",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -111,7 +105,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
     description: "User created at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",
@@ -120,7 +114,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
     description: "User updated at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",

@@ -1,24 +1,28 @@
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsNotEmpty, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+
+import { SwaggerType } from "@app/common/types";
 
 export class CreateGymSpecializedInWorkoutDto {
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym id",
     example: 235,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   gymId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Workout id",
     example: 23,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   baseWorkoutId: number;
 }

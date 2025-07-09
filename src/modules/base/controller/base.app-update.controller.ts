@@ -10,16 +10,34 @@ import {
   HttpStatus,
   HttpCode,
   UseGuards,
-  Query
+  Query,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiParam, ApiBearerAuth, ApiQuery, ApiCreatedResponse, ApiOkResponse, ApiNotFoundResponse, ApiNoContentResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNotFoundResponse,
+  ApiNoContentResponse
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
+
+import {
+  DetailsBaseAppUpdateDto,
+  PaginatedDetailsBaseAppUpdateDto
+} from '../dto';
 
 import { BaseAppUpdateService } from '../service';
-import { BaseAppUpdateEntity } from '../entity';
-import { CreateBaseAppUpdateDto, UpdateBaseAppUpdateDto } from '../dto';
+import {
+  CreateBaseAppUpdateDto,
+  UpdateBaseAppUpdateDto
+} from '../dto';
+import { SwaggerType } from '@app/common/types';
 
 
 @ApiTags("Base module endpoints")
@@ -30,27 +48,45 @@ export class BaseAppUpdateController {
   constructor(private readonly baseAppUpdateService: BaseAppUpdateService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new app update' })
+  @ApiOperation({
+    summary: 'Create a new app update',
+    description: 'Create a new app update',
+    operationId: 'createAppUpdate'
+  })
   @ApiCreatedResponse({ 
     description: 'The app update has been successfully created.',
-    type: BaseAppUpdateEntity 
+    type: DetailsBaseAppUpdateDto 
   })
-  async create(@Body() createBaseAppUpdateDto: CreateBaseAppUpdateDto): Promise<BaseAppUpdateEntity> {
+  async create(@Body() createBaseAppUpdateDto: CreateBaseAppUpdateDto): Promise<DetailsBaseAppUpdateDto> {
     return this.baseAppUpdateService.create(createBaseAppUpdateDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all app updates with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Get all app updates with pagination',
+    description: 'Get all app updates with pagination',
+    operationId: 'findAllAppUpdates'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiOkResponse({
     description: 'Paginated list of app updates',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseAppUpdateDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
+  ): Promise<PaginatedDetailsBaseAppUpdateDto> {
     return this.baseAppUpdateService.findAll({
       page: +page,
       limit: +limit
@@ -58,19 +94,37 @@ export class BaseAppUpdateController {
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search app updates by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Search app updates by query string with pagination',
+    description: 'Search app updates by query string with pagination',
+    operationId: 'searchAppUpdates'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiOkResponse({
     description: 'Paginated search results of app updates',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseAppUpdateDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
+  ): Promise<PaginatedDetailsBaseAppUpdateDto> {
     return this.baseAppUpdateService.search(query, {
       page: +page,
       limit: +limit
@@ -78,15 +132,26 @@ export class BaseAppUpdateController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific app update by ID' })
-  @ApiParam({ name: 'id', description: 'App update ID' })
+  @ApiOperation({
+    summary: 'Get a specific app update by ID',
+    description: 'Get a specific app update by ID',
+    operationId: 'findAppUpdateById'
+  })
+  @ApiParam({
+    type: SwaggerType.INTEGER,
+    name: 'id',
+    required: true,
+    description: 'App update ID'
+  })
   @ApiOkResponse({
     description: 'The found app update',
-    type: BaseAppUpdateEntity
+    type: DetailsBaseAppUpdateDto
   })
-  @ApiNotFoundResponse({ description: 'App update not found' })
-  async findOne(@Param('id') id: string): Promise<BaseAppUpdateEntity> {
-    const update = await this.baseAppUpdateService.findOne(+id);
+  @ApiNotFoundResponse({
+    description: 'App update not found'
+  })
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseAppUpdateDto> {
+    const update = await this.baseAppUpdateService.findOne(id);
     if (!update) {
       throw new NotFoundException(`App update with ID ${id} not found`);
     }
@@ -94,18 +159,29 @@ export class BaseAppUpdateController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update an app update by ID' })
-  @ApiParam({ name: 'id', description: 'App update ID' })
+  @ApiOperation({
+    summary: 'Update an app update by ID',
+    description: 'Update an app update by ID',
+    operationId: 'updateAppUpdateById'
+  })
+  @ApiParam({
+    type: SwaggerType.INTEGER,
+    name: 'id',
+    required: true,
+    description: 'App update ID'
+  })
   @ApiOkResponse({
     description: 'The updated app update',
-    type: BaseAppUpdateEntity
+    type: DetailsBaseAppUpdateDto
   })
-  @ApiNotFoundResponse({ description: 'App update not found' })
+  @ApiNotFoundResponse({
+    description: 'App update not found'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseAppUpdateDto: UpdateBaseAppUpdateDto,
-  ): Promise<BaseAppUpdateEntity> {
-    const update = await this.baseAppUpdateService.update(+id, updateBaseAppUpdateDto);
+  ): Promise<DetailsBaseAppUpdateDto> {
+    const update = await this.baseAppUpdateService.update(id, updateBaseAppUpdateDto);
     if (!update) {
       throw new NotFoundException(`App update with ID ${id} not found`);
     }
@@ -113,27 +189,50 @@ export class BaseAppUpdateController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete an app update by ID' })
-  @ApiParam({ name: 'id', description: 'App update ID' })
-  @ApiNoContentResponse({ description: 'The app update has been successfully deleted' })
-  @ApiNotFoundResponse({ description: 'App update not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseAppUpdateService.remove(+id);
+  @ApiOperation({
+    summary: 'Delete an app update by ID',
+    description: 'Delete an app update by ID',
+    operationId: 'deleteAppUpdateById'
+  })
+  @ApiParam({
+    type: SwaggerType.INTEGER,
+    name: 'id',
+    required: true,
+    description: 'App update ID'
+  })
+  @ApiNoContentResponse({
+    description: 'The app update has been successfully deleted'
+  })
+  @ApiNotFoundResponse({
+    description: 'App update not found'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseAppUpdateService.remove(id);
     if (!result) {
       throw new NotFoundException(`App update with ID ${id} not found`);
     }
   }
 
   @Get('version/:version')
-  @ApiOperation({ summary: 'Get app update by version number' })
-  @ApiParam({ name: 'version', description: 'App update version' })
+  @ApiOperation({
+    summary: 'Get app update by version number',
+    description: 'Get app update by version number',
+    operationId: 'findByVersion'
+  })
+  @ApiParam({
+    type: SwaggerType.STRING,
+    name: 'version',
+    required: true,
+    description: 'App update version'
+  })
   @ApiOkResponse({
     description: 'The found app update',
-    type: BaseAppUpdateEntity
+    type: DetailsBaseAppUpdateDto
   })
-  @ApiNotFoundResponse({ description: 'App update not found' })
-  async findByVersion(@Param('version') version: string): Promise<BaseAppUpdateEntity> {
+  @ApiNotFoundResponse({
+    description: 'App update not found'
+  })
+  async findByVersion(@Param('version') version: string): Promise<DetailsBaseAppUpdateDto> {
     const update = await this.baseAppUpdateService.findByVersion(version);
     if (!update) {
       throw new NotFoundException(`App update with version ${version} not found`);

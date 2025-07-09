@@ -1,7 +1,7 @@
 export * from "./update.base.app-update.dto";
 export * from "./update.base.body-param.dto";
 export * from "./update.base.food-group.dto";
-export * from "./update.base.food-nutrients.dto";
+export * from "./update.base.food-nutrient.dto";
 export * from "./update.base.food.dto";
 export * from "./update.base.meal-food.dto";
 export * from "./update.base.meal.dto";
@@ -12,3 +12,7 @@ export * from "./update.base.workout-howto-perform-step.dto";
 export * from "./update.base.workout-nutrient-burn.dto";
 export * from "./update.base.workout-recommended-repetition.dto";
 export * from "./update.base.workout.dto";
+export * from "./update.base.sociology.dto";
+export * from "./update.base.sociology-group.dto";
+export * from "./update.base.nutrition.dto";
+export * from "./update.base.nutrition-type.dto";

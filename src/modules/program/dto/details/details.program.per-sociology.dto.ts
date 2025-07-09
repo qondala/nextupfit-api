@@ -4,12 +4,13 @@ import {
   IsNumber,
 } from "class-validator";
 import { ProgramItemTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class DetailsProgramPerSociologyDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -19,7 +20,7 @@ export class DetailsProgramPerSociologyDto {
   id: number;
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -30,7 +31,7 @@ export class DetailsProgramPerSociologyDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -41,6 +42,7 @@ export class DetailsProgramPerSociologyDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the sociology",
     example: 3,
     required: true,

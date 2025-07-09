@@ -4,3 +4,4 @@ export * from "./user.recommendation.service";
 export * from "./user.service";
 export * from "./user.subscription-plan.service";
 export * from "./user.bookmark-and-favorite.service";
+export * from "./user.schedule.service";

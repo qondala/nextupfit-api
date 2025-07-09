@@ -3,7 +3,6 @@ export * from './paginated.details.program.step.dto';
 export * from './paginated.details.program.step-activity.dto';
 export * from './paginated.details.step-activity-workingsession-workout';
 export * from './paginated.details.program.step-activity-workingsession.dto';
-export * from './paginated.details.program.activity-content.dto';
 export * from './paginated.details.program.per-sociology.dto';
 export * from './paginated.details.program.subscription-plan.dto';
 export * from './paginated.details.program.workout-nutrient-burn.dto';

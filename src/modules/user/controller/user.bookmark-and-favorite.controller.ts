@@ -17,7 +17,7 @@ import { User } from '@app/common/decorators';
 
 import { UserBookmarkAndFavoriteService } from '../service';
 import { UserBookmarkAndFavoriteItemTypeEnum } from '../types';
-import { DetailsUserBookmarkAndFavoriteDto } from '../dto';
+import { DetailsUserBookmarkAndFavoriteDto, PaginatedDetailsUserBookmarkAndFavoriteDto } from '../dto';
 
 
 @ApiTags("User module endpoints")
@@ -52,7 +52,7 @@ export class UserBookmarkAndFavoriteController {
   async findAll(
     @User('id') userId: number,
     @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findAll(userId, paginationOptions);
   }
 
@@ -61,7 +61,7 @@ export class UserBookmarkAndFavoriteController {
     @User('id') userId: number,
     @Param('type') type: UserBookmarkAndFavoriteItemTypeEnum,
     @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findByType(
       userId,
       type,
@@ -73,7 +73,7 @@ export class UserBookmarkAndFavoriteController {
   async findBookmarks(
     @User('id') userId: number,
     @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findBookmarks(
       userId,
       paginationOptions,
@@ -84,7 +84,7 @@ export class UserBookmarkAndFavoriteController {
   async findFavorites(
     @User('id') userId: number,
     @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findFavorites(
       userId,
       paginationOptions,
@@ -115,6 +115,33 @@ export class UserBookmarkAndFavoriteController {
     @Query('type') type: UserBookmarkAndFavoriteItemTypeEnum,
   ): Promise<DetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findByItemId(
+      userId,
+      itemId,
+      type,
+    );
+  }
+
+  
+  @Get('is-bookmarked')
+  async isBookmarked(
+    @User('id') userId: number,
+    @Query('itemId') itemId: number,
+    @Query('type') type: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    return await this.bookmarkAndFavoriteService.isBookmarked(
+      userId,
+      itemId,
+      type,
+    );
+  }
+
+  @Get('is-favorite')
+  async isFavorite(
+    @User('id') userId: number,
+    @Query('itemId') itemId: number,
+    @Query('type') type: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    return await this.bookmarkAndFavoriteService.isFavorite(
       userId,
       itemId,
       type,

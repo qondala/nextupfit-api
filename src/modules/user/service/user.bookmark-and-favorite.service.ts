@@ -158,4 +158,26 @@ export class UserBookmarkAndFavoriteService {
       where: { userId, itemId, bookmarkType },
     });
   }
+
+  async isBookmarked(
+    userId: number,
+    itemId: number,
+    bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    const bookmarkAndFavorite = await this.bookmarkAndFavoriteRepository.findOne({
+      where: { userId, itemId, bookmarkType },
+    });
+    return !!bookmarkAndFavorite;
+  }
+
+  async isFavorite(
+    userId: number,
+    itemId: number,
+    bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    const bookmarkAndFavorite = await this.bookmarkAndFavoriteRepository.findOne({
+      where: { userId, itemId, bookmarkType },
+    });
+    return !!bookmarkAndFavorite;
+  }
 }

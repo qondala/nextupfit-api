@@ -4,3 +4,4 @@ export * from './details.user.bookmark-and-favorite.dto';
 export * from './details.user.body-param.dto';
 export * from './details.user.subscription-plan.dto';
 export * from './details.user.recommendation.dto';
+export * from './details.user.schedule.dto';

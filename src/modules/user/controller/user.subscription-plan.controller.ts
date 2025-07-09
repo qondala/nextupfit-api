@@ -16,7 +16,6 @@ import { PaginationOptionsDto } from "@app/common/dto";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
 
-import { UserSubscriptionPlanEntity } from "../entity";
 import { UserSubscriptionPlanService } from "../service";
 import { CreateUserSubscriptionPlanDto, DetailsUserSubscriptionPlanDto, UpdateUserSubscriptionPlanDto } from "../dto";
 

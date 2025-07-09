@@ -5,7 +5,6 @@ import { BaseSociologyEntity } from "@app/module/base/entity";
 import { GymManagerEntity } from "@app/module/gym/entity";
 
 import {
-  ProgramActivityContentEntity,
   ProgramEntity,
   ProgramPerSociologyEntity,
   ProgramStepActivityEntity,
@@ -18,7 +17,6 @@ import {
 } from "./entity";
 
 import {
-  ProgramActivityContentController,
   ProgramController, 
   ProgramManagerController, 
   ProgramPerSociologyController, 
@@ -31,7 +29,6 @@ import {
 } from "./controller";
 
 import {
-  ProgramActivityContentService,
   ProgramManagerService,
   ProgramPerSociologyService,
   ProgramService,
@@ -56,7 +53,6 @@ import {
       ProgramWorkoutNutrientBurnEntity,
       ProgramStepActivityWorkingsessionEntity,
       ProgramStepActivityWorkingsessionWorkoutEntity,
-      ProgramActivityContentEntity,
       ProgramPerSociologyEntity,
       ProgramManagerEntity,
 
@@ -73,7 +69,6 @@ import {
     ProgramWorkoutNutrientBurnController,
     ProgramStepActivityWorkingsessionController,
     ProgramStepActivityWorkingsessionWorkoutController,
-    ProgramActivityContentController,
     ProgramPerSociologyController,
     ProgramManagerController
   ],
@@ -85,7 +80,6 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
-    ProgramActivityContentService,
     ProgramPerSociologyService,
     ProgramManagerService
   ],
@@ -97,7 +91,6 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
-    ProgramActivityContentService,
     ProgramPerSociologyService,
     ProgramManagerService
   ],

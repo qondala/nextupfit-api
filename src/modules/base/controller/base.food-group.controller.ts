@@ -11,18 +11,39 @@ import {
   HttpCode,
   Query,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiBadRequestResponse
+} from '@nestjs/swagger';
 
-import { ErrorResponseException, ErrorResponseExceptionType, SystemStatusCode } from '@app/common/exceptions';
+import {
+  ErrorResponseException,
+  ErrorResponseExceptionType,
+  SystemStatusCode
+} from '@app/common/exceptions';
+import { SwaggerType } from '@app/common/types';
 
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
-
+import {
+  DetailsBaseFoodGroupDto,
+  PaginatedDetailsBaseFoodGroupDto
+} from '../dto';
 import { BaseFoodGroupService } from '../service';
-import { BaseFoodGroupEntity } from '../entity';
-import { CreateBaseFoodGroupDto, UpdateBaseFoodGroupDto } from '../dto';
+import {
+  CreateBaseFoodGroupDto,
+  UpdateBaseFoodGroupDto
+} from '../dto';
 
 
 @ApiTags("Base module endpoints")
@@ -33,19 +54,20 @@ export class BaseFoodGroupController {
   constructor(private readonly baseFoodGroupService: BaseFoodGroupService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new food group' })
-  @ApiResponse({ 
-    status: HttpStatus.CREATED,
-    description: 'The food group has been successfully created.',
-    type: BaseFoodGroupEntity 
+  @ApiOperation({
+    summary: 'Create a new food group',
+    description: 'Create a new food group',
+    operationId: 'createFoodGroup'
   })
-  @ApiResponse({ 
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Bad request. Code already exists or invalid input.',
+  @ApiCreatedResponse({ 
+    description: 'The food group has been successfully created.',
+    type: DetailsBaseFoodGroupDto 
+  })
+  @ApiNotFoundResponse({ 
+    description: 'Food group with this code already exists or invalid input.',
     type: ErrorResponseException
   })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseFoodGroupDto: CreateBaseFoodGroupDto): Promise<BaseFoodGroupEntity> {
+  async create(@Body() createBaseFoodGroupDto: CreateBaseFoodGroupDto): Promise<DetailsBaseFoodGroupDto> {
     try {
       return await this.baseFoodGroupService.create(createBaseFoodGroupDto);
     } catch (error) {
@@ -62,20 +84,38 @@ export class BaseFoodGroupController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all food groups with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiQuery({ name: 'userId', description: 'Filter by creator user ID', required: false, type: Number })
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    summary: 'Get all food groups with pagination',
+    description: 'Get all food groups with pagination',
+    operationId: 'findAllFoodGroups'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'Filter by creator user ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
     description: 'Paginated list of food groups',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseFoodGroupDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('userId') userId?: number
-  ): Promise<PaginatedResponseDto<BaseFoodGroupEntity>> {
+  ): Promise<PaginatedDetailsBaseFoodGroupDto> {
     return this.baseFoodGroupService.findAll({
       page: +page,
       limit: +limit
@@ -83,20 +123,37 @@ export class BaseFoodGroupController {
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search food groups by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    summary: 'Search food groups by query string with pagination',
+    description: 'Search food groups by query string with pagination',
+    operationId: 'searchFoodGroups'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
     description: 'Paginated search results of food groups',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseFoodGroupDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseFoodGroupEntity>> {
+  ): Promise<PaginatedDetailsBaseFoodGroupDto> {
     return this.baseFoodGroupService.search(query, {
       page: +page,
       limit: +limit
@@ -104,38 +161,58 @@ export class BaseFoodGroupController {
   }
 
   @Get('code/:code')
-  @ApiOperation({ summary: 'Get food group by code' })
-  @ApiParam({ name: 'code', description: 'Food group code' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found food group',
-    type: BaseFoodGroupEntity
+  @ApiOperation({
+    summary: 'Get food group by code',
+    description: 'Get food group by code',
+    operationId: 'findFoodGroupByCode'
   })
-  @ApiResponse({ status: 404, description: 'Food group not found' })
-  async findByCode(@Param('code') code: string): Promise<BaseFoodGroupEntity> {
+  @ApiParam({
+    name: 'code',
+    description: 'Food group code',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiOkResponse({
+    description: 'The found food group',
+    type: DetailsBaseFoodGroupDto
+  })
+  @ApiNotFoundResponse({
+    description: 'Food group not found'
+  })
+  async findByCode(@Param('code') code: string): Promise<DetailsBaseFoodGroupDto> {
     const foodGroup = await this.baseFoodGroupService.findByCode(code);
     if (!foodGroup) {
       throw new ErrorResponseException(
         ErrorResponseExceptionType.HTTP,
         `Food group with code '${code}' not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.GENERIC
+        SystemStatusCode.DATABASE
       );
     }
     return foodGroup;
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific food group by ID' })
-  @ApiParam({ name: 'id', description: 'Food group ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found food group',
-    type: BaseFoodGroupEntity
+  @ApiOperation({
+    summary: 'Get a specific food group by ID',
+    description: 'Get a specific food group by ID',
+    operationId: 'findFoodGroupById'
   })
-  @ApiResponse({ status: 404, description: 'Food group not found' })
-  async findOne(@Param('id') id: string): Promise<BaseFoodGroupEntity> {
-    const foodGroup = await this.baseFoodGroupService.findOne(+id);
+  @ApiParam({
+    name: 'id',
+    description: 'Food group ID',
+    type: SwaggerType.INTEGER,
+    required: true
+  })
+  @ApiOkResponse({
+    description: 'The found food group',
+    type: DetailsBaseFoodGroupDto
+  })
+  @ApiNotFoundResponse({
+    description: 'Food group not found'
+  })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseFoodGroupDto> {
+    const foodGroup = await this.baseFoodGroupService.findOne(id);
     if (!foodGroup) {
       throw new NotFoundException(`Food group with ID ${id} not found`);
     }
@@ -143,21 +220,33 @@ export class BaseFoodGroupController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a food group by ID' })
-  @ApiParam({ name: 'id', description: 'Food group ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated food group',
-    type: BaseFoodGroupEntity
+  @ApiOperation({
+    summary: 'Update a food group by ID',
+    description: 'Update a food group by ID',
+    operationId: 'updateFoodGroupById'
   })
-  @ApiResponse({ status: 404, description: 'Food group not found' })
-  @ApiResponse({ status: 400, description: 'Bad request. Code already exists or invalid input.' })
+  @ApiParam({
+    name: 'id',
+    description: 'Food group ID',
+    type: SwaggerType.INTEGER,
+    required: true
+  })
+  @ApiOkResponse({
+    description: 'The updated food group',
+    type: DetailsBaseFoodGroupDto
+  })
+  @ApiNotFoundResponse({
+    description: 'Food group not found'
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. Code already exists or invalid input.'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseFoodGroupDto: UpdateBaseFoodGroupDto,
-  ): Promise<BaseFoodGroupEntity> {
+  ): Promise<DetailsBaseFoodGroupDto> {
     try {
-      const foodGroup = await this.baseFoodGroupService.update(+id, updateBaseFoodGroupDto);
+      const foodGroup = await this.baseFoodGroupService.update(id, updateBaseFoodGroupDto);
       if (!foodGroup) {
         throw new NotFoundException(`Food group with ID ${id} not found`);
       }
@@ -170,14 +259,27 @@ export class BaseFoodGroupController {
     }
   }
 
+
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a food group by ID' })
-  @ApiParam({ name: 'id', description: 'Food group ID' })
-  @ApiResponse({ status: 204, description: 'The food group has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Food group not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseFoodGroupService.remove(+id);
+  @ApiOperation({
+    summary: 'Delete a food group by ID',
+    description: 'Delete a food group by ID',
+    operationId: 'deleteFoodGroupById'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Food group ID',
+    type: SwaggerType.INTEGER,
+    required: true
+  })
+  @ApiNoContentResponse({
+    description: 'The food group has been successfully deleted'
+  })
+  @ApiNotFoundResponse({
+    description: 'Food group not found'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseFoodGroupService.remove(id);
     if (!result) {
       throw new NotFoundException(`Food group with ID ${id} not found`);
     }

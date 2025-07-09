@@ -17,7 +17,7 @@ import { ProgramModule } from "@app/module/program/program.module";
 import { SocialModule } from "@app/module/social/social.module";
 import { PaymentModule } from "@app/module/payment/payment.module";
 import { MapModule } from "@app/module/map/map.module";
-
+import { ContentModule } from "@app/module/content/content.module";
 
 @Module({
   imports: [
@@ -35,6 +35,7 @@ import { MapModule } from "@app/module/map/map.module";
     // Business modules
     BaseModule,
     AuthModule,
+    ContentModule,
     UserModule,
     GymModule,
     ProgramModule,

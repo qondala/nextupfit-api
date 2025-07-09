@@ -16,12 +16,13 @@ import { DetailsBaseSociologyDto } from "@app/module/base/dto";
 
 import { ProgramStepStatusEnum } from "../../types";
 import { DetailsProgramStepActivityDto } from "..";
+import { SwaggerType } from "@app/common/types";
 
 
 export class DetailsProgramStepDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -32,6 +33,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step name",
     example: "Daily workout",
     required: true,
@@ -41,6 +43,7 @@ export class DetailsProgramStepDto {
   name: string;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step description",
     example: "Here a sample description of the step",
     required: false,
@@ -50,6 +53,7 @@ export class DetailsProgramStepDto {
   description: string;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the program",
     example: 4335,
     required: true,
@@ -60,6 +64,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program",
     example: 80,
     required: true,
@@ -70,6 +75,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
     required: true,
@@ -80,6 +86,7 @@ export class DetailsProgramStepDto {
   
 
   @ApiProperty({
+    type: SwaggerType.DATE,
     description: "Date the program step was created",
     example: Date(),
     required: false,
@@ -89,6 +96,7 @@ export class DetailsProgramStepDto {
   createdDate?: Date;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Step icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
@@ -97,6 +105,9 @@ export class DetailsProgramStepDto {
   iconUrl?: string;
 
   @ApiProperty({
+    enum: ProgramStepStatusEnum,
+    enumName: "ProgramStepStatusEnum",
+    title: "ProgramStepStatusEnum",
     description: "Program step status",
     example: ProgramStepStatusEnum.published,
     required: false,
@@ -107,6 +118,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Step attendees count",
     example: 5000,
     required: false,
@@ -118,6 +130,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false,
@@ -129,6 +142,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false,
@@ -140,6 +154,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number times step was rated",
     example: 3000,
     required: false,
@@ -151,6 +166,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Duration of the step",
     example: 2,
     required: false,
@@ -162,6 +178,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
@@ -174,6 +191,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number of workouts in the step",
     example: 0,
     required: false,
@@ -185,6 +203,7 @@ export class DetailsProgramStepDto {
 
   
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
@@ -197,6 +216,7 @@ export class DetailsProgramStepDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Position of the Step inside the Program",
     example: 0,
     required: false

@@ -2,11 +2,15 @@ import { IsNotEmpty, IsEnum, IsNumber, IsBoolean } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { UserBookmarkAndFavoriteItemTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateUserBookmarkAndFavoriteDto {
 
   @ApiProperty({
+    enum: UserBookmarkAndFavoriteItemTypeEnum,
+    enumName: "UserBookmarkAndFavoriteItemTypeEnum",
+    title: "UserBookmarkAndFavoriteItemTypeEnum",
     description: "Bokmarkable element",
     example: UserBookmarkAndFavoriteItemTypeEnum.gym,
     required: true,
@@ -17,6 +21,7 @@ export class CreateUserBookmarkAndFavoriteDto {
 
 
   @ApiProperty({
+    type: SwaggerType.BOOLEAN,
     description: "Whether it is a Bookmark (or a Favorite)",
     example: true,
     required: false,
@@ -27,6 +32,7 @@ export class CreateUserBookmarkAndFavoriteDto {
 
 
   @ApiProperty({
+    type: SwaggerType.BOOLEAN,
     description: "Whether it is a Favorite (or a Bookmark)",
     example: false,
     required: false,
@@ -37,6 +43,7 @@ export class CreateUserBookmarkAndFavoriteDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the bookmarked element",
     example: 232232,
     required: true
@@ -47,6 +54,7 @@ export class CreateUserBookmarkAndFavoriteDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "User Id who bookmarked the element",
     example: 1122423,
     required: true

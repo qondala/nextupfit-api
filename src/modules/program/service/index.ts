@@ -3,7 +3,7 @@ export * from './program.step-activity.service';
 export * from './program.step.service';
 export * from './program.subscription-plan.service';
 export * from './program.workout-nutrient-burn.service';
-export * from './program.activity-content.service';
+export * from '../../content/service/content.service';
 export * from './program.step-activity-workingsession-workout.service';
 export * from './program.step-activity-workingsession.service';
 export * from './program.per-sociology.service';

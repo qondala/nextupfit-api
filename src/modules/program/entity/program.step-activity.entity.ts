@@ -1,7 +1,16 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { ProgramStepActivityStatusEnum } from "../types";
-import { ProgramStepEntity } from "./program.step.entity";
-import { ProgramStepActivityWorkingsessionEntity } from "./program.step-activity-workingsession.entity";
+import { ProgramStepEntity, ProgramStepActivityWorkingsessionEntity } from ".";
 
 
 @Entity("program_step_activity")

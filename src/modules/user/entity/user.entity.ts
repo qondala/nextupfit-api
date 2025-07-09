@@ -1,5 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+
 import { UserProfileTypeEnum } from "../types";
+import { UserSubscriptionPlanEntity } from ".";
 
 @Entity("user")
 export class UserEntity {
@@ -43,6 +54,9 @@ export class UserEntity {
     default: [UserProfileTypeEnum.attendee],
   })
   userProfile: UserProfileTypeEnum[];
+
+  @OneToMany(() => UserSubscriptionPlanEntity, plan => plan.user)
+  subscriptionPlans: UserSubscriptionPlanEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

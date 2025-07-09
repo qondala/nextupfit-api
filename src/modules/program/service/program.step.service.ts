@@ -3,11 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
-import { GymManagerEntity } from "@app/module/gym/entity";
 
-import { ProgramStepEntity, ProgramManagerEntity } from "../entity";
+import { ProgramStepEntity } from "../entity";
 import { CreateProgramStepDto, UpdateProgramStepDto } from "../dto";
-import { ProgramItemTypeEnum } from "../types";
 
 
 @Injectable()

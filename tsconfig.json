@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types", "./src/shared/types/types.d.ts"],
+    "typeRoots": ["./node_modules/@types", "src/shared/types/index.ts"],
     "paths": {
       "@app/common/*": [
         "src/shared/*"
@@ -28,6 +28,9 @@
       ],
       "@app/module/base/*": [
         "src/modules/base/*"
+      ],
+      "@app/module/content/*": [
+        "src/modules/content/*"
       ],
       "@app/module/user/*": [
         "src/modules/user/*"

@@ -14,6 +14,7 @@ import { GymSpecialityEnum, GymVerifiedStatusEnum } from '../types';
 import {
   GymManagerEntity,
   GymMembershipPlanEntity,
+  GymSpecializedInNutritionEntity,
   GymSpecializedInWorkoutEntity
 } from './';
 import { UserEntity } from '@app/module/user/entity';
@@ -134,6 +135,9 @@ export class GymEntity {
 
   @OneToMany(() => GymSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.gym)
   specializedWorkouts: GymSpecializedInWorkoutEntity[];
+
+  @OneToMany(() => GymSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.gym)
+  specializedNutritions: GymSpecializedInNutritionEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

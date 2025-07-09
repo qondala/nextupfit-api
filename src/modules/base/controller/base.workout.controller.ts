@@ -10,7 +10,8 @@ import {
   HttpStatus,
   Query,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth, ApiNotFoundResponse, ApiNoContentResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
@@ -22,11 +23,12 @@ import {
   PaginatedDetailsBaseWorkoutDto,
   UpdateBaseWorkoutDto
 } from '../dto';
+import { SwaggerType } from '@app/common/types';
 
 @ApiTags("Base module endpoints")
-// @ApiBearerAuth()
+@ApiBearerAuth()
 @Controller("base/workout")
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class BaseWorkoutController {
 
   constructor(private readonly baseWorkoutService: BaseWorkoutService) {}
@@ -66,19 +68,19 @@ export class BaseWorkoutController {
     name: 'page',
     description: 'Page number',
     required: false,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @ApiQuery({
     name: 'limit',
     description: 'Number of items per page',
     required: false,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @ApiQuery({
     name: 'userId',
     description: 'Filter by creator user ID',
     required: false,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -110,13 +112,13 @@ export class BaseWorkoutController {
     name: 'page',
     description: 'Page number',
     required: false,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @ApiQuery({
     name: 'limit',
     description: 'Number of items per page',
     required: false,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -174,8 +176,8 @@ export class BaseWorkoutController {
     description: 'Workout not found',
     type: NotFoundException
   })
-  async findOne(@Param('id') id: string): Promise<DetailsBaseWorkoutDto> {
-    const workout = await this.baseWorkoutService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseWorkoutDto> {
+    const workout = await this.baseWorkoutService.findOne(id);
     if (!workout) {
       throw new NotFoundException(`Workout with ID ${id} not found`);
     }
@@ -205,11 +207,11 @@ export class BaseWorkoutController {
     type: BadRequestException
   })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseWorkoutDto: UpdateBaseWorkoutDto,
   ): Promise<DetailsBaseWorkoutDto> {
     try {
-      const workout = await this.baseWorkoutService.update(+id, updateBaseWorkoutDto);
+      const workout = await this.baseWorkoutService.update(id, updateBaseWorkoutDto);
       if (!workout) {
         throw new NotFoundException(`Workout with ID ${id} not found`);
       }
@@ -234,8 +236,8 @@ export class BaseWorkoutController {
   @ApiNotFoundResponse({
     description: 'Workout not found'
   })
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseWorkoutService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseWorkoutService.remove(id);
     if (!result) {
       throw new NotFoundException(`Workout with ID ${id} not found`);
     }

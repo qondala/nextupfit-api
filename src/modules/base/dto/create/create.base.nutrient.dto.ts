@@ -1,12 +1,14 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { BaseNutrientGroupEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateBaseNutrientDto {
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Nutrient's name",
     example: "Carbohydrates",
     required: true
@@ -17,6 +19,7 @@ export class CreateBaseNutrientDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Description of the nutrient",
     example: "Carbohydrates are molecules made of carbon, hydrogen, and oxygen. Their main role is to provide your body with energy.",
     required: false
@@ -27,7 +30,8 @@ export class CreateBaseNutrientDto {
 
 
   @ApiProperty({
-    description: "Brief insight",
+    type: SwaggerType.STRING,
+      description: "Brief insight",
     example: "This nutrient is used to measure sugar levels in the body.",
     required: false,
   })
@@ -37,6 +41,8 @@ export class CreateBaseNutrientDto {
 
 
   @ApiProperty({
+    enum: BaseNutrientGroupEnum,
+    enumName: "BaseNutrientGroupEnum",
     description: "Nutrient group",
     example: BaseNutrientGroupEnum.carbohydrates,
     required: true,
@@ -47,31 +53,34 @@ export class CreateBaseNutrientDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Nutrient's name abbreviation",
     example: "Carbs",
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   abbreviation: string;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Nutrient's unit id. Exple: 1=Carbohydrates",
     example: 1,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   baseUnitId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Nutrient's display order",
     example: 1,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   order?: number;
 }

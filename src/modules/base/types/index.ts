@@ -10,3 +10,8 @@ export * from "./base.unit-containance.enum";
 export * from "./base.workout-attendee-level.enum";
 export * from "./base.workout-discipline.enum";
 export * from "./base.week-days.enum";
+export * from "./base.schedulable.enum";
+export * from "./base.consumption-program.enum";
+export * from "./base.time-format.enum";
+export * from "./base.consumption-item-type.enum";
+

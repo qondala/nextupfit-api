@@ -220,11 +220,10 @@ export class AuthService {
     }
   }
 
-  async validateUser(email: string, pass: string): Promise<DetailsUserDto> {
+  async validateUser(email: string, pass: string): Promise<DetailsUserDto | null> {
     const user = await this.userService.findByEmail(email);
 
     if (user && (await argon2.verify(user.passwordHash, pass))) {
-      // const { passwordHash, ...result } = user; // Exclude passwordHash from result
       return user;
     }
 
