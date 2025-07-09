@@ -1,7 +1,16 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { ProgramStepActivityStatusEnum } from "../types";
-import { ProgramStepEntity } from "./program.step.entity";
-import { ProgramStepActivityWorkingsessionEntity } from "./program.step-activity-workingsession.entity";
+import { ProgramStepEntity, ProgramStepActivityWorkingsessionEntity } from ".";
 
 
 @Entity("program_step_activity")
@@ -63,6 +72,15 @@ export class ProgramStepActivityEntity {
 
   @Column({ default: 0 })
   position: number;
+
+  @Column({ default: false })
+  isFreeTool: boolean;
+
+  @Column({ default: 0 })
+  price: number;
+
+  @Column({ default: false })
+  isChallenge: boolean;
 
   @ManyToOne(() => ProgramStepEntity, step => step.activities)
   @JoinColumn({ name: 'programStepId' })

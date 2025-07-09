@@ -12,10 +12,10 @@ export class GymOpenDayEntity {
   gymId: number;
 
   @Column({
-      type: "enum",
-      enum: BaseWeekDaysEnum,
-      nullable: false
-    })
+    type: "enum",
+    enum: BaseWeekDaysEnum,
+    nullable: false
+  })
   day: BaseWeekDaysEnum;
 
   @Column({ nullable: false })

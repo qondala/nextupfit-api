@@ -65,6 +65,33 @@ export class ProgramStepActivityWorkingsessionWorkoutService {
     return await this.programStepActivityWorkingsessionWorkoutRepository.save(programStepActivityWorkingsessionWorkout);
   }
 
+  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityWorkingsessionWorkoutEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    const queryBuilder = this.programStepActivityWorkingsessionWorkoutRepository.createQueryBuilder("programStepActivityWorkingsessionWorkout");
+
+    const [items, totalItems] = await queryBuilder
+      .where("programStepActivityWorkingsessionWorkout.title ILIKE :query", { query: `%${query}%` })
+      .skip(skip)
+      .take(limit)
+      .orderBy("programStepActivityWorkingsessionWorkout.position", "ASC")
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages,
+        currentPage: page
+      }
+    };
+  }
+
   async remove(id: number): Promise<void> {
     await this.programStepActivityWorkingsessionWorkoutRepository.delete(id);
   }

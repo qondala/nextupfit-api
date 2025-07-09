@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { UserRecommendationEntity } from "../entity";
 import { CreateUserRecommendationDto, UpdateUserRecommendationDto } from "../dto";
@@ -20,17 +20,28 @@ export class UserRecommendationService {
     return await this.userRecommendationRepository.save(userRecommendation);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[UserRecommendationEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserRecommendationEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userRecommendationRepository.findAndCount({
+    const [items, total] = await this.userRecommendationRepository.findAndCount({
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 
   async findOne(id: number): Promise<UserRecommendationEntity> {
@@ -52,11 +63,11 @@ export class UserRecommendationService {
     await this.userRecommendationRepository.remove(userRecommendation);
   }
 
-  async findByRecommenderId(recommenderId: number, options: PaginationOptionsDto): Promise<[UserRecommendationEntity[], number]> {
+  async findByRecommenderId(recommenderId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserRecommendationEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userRecommendationRepository.findAndCount({
+    const [items, total] = await this.userRecommendationRepository.findAndCount({
       where: { recommenderUserId: recommenderId },
       skip,
       take: limit,
@@ -64,13 +75,24 @@ export class UserRecommendationService {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 
-  async findByRecommendeeId(recommendeeId: number, options: PaginationOptionsDto): Promise<[UserRecommendationEntity[], number]> {
+  async findByRecommendeeId(recommendeeId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserRecommendationEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userRecommendationRepository.findAndCount({
+    const [items, total] = await this.userRecommendationRepository.findAndCount({
       where: { recommendeeUserId: recommendeeId },
       skip,
       take: limit,
@@ -78,5 +100,16 @@ export class UserRecommendationService {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 }

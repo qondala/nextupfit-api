@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { UserBodyParamEntity } from "../entity";
 import { CreateUserBodyParamDto, UpdateUserBodyParamDto } from "../dto";
@@ -21,17 +21,28 @@ export class UserBodyParamService {
     return await this.userBodyParamRepository.save(userBodyParam);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[UserBodyParamEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserBodyParamEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userBodyParamRepository.findAndCount({
+    const [items, count] = await this.userBodyParamRepository.findAndCount({
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: count,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page
+      }
+    };
   }
 
   async findOne(id: number): Promise<UserBodyParamEntity> {
@@ -47,6 +58,19 @@ export class UserBodyParamService {
     return userBodyParam;
   }
 
+  async getUserBodyParams(userId: number): Promise<PaginatedResponseDto<UserBodyParamEntity>> {
+    const userBodyParams = await this.userBodyParamRepository.find({ where: { userId } });
+    return {
+      items: userBodyParams,
+      meta: {
+        totalItems: userBodyParams.length,
+        itemCount: userBodyParams.length,
+        itemsPerPage: 10,
+        totalPages: 1,
+        currentPage: 1
+      }
+    };
+  }
 
   async update(id: number, updateUserBodyParamDto: UpdateUserBodyParamDto): Promise<UserBodyParamEntity> {
     const userBodyParam = await this.findOne(id);
@@ -60,11 +84,11 @@ export class UserBodyParamService {
     await this.userBodyParamRepository.remove(userBodyParam);
   }
 
-  async findByUserId(userId: number, options: PaginationOptionsDto): Promise<[UserBodyParamEntity[], number]> {
+  async findByUserId(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserBodyParamEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userBodyParamRepository.findAndCount({
+    const [items, total] = await this.userBodyParamRepository.findAndCount({
       where: { userId },
       skip,
       take: limit,
@@ -72,5 +96,16 @@ export class UserBodyParamService {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page
+      }
+    };
   }
 }

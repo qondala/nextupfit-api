@@ -1,42 +1,64 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-import { PaymentStatusEnum } from "../types";
+import { PaymentStatusEnum, PaymentMethodEnum } from "../types";
 
 @Entity("payment_transfer")
 export class PaymentTransferEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ type: "bigint" })
   id: number;
 
-  @Column()
+  @Column({ type: "bigint" })
   senderUserId: number;
 
-  @Column()
-  senderGymId: number;
+  @Column({ type: "bigint", nullable: true })
+  senderManagerId?: number;
 
-  @Column()
+  @Column({ type: "bigint", nullable: true })
+  senderGymId?: number;
+
+  @Column({ type: "bigint" })
   receiverUserId: number;
 
-  @Column("decimal", { precision: 10, scale: 2 })
-  amountTransferred: number;
+  @Column({ type: "bigint", nullable: true })
+  receiverManagerId?: number;
 
-  @Column()
-  currency: string;
+  @Column({ type: "bigint", nullable: true })
+  receiverGymId?: number;
 
-  @Column({ type: "timestamp", nullable: true })
-  operationDate?: Date;
-
-  @Column()
-  paymentMethod: string;
-
-  @Column()
-  secret: string;
+  @Column({ type: "decimal", precision: 10, scale: 2 })
+  amount: number;
 
   @Column({
     type: "enum",
     enum: PaymentStatusEnum,
+    default: PaymentStatusEnum.triggered,
   })
   status: PaymentStatusEnum;
 
-  @CreateDateColumn()
+  @Column({ type: "varchar" })
+  stripeTransferId: string;
+
+  @Column({ type: "timestamp", default: () => "now()" })
+  operationDate: Date;
+
+  @Column({ type: "timestamp", nullable: true })
+  completionDate?: Date;
+
+  @Column({ type: "text", nullable: true })
+  message?: string;
+
+  @Column({ type: "enum", enum: PaymentMethodEnum, nullable: true })
+  paymentMethod?: PaymentMethodEnum;
+
+  @CreateDateColumn({ name: "createdAt" })
   createdAt: Date;
+
+  @UpdateDateColumn({ name: "updatedAt" })
+  updatedAt: Date;
 }

@@ -1,71 +1,103 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { SocialNotificationTypeEnum } from '../types';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn
+} from "typeorm";
 
-@Entity('social_notification')
+import {
+  SocialNotificationTypeEnum,
+  SocialNotificationPayload
+} from "../types";
+
+@Entity("social_notification")
 export class SocialNotificationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    name: "user_id", 
+    type: "integer"
+  })
   userId: number;
 
-  @Column({ nullable: true })
-  programId?: number;
-
-  @Column({ nullable: true })
-  workoutId?: number;
-
-  @Column({ nullable: true })
-  workingsessionId?: number;
-
-  @Column({ nullable: true })
-  programActivityId?: number;
-
-  @Column({ nullable: true })
-  programActivityWorkingsessionId?: number;
-
-  @Column({ nullable: true })
-  achievementId?: number;
-
-  @Column({ nullable: true })
-  badgeId?: number;
-
-  @Column({ nullable: true })
-  challengeId?: number;
-
-  @Column({ nullable: true })
-  challengeWorkingsessionId?: number;
-
-  @Column({ nullable: true })
-  challengeActivityId?: number;
-
-  @Column({ nullable: true })
-  challengeActivityWorkingsessionId?: number;
-
-  @Column({ nullable: true })
-  teamId?: number;
-
-  @Column({ nullable: true })
-  teamWorkingsessionId?: number;
-
-  @Column({ nullable: true })
-  teamActivityId?: number;
-
-  @Column({ nullable: true })
-  teamActivityWorkingsessionId?: number;
-
-  @Column()
-  isRead: boolean;
-
   @Column({
-    type: 'enum',
-    enum: SocialNotificationTypeEnum
+    type: "enum",
+    enum: SocialNotificationTypeEnum,
   })
   type: SocialNotificationTypeEnum;
 
-  @CreateDateColumn()
+  @Column({
+    name: "title", 
+    type: "text"
+  })
+  title: string;
+
+  @Column({
+    name: "body", 
+    type: "text"
+  })
+  body: string;
+
+  @Column({
+    name: "image_url", 
+    type: "text", 
+    nullable: true 
+  })
+  imageUrl?: string;
+
+  @CreateDateColumn({
+    name: "created_at", 
+    type: "timestamptz" 
+  })
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @Column({
+    name: "scheduled_at", 
+    type: "timestamptz", 
+    nullable: true 
+  })
+  scheduledAt?: Date;
+
+  @Column({
+    name: "is_delivered", 
+    type: "boolean", 
+    default: false 
+  })
+  isDelivered: boolean;
+
+  @Column({
+    name: "delivered_at", 
+    type: "timestamptz", 
+    nullable: true 
+  })
+  deliveredAt?: Date;
+
+  @Column({
+    name: "is_read", 
+    type: "boolean", 
+    default: false 
+  })
+  isRead: boolean;
+
+  @Column({
+    name: "read_at", 
+    type: "timestamptz", 
+    nullable: true 
+  })
+  readAt?: Date;
+
+  @Column({
+    name: "priority", 
+    type: "smallint", 
+    default: 1 
+  })
+  priority: number;
+
+  @Column({
+    name: "data", 
+    type: "jsonb", 
+    nullable: true 
+  })
+  data?: SocialNotificationPayload;
 }

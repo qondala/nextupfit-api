@@ -8,3 +8,4 @@ export * from './social.chat.controller';
 export * from './social.news.controller';
 export * from './social.notification.controller';
 export * from './social.review.controller';
+export * from './social.ratings.controller';

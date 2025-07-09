@@ -1,5 +1,18 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import {
+  GymEntity, 
+  GymManagerOverviewEntity 
+} from '@app/module/gym/entity';
+
+import {
+  ProgramEntity, 
+  ProgramStepActivityEntity, 
+  ProgramStepActivityWorkingsessionEntity, 
+  ProgramStepActivityWorkingsessionWorkoutEntity 
+} from '@app/module/program/entity';
+
 import {
   SocialAdvertisementEntity,
   SocialAffiliateLinkEntity,
@@ -10,7 +23,8 @@ import {
   SocialChatEntity,
   SocialNewsEntity,
   SocialNotificationEntity,
-  SocialReviewEntity
+  SocialReviewEntity,
+  SocialRatingsEntity
 } from './entity';
 import {
   SocialAdvertisementController,
@@ -22,7 +36,8 @@ import {
   SocialNewsController,
   SocialNotificationController,
   SocialReviewController,
-  SocialChatMessageTextController
+  SocialChatMessageTextController,
+  SocialRatingsController
 } from './controller';
 import {
   SocialAdvertisementService,
@@ -34,12 +49,22 @@ import {
   SocialChatService,
   SocialNewsService,
   SocialNotificationService,
-  SocialReviewService
+  SocialReviewService,
+  SocialRatingsService
 } from './service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      // Gym
+      GymEntity,
+      GymManagerOverviewEntity,
+      // Program
+      ProgramEntity,
+      ProgramStepActivityEntity,
+      ProgramStepActivityWorkingsessionEntity,
+      ProgramStepActivityWorkingsessionWorkoutEntity,
+      // Social
       SocialAdvertisementEntity,
       SocialAffiliateLinkEntity,
       SocialAffiliateProgramEntity,
@@ -49,7 +74,8 @@ import {
       SocialChatEntity,
       SocialNewsEntity,
       SocialNotificationEntity,
-      SocialReviewEntity
+      SocialReviewEntity,
+      SocialRatingsEntity
     ])
   ],
   controllers: [
@@ -62,7 +88,8 @@ import {
     SocialChatController,
     SocialNewsController,
     SocialNotificationController,
-    SocialReviewController
+    SocialReviewController,
+    SocialRatingsController
   ],
   providers: [
     SocialAdvertisementService,
@@ -74,7 +101,8 @@ import {
     SocialChatService,
     SocialNewsService,
     SocialNotificationService,
-    SocialReviewService
+    SocialReviewService,
+    SocialRatingsService
   ],
   exports: [
     SocialAdvertisementService,
@@ -86,7 +114,8 @@ import {
     SocialChatService,
     SocialNewsService,
     SocialNotificationService,
-    SocialReviewService
+    SocialReviewService,
+    SocialRatingsService
   ]
 })
 export class SocialModule {}

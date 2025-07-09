@@ -8,19 +8,33 @@ import {
   Param, 
   NotFoundException,
   HttpStatus,
-  HttpCode,
   Query,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth
+} from '@nestjs/swagger';
 
-import { PaginatedResponseDto } from '@app/common/dto';
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
+import { SwaggerType } from '@app/common/types';
+import {
+  JwtAuthGuard,
+  RolesGuard
+} from '@app/common/guards';
 
-import { CreateBaseWorkoutNutrientBurnDto, UpdateBaseWorkoutNutrientBurnDto } from '../dto';
+import {
+  CreateBaseWorkoutNutrientBurnDto,
+  UpdateBaseWorkoutNutrientBurnDto,
+  PaginatedDetailsBaseWorkoutNutrientBurnDto,
+  DetailsBaseWorkoutNutrientBurnDto
+} from '../dto';
+
 import { BaseWorkoutNutrientBurnService } from '../service';
-import { BaseWorkoutNutrientBurnEntity } from '../entity';
-
 
 
 @ApiTags("Base module endpoints")
@@ -31,49 +45,80 @@ export class BaseWorkoutNutrientBurnController {
   constructor(private readonly baseWorkoutNutrientBurnService: BaseWorkoutNutrientBurnService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new workout nutrient burn' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'The workout nutrient burn has been successfully created.',
-    type: BaseWorkoutNutrientBurnEntity 
+  @ApiOperation({
+    operationId: 'createBaseWorkoutNutrientBurn',
+    summary: 'Create a new workout nutrient burn'
   })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseWorkoutNutrientBurnDto: CreateBaseWorkoutNutrientBurnDto): Promise<BaseWorkoutNutrientBurnEntity> {
-    return await this.baseWorkoutNutrientBurnService.create(createBaseWorkoutNutrientBurnDto);
+  @ApiResponse({ 
+    status: HttpStatus.CREATED, 
+    description: 'The workout nutrient burn has been successfully created.',
+    type: DetailsBaseWorkoutNutrientBurnDto 
+  })
+  async create(@Body() createBaseWorkoutNutrientBurnDto: CreateBaseWorkoutNutrientBurnDto): Promise<DetailsBaseWorkoutNutrientBurnDto> {
+    return await this.baseWorkoutNutrientBurnService.create(createBaseWorkoutNutrientBurnDto) as unknown as DetailsBaseWorkoutNutrientBurnDto;
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all workout nutrient burns with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiQuery({ name: 'workoutId', description: 'Filter by workout ID', required: false, type: Number })
+  @ApiOperation({
+    operationId: 'getBaseWorkoutNutrientBurns',
+    summary: 'Get all workout nutrient burns with pagination'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'workoutId',
+    description: 'Filter by workout ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
     status: 200,
     description: 'Paginated list of workout nutrient burns',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseWorkoutNutrientBurnDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('workoutId') workoutId?: number
-  ): Promise<PaginatedResponseDto<BaseWorkoutNutrientBurnEntity>> {
-    return this.baseWorkoutNutrientBurnService.findAll({
+  ): Promise<PaginatedDetailsBaseWorkoutNutrientBurnDto> {
+    return await this.baseWorkoutNutrientBurnService.findAll({
       page: +page,
       limit: +limit
     }, workoutId ? +workoutId : undefined);
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific workout nutrient burn by ID' })
-  @ApiParam({ name: 'id', description: 'Workout nutrient burn ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found workout nutrient burn',
-    type: BaseWorkoutNutrientBurnEntity
+  @ApiOperation({
+    operationId: 'getBaseWorkoutNutrientBurnById',
+    summary: 'Get a specific workout nutrient burn by ID'
   })
-  @ApiResponse({ status: 404, description: 'Workout nutrient burn not found' })
-  async findOne(@Param('id') id: string): Promise<BaseWorkoutNutrientBurnEntity> {
-    const nutrientBurn = await this.baseWorkoutNutrientBurnService.findOne(+id);
+  @ApiParam({
+    name: 'id',
+    description: 'Workout nutrient burn ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found workout nutrient burn',
+    type: DetailsBaseWorkoutNutrientBurnDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout nutrient burn not found'
+  })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseWorkoutNutrientBurnDto> {
+    const nutrientBurn = await this.baseWorkoutNutrientBurnService.findOne(id) as unknown as DetailsBaseWorkoutNutrientBurnDto;
     if (!nutrientBurn) {
       throw new NotFoundException(`Workout nutrient burn with ID ${id} not found`);
     }
@@ -81,19 +126,30 @@ export class BaseWorkoutNutrientBurnController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a workout nutrient burn by ID' })
-  @ApiParam({ name: 'id', description: 'Workout nutrient burn ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated workout nutrient burn',
-    type: BaseWorkoutNutrientBurnEntity
+  @ApiOperation({
+    operationId: 'updateBaseWorkoutNutrientBurn',
+    summary: 'Update a workout nutrient burn by ID'
   })
-  @ApiResponse({ status: 404, description: 'Workout nutrient burn not found' })
+  @ApiParam({
+    name: 'id',
+    description: 'Workout nutrient burn ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The updated workout nutrient burn',
+    type: DetailsBaseWorkoutNutrientBurnDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout nutrient burn not found'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseWorkoutNutrientBurnDto: UpdateBaseWorkoutNutrientBurnDto,
-  ): Promise<BaseWorkoutNutrientBurnEntity> {
-    const nutrientBurn = await this.baseWorkoutNutrientBurnService.update(+id, updateBaseWorkoutNutrientBurnDto);
+  ): Promise<DetailsBaseWorkoutNutrientBurnDto> {
+    const nutrientBurn = await this.baseWorkoutNutrientBurnService.update(id, updateBaseWorkoutNutrientBurnDto) as unknown as DetailsBaseWorkoutNutrientBurnDto;
     if (!nutrientBurn) {
       throw new NotFoundException(`Workout nutrient burn with ID ${id} not found`);
     }
@@ -101,15 +157,28 @@ export class BaseWorkoutNutrientBurnController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a workout nutrient burn by ID' })
-  @ApiParam({ name: 'id', description: 'Workout nutrient burn ID' })
-  @ApiResponse({ status: 204, description: 'The workout nutrient burn has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Workout nutrient burn not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseWorkoutNutrientBurnService.remove(+id);
+  @ApiOperation({
+    operationId: 'deleteBaseWorkoutNutrientBurn',
+    summary: 'Delete a workout nutrient burn by ID'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Workout nutrient burn ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'The workout nutrient burn has been successfully deleted'
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout nutrient burn not found'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseWorkoutNutrientBurnService.remove(id);
     if (!result) {
       throw new NotFoundException(`Workout nutrient burn with ID ${id} not found`);
     }
   }
-} 
+}

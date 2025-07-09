@@ -1,7 +1,7 @@
 export * from "./base.app-update.service";
 export * from "./base.body-param.service";
 export * from "./base.food-group.service";
-export * from "./base.food-nutrients.service";
+export * from "./base.food-nutrient.service";
 export * from "./base.food.service";
 export * from "./base.meal.service";
 export * from "./base.meal-food.service";
@@ -12,4 +12,15 @@ export * from "./base.workout.service";
 export * from "./base.workout-howto-perform-step.service";
 export * from "./base.workout-nutrient-burn.service";
 export * from "./base.workout-recommended-repetition.service";
+export * from "./base.nutrition-type.service";
+export * from "./base.nutrition.service";
+export * from "./base.sociology.service";
+export * from "./base.sociology-group.service";
+export * from "./base.nutrition-tool.service";
+export * from "./base.recipe-item.service";
+export * from "./base.recipe-instruction-tag.service";
+export * from "./base.recipe-instruction.service";
+export * from "./base.recipe.service";
+export * from "./base.currency.service";
+export * from "./base.program-goal.service";
 

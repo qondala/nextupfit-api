@@ -1,24 +1,33 @@
-import { IsOptional, IsDate, IsEnum, IsNumber, IsDefined } from "class-validator";
+import {
+  IsOptional,
+  IsEnum,
+  IsNumber,
+  IsDefined,
+  IsInt
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ProgamEvolutionEventTypeEnum, ProgramItemTypeEnum } from "@app/module/program/types";
+import {
+  ProgramEvolutionEventTypeEnum,
+  ProgramItemTypeEnum
+} from "@app/module/program/types";
+import { SwaggerType } from "@app/common/types";
 
 export class CreateUserProgramEvolutionEventDto {
 
   @ApiProperty({
-    enum: ProgamEvolutionEventTypeEnum,
+    enum: ProgramEvolutionEventTypeEnum,
     enumName: "ProgamEvolutionEventTypeEnum",
-    isArray: true,
     description: "For saving any program evolution of the user",
-    example: ProgamEvolutionEventTypeEnum.registered,
+    example: ProgramEvolutionEventTypeEnum.registered,
     required: true,
   })
   @IsDefined()
-  @IsEnum(ProgamEvolutionEventTypeEnum)
-  event: ProgamEvolutionEventTypeEnum;
+  @IsEnum(ProgramEvolutionEventTypeEnum)
+  event: ProgramEvolutionEventTypeEnum;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "User id",
     example: 12345,
     required: true,
@@ -29,7 +38,7 @@ export class CreateUserProgramEvolutionEventDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Gym owning the program",
     example: 0,
     required: false,
@@ -40,7 +49,7 @@ export class CreateUserProgramEvolutionEventDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Concerned program",
     example: 0,
     required: false,
@@ -53,7 +62,6 @@ export class CreateUserProgramEvolutionEventDto {
   @ApiProperty({
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
-    isArray: true,
     description: "Program component concerned by the evolution",
     example: ProgramItemTypeEnum.workout,
     required: true,
@@ -64,34 +72,64 @@ export class CreateUserProgramEvolutionEventDto {
 
 
   @ApiProperty({
-    type: Date,
-    description: "Date of subscription",
-    example: Date(),
+    type: SwaggerType.INTEGER,
+    description: "Progression points",
+    example: 10,
     required: false,
   })
   @IsOptional()
-  @IsDate()
-  subscriptionDate?: Date;
+  @IsInt()
+  progressionPoints?: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Progression percentage (0-100)",
+    example: 25.5,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  progressionPercentage?: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Total progression percentage",
+    example: 70.0,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  totalProgressionPercentage?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Total progression points",
+    example: 100,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  totalProgressionPoints?: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Quantity",
     example: 0,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   quantity?: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Iteration: for programs that extends over multiple days or another time unit, this field represents the nth day the user attents to the program component.",
     example: 1,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   iteration?: number;
 }

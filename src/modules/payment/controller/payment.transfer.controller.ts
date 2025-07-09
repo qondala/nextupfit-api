@@ -1,60 +1,139 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+  HttpStatus,
+  UseGuards,
+  ParseIntPipe,
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
-import { User } from '@app/common/decorators';
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { SwaggerType } from "@app/common/types";
+import {
+  CreatePaymentTransferDto,
+  UpdatePaymentTransferDto,
+  DetailsPaymentTransferDto,
+  PaginatedDetailsPaymentTransferDto,
+} from "../dto";
+import { PaymentTransferService } from "../service";
 
-import { CreatePaymentTransferDto, UpdatePaymentTransferDto } from '../dto';
-import { PaymentTransferService } from '../service';
-import { PaymentTransferEntity } from '../entity';
-
-
-@ApiTags('Payment module endpoints')
+@ApiTags("PaymentTransfer")
 @ApiBearerAuth()
-@Controller('payment/transfer')
+@Controller("payment-transfer")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class PaymentTransferController {
   constructor(private readonly paymentTransferService: PaymentTransferService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a payment transfer' })
-  @ApiResponse({ status: 201, description: 'Payment transfer created successfully.' })
-  create(
+  @ApiOperation({
+    summary: "Create payment transfer",
+    description: "Create payment transfer",
+    operationId: "createPaymentTransfer",
+    tags: ["PaymentTransfer"],
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: DetailsPaymentTransferDto,
+  })
+  async create(
     @Body() createDto: CreatePaymentTransferDto,
-    @User('id') userId: number
-  ) {
-    return this.paymentTransferService.create(createDto, userId);
+    @Query("userId", ParseIntPipe) userId: number,
+  ): Promise<DetailsPaymentTransferDto> {
+    return await this.paymentTransferService.create(createDto, userId);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all payment transfers' })
+  @ApiOperation({
+    summary: "Get payment transfers paginated",
+    description: "Get payment transfers paginated",
+    operationId: "getPaymentTransfersPaginated",
+    tags: ["PaymentTransfer"],
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PaginatedDetailsPaymentTransferDto,
+  })
   async findAll(
-    @Query() paginationOptions: PaginationOptionsDto,
-    @User('id') userId: number
-  ): Promise<PaginatedResponseDto<PaymentTransferEntity>> {
-    return this.paymentTransferService.findAll(paginationOptions, userId);
+    @Query("page") page = 1,
+    @Query("limit") limit = 10,
+    @Query("userId", ParseIntPipe) userId: number,
+  ): Promise<PaginatedDetailsPaymentTransferDto> {
+    return await this.paymentTransferService.findAll({ page: +page, limit: +limit }, userId);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get payment transfer by id' })
-  findOne(@Param('id') id: string) {
-    return this.paymentTransferService.findOne(+id);
+  @Get(":id")
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DetailsPaymentTransferDto,
+  })
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsPaymentTransferDto> {
+    return await this.paymentTransferService.findOne(id);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update payment transfer' })
-  update(
-    @Param('id') id: string,
+  @Put(":id")
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DetailsPaymentTransferDto,
+  })
+  async update(
+    @Param("id", ParseIntPipe) id: number,
     @Body() updateDto: UpdatePaymentTransferDto,
-    @User('id') userId: number
-  ) {
-    return this.paymentTransferService.update(+id, updateDto, userId);
+    @Query("userId", ParseIntPipe) userId: number,
+  ): Promise<DetailsPaymentTransferDto> {
+    return await this.paymentTransferService.update(id, updateDto, userId);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete payment transfer' })
-  remove(@Param('id') id: string, @User('id') userId: number) {
-    return this.paymentTransferService.remove(+id, userId);
+  @Delete(":id")
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+  })
+  async remove(
+    @Param("id", ParseIntPipe) id: number,
+    @Query("userId", ParseIntPipe) userId: number,
+  ): Promise<void> {
+    return await this.paymentTransferService.remove(id, userId);
   }
 }

@@ -25,6 +25,7 @@ import {
 
 import { FirebaseAuthService } from "./firebaseauth.service";
 import { DetailsUserDto } from "../user/dto";
+import { UserProfileTypeEnum } from "../user/types";
 
 
 
@@ -43,7 +44,10 @@ export class AuthService {
       throw new ConflictException("Email already exists");
     }
 
-    const user = await this.userService.create(registerDto);
+    const user = await this.userService.create({
+      ...registerDto,
+      userProfile: [UserProfileTypeEnum.attendee],
+    });
 
     // Generate a verification token (e.g., using JWT)
     const verificationToken = this.jwtService.sign(
@@ -62,7 +66,7 @@ export class AuthService {
     return user;
   }
 
-  async signUpWithIdToken(idTokenDto: IdTokenDto) {
+  async signUpWithIdToken(idTokenDto: IdTokenDto): Promise<AuthTokenDto> {
     console.log("Signin up with id token :", idTokenDto);
     const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
 
@@ -78,6 +82,7 @@ export class AuthService {
         firstName: idTokenDto.userData.firstName ?? decoded.displayName ?? "",
         lastName: idTokenDto.userData.lastName ?? "",
         password: decoded.uid,
+        userProfile: [UserProfileTypeEnum.attendee],
       });
     }
 
@@ -220,11 +225,10 @@ export class AuthService {
     }
   }
 
-  async validateUser(email: string, pass: string): Promise<DetailsUserDto> {
+  async validateUser(email: string, pass: string): Promise<DetailsUserDto | null> {
     const user = await this.userService.findByEmail(email);
 
     if (user && (await argon2.verify(user.passwordHash, pass))) {
-      // const { passwordHash, ...result } = user; // Exclude passwordHash from result
       return user;
     }
 

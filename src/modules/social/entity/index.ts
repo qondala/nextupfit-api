@@ -8,3 +8,4 @@ export * from './social.chat-message-text.entity';
 export * from './social.news.entity';
 export * from './social.notification.entity';
 export * from './social.review.entity';
+export * from './social.ratings.entity';

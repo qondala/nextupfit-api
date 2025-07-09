@@ -1,26 +1,38 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Put, 
-  Delete, 
-  Body, 
-  Param, 
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
   NotFoundException,
   HttpStatus,
-  HttpCode,
   Query,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
+import { SwaggerType } from '@app/common/types';
 
 import { BaseNutrientService } from '../service';
-import { BaseNutrientEntity } from '../entity';
-import { CreateBaseNutrientDto, UpdateBaseNutrientDto } from '../dto';
+
+import {
+  CreateBaseNutrientDto,
+  UpdateBaseNutrientDto,
+  PaginatedDetailsBaseNutrientDto,
+  DetailsBaseNutrientDto
+} from '../dto';
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -30,18 +42,21 @@ export class BaseNutrientController {
   constructor(private readonly baseNutrientService: BaseNutrientService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new nutrient' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'The nutrient has been successfully created.',
-    type: BaseNutrientEntity 
+  @ApiOperation({
+    operationId: 'createBaseNutrient',
+    summary: 'Create a new nutrient'
   })
   @ApiResponse({ 
-    status: 400, 
+    status: HttpStatus.CREATED, 
+    description: 'The nutrient has been successfully created.',
+    type: DetailsBaseNutrientDto 
+  })
+  @ApiResponse({ 
+    status: HttpStatus.BAD_REQUEST, 
     description: 'Bad request. Code already exists or invalid input.' 
   })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseNutrientDto: CreateBaseNutrientDto): Promise<BaseNutrientEntity> {
+  
+  async create(@Body() createBaseNutrientDto: CreateBaseNutrientDto): Promise<DetailsBaseNutrientDto> {
     try {
       return await this.baseNutrientService.create(createBaseNutrientDto);
     } catch (error) {
@@ -53,41 +68,77 @@ export class BaseNutrientController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all nutrients with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiQuery({ name: 'userId', description: 'Filter by creator user ID', required: false, type: Number })
+  @ApiOperation({
+    operationId: 'findAllBaseNutrients',
+    summary: 'Get all nutrients with pagination'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'Filter by creator user ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated list of nutrients',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseNutrientDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('userId') userId?: number
-  ): Promise<PaginatedResponseDto<BaseNutrientEntity>> {
-    return this.baseNutrientService.findAll({
+  ): Promise<PaginatedDetailsBaseNutrientDto> {
+    return await this.baseNutrientService.findAll({
       page: +page,
       limit: +limit
     }, userId ? +userId : undefined);
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search nutrients by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
+  @ApiOperation({
+    operationId: 'searchBaseNutrients',
+    summary: 'Search nutrients by query string with pagination'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated search results of nutrients',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseNutrientDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseNutrientEntity>> {
+  ): Promise<PaginatedDetailsBaseNutrientDto> {
     return this.baseNutrientService.search(query, {
       page: +page,
       limit: +limit
@@ -95,15 +146,26 @@ export class BaseNutrientController {
   }
 
   @Get('code/:code')
-  @ApiOperation({ summary: 'Get nutrient by code' })
-  @ApiParam({ name: 'code', description: 'Nutrient code' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found nutrient',
-    type: BaseNutrientEntity
+  @ApiOperation({
+    operationId: 'getBaseNutrientByCode',
+    summary: 'Get nutrient by code'
   })
-  @ApiResponse({ status: 404, description: 'Nutrient not found' })
-  async findByCode(@Param('code') code: string): Promise<BaseNutrientEntity> {
+  @ApiParam({
+    name: 'code',
+    description: 'Nutrient code',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found nutrient',
+    type: DetailsBaseNutrientDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Nutrient not found'
+  })
+  async findByCode(@Param('code') code: string): Promise<DetailsBaseNutrientDto> {
     const nutrient = await this.baseNutrientService.findByCode(code);
     if (!nutrient) {
       throw new NotFoundException(`Nutrient with code '${code}' not found`);
@@ -112,16 +174,27 @@ export class BaseNutrientController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific nutrient by ID' })
-  @ApiParam({ name: 'id', description: 'Nutrient ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found nutrient',
-    type: BaseNutrientEntity
+  @ApiOperation({
+    operationId: 'getBaseNutrientById',
+    summary: 'Get a specific nutrient by ID'
   })
-  @ApiResponse({ status: 404, description: 'Nutrient not found' })
-  async findOne(@Param('id') id: string): Promise<BaseNutrientEntity> {
-    const nutrient = await this.baseNutrientService.findOne(+id);
+  @ApiParam({
+    name: 'id',
+    description: 'Nutrient ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found nutrient',
+    type: DetailsBaseNutrientDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Nutrient not found'
+  })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseNutrientDto> {
+    const nutrient = await this.baseNutrientService.findOne(id);
     if (!nutrient) {
       throw new NotFoundException(`Nutrient with ID ${id} not found`);
     }
@@ -129,21 +202,35 @@ export class BaseNutrientController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a nutrient by ID' })
-  @ApiParam({ name: 'id', description: 'Nutrient ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated nutrient',
-    type: BaseNutrientEntity
+  @ApiOperation({
+    operationId: 'updateBaseNutrient',
+    summary: 'Update a nutrient by ID'
   })
-  @ApiResponse({ status: 404, description: 'Nutrient not found' })
-  @ApiResponse({ status: 400, description: 'Bad request. Code already exists or invalid input.' })
+  @ApiParam({
+    name: 'id',
+    description: 'Nutrient ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The updated nutrient',
+    type: DetailsBaseNutrientDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Nutrient not found'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request. Code already exists or invalid input.'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseNutrientDto: UpdateBaseNutrientDto,
-  ): Promise<BaseNutrientEntity> {
+  ): Promise<DetailsBaseNutrientDto> {
     try {
-      const nutrient = await this.baseNutrientService.update(+id, updateBaseNutrientDto);
+      const nutrient = await this.baseNutrientService.update(id, updateBaseNutrientDto);
       if (!nutrient) {
         throw new NotFoundException(`Nutrient with ID ${id} not found`);
       }
@@ -157,15 +244,28 @@ export class BaseNutrientController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a nutrient by ID' })
-  @ApiParam({ name: 'id', description: 'Nutrient ID' })
-  @ApiResponse({ status: 204, description: 'The nutrient has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Nutrient not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseNutrientService.remove(+id);
+  @ApiOperation({
+    operationId: 'deleteBaseNutrient',
+    summary: 'Delete a nutrient by ID'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Nutrient ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'The nutrient has been successfully deleted'
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Nutrient not found'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseNutrientService.remove(id);
     if (!result) {
       throw new NotFoundException(`Nutrient with ID ${id} not found`);
     }
   }
-} 
+}

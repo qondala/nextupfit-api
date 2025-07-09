@@ -8,3 +8,4 @@ export * from './social.chat.service';
 export * from './social.news.service';
 export * from './social.notification.service';
 export * from './social.review.service';
+export * from './social.ratings.service';

@@ -1,16 +1,25 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsString,
   IsEnum,
+  IsNumber,
 } from "class-validator";
-import { ProgramStatusEnum, ProgramTypeEnum } from "../../types";
+
+
+import { SwaggerType } from "@app/common/types";
+
+import {
+  ProgramStatusEnum,
+  ProgramTypeEnum,
+} from "../../types";
 
 
 export class CreateProgramDto {
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program name",
     example: "Daily workout",
     required: true,
@@ -20,26 +29,30 @@ export class CreateProgramDto {
   name: string;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the program",
     example: 4335,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   gymId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   ownerUserId: number;
   
 
   @ApiProperty({
+    enumName: "ProgramTypeEnum",
+    enum: ProgramTypeEnum,
     description: "Program type",
     example: ProgramTypeEnum.nutrition,
     required: true,
@@ -49,6 +62,8 @@ export class CreateProgramDto {
 
 
   @ApiProperty({
+    enumName: "ProgramStatusEnum",
+    enum: ProgramStatusEnum,
     description: "Program status",
     example: ProgramStatusEnum.published,
     required: true,
@@ -58,6 +73,7 @@ export class CreateProgramDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
@@ -67,6 +83,7 @@ export class CreateProgramDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program icon URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
     required: false,
@@ -76,28 +93,31 @@ export class CreateProgramDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Program attendees count",
     example: 5000,
     required: false,
     default: 0
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   attendeesCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false,
     default: 0
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   viewsCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false,
@@ -109,45 +129,49 @@ export class CreateProgramDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number times program was rated",
     example: 3000,
     required: false,
     default: 0
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   ratingsCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Duration of the program",
     example: 2,
     required: false,
     default: 2
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   duration?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
     default: 16
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   durationUnitId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
     default: 0
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   difficultyLevel?: number;
 }

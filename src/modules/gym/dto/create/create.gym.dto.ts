@@ -5,15 +5,17 @@ import {
   IsNumber,
   IsEnum,
   IsOptional,
-  IsPhoneNumber} from "class-validator";
+  IsPhoneNumber,
+  IsInt} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { SwaggerType } from "@app/common/types";
 
 import { GymSpecialityEnum, GymVerifiedStatusEnum } from "../../types";
 
 export class CreateGymDto {
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Gym name",
     example: "The Training Ground",
     required: true
@@ -24,7 +26,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Gym logo URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/gyms/logos/the-training-ground.png",
     required: false
@@ -35,7 +37,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Gym cover image URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/gyms/covers/the-training-ground.png",
     required: false
@@ -46,7 +48,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Gym logo URL",
     example: "1234 Nicollet Avenue, Minneapolis, MN 55403, USA",
     required: true
@@ -57,6 +59,7 @@ export class CreateGymDto {
 
   
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's email",
     example: "infos@thetrainingground.com",
     required: true
@@ -67,6 +70,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym Facebook page URL",
     example: "https://web.facebook.com/thetrainingground",
     required: false
@@ -77,6 +81,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's Twitter page URL",
     example: "https://twitter.com/thetrainingground",
     required: false
@@ -87,6 +92,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's LinkedIn page URL",
     example: "https://linkedin.com/thetrainingground",
     required: false
@@ -97,6 +103,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's Youtube page URL",
     example: "https://youtube.com/thetrainingground",
     required: false
@@ -107,6 +114,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's Tittok page URL",
     example: "https://tiktok.com/thetrainingground",
     required: false
@@ -117,6 +125,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's phone line 1",
     example: "+19297554196",
     required: false
@@ -127,6 +136,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's phone line 2",
     example: "+19297554196",
     required: false
@@ -136,6 +146,7 @@ export class CreateGymDto {
   phoneLine2?: string;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym's moto",
     example: "Stay healthy, stay fit !",
     required: false
@@ -145,21 +156,23 @@ export class CreateGymDto {
   moto?: string;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym followers count",
     example: 5000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   followersCount?: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym owner user Id",
     example: 12334,
     required: false
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   createdByUserId: number;
 
 
@@ -175,6 +188,7 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Gym Stripe account id",
     example: "R4567FGH789",
     required: false
@@ -185,47 +199,53 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym country id",
     example: 0,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   countryId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym State id",
     example: 0,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   stateId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym City id",
     example: 0,
     required: false
   })
   @IsOptional()
-  @IsNumber()
-  cityId: number;
+  @IsInt()
+  cityId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Gym members count",
     example: 5000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   membersCount?: number;
 
 
   @ApiProperty({
     enum: GymVerifiedStatusEnum,
+    enumName: "GymVerifiedStatusEnum",
+    title: "GymVerifiedStatusEnum",
     description: "Gym verified status",
     example: GymVerifiedStatusEnum.unverified,
     required: false
@@ -236,16 +256,18 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   viewsCount: number;
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false
@@ -256,11 +278,12 @@ export class CreateGymDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number times gym was rated",
     example: 3000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   ratingsCount: number;
 }

@@ -1,10 +1,12 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateBaseFoodGroupDto {
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Food group name",
     example: "Coffee drinks",
     required: true,
@@ -15,31 +17,34 @@ export class CreateBaseFoodGroupDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Food group illustration icon Url",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/coffee-drinks.png",
-    required: true,
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   iconUrl?: string;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,  
     description: "UserId (Gym manager) who created the food group record.",
     example: 1368464,
     required: true,
   })
   @IsNotEmpty()
-  @IsNotEmpty()
+  @IsInt()
   createdByUserId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Food group's unique code, meant to be used for app translation and other facilities.",
     example: "coffee-drinks",
     required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   code?: string;
 }

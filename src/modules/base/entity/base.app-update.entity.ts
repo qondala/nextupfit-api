@@ -7,14 +7,32 @@ export class BaseAppUpdateEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", nullable: false, unique: true })
+  @Column({
+    type: "varchar",
+    nullable: false,
+    unique: true
+  })
   version: string;
 
 
-  @Column({ type: "varchar", nullable: false, unique: true })
+  @Column({
+    type: "varchar",
+    nullable: false,
+    unique: true
+  })
   name: string;
 
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({
+    type: "varchar",
+    nullable: false
+  })
   features: string;
+
+
+  @Column({
+    type: "varchar",
+    nullable: false
+  })
+  changes: string;
 }

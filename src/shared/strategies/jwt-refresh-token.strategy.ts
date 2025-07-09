@@ -1,10 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
-
 import { ExtractJwt, Strategy } from "passport-jwt";
 
 import { UserService } from "@app/module/user/service";
+import { DetailsUserDto } from "@app/module/user/dto";
+import { AppRequest } from "@app/common/types";
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(
@@ -23,11 +24,15 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: Request, payload: any) {
+  async validate(req: AppRequest, payload: any): Promise<DetailsUserDto | null> {
+    const refreshToken = req.body.refreshToken;
     const user = await this.userService.findOne(payload.userId);
+
     if (!user) {
       return null;
     }
+
     return user;
   }
 }
+

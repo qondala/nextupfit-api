@@ -2,9 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 import { UserSubscriptionPlanEntity } from "../entity";
 import { CreateUserSubscriptionPlanDto, UpdateUserSubscriptionPlanDto } from "../dto";
+import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
 
 
@@ -20,17 +21,29 @@ export class UserSubscriptionPlanService {
     return await this.userSubscriptionPlanRepository.save(userSubscriptionPlan);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[UserSubscriptionPlanEntity[], number]> {
+  async findAll(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserSubscriptionPlanEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userSubscriptionPlanRepository.findAndCount({
+    const [items, total] = await this.userSubscriptionPlanRepository.findAndCount({
+      where: { userId },
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 
   async findOne(id: number): Promise<UserSubscriptionPlanEntity> {
@@ -52,17 +65,32 @@ export class UserSubscriptionPlanService {
     await this.userSubscriptionPlanRepository.remove(userSubscriptionPlan);
   }
 
-  async findByItemId(itemId: number, options: PaginationOptionsDto): Promise<[UserSubscriptionPlanEntity[], number]> {
+  async findByItemType(
+    userId: number,
+    itemType: BaseSubscriptionPlanItemEnum,
+    options: PaginationOptionsDto
+  ): Promise<PaginatedResponseDto<UserSubscriptionPlanEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userSubscriptionPlanRepository.findAndCount({
-      where: { itemId },
+    const [items, total] = await this.userSubscriptionPlanRepository.findAndCount({
+      where: { userId, itemType },
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 }

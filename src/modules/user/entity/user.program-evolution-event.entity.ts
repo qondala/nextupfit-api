@@ -1,5 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ProgamEvolutionEventTypeEnum, ProgramItemTypeEnum } from "@app/module/program/types";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+import {
+  ProgramEvolutionEventTypeEnum,
+  ProgramItemTypeEnum
+} from "@app/module/program/types";
 
 
 @Entity("user_program_evolution_event")
@@ -9,17 +18,17 @@ export class UserProgramEvolutionEntity {
 
   @Column({
     type: "enum",
-    enum: ProgamEvolutionEventTypeEnum,
+    enum: ProgramEvolutionEventTypeEnum,
   })
-  event: ProgamEvolutionEventTypeEnum;
+  event: ProgramEvolutionEventTypeEnum;
 
   @Column()
   userId: number;
 
-  @Column({ nullable: true })
+  @Column()
   gymId: number;
 
-  @Column({ nullable: true })
+  @Column()
   programItemId: number;
 
   @Column({
@@ -28,8 +37,17 @@ export class UserProgramEvolutionEntity {
   })
   programItem: ProgramItemTypeEnum;
 
-  @Column({ type: "timestamp", nullable: true })
-  subscriptionDate: Date;
+  @Column({ default: 0 })
+  progressionPoints: number;
+
+  @Column({ type: "numeric", precision: 3, scale: 2, default: 0 })
+  progressionPercentage: number;
+
+  @Column({ type: "numeric", precision: 3, scale: 2, default: 0 })
+  totalProgressionPercentage: number;
+
+  @Column({ default: 0 })
+  totalProgressionPoints: number;
 
   @Column({ nullable: true })
   quantity: number;

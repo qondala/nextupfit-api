@@ -6,12 +6,15 @@ import {
   IsDate,
   IsString,
   IsEnum,
+  IsInt,
 } from "class-validator";
 import { ProgramStepStatusEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateProgramStepDto {
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step name",
     example: "Daily workout",
     required: true,
@@ -21,6 +24,7 @@ export class CreateProgramStepDto {
   name: string;
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Program step description",
     example: "Here a sample description of the step",
     required: false,
@@ -30,43 +34,37 @@ export class CreateProgramStepDto {
   description: string;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the program",
     example: 4335,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   gymId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program",
     example: 80,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   programId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   ownerUserId: number;
-  
 
-  @ApiProperty({
-    description: "Date the program step was created",
-    example: Date(),
-    required: false,
-  })
-  @IsOptional()
-  @IsDate()
-  createdDate?: Date;
 
   @ApiProperty({
     description: "Step icon URL",

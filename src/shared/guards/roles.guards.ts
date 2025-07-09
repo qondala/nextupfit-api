@@ -38,7 +38,6 @@ export class RolesGuard implements CanActivate {
     const userRepository = AppDataSource.getRepository(UserEntity);
     const fetchedUser = await userRepository.findOne({
       where: { id: user.id },
-
     });
 
     if (!fetchedUser) {

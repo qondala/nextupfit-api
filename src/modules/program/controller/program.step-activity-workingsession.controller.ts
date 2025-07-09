@@ -62,6 +62,34 @@ export class ProgramStepActivityWorkingsessionController {
     return details;
   }
 
+  @Get("search")
+  @ApiOperation({
+    summary: "Search program step activity workingsessions by name",
+    operationId: "searchProgramStepActivityWorkingsessions"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return program step activity workingsessions matching the search query.",
+    type: PaginatedDetailsProgramStepActivityWorkingsessionDto,
+  })
+  async search(
+    @Query("query") query: string,
+    @Query() options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsProgramStepActivityWorkingsessionDto> {
+    const result = await this.programStepActivityWorkingsessionService.search(query, options);
+
+    const details: DetailsProgramStepActivityWorkingsessionDto[] = await Promise.all(result.items.map(async (programStepActivityWorkingsession) => ({
+      ...programStepActivityWorkingsession,
+      managers: await this.programManagerService.fetchProgramItemManagers(programStepActivityWorkingsession.id, ProgramItemTypeEnum.workingsession),
+      audience: await this.programPerSociologyService.fetchProgramItemSociology(programStepActivityWorkingsession.id, ProgramItemTypeEnum.workingsession),
+    })));
+
+    return {
+      ...result,
+      items: details
+    };
+  }
+
   @Get()
   @ApiOperation({
     summary: "Get all program step activity workingsessions with pagination",

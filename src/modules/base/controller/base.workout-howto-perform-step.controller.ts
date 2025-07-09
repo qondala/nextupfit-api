@@ -11,16 +11,29 @@ import {
   HttpCode,
   Query,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth
+} from '@nestjs/swagger';
 
+import { SwaggerType } from '@app/common/types';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
+
+import {
+  PaginatedDetailsBaseWorkoutHowtoPerformStepDto,
+  DetailsBaseWorkoutHowtoPerformStepDto,
+  CreateBaseWorkoutHowtoPerformStepDto,
+  UpdateBaseWorkoutHowtoPerformStepDto
+} from '../dto';
 
 import { BaseWorkoutHowtoPerformStepService } from '../service';
-import { BaseWorkoutHowtoPerformStepEntity } from '../entity';
-import { CreateBaseWorkoutHowtoPerformStepDto, UpdateBaseWorkoutHowtoPerformStepDto } from '../dto';
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -30,20 +43,26 @@ export class BaseWorkoutHowtoPerformStepController {
   constructor(private readonly baseWorkoutHowtoPerformStepService: BaseWorkoutHowtoPerformStepService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new workout howto perform step' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'The workout howto perform step has been successfully created.',
-    type: BaseWorkoutHowtoPerformStepEntity 
+  @ApiOperation({
+    summary: 'Create a new workout howto perform step',
+    description: 'Create a new workout howto perform step',
+    operationId: 'createWorkoutHowtoPerformStep'
   })
   @ApiResponse({ 
-    status: 400, 
-    description: 'Bad request. Code already exists or invalid input.' 
+    status: HttpStatus.CREATED,
+    description: 'The workout howto perform step has been successfully created.',
+    type: DetailsBaseWorkoutHowtoPerformStepDto
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request. Code already exists or invalid input.'
   })
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseWorkoutHowtoPerformStepDto: CreateBaseWorkoutHowtoPerformStepDto): Promise<BaseWorkoutHowtoPerformStepEntity> {
+  async create(
+    @Body() createBaseWorkoutHowtoPerformStepDto: CreateBaseWorkoutHowtoPerformStepDto
+  ): Promise<DetailsBaseWorkoutHowtoPerformStepDto> {
     try {
-      return await this.baseWorkoutHowtoPerformStepService.create(createBaseWorkoutHowtoPerformStepDto);
+      return await this.baseWorkoutHowtoPerformStepService.create(createBaseWorkoutHowtoPerformStepDto) as unknown as DetailsBaseWorkoutHowtoPerformStepDto;
     } catch (error) {
       if (error.code === '23505') { // PostgreSQL unique violation error code
         throw new BadRequestException('Workout howto perform step with this code already exists');
@@ -53,20 +72,39 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all workout howto perform steps with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiQuery({ name: 'workoutId', description: 'Filter by workout ID', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Get all workout howto perform steps with pagination',
+    description: 'Get all workout howto perform steps with pagination',
+    operationId: 'getAllWorkoutHowtoPerformSteps'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'workoutId',
+    description: 'Filter by workout ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated list of workout howto perform steps',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseWorkoutHowtoPerformStepDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('workoutId') workoutId?: number
-  ): Promise<PaginatedResponseDto<BaseWorkoutHowtoPerformStepEntity>> {
+  ): Promise<PaginatedDetailsBaseWorkoutHowtoPerformStepDto> {
     return this.baseWorkoutHowtoPerformStepService.findAll({
       page: +page,
       limit: +limit
@@ -74,20 +112,39 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search workout howto perform steps by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Search workout howto perform steps by query string with pagination',
+    description: 'Search workout howto perform steps by query string with pagination',
+    operationId: 'searchWorkoutHowtoPerformSteps'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated search results of workout howto perform steps',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseWorkoutHowtoPerformStepDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseWorkoutHowtoPerformStepEntity>> {
+  ): Promise<PaginatedDetailsBaseWorkoutHowtoPerformStepDto> {
     return this.baseWorkoutHowtoPerformStepService.search(query, {
       page: +page,
       limit: +limit
@@ -95,15 +152,27 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Get('code/:code')
-  @ApiOperation({ summary: 'Get workout howto perform step by code' })
-  @ApiParam({ name: 'code', description: 'Workout howto perform step code' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found workout howto perform step',
-    type: BaseWorkoutHowtoPerformStepEntity
+  @ApiOperation({
+    summary: 'Get workout howto perform step by code',
+    description: 'Get workout howto perform step by code',
+    operationId: 'getWorkoutHowtoPerformStepByCode'
   })
-  @ApiResponse({ status: 404, description: 'Workout howto perform step not found' })
-  async findByCode(@Param('code') code: string): Promise<BaseWorkoutHowtoPerformStepEntity> {
+  @ApiParam({
+    name: 'code',
+    description: 'Workout howto perform step code',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found workout howto perform step',
+    type: DetailsBaseWorkoutHowtoPerformStepDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout howto perform step not found'
+  })
+  async findByCode(@Param('code') code: string): Promise<DetailsBaseWorkoutHowtoPerformStepDto> {
     const step = await this.baseWorkoutHowtoPerformStepService.findByCode(code);
     if (!step) {
       throw new NotFoundException(`Workout howto perform step with code '${code}' not found`);
@@ -112,15 +181,27 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific workout howto perform step by ID' })
-  @ApiParam({ name: 'id', description: 'Workout howto perform step ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found workout howto perform step',
-    type: BaseWorkoutHowtoPerformStepEntity
+  @ApiOperation({
+    summary: 'Get a specific workout howto perform step by ID',
+    description: 'Get a specific workout howto perform step by ID',
+    operationId: 'getWorkoutHowtoPerformStepById'
   })
-  @ApiResponse({ status: 404, description: 'Workout howto perform step not found' })
-  async findOne(@Param('id') id: string): Promise<BaseWorkoutHowtoPerformStepEntity> {
+  @ApiParam({
+    name: 'id',
+    description: 'Workout howto perform step ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found workout howto perform step',
+    type: DetailsBaseWorkoutHowtoPerformStepDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout howto perform step not found'
+  })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseWorkoutHowtoPerformStepDto> {
     const step = await this.baseWorkoutHowtoPerformStepService.findOne(+id);
     if (!step) {
       throw new NotFoundException(`Workout howto perform step with ID ${id} not found`);
@@ -129,21 +210,36 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a workout howto perform step by ID' })
-  @ApiParam({ name: 'id', description: 'Workout howto perform step ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated workout howto perform step',
-    type: BaseWorkoutHowtoPerformStepEntity
+  @ApiOperation({
+    summary: 'Update a workout howto perform step by ID',
+    description: 'Update a workout howto perform step by ID',
+    operationId: 'updateWorkoutHowtoPerformStep'
   })
-  @ApiResponse({ status: 404, description: 'Workout howto perform step not found' })
-  @ApiResponse({ status: 400, description: 'Bad request. Code already exists or invalid input.' })
+  @ApiParam({
+    name: 'id',
+    description: 'Workout howto perform step ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The updated workout howto perform step',
+    type: DetailsBaseWorkoutHowtoPerformStepDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Workout howto perform step not found'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request. Code already exists or invalid input.'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseWorkoutHowtoPerformStepDto: UpdateBaseWorkoutHowtoPerformStepDto,
-  ): Promise<BaseWorkoutHowtoPerformStepEntity> {
+  ): Promise<DetailsBaseWorkoutHowtoPerformStepDto> {
     try {
-      const step = await this.baseWorkoutHowtoPerformStepService.update(+id, updateBaseWorkoutHowtoPerformStepDto);
+      const step = await this.baseWorkoutHowtoPerformStepService.update(id, updateBaseWorkoutHowtoPerformStepDto) as unknown as DetailsBaseWorkoutHowtoPerformStepDto;
       if (!step) {
         throw new NotFoundException(`Workout howto perform step with ID ${id} not found`);
       }
@@ -157,12 +253,22 @@ export class BaseWorkoutHowtoPerformStepController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a workout howto perform step by ID' })
-  @ApiParam({ name: 'id', description: 'Workout howto perform step ID' })
-  @ApiResponse({ status: 204, description: 'The workout howto perform step has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Workout howto perform step not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
+  @ApiOperation({
+    summary: 'Delete a workout howto perform step by ID',
+    description: 'Delete a workout howto perform step by ID',
+    operationId: 'deleteWorkoutHowtoPerformStep'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Workout howto perform step ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'The workout howto perform step has been successfully deleted'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
     const result = await this.baseWorkoutHowtoPerformStepService.remove(+id);
     if (!result) {
       throw new NotFoundException(`Workout howto perform step with ID ${id} not found`);

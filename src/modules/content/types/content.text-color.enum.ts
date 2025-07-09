@@ -1,0 +1,16 @@
+export enum ContentTextColorEnum {
+  default = "default",
+  defaultHighlight = "defaultHighlight",
+  black = "black",
+  white = "white",
+  red = "red",
+  green = "green",
+  yellow = "yellow",
+  pink = "pink",
+  grey = "grey",
+  orange = "orange",
+  gold = "gold",
+  darkred = "darkred",
+  darkgreen = "darkgreen",
+  purple = "purple",
+}

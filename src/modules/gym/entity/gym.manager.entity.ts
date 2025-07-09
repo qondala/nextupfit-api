@@ -10,13 +10,15 @@ import {
   OneToOne
 } from "typeorm";
 
-import { GymManagerRoleEnum } from "../types";
+import { GymManagerRoleEnum, GymManagerSpecialityEnum } from "../types";
 import {
   GymEntity,
   GymManagerOverviewEntity,
   GymManagerQualificationEntity,
+  GymManagerSpecializedInNutritionEntity,
   GymManagerSpecializedInWorkoutEntity
 } from "./";
+import { UserEntity } from "@app/module/user/entity";
 
 @Entity("gym_manager")
 export class GymManagerEntity {
@@ -34,7 +36,11 @@ export class GymManagerEntity {
   managerOverviewId?: number;
 
 
-  @Column({ type: "enum", enum: GymManagerRoleEnum, nullable: false })
+  @Column({ 
+    type: "enum", 
+    enum: GymManagerRoleEnum, 
+    nullable: false 
+  })
   role: GymManagerRoleEnum;
 
 
@@ -45,6 +51,13 @@ export class GymManagerEntity {
   @Column({ nullable: true })
   suspended?: boolean;
 
+  @Column({
+    nullable: false,
+    type: "enum",
+    enum: GymManagerSpecialityEnum
+  })
+  speciality: GymManagerSpecialityEnum;
+
   @OneToOne(() => GymManagerOverviewEntity)
   @JoinColumn({ name: 'managerOverviewId' })
   overview?: GymManagerOverviewEntity;
@@ -53,11 +66,18 @@ export class GymManagerEntity {
   @JoinColumn({ name: "gymId" })
   gym?: GymEntity;
 
+  @OneToOne(() => UserEntity)
+  @JoinColumn({ name: 'managerUserId' })
+  user: UserEntity;
+
   @OneToMany(() => GymManagerQualificationEntity, qualification => qualification.manager)
   qualifications?: GymManagerQualificationEntity[];
 
   @OneToMany(() => GymManagerSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.manager)
   specializedWorkouts?: GymManagerSpecializedInWorkoutEntity[];
+
+  @OneToMany(() => GymManagerSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.manager)
+  specializedNutritions?: GymManagerSpecializedInNutritionEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,95 +1,141 @@
-import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
-import { PaymentPayableItemEnum, PaymentStatusEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
+import {
+  PaymentPayableItemEnum,
+  PaymentMethodEnum,
+} from "../../types";
+import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
 export class CreatePaymentDto {
   @ApiProperty({
-    description: "Amount paid",
-    example: 500,
-    required: true
+    type: SwaggerType.NUMBER,
+    description: "Amount to pay",
+    example: 19.99,
   })
   @IsNotEmpty()
   @IsNumber()
-  amountPaid: number;
-
+  amount: number;
 
   @ApiProperty({
-    description: "Payment currency",
-    example: "usd",
-    required: true
+    type: SwaggerType.STRING,
+    description: "Secret token",
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  currency: string;
-
-  
-  @ApiProperty({
-    description: "Payment date",
-    example: Date(),
-    required: false
-  })
-  @IsNotEmpty()
-  @IsDate()
-  paymentDate?: Date;
-
+  secret?: string;
 
   @ApiProperty({
-    description: "Payment method",
-    example: "card",
-    required: true
+    enum: PaymentPayableItemEnum,
+    enumName: "PaymentPayableItemEnum",
+    description: "Item type",
   })
-  @IsNotEmpty()
-  @IsString()
-  paymentMethod: string;
-
-
-  @ApiProperty({
-    description: "Payment secret",
-    example: "eer453#ferr@erre$eger-gef_e!er",
-    required: true
-  })
-  @IsString()
-  @IsNotEmpty()
-  secret: string;
-
-
-  @ApiProperty({
-    description: "User id",
-    example: 12434,
-    required: true
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  userId: number;
-
-
-  @ApiProperty({
-    description: "Item type to be paid",
-    example: PaymentPayableItemEnum.workingsession,
-    required: true
-  })
-  @IsNotEmpty()
   @IsEnum(PaymentPayableItemEnum)
-  item: PaymentPayableItemEnum
-
+  itemType: PaymentPayableItemEnum;
 
   @ApiProperty({
-    description: "Item id to be paid",
-    example: 434242,
-    required: true
+    type: SwaggerType.INTEGER,
+    description: "Item identifier",
   })
-  @IsNumber()
+  @IsInt()
   itemId: number;
 
+  @ApiProperty({
+    enum: PaymentMethodEnum,
+    enumName: "PaymentMethodEnum",
+    description: "Payment method",
+  })
+  @IsEnum(PaymentMethodEnum)
+  paymentMethod: PaymentMethodEnum;
 
   @ApiProperty({
-    description: "Payment status",
-    example: PaymentStatusEnum.inprogress,
-    required: true
+    type: SwaggerType.INTEGER,
+    description: "Currency id",
+    required: false,
   })
-  @IsNotEmpty()
-  @IsEnum(PaymentStatusEnum)
-  status: PaymentStatusEnum;
+  @IsOptional()
+  @IsInt()
+  currencyId?: number;
+
+  @ApiProperty({
+    enum: BaseSubscriptionPlanItemEnum,
+    enumName: "BaseSubscriptionPlanItemEnum",
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(BaseSubscriptionPlanItemEnum)
+  subscriptionType?: BaseSubscriptionPlanItemEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Subscription plan id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  subscriptionPlanId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Payment cart id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  paymentCartId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Stripe payment id",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  stripePaymentId?: string;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Receiver user id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  receiverUserId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Receiver manager id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  receiverManagerId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Receiver gym id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  receiverGymId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Message",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  message?: string;
 }

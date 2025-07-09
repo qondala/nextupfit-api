@@ -8,3 +8,4 @@ export * from './create.social.news.dto';
 export * from './create.social.notification.dto';
 export * from './create.social.review.dto';
 export * from './create.social.chat-message-text.dto';
+export * from './create.social.ratings.dto';

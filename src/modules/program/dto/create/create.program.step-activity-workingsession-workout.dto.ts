@@ -1,38 +1,43 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
-  IsNumber,
+  IsInt,
   IsOptional,
   IsDate,
   IsString,
   IsEnum,
+  IsNumber,
 } from "class-validator";
 import { ProgramStepActivityStatusEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateProgramStepActivityWorkingsessionWorkoutDto {
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Workingsession's id",
     example: 6789,
     required: false,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   workingSessionId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Base workout's id",
     example: 12,
     required: false,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   baseWorkoutId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Working session's title",
     example: "Simple Pillates workout",
     required: true,
@@ -43,6 +48,7 @@ export class CreateProgramStepActivityWorkingsessionWorkoutDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Workingsession's description",
     example: "Here's a sample description of the workout",
     required: false,
@@ -53,65 +59,61 @@ export class CreateProgramStepActivityWorkingsessionWorkoutDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the Workingession",
     example: 4335,
-    required: true,
+    required: false,
   })
-  @IsNotEmpty()
-  @IsNumber()
-  gymId: number;
+  @IsOptional()
+  @IsInt()
+  gymId?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program",
     example: 80,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   programId: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program step",
     example: 789,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   programStepId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the program step acitivity",
     example: 45645,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   programStepActivityId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",
     example: 4335,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   ownerUserId: number;
-  
-
-  @ApiProperty({
-    description: "Date the program step activity was created",
-    example: Date(),
-    required: false,
-  })
-  @IsOptional()
-  @IsDate()
-  createdDate?: Date;
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Workout image URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
     required: false,
@@ -122,6 +124,7 @@ export class CreateProgramStepActivityWorkingsessionWorkoutDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Workout illustration URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
     required: false,
@@ -132,6 +135,7 @@ export class CreateProgramStepActivityWorkingsessionWorkoutDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Workout illustration URL",
     example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
     required: false,
@@ -142,82 +146,92 @@ export class CreateProgramStepActivityWorkingsessionWorkoutDto {
   
 
   @ApiProperty({
+    enum: ProgramStepActivityStatusEnum,
+    enumName: "ProgramStepActivityStatusEnum",
+    title: "ProgramStepActivityStatusEnum",
     description: "Program step activity status",
     example: ProgramStepActivityStatusEnum.published,
-    required: false,
+    required: true,
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsEnum(ProgramStepActivityStatusEnum)
   status: ProgramStepActivityStatusEnum;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number points gained after passing this Workingsession",
     example: 10,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
-  points: number;
+  @IsInt()
+  points?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Workingsession attendees count",
     example: 5000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   attendeesCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
-  viewsCount: number;
+  @IsInt()
+  viewsCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false
   })
   @IsOptional()
   @IsNumber()
-  ratingsAvg: number;
+  ratingsAvg?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number times Workingsession was rated",
     example: 3000,
     required: false
   })
   @IsOptional()
-  @IsNumber()
-  ratingsCount: number;
+  @IsInt()
+  ratingsCount?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
     default: 0
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   difficultyLevel?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Position of the Workout inside the Working session",
     example: 0,
     required: false
   })
   @IsOptional()
-  @IsNumber()
-  position: number;
+  @IsInt()
+  position?: number;
 }

@@ -6,7 +6,7 @@ import {
   UseGuards,
   Req,
   Query,
-  HttpStatus,
+  Request
 } from "@nestjs/common";
 
 import {
@@ -15,7 +15,6 @@ import {
   ApiOkResponse,
   ApiCreatedResponse,
 } from "@nestjs/swagger";
-import { Request } from "express";
 
 import { AuthService } from "./auth.service";
 import {
@@ -36,7 +35,7 @@ import {
   JwtAuthGuard
 } from "@app/common/guards";
 
-import { Public } from "@app/common/decorators";
+import { Public, User } from "@app/common/decorators";
 import { DetailsUserDto } from "@app/module/user/dto";
 
 @ApiTags("Authentication")
@@ -117,8 +116,8 @@ export class AuthController {
     description: "User profile",
     type: DetailsUserDto
   })
-  getProfile(@Req() req: Request): Promise<DetailsUserDto> {
-    return req.user;
+  getProfile(@User() user: DetailsUserDto): DetailsUserDto {
+    return user;
   }
 
   @Public()
@@ -128,8 +127,8 @@ export class AuthController {
     description: "Token refreshed successfully.",
     type: AccessTokenDto
   })
-  async refreshToken(@Req() req: Request): Promise<AccessTokenDto> {
-    const refreshToken = req.body.refresh_token;
+  async refreshToken(@Request() req): Promise<AccessTokenDto> {
+    const refreshToken = req.body.refreshToken;
     const newAccessToken = await this.authService.refreshToken(refreshToken);
     return newAccessToken;
   }

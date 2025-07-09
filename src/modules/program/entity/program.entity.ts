@@ -12,7 +12,7 @@ import {
 import { GymEntity } from "@app/module/gym/entity";
 
 import { ProgramStatusEnum, ProgramTypeEnum } from "../types";
-import { ProgramStepEntity } from ".";
+import { ProgramStepEntity, ProgramSubscriptionPlanEntity } from ".";
 
 
 @Entity("program")
@@ -23,27 +23,27 @@ export class ProgramEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  gymId?: number;
 
-  @Column()
-  gymId: number;
-
-
-  @Column()
+  @Column({ nullable: false })
   ownerUserId: number;
 
 
   @Column({
-    type: "enum",
     enum: ProgramTypeEnum,
+    enumName: "ProgramTypeEnum",
     default: ProgramTypeEnum.nutrition,
+    nullable: false
   })
   type: ProgramTypeEnum;
 
 
   @Column({
-    type: "enum",
     enum: ProgramStatusEnum,
+    enumName: "ProgramStatusEnum",
     default: ProgramStatusEnum.unpublished,
+    nullable: false
   })
   status: ProgramStatusEnum;
 
@@ -83,14 +83,21 @@ export class ProgramEntity {
   @Column({ default: 0 })
   difficultyLevel: number;
 
+  @Column({ nullable: true })
+  points?: number;
+
 
   @ManyToOne(() => GymEntity)
   @JoinColumn({ name: 'gymId' })
-  gym: GymEntity;
+  gym?: GymEntity;
 
 
   @OneToMany(() => ProgramStepEntity, step => step.program)
   steps: ProgramStepEntity[];
+
+
+  @OneToMany(() => ProgramSubscriptionPlanEntity, plan => plan.program)
+  subscriptionPlans: ProgramSubscriptionPlanEntity[];
 
 
   @CreateDateColumn()

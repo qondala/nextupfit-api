@@ -11,16 +11,25 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth
+} from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
-import { ProgramManagerService } from "../service";
+
 import { ProgramItemTypeEnum } from "@app/module/program/types";
-import { CreateProgramManagerDto } from "../dto/create/create.program.manager.dto";
-import { UpdateProgramManagerDto } from "../dto/update/update.program.manager.dto";
-import { DetailsProgramManagerDto } from "../dto/details";
-import { PaginatedDetailsProgramManagerDto } from "../dto/paginated";
+import {
+  CreateProgramManagerDto,
+  UpdateProgramManagerDto,
+  DetailsProgramManagerDto,
+  PaginatedDetailsProgramManagerDto
+} from "../dto";
+
+import { ProgramManagerService } from "../service";
 
 @ApiTags("Programs")
 @ApiBearerAuth()

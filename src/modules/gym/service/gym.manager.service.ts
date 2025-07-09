@@ -78,10 +78,39 @@ export class GymManagerService {
     };
   }
 
+  async findBest(
+    gymId: number,
+    paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedResponseDto<GymManagerEntity>> {
+    const queryBuilder = this.gymManagerRepository.createQueryBuilder('manager')
+      .where('manager.gymId = :gymId', { gymId })
+      .orderBy('manager.createdAt', 'DESC');
+
+    const skip = (paginationOptions.page - 1) * paginationOptions.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(paginationOptions.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / paginationOptions.limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: paginationOptions.limit,
+        totalPages,
+        currentPage: paginationOptions.page
+      }
+    };
+  }
+
   async findOne(id: number): Promise<GymManagerEntity> {
     return await this.gymManagerRepository.findOne({
       where: { id },
       relations: [
+        'user',
         'gym',
         'overview',
         'qualifications',

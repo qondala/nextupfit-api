@@ -1,11 +1,12 @@
 import { IsNotEmpty, IsString, IsEmail, IsOptional, IsArray, IsDate, IsBoolean, IsEnum } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { UserProfileTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 export class UpdateUserDto {
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's email",
     example: "test@example.com",
     required: false,
@@ -16,7 +17,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's first name",
     example: "John",
     required: false,
@@ -27,7 +28,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's last name",
     example: "Doe",
     required: false,
@@ -38,7 +39,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Numero de telephone",
     example: "+1 (612) 508-8704",
     required: false,
@@ -49,7 +50,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
     description: "User's birthdate",
     example: "2025-05-02",
     required: false,
@@ -60,7 +61,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's password",
     example: "Password123",
     required: false,
@@ -71,7 +72,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's profile image URL",
     example: "https://example.com/profile-picture.jpg",
     required: false,
@@ -82,7 +83,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's cover image URL",
     example: "https://example.com/profile-picture.jpg",
     required: false,
@@ -93,7 +94,7 @@ export class UpdateUserDto {
 
 
   @ApiProperty({
-    type: Boolean,
+    type: SwaggerType.BOOLEAN,
     description: "Whether user has confirmed successfully his email",
     example: true,
     required: false,
@@ -104,7 +105,8 @@ export class UpdateUserDto {
   isEmailVerified?: boolean;
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.DATE,
+    format: "date-time",
     description: "User last connexion",
     example: Date(),
     required: false,

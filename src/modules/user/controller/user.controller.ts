@@ -9,6 +9,9 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  ConflictException,
+  HttpStatus,
+  InternalServerErrorException,
 } from "@nestjs/common";
 
 import {
@@ -17,7 +20,12 @@ import {
   ApiBearerAuth,
   ApiNoContentResponse,
   ApiCreatedResponse,
-  ApiOkResponse
+  ApiOkResponse,
+  ApiParam,
+  ApiBody,
+  ApiQuery,
+  ApiConflictResponse,
+  ApiInternalServerErrorResponse
 } from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
@@ -30,6 +38,12 @@ import {
   UpdateUserDto,
   PaginatedDetailsUserDto
 } from "../dto";
+import { SwaggerType } from "@app/common/types";
+import {
+  ErrorResponseException,
+  ErrorResponseExceptionType,
+  SystemStatusCode,
+} from "@app/common/exceptions";
 
 
 
@@ -46,12 +60,45 @@ export class UserController {
     operationId: "createUser",
     summary: "Create a new user"
   })
+  @ApiBody({
+    required: true,
+    type: CreateUserDto
+  })
   @ApiCreatedResponse({
     description: "The user has been successfully created.",
     type: DetailsUserDto,
   })
+  @ApiConflictResponse({
+    type: ErrorResponseException,
+    description: "A user with the same email already exists.",
+  })
+  @ApiInternalServerErrorResponse({
+    type: ErrorResponseException,
+    description: "An error occurred while creating the user.",
+  })
   create(@Body() createUserDto: CreateUserDto): Promise<DetailsUserDto> {
-    return this.userService.create(createUserDto);
+    try {
+      return this.userService.create(createUserDto);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw new ConflictException(
+          new ErrorResponseException(
+            ErrorResponseExceptionType.DATABASE,
+            error.message,
+            HttpStatus.CONFLICT,
+            SystemStatusCode.CONFLICT
+          )
+        );
+      }
+      throw new InternalServerErrorException(
+        new ErrorResponseException(
+          ErrorResponseExceptionType.DATABASE,
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          SystemStatusCode.GENERIC
+        )
+      );
+    }
   }
 
 
@@ -59,6 +106,20 @@ export class UserController {
   @ApiOperation({
     operationId: "getAllUsers",
     summary: "Get all users with pagination"
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
   })
   @ApiOkResponse({
     description: "Return all users with pagination.",
@@ -73,6 +134,27 @@ export class UserController {
   @ApiOperation({
     operationId: "searchUsers",
     summary: "Search users by email, first name, or last name"
+  })
+  @ApiQuery({
+    name: "query",
+    required: true,
+    type: SwaggerType.STRING,
+    description: "Search query",
+    example: "john"
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
   })
   @ApiOkResponse({
     description: "Return users matching the search query.",
@@ -91,6 +173,13 @@ export class UserController {
     operationId: "getUserById",
     summary: "Get a user by id"
   })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
   @ApiOkResponse({
     description: "Return the user.",
     type: DetailsUserDto,
@@ -104,6 +193,17 @@ export class UserController {
   @ApiOperation({
     operationId: "updateUser",
     summary: "Update a user"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiBody({
+    required: true,
+    type: UpdateUserDto
   })
   @ApiOkResponse({
     description: "The user has been successfully updated.",
@@ -121,6 +221,13 @@ export class UserController {
   @ApiOperation({ 
     operationId: "deleteUser",
     summary: "Delete a user"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
   })
   @ApiNoContentResponse({
     description: "The user has been successfully deleted.",

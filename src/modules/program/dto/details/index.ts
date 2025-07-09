@@ -1,4 +1,3 @@
-export * from "./details.program.activity-content.dto";
 export * from "./details.program.dto";
 export * from "./details.program.per-sociology.dto";
 export * from "./details.program.step-activity-workingsession-workout.dto";

@@ -1,3 +1,4 @@
+import { SwaggerType } from "@app/common/types";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsDate,
@@ -10,6 +11,7 @@ import {
 export class DetailsBaseSociologyGroupDto {
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Sociology group's name",
     example: "Age Group",
     required: true
@@ -20,6 +22,7 @@ export class DetailsBaseSociologyGroupDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Sociology group's description",
     example: "This sociology group is adapted for people of this age group",
     required: false
@@ -30,6 +33,7 @@ export class DetailsBaseSociologyGroupDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Sociology group's code",
     example: "age-group",
     required: false
@@ -40,6 +44,8 @@ export class DetailsBaseSociologyGroupDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "Record created date",
     example: "2022-01-01T00:00:00.000Z",
     required: false
@@ -50,6 +56,8 @@ export class DetailsBaseSociologyGroupDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "Record updated date",
     example: "2022-01-01T00:00:00.000Z",
     required: false

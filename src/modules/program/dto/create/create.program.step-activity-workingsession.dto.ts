@@ -76,7 +76,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   ownerUserId: number;
   
-	;
+
   @ApiProperty({
     description: "Date the program step activity was created",
     example: Date(),
@@ -93,7 +93,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
     required: false,
   })
   @IsString()
-  imagerUrl?: string;
+  imageUrl?: string;
 
   @ApiProperty({
     description: "Step icon URL",
@@ -182,4 +182,31 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsOptional()
   @IsNumber()
   position: number;
+
+  @ApiProperty({
+    description: "Duration of the Workingsession",
+    example: 60,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  duration?: number;
+
+  @ApiProperty({
+    description: "Duration unit id (e.g., minutes=1)",
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  durationUnitId?: number;
+
+  @ApiProperty({
+    description: "Price of the Workingsession",
+    example: 9.99,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  price?: number;
 }

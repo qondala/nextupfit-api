@@ -1,46 +1,86 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-import { PaymentPayableItemEnum, PaymentStatusEnum } from "../types";
-
+import {
+  PaymentPayableItemEnum,
+  PaymentStatusEnum,
+  PaymentMethodEnum,
+} from "../types";
+import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
 @Entity("payment")
 export class PaymentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("decimal", { precision: 10, scale: 2 })
-  amountPaid: number;
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
+  amount: number;
 
-  @Column()
-  currency: string;
+  @Column({ type: "timestamp", default: () => "now()" })
+  paymentDate: Date;
 
-  @Column({ type: "timestamp", nullable: true })
-  paymentDate?: Date;
+  @Column({ type: "varchar", nullable: true })
+  secret?: string;
 
-  @Column()
-  paymentMethod: string;
-
-  @Column()
-  secret: string;
-
-  @Column()
+  @Column({ type: "int", nullable: false })
   userId: number;
 
-  @Column({
-    type: "enum",
-    enum: PaymentPayableItemEnum,
-  })
-  item: PaymentPayableItemEnum;
+  @Column({ type: "enum", enum: PaymentPayableItemEnum, nullable: false })
+  itemType: PaymentPayableItemEnum;
 
-  @Column()
+  @Column({ type: "int", nullable: false })
   itemId: number;
 
   @Column({
     type: "enum",
     enum: PaymentStatusEnum,
+    nullable: false,
+    default: PaymentStatusEnum.triggered,
   })
   status: PaymentStatusEnum;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: "createdAt" })
   createdAt: Date;
+
+  @UpdateDateColumn({ name: "updatedAt" })
+  updatedAt: Date;
+
+  @Column({ type: "enum", enum: PaymentMethodEnum, nullable: false })
+  paymentMethod: PaymentMethodEnum;
+
+  @Column({ type: "int", nullable: true })
+  currencyId?: number;
+
+  @Column({
+    type: "enum",
+    enum: BaseSubscriptionPlanItemEnum,
+    nullable: true,
+  })
+  subscriptionType?: BaseSubscriptionPlanItemEnum;
+
+  @Column({ type: "bigint", nullable: true })
+  subscriptionPlanId?: number;
+
+  @Column({ type: "bigint", nullable: true })
+  paymentCartId?: number;
+
+  @Column({ type: "varchar", nullable: true })
+  stripePaymentId?: string;
+
+  @Column({ type: "bigint", nullable: true })
+  receiverUserId?: number;
+
+  @Column({ type: "bigint", nullable: true })
+  receiverManagerId?: number;
+
+  @Column({ type: "bigint", nullable: true })
+  receiverGymId?: number;
+
+  @Column({ type: "text", nullable: true })
+  message?: string;
 }

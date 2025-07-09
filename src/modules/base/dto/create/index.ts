@@ -1,7 +1,12 @@
 export * from "./create.base.app-update.dto";
-export * from "./create.base.body-param.dto";
+export * from './create.base.body-param.dto';
+export * from './create.base.nutrition-tool.dto';
+export * from './create.base.recipe-item.dto';
+export * from './create.base.recipe-instruction-tag.dto';
+export * from './create.base.recipe-instruction.dto';
+export * from './create.base.recipe.dto';
 export * from "./create.base.food-group.dto";
-export * from "./create.base.food-nutrients.dto";
+export * from "./create.base.food-nutrient.dto";
 export * from "./create.base.food.dto";
 export * from "./create.base.meal-food.dto";
 export * from "./create.base.meal.dto";
@@ -12,6 +17,10 @@ export * from "./create.base.workout-howto-perform-step.dto";
 export * from "./create.base.workout-nutrient-burn.dto";
 export * from "./create.base.workout-recommended-repetition.dto";
 export * from "./create.base.workout.dto";
+export * from "./create.base.nutrition-type.dto";
+export * from "./create.base.nutrition.dto";
 export * from "./create.base.sociology-group.dto";
 export * from "./create.base.sociology.dto";
+export * from "./create.base.currency.dto";
+export * from "./create.base.program-goal.dto";
 

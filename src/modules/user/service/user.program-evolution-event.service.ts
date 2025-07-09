@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { UserProgramEvolutionEntity } from "../entity";
 import { CreateUserProgramEvolutionEventDto, UpdateUserProgramEvolutionDto } from "../dto";
@@ -20,17 +20,28 @@ export class UserProgramEvolutionService {
     return await this.userProgramEvolutionRepository.save(userProgramEvolution);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[UserProgramEvolutionEntity[], number]> {
+  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userProgramEvolutionRepository.findAndCount({
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 
   async findOne(id: number): Promise<UserProgramEvolutionEntity> {
@@ -52,11 +63,11 @@ export class UserProgramEvolutionService {
     await this.userProgramEvolutionRepository.remove(userProgramEvolution);
   }
 
-  async findByUserId(userId: number, options: PaginationOptionsDto): Promise<[UserProgramEvolutionEntity[], number]> {
+  async findByUserId(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userProgramEvolutionRepository.findAndCount({
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
       where: { userId },
       skip,
       take: limit,
@@ -64,5 +75,16 @@ export class UserProgramEvolutionService {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 }

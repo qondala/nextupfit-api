@@ -1,62 +1,173 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+  ParseIntPipe,
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 
-import { User } from '@app/common/decorators';
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
+import { SwaggerType } from "@app/common/types";
 
-import { CreateSocialNotificationDto, UpdateSocialNotificationDto } from '../dto';
-import { SocialNotificationService } from '../service';
-import { SocialNotificationEntity } from '../entity';
+import {
+  CreateSocialNotificationDto,
+  UpdateSocialNotificationDto,
+  DetailsSocialNotificationDto,
+  PaginatedDetailsSocialNotificationDto,
+} from "../dto";
+import { SocialNotificationService } from "../service";
 
-
-@ApiTags('Social module endpoints')
+@ApiTags("Social module endpoints")
 @ApiBearerAuth()
-@Controller('social/notification')
+@Controller("social/notification")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialNotificationController {
   constructor(private readonly notificationService: SocialNotificationService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a notification' })
-  @ApiResponse({ status: 201, description: 'Notification created successfully.' })
-  create(@Body() createDto: CreateSocialNotificationDto) {
-    return this.notificationService.create(createDto);
+  @ApiOperation({
+    summary: "Create a notification",
+    operationId: "createSocialNotification",
+  })
+  @ApiBody({
+    type: CreateSocialNotificationDto,
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: DetailsSocialNotificationDto,
+    description: "Notification created successfully",
+  })
+  async create(
+    @Body() createDto: CreateSocialNotificationDto,
+  ): Promise<DetailsSocialNotificationDto> {
+    return await this.notificationService.create(createDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all notifications' })
+  @ApiOperation({
+    summary: "Get all notifications",
+    operationId: "findAllSocialNotifications",
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PaginatedDetailsSocialNotificationDto,
+    description: "Notifications found successfully",
+  })
   async findAll(
-    @Query() paginationOptions: PaginationOptionsDto,
-    @User('id') userId: number
-  ): Promise<PaginatedResponseDto<SocialNotificationEntity>> {
-    return this.notificationService.findAll(paginationOptions, userId);
+    @Query() paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedDetailsSocialNotificationDto> {
+    return await this.notificationService.findAll(paginationOptions);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get notification by id' })
-  findOne(@Param('id') id: string) {
-    return this.notificationService.findOne(+id);
+  @Get("user/:userId")
+  @ApiOperation({
+    summary: "Get notifications by user id",
+    operationId: "findByUserIdSocialNotifications",
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: PaginatedDetailsSocialNotificationDto,
+    description: "Notifications found successfully",
+  })
+  async findByUserId(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Query() paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedDetailsSocialNotificationDto> {
+    return await this.notificationService.findByUserId(userId, paginationOptions);
   }
 
-  @Patch(':id')
-  @ApiOperation({ summary: 'Update notification' })
+  @Get(":id")
+  @ApiOperation({
+    summary: "Get notification by id",
+    operationId: "findSocialNotificationById",
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DetailsSocialNotificationDto,
+    description: "Notification found successfully",
+  })
+  findOne(@Param("id", ParseIntPipe) id: number) {
+    return this.notificationService.findOne(id);
+  }
+
+  @Patch(":id")
+  @ApiOperation({
+    summary: "Update notification",
+    operationId: "updateSocialNotification",
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiBody({
+    type: UpdateSocialNotificationDto,
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: DetailsSocialNotificationDto,
+    description: "Notification updated successfully",
+  })
   update(
-    @Param('id') id: string,
+    @Param("id", ParseIntPipe) id: number,
     @Body() updateDto: UpdateSocialNotificationDto
   ) {
-    return this.notificationService.update(+id, updateDto);
+    return this.notificationService.update(id, updateDto);
   }
 
-  @Patch(':id/read')
-  @ApiOperation({ summary: 'Mark notification as read' })
-  markAsRead(@Param('id') id: string) {
-    return this.notificationService.markAsRead(+id);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete notification' })
-  remove(@Param('id') id: string) {
-    return this.notificationService.remove(+id);
+  @Delete(":id")
+  @ApiOperation({
+    summary: "Delete notification",
+    operationId: "removeSocialNotification",
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "Notification deleted successfully",
+  })
+  remove(@Param("id", ParseIntPipe) id: number) {
+    return this.notificationService.remove(id);
   }
 }

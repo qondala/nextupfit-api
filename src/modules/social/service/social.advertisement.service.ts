@@ -15,12 +15,8 @@ export class SocialAdvertisementService {
     private readonly advertisementRepository: Repository<SocialAdvertisementEntity>,
   ) {}
 
-  async create(createDto: CreateSocialAdvertisementDto, userId: number): Promise<SocialAdvertisementEntity> {
-    const advertisement = this.advertisementRepository.create({
-      ...createDto,
-      userId,
-      createdAt: new Date()
-    });
+  async create(createDto: CreateSocialAdvertisementDto): Promise<SocialAdvertisementEntity> {
+    const advertisement = this.advertisementRepository.create(createDto);
     return await this.advertisementRepository.save(advertisement);
   }
 
@@ -50,6 +46,12 @@ export class SocialAdvertisementService {
     };
   }
 
+  async getRandom(): Promise<SocialAdvertisementEntity> {
+    return await this.advertisementRepository.createQueryBuilder('advertisement')
+      .orderBy('RANDOM()')
+      .getOne();
+  }
+
   async findOne(id: number): Promise<SocialAdvertisementEntity> {
     return await this.advertisementRepository.findOneOrFail({ where: { id } });
   }
@@ -60,6 +62,34 @@ export class SocialAdvertisementService {
       updatedAt: new Date()
     });
     return this.findOne(id);
+  }
+
+  async findByManagerId(
+    managerId: number,
+    paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedResponseDto<SocialAdvertisementEntity>> {
+    const queryBuilder = this.advertisementRepository.createQueryBuilder('advertisement')
+      .where('advertisement.createdByManagerId = :managerId', { managerId })
+      .orderBy('advertisement.createdAt', 'DESC');
+
+    const skip = (paginationOptions.page - 1) * paginationOptions.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(paginationOptions.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / paginationOptions.limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: paginationOptions.limit,
+        totalPages,
+        currentPage: paginationOptions.page
+      }
+    };
   }
 
   async remove(id: number): Promise<void> {

@@ -1,34 +1,43 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { GymVerifiedStatusEnum } from "../../types";
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsNumber
+} from "class-validator";
 import { Type } from "class-transformer";
+
+import { SwaggerType } from "@app/common/types";
+import { GymVerifiedStatusEnum } from "../../types";
 
 
 export class DetailsGymManagerOverviewDto {
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'ID of the gym manager',
     example: 1,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   id: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'ID of the gym manager user',
     example: 1,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   managerUserId: number;
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Bio of the gym manager',
     example: 'Bio of the gym manager',
     required: false,
@@ -39,7 +48,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Text of the gym manager',
     example: 'Text of the gym manager',
     required: false,
@@ -50,7 +59,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Cover URL of the gym manager',
     example: 'Cover URL of the gym manager',
     required: false,
@@ -61,7 +70,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Address of the gym manager',
     example: 'Address of the gym manager',
     required: true,
@@ -72,7 +81,7 @@ export class DetailsGymManagerOverviewDto {
   
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Email of the gym manager',
     example: 'Email of the gym manager',
     required: true,
@@ -83,7 +92,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Facebook page URL of the gym manager',
     example: 'Facebook page URL of the gym manager',
     required: false,
@@ -94,7 +103,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Twitter page URL of the gym manager',
     example: 'Twitter page URL of the gym manager',
     required: false,
@@ -105,7 +114,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Linkedin page URL of the gym manager',
     example: 'Linkedin page URL of the gym manager',
     required: false,
@@ -116,7 +125,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Youtube page URL of the gym manager',
     example: 'Youtube page URL of the gym manager',
     required: false,
@@ -127,7 +136,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Tiktok page URL of the gym manager',
     example: 'Tiktok page URL of the gym manager',
     required: false,
@@ -138,7 +147,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Phone of the gym manager',
     example: 'Phone of the gym manager',
     required: false,
@@ -149,18 +158,18 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'Followers count of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   followersCount?: number;
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Stripe account ID of the gym manager',
     example: 'Stripe account ID of the gym manager',
     required: false,
@@ -171,54 +180,55 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'Country ID of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   countryId?: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'State ID of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   stateId?: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'City ID of the gym manager',
     example: 1,
     required: true,
   }) 
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   cityId: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'Attendees count of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   attendeesCount?: number;
 
 
   @ApiProperty({
-    type: GymVerifiedStatusEnum,
+    enum: GymVerifiedStatusEnum,
+    enumName: 'GymVerifiedStatusEnum',
+    title: 'GymVerifiedStatusEnum',
     description: 'Verified status of the gym manager',
     example: 'verified',
-    enum: GymVerifiedStatusEnum,
     required: true,
   }) 
   @IsNotEmpty()
@@ -238,7 +248,7 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: 'Experiences of the gym manager',
     example: 'Experiences of the gym manager',
     required: false,
@@ -249,20 +259,20 @@ export class DetailsGymManagerOverviewDto {
   
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'Views count of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   viewsCount?: number;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.NUMBER,
     description: 'Ratings average of the gym manager',
-    example: 1,
+    example: 5.4,
     required: false,
   }) 
   @IsOptional()
@@ -271,18 +281,19 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'Ratings count of the gym manager',
     example: 1,
     required: false,
   }) 
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   ratingsCount?: number;
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: 'Created at of the gym manager',
     example: '2022-01-01T00:00:00.000Z',
     required: true,
@@ -293,7 +304,8 @@ export class DetailsGymManagerOverviewDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: 'Updated at of the gym manager',
     example: '2022-01-01T00:00:00.000Z',
     required: true,

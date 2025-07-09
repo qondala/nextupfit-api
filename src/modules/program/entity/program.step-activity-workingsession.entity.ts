@@ -30,13 +30,13 @@ export class ProgramStepActivityWorkingsessionEntity {
   ownerUserId: number;
 
   @Column({ nullable: true })
-  imagerUrl: string;
+  imageUrl: string;
 
   @Column({ nullable: true })
   coverUrl: string;
 
   @Column({
-    type: "enum",
+    enumName: "ProgramStepActivityStatusEnum",
     enum: ProgramStepActivityStatusEnum,
     default: ProgramStepActivityStatusEnum.unpublished,
   })
@@ -62,6 +62,16 @@ export class ProgramStepActivityWorkingsessionEntity {
 
   @Column({ default: 0 })
   position: number;
+
+  @Column({ default: 0 })
+  duration: number;
+
+  @Column({ default: 0 })
+  durationUnitId: number;
+
+  @Column({ default: 0 })
+  price: number;
+
 
   @ManyToOne(() => ProgramStepActivityEntity, activity => activity.workingssessions)
   @JoinColumn({ name: 'programStepActivityId' })

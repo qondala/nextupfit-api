@@ -8,3 +8,4 @@ export * from './update.social.news.dto';
 export * from './update.social.notification.dto';
 export * from './update.social.review.dto';
 export * from './update.social.chat-message-text.dto';
+export * from './update.social.ratings.dto';
