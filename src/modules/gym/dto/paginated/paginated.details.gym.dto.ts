@@ -11,7 +11,8 @@ export class PaginatedDetailsGymDto extends PaginatedResponseDto<DetailsGymDto> 
     type: () => DetailsGymDto,
     name: 'items',
     isArray: true,
-    description: 'List of gyms'
+    description: 'List of gyms',
+    required: true
   })
   @IsDefined()
   @IsArray()

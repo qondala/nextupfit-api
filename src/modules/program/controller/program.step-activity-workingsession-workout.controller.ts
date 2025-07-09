@@ -11,33 +11,42 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import {
+  JwtAuthGuard,
+  RolesGuard
+} from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
 
+import { ProgramItemTypeEnum } from "../types";
+import { ProgramStepActivityWorkingsessionWorkoutEntity } from "../entity";
+import {
+  CreateProgramStepActivityWorkingsessionWorkoutDto,
+  UpdateProgramStepActivityWorkingsessionWorkoutDto,
+  DetailsProgramStepActivityWorkingsessionWorkoutDto,
+  PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto,
+  ProgramFindCriteriaWorkoutDto
+} from "../dto";
 import {
   ProgramManagerService,
   ProgramStepActivityWorkingsessionWorkoutService,
   ProgramPerSociologyService
 } from "../service";
 
-import {
-  CreateProgramStepActivityWorkingsessionWorkoutDto,
-  UpdateProgramStepActivityWorkingsessionWorkoutDto,
-  DetailsProgramStepActivityWorkingsessionWorkoutDto,
-  PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto
-} from "../dto";
-import { ProgramItemTypeEnum } from "../types";
 
-
-@ApiTags("Programs")
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("programs/step-activity-workingsession-workouts")
+@Controller("program/step/activity/workingsession/workouts")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramStepActivityWorkingsessionWorkoutController {
   constructor(
-    private readonly programStepActivityWorkingsessionWorkoutService: ProgramStepActivityWorkingsessionWorkoutService,
+    private readonly service: ProgramStepActivityWorkingsessionWorkoutService,
     private readonly programManagerService: ProgramManagerService,
     private readonly programPerSociologyService: ProgramPerSociologyService,
   ) {}
@@ -52,17 +61,16 @@ export class ProgramStepActivityWorkingsessionWorkoutController {
     description: "The program step activity workingsession workout has been successfully created.",
     type: DetailsProgramStepActivityWorkingsessionWorkoutDto,
   })
-  async create(@Body() createProgramStepActivityWorkingsessionWorkoutDto: CreateProgramStepActivityWorkingsessionWorkoutDto): Promise<DetailsProgramStepActivityWorkingsessionWorkoutDto> {
-    const record = await this.programStepActivityWorkingsessionWorkoutService.create(createProgramStepActivityWorkingsessionWorkoutDto);
+  async create(@Body() body: CreateProgramStepActivityWorkingsessionWorkoutDto): Promise<DetailsProgramStepActivityWorkingsessionWorkoutDto> {
+    const record = await this.service.create(body);
 
-    const details: DetailsProgramStepActivityWorkingsessionWorkoutDto = {
+    return {
       ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workout),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workout),
+      managers: [],
+      audience: [],
     };
-
-    return details;
   }
+
 
   @Get()
   @ApiOperation({
@@ -74,19 +82,20 @@ export class ProgramStepActivityWorkingsessionWorkoutController {
     description: "Successfully retrieved program step activity workingsession workouts.",
     type: PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto,
   })
-  async findAll(@Query() paginationOptions: PaginationOptionsDto): Promise<PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto> {
-    const result = await this.programStepActivityWorkingsessionWorkoutService.findAll(paginationOptions);
+  async findAll(
+    @Query() criteria: ProgramFindCriteriaWorkoutDto,
+    @Query() pagination?: PaginationOptionsDto): Promise<PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto> {
+    
+    const result = await this.service.findAll(criteria, pagination);
 
-    const details: DetailsProgramStepActivityWorkingsessionWorkoutDto[] = await Promise.all(result.items.map(async (programStepActivityWorkingsessionWorkout) => ({
-      ...programStepActivityWorkingsessionWorkout,
-      managers: await this.programManagerService.fetchProgramItemManagers(programStepActivityWorkingsessionWorkout.id, ProgramItemTypeEnum.workout),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(programStepActivityWorkingsessionWorkout.id, ProgramItemTypeEnum.workout),
-    })));
+    const details = await Promise.all(result.items.map(
+      async (workout) => await this.extractWorkoutDetails(workout)
+    ));
 
     return {
-      ...result,
+      meta: result.meta,
       items: details
-    };
+    }; 
   }
 
   @Get(':id')
@@ -100,14 +109,8 @@ export class ProgramStepActivityWorkingsessionWorkoutController {
     type: DetailsProgramStepActivityWorkingsessionWorkoutDto,
   })
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsProgramStepActivityWorkingsessionWorkoutDto> {
-    const record = await this.programStepActivityWorkingsessionWorkoutService.findOne(id);
-
-    const details: DetailsProgramStepActivityWorkingsessionWorkoutDto = {
-      ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workout),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workout),
-    };
-
+    const record = await this.service.findOne(id);
+    const details = await this.extractWorkoutDetails(record);
     return details;
   }
 
@@ -123,18 +126,13 @@ export class ProgramStepActivityWorkingsessionWorkoutController {
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProgramStepActivityWorkingsessionWorkoutDto: UpdateProgramStepActivityWorkingsessionWorkoutDto
+    @Body() body: UpdateProgramStepActivityWorkingsessionWorkoutDto
   ): Promise<DetailsProgramStepActivityWorkingsessionWorkoutDto> {
-    const record = await this.programStepActivityWorkingsessionWorkoutService.update(id, updateProgramStepActivityWorkingsessionWorkoutDto);
-
-    const details: DetailsProgramStepActivityWorkingsessionWorkoutDto = {
-      ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workout),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workout),
-    };
-
+    const workout = await this.service.update(id, body);
+    const details = await this.extractWorkoutDetails(workout);
     return details;
   }
+
 
   @Delete(':id')
   @ApiOperation({
@@ -146,6 +144,29 @@ export class ProgramStepActivityWorkingsessionWorkoutController {
     description: "The program step activity workingsession workout has been successfully deleted.",
   })
   async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.programStepActivityWorkingsessionWorkoutService.remove(id);
+    return this.service.remove(id);
   }
+
+  /**
+   * Extracts workout details including managers and audience.
+   * @param workout - The workout entity to extract details from.
+   * @returns A Promise that resolves to a DetailsProgramStepActivityWorkingsessionWorkoutDto object containing the workout details.
+   */
+  private async extractWorkoutDetails(workout: ProgramStepActivityWorkingsessionWorkoutEntity): Promise<DetailsProgramStepActivityWorkingsessionWorkoutDto> {
+    const programCriteria = {
+      itemId: workout.id,
+      itemType: ProgramItemTypeEnum.workout,
+    };
+
+    const managersFound = await this.programManagerService.findAll(programCriteria);
+    const audienceFound = await this.programPerSociologyService.findAll(programCriteria);
+
+    return {
+      ...workout,
+      managers: managersFound.items.map((programManager) => programManager.manager), 
+      audience: audienceFound.items.map((programPerSociology) => programPerSociology.sociology),
+    };
+  }
+
+
 }

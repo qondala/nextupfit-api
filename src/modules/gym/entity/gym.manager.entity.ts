@@ -3,20 +3,21 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne,
   JoinColumn,
   OneToMany,
   UpdateDateColumn,
   OneToOne
 } from "typeorm";
 
-import { GymManagerRoleEnum } from "../types";
+import { GymManagerSpecialityEnum } from "../types";
 import {
-  GymEntity,
   GymManagerOverviewEntity,
   GymManagerQualificationEntity,
+  GymManagerSpecializedInNutritionEntity,
   GymManagerSpecializedInWorkoutEntity
 } from "./";
+import { UserEntity } from "@app/module/user/entity";
+import { GymManagerInterestEntity } from "./gym.manager-interest.entity";
 
 @Entity("gym_manager")
 export class GymManagerEntity {
@@ -24,40 +25,76 @@ export class GymManagerEntity {
   id: number;
 
   @Column({ nullable: false })
-  gymId: number;
-
+  name: string;
 
   @Column({ nullable: false })
   managerUserId: number;
 
   @Column({ nullable: false })
-  managerOverviewId?: number;
+  managerOverviewId: number;
 
 
-  @Column({ type: "enum", enum: GymManagerRoleEnum, nullable: false })
-  role: GymManagerRoleEnum;
+  @Column({
+    nullable: false,
+    type: "enum",
+    enum: GymManagerSpecialityEnum
+  })
+  speciality: GymManagerSpecialityEnum;
 
+  @Column({ nullable: true, default: 0 })
+  viewsCount: number;
+
+  @Column({ nullable: true, default: 0 })
+  attendeesCount: number;
+
+  @Column({ nullable: true, default: 0.0 })
+  ratingsAvg: number;
+
+  @Column({ nullable: true, default: 0 })
+  followersCount: number;
+
+  @Column({ nullable: true, default: 0 })
+  ratingsCount: number;
 
   @Column({ nullable: true })
-  dateEnrollment?: Date;
-
+  age: number;
 
   @Column({ nullable: true })
-  suspended?: boolean;
+  gender: number;
+
+  @Column({ nullable: true })
+  yearsOfExperience: number;
+
+  @Column({ type: "boolean", nullable: true })
+  certified: boolean;
+
+  @Column({ type: "boolean", nullable: true })
+  verified: boolean;
+
+  @Column({ nullable: true })
+  level: number;
+
 
   @OneToOne(() => GymManagerOverviewEntity)
   @JoinColumn({ name: 'managerOverviewId' })
-  overview?: GymManagerOverviewEntity;
+  overview: GymManagerOverviewEntity;
 
-  @ManyToOne(() => GymEntity, gym => gym.managers)
-  @JoinColumn({ name: "gymId" })
-  gym?: GymEntity;
+
+  @OneToOne(() => UserEntity)
+  @JoinColumn({ name: 'managerUserId' })
+  user: UserEntity;
 
   @OneToMany(() => GymManagerQualificationEntity, qualification => qualification.manager)
-  qualifications?: GymManagerQualificationEntity[];
+  qualifications: GymManagerQualificationEntity[];
 
   @OneToMany(() => GymManagerSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.manager)
-  specializedWorkouts?: GymManagerSpecializedInWorkoutEntity[];
+  specializedWorkouts: GymManagerSpecializedInWorkoutEntity[];
+
+  @OneToMany(() => GymManagerSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.manager)
+  specializedNutritions: GymManagerSpecializedInNutritionEntity[];
+
+  @OneToMany(() => GymManagerInterestEntity, interest => interest.manager)
+  interests: GymManagerInterestEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -35,6 +35,9 @@ export class ProgramStepActivityWorkingsessionWorkoutEntity {
   @Column()
   ownerUserId: number;
 
+  @Column()
+  ownerManagerId: number;
+
   @Column({ nullable: true })
   imageUrl: string;
 

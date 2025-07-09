@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 
 import { BaseWeekDaysEnum } from "@app/module/base/types";
+import { GymEntity } from "./gym.entity";
 
 
 @Entity("gym_open_day")
@@ -12,10 +13,10 @@ export class GymOpenDayEntity {
   gymId: number;
 
   @Column({
-      type: "enum",
-      enum: BaseWeekDaysEnum,
-      nullable: false
-    })
+    type: "enum",
+    enum: BaseWeekDaysEnum,
+    nullable: false
+  })
   day: BaseWeekDaysEnum;
 
   @Column({ nullable: false })
@@ -35,4 +36,8 @@ export class GymOpenDayEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => GymEntity)
+  @JoinColumn({ name: 'gymId' })
+  gym: GymEntity;
 }

@@ -25,9 +25,9 @@ import {
 } from "../dto";
 
 
-@ApiTags("Programs")
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("program/workout-nutrient-burn")
+@Controller("program/workout/nutrient-burn")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramWorkoutNutrientBurnController {
   constructor(private readonly programWorkoutNutrientBurnService: ProgramWorkoutNutrientBurnService) {}

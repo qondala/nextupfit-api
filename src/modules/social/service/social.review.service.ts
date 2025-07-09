@@ -4,17 +4,20 @@ import { Repository } from 'typeorm';
 
 import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
 
-import { CreateSocialReviewDto, UpdateSocialReviewDto } from '../dto';
+import {
+  CreateSocialReviewDto, 
+  UpdateSocialReviewDto, 
+  DetailsSocialRatingStatsDto 
+} from '../dto';
 import { SocialReviewEntity } from '../entity';
 import { SocialReviewItemTypeEnum } from '../types';
-import { DetailsSocialRatingsDto } from '../dto/details';
 
 
 @Injectable()
 export class SocialReviewService {
   constructor(
     @InjectRepository(SocialReviewEntity)
-    private readonly reviewRepository: Repository<SocialReviewEntity>,
+    private readonly reviewRepository: Repository<SocialReviewEntity>
   ) {}
 
   async create(createDto: CreateSocialReviewDto, userId: number): Promise<SocialReviewEntity> {
@@ -26,12 +29,14 @@ export class SocialReviewService {
     return await this.reviewRepository.save(review);
   }
 
-  async findAll(
+  async getReviewsByItemTypeAndItemId(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
     paginationOptions: PaginationOptionsDto,
-    userId: number
   ): Promise<PaginatedResponseDto<SocialReviewEntity>> {
     const queryBuilder = this.reviewRepository.createQueryBuilder('review')
-      .where('review.userId = :userId', { userId })
+      .where('review.itemType = :itemType', { itemType })
+      .andWhere('review.itemId = :itemId', { itemId })
       .orderBy('review.createdAt', 'DESC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
@@ -70,37 +75,26 @@ export class SocialReviewService {
     await this.reviewRepository.delete(id);
   }
 
+  async getReviewRatingStats(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<DetailsSocialRatingStatsDto> {
+    const result: number[] = [];
 
+    for (let i = 1; i <= 5; i++) {
+      const count = await this.reviewRepository.createQueryBuilder('review')
+        .select('COUNT(review.id)', 'totalReviews')
+        .where('review.itemType = :itemType', { itemType })
+        .andWhere('review.itemId = :itemId', { itemId })
+        .andWhere('review.rating = :rating', { rating: i })
+        .getRawOne();
+      result[i] = parseInt(count.totalReviews);
+    }
 
-  async getProgramRating(programId: number): Promise<DetailsSocialRatingsDto> {
-    const reviews = await this.reviewRepository.find({
-      where: { itemId: programId, itemType: SocialReviewItemTypeEnum.program },
-      order: { createdAt: 'DESC' },
-      take: 10,
-    });
-
-    const stats = await this.reviewRepository
-      .createQueryBuilder('review')
-      .select('AVG(review.rating)', 'averageRating')
-      .addSelect('AVG(review.easeOfUse)', 'averageEaseOfUse')
-      .addSelect('AVG(review.effectiveness)', 'averageEffectiveness')
-      .addSelect('COUNT(review.id)', 'totalReviews')
-      .addSelect('MIN(review.rating)', 'minRating')
-      .addSelect('MAX(review.rating)', 'maxRating')
-      .where('review.itemId = :programId', { programId })
-      .andWhere('review.itemType = :itemType', { itemType: SocialReviewItemTypeEnum.program })
-      .getRawOne();
-
-    return {
-      reviews,
-      count: parseInt(stats.totalReviews) || 0,
-      rating: parseFloat(stats.averageRating) || 0,
-      easeOfUse: parseFloat(stats.averageEaseOfUse) || 0,
-      effectiveness: parseFloat(stats.averageEffectiveness) || 0,
-      minRating: parseFloat(stats.minRating) || 0,
-      maxRating: parseFloat(stats.maxRating) || 0,
-      itemId: programId,
-      itemType: SocialReviewItemTypeEnum.program,
+    const stats: DetailsSocialRatingStatsDto = {
+      totalReviews: result.reduce((a, b) => a + b, 0),
+      averageRating: result.reduce((a, b) => a + b, 0) / result.length,
+      items: result
     };
+
+    return stats;
   }
+
 }

@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramDto extends PaginatedResponseDto<DetailsProg
     type: () => DetailsProgramDto,
     name: 'items',
     isArray: true,
-    description: 'List of programs'
+    description: 'List of programs',
+    required: true
   })
   @IsDefined()
   @IsArray()

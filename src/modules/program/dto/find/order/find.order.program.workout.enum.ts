@@ -1,0 +1,19 @@
+
+export enum ProgramFindOrderWorkoutEnum {
+  date = "date",
+  random = "random",
+  title = "title",
+  gym = "gym",
+  program = "program",
+  programStep = "programStep",
+  activity = "activity",
+  workingSession = "workingSession",
+  owner = "owner",
+  status = "status",
+  attendeesCount = "attendeesCount",
+  viewsCount = "viewsCount",
+  ratingsAvg = "ratingsAvg",
+  ratingsCount = "ratingsCount",
+  difficultyLevel = "difficultyLevel",
+  position = "position",
+}

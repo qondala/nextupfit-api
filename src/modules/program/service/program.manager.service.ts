@@ -2,21 +2,27 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
-import { GymManagerEntity } from "@app/module/gym/entity";
+import {
+  FindOrderByEnum,
+  PaginatedResponseDto,
+  PaginationOptionsDto,
+} from "@app/common/dto";
 
 import { ProgramManagerEntity } from "../entity";
-import { ProgramItemTypeEnum } from "../types";
-import { CreateProgramManagerDto, UpdateProgramManagerDto } from "../dto";
+import {
+  CreateProgramManagerDto,
+  ProgramFindCriteriaManagerDto,
+  UpdateProgramManagerDto,
+} from "../dto";
 
+import { ProgramService } from "../service";
 
 @Injectable()
 export class ProgramManagerService {
   constructor(
     @InjectRepository(ProgramManagerEntity)
     private readonly programManagerRepository: Repository<ProgramManagerEntity>,
-    @InjectRepository(GymManagerEntity)
-    private readonly gymManagerRepository: Repository<GymManagerEntity>
+    private readonly programService: ProgramService,
   ) {}
 
   async create(createProgramManagerDto: CreateProgramManagerDto): Promise<ProgramManagerEntity> {
@@ -24,19 +30,57 @@ export class ProgramManagerService {
     return await this.programManagerRepository.save(programManager);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramManagerEntity>> {
-    const { page = 1, limit = 10 } = options;
-    const skip = (page - 1) * limit;
+  async findAll(
+    criteria: ProgramFindCriteriaManagerDto,
+    pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramManagerEntity>> {
 
     const queryBuilder = this.programManagerRepository.createQueryBuilder("programManager");
+
+    queryBuilder.where("programManager.id != 0");
+
+    if (criteria.itemType) {
+      queryBuilder.andWhere("programManager.itemType = :itemType", { itemType: criteria.itemType });
+    }
+    if (criteria.itemId) {
+      queryBuilder.andWhere("programManager.itemId = :itemId", { itemId: criteria.itemId });
+    }
+    if (criteria.managerId) {
+      queryBuilder.andWhere("programManager.managerId = :managerId", { managerId: criteria.managerId });
+    }
+    if (criteria.gymId) {
+      queryBuilder.andWhere("programManager.gymId = :gymId", { gymId: criteria.gymId });
+    }
+    if (criteria.managerUserId) {
+      queryBuilder.andWhere("programManager.managerUserId = :managerUserId", { managerUserId: criteria.managerUserId });
+    }
+
+    if (criteria.orderBy) {
+      switch (criteria.orderBy) {
+        case FindOrderByEnum.random:
+          queryBuilder.addOrderBy('RANDOM()');
+          break;
+        case FindOrderByEnum.date:
+          queryBuilder.addOrderBy('programManager.createdAt', 'DESC');
+          break;
+        default:
+          queryBuilder.addOrderBy('programManager.createdAt', 'DESC');
+          break;
+      }
+    }
+
+    const { page, limit} = pagination || { page: 1, limit: 10 };
+    const skip = (page - 1) * limit;
 
     const [items, totalItems] = await queryBuilder
       .skip(skip)
       .take(limit)
-      .orderBy("programManager.createdAt", "DESC")
       .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / limit);
+
+    for (const item of items) {
+      item.item = await this.programService.getProgramItem(item.itemType, item.itemId);
+    }
 
     return {
       items,
@@ -52,19 +96,14 @@ export class ProgramManagerService {
 
   async findOne(id: number): Promise<ProgramManagerEntity> {
     const programManager = await this.programManagerRepository.findOne({ where: { id } });
-    if (!programManager) {
-      throw new Error(`Program manager with ID ${id} not found`);
+    
+    if (programManager) {
+      programManager.item = await this.programService.getProgramItem(programManager.itemType, programManager.itemId);
     }
+
     return programManager;
   }
 
-  async findByManagerId(managerId: number): Promise<ProgramManagerEntity[]> {
-    return await this.programManagerRepository.find({ where: { managerId } });
-  }
-
-  async findByItemTypeAndItemId(itemType: ProgramItemTypeEnum, itemId: number): Promise<ProgramManagerEntity[]> {
-    return await this.programManagerRepository.find({ where: { itemType, itemId } });
-  }
 
   async update(id: number, updateProgramManagerDto: UpdateProgramManagerDto): Promise<ProgramManagerEntity> {
     const programManager = await this.findOne(id);
@@ -75,36 +114,5 @@ export class ProgramManagerService {
   async remove(id: number): Promise<void> {
     await this.programManagerRepository.delete(id);
   }
-
-
-  /**
-   * Fetches the managers of a program item, which are among gym managers.
-   * 
-   * @param itemId The ID of the program item.
-   * @param itemType The type of the program item.
-   * @returns An array of gym managers.
-   */
-  async fetchProgramItemManagers(itemId: number, itemType: ProgramItemTypeEnum): Promise<GymManagerEntity[]> {
-    const managers = await this.programManagerRepository.find({
-      where: {
-        itemType,
-        itemId
-      }
-    });
-
-    const gymManagers = [];
-    for (const manager of managers) {
-      const gymManager = this.gymManagerRepository.findOne({
-        where: { id: manager.managerId },
-        relations: [
-          'overview',
-        ]
-      });
-      gymManagers.push(gymManager);
-    }
-
-    return gymManagers;
-  }
-
 
 }

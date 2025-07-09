@@ -17,34 +17,44 @@ import {
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
-  ApiNotFoundResponse
+  ApiNotFoundResponse,
+  ApiParam,
+  ApiBody,
+  ApiQuery
 } from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import {
+  JwtAuthGuard,
+  RolesGuard
+} from "@app/common/guards";
+import { SwaggerType } from "@app/common/types";
 import { PaginationOptionsDto } from "@app/common/dto";
 
+
+import { ProgramItemTypeEnum } from "../types";
+import { ProgramEntity } from "../entity";
+import {
+  CreateProgramDto,
+  UpdateProgramDto,
+  PaginatedDetailsProgramDto,
+  DetailsProgramDto,
+  ProgramFindCriteriaDto,
+} from "../dto";
 import {
   ProgramService,
   ProgramManagerService,
   ProgramPerSociologyService,
   ProgramSubscriptionPlanService
 } from "../service";
-import {
-  CreateProgramDto,
-  UpdateProgramDto,
-  PaginatedDetailsProgramDto,
-  DetailsProgramDto
-} from "../dto";
-import { ProgramItemTypeEnum } from "../types";
 
 
-@ApiTags("Programs")
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("programs/program")
+@Controller("program/program")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramController {
   constructor(
-    private readonly programService: ProgramService,
+    private readonly service: ProgramService,
     private readonly programManagerService: ProgramManagerService,
     private readonly programPerSociologyService: ProgramPerSociologyService,
     private readonly programSubscriptionPlanService: ProgramSubscriptionPlanService,
@@ -55,19 +65,24 @@ export class ProgramController {
     summary: "Create a new program",
     operationId: "createProgram"
   })
+  @ApiBody({
+    type: CreateProgramDto,
+    required: true,
+    description: "Program data",
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "The program has been successfully created.",
     type: DetailsProgramDto,
   })
-  async create(@Body() createProgramDto: CreateProgramDto): Promise<DetailsProgramDto> {
-    const record = await this.programService.create(createProgramDto);
+  async create(@Body() body: CreateProgramDto): Promise<DetailsProgramDto> {
+    const record = await this.service.create(body);
 
     const details: DetailsProgramDto = {
       ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.program),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.program),
-      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(record.id),
+      managers: [],
+      audience: [],
+      subscriptionPlans: [],
     };
 
     return details;
@@ -79,62 +94,46 @@ export class ProgramController {
     summary: "Get all programs with pagination",
     operationId: "findAllPrograms"
   })
+  @ApiQuery({
+    type: ProgramFindCriteriaDto,
+    required: true,
+    description: "Pagination options",
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: true,
+    description: "Pagination options",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Return all programs with pagination.",
     type: PaginatedDetailsProgramDto,
   })
-  async findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramDto> {
-    const result = await this.programService.findAll(options);
+  async findAll(
+    @Query() criteria: ProgramFindCriteriaDto,
+    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsProgramDto> {
+    const result = await this.service.findAll(criteria, pagination);
 
-    const details: DetailsProgramDto[] = await Promise.all(result.items.map(async (program) => ({
-      ...program,
-      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
-      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
-    })));
+    const details = await Promise.all(result.items.map(async (program) => await this.extractProgramDetails(program)));
 
     return {
-      ...result,
+      meta: result.meta,
       items: details
     };
   }
-
-  @Get("search")
-  @ApiOperation({
-    summary: "Search programs by name",
-    operationId: "searchPrograms"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Return programs matching the search query.",
-    type: PaginatedDetailsProgramDto,
-  })
-  async search(
-    @Query("query") query: string,
-    @Query() options: PaginationOptionsDto
-  ): Promise<PaginatedDetailsProgramDto> {
-    const result = await this.programService.search(query, options);
-
-    const details: DetailsProgramDto[] = await Promise.all(result.items.map(async (program) => ({
-      ...program,
-      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
-      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
-    })));
-
-    return {
-      ...result,
-      items: details
-    };
-  }
-
 
 
   @Get(":id")
   @ApiOperation({
     summary: "Get a program by id",
     operationId: "findOneProgram"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    example: 1234,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -146,17 +145,12 @@ export class ProgramController {
     type: NotFoundException,
   })
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramDto> {
-    const program = await this.programService.findOne(id);
+    const program = await this.service.findOne(id);
     if (!program) {
       throw new NotFoundException(`Program with ID ${id} not found`);
     }
 
-    const details: DetailsProgramDto = {
-      ...program,
-      managers: await this.programManagerService.fetchProgramItemManagers(program.id, ProgramItemTypeEnum.program),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(program.id, ProgramItemTypeEnum.program),
-      subscriptionPlans: await this.programSubscriptionPlanService.fetchProgramSubscriptionPlans(program.id),
-    };
+    const details = await this.extractProgramDetails(program);
 
     return details;
   }
@@ -166,6 +160,13 @@ export class ProgramController {
     summary: "Update a program",
     operationId: "updateProgram"
   })
+  @ApiParam({
+    name: "id",
+    description: "Program id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    example: 1234,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "The program has been successfully updated.",
@@ -173,15 +174,10 @@ export class ProgramController {
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateProgramDto: UpdateProgramDto
+    @Body() body: UpdateProgramDto
   ): Promise<DetailsProgramDto> {
-    const record = await this.programService.update(id, updateProgramDto);
-    const details: DetailsProgramDto = {
-      ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.program),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.program),
-    };
-
+    const record = await this.service.update(id, body);
+    const details = await this.extractProgramDetails(record);
     return details;
   }
 
@@ -191,11 +187,47 @@ export class ProgramController {
     summary: "Delete a program",
     operationId: "removeProgram"
   })
+  @ApiParam({
+    name: "id",
+    description: "Program id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    example: 1234,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "The program has been successfully deleted.",
   })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
-    return this.programService.remove(id);
+    return this.service.remove(id);
+  }
+
+  /**
+   * Extracts program details including managers, audience, and subscription plans.
+   * @param program - The program entity to extract details from.
+   * @returns A Promise that resolves to a DetailsProgramDto object containing the program details.
+   */
+  private async extractProgramDetails(program: ProgramEntity): Promise<DetailsProgramDto> {
+    const programCriteria = {
+      itemId: program.id,
+      itemType: ProgramItemTypeEnum.program,
+    };
+
+    const subscriptionPlanCriteria = {
+      programId: program.id,
+    };
+
+    const managersFound = await this.programManagerService.findAll(programCriteria);
+    const audienceFound = await this.programPerSociologyService.findAll(programCriteria);
+    const subscriptionPlansFound = await this.programSubscriptionPlanService.findAll(subscriptionPlanCriteria);
+
+
+    return {
+      ...program,
+      managers: managersFound.items.map((programManager) => programManager.manager), 
+      audience: audienceFound.items.map((programPerSociology) => programPerSociology.sociology),
+      subscriptionPlans: subscriptionPlansFound.items
+    };
   }
 }
+

@@ -11,9 +11,23 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiBody,
+  ApiParam,
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+
+import { SwaggerType } from "@app/common/types";
+import {
+  JwtAuthGuard,
+  RolesGuard
+} from "@app/common/guards";
+
 import { PaginationOptionsDto } from "@app/common/dto";
 
 import { ProgramPerSociologyService } from "../service";
@@ -21,17 +35,18 @@ import {
     CreateProgramPerSociologyDto,
     UpdateProgramPerSociologyDto,
     DetailsProgramPerSociologyDto,
-    PaginatedDetailsProgramPerSociologyDto
+    PaginatedDetailsProgramPerSociologyDto,
+    ProgramFindCriteriaPerSociologyDto
 } from "../dto";
 
 
-@ApiTags("Programs")
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("programs/per-sociology")
+@Controller("program/per-sociology")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramPerSociologyController {
   constructor(
-    private readonly programPerSociologyService: ProgramPerSociologyService,
+    private readonly service: ProgramPerSociologyService,
   ) {}
 
   @Post()
@@ -44,8 +59,13 @@ export class ProgramPerSociologyController {
     description: "The program per sociology has been successfully created.",
     type: DetailsProgramPerSociologyDto,
   })
-  create(@Body() createProgramPerSociologyDto: CreateProgramPerSociologyDto): Promise<DetailsProgramPerSociologyDto> {
-    return this.programPerSociologyService.create(createProgramPerSociologyDto);
+  @ApiBody({
+    type: CreateProgramPerSociologyDto,
+    required: true,
+    description: "Program per sociology data",
+  })
+  create(@Body() body: CreateProgramPerSociologyDto): Promise<DetailsProgramPerSociologyDto> {
+    return this.service.create(body);
   }
 
   @Get()
@@ -53,13 +73,25 @@ export class ProgramPerSociologyController {
     summary: "Get all program per sociologies with pagination",
     operationId: "findAllProgramPerSociologies"
   })
+  @ApiQuery({
+    type: ProgramFindCriteriaPerSociologyDto,
+    required: false,
+    description: "Program per sociology criteria",
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+    description: "Pagination options",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Successfully retrieved program per sociologies.",
     type: PaginatedDetailsProgramPerSociologyDto,
   })
-  findAll(@Query() paginationOptions: PaginationOptionsDto): Promise<PaginatedDetailsProgramPerSociologyDto> {
-    return this.programPerSociologyService.findAll(paginationOptions);
+  findAll(
+    @Query() criteria: ProgramFindCriteriaPerSociologyDto,
+    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsProgramPerSociologyDto> {
+    return this.service.findAll(criteria, pagination);
   }
 
   @Get(':id')
@@ -73,7 +105,7 @@ export class ProgramPerSociologyController {
     type: DetailsProgramPerSociologyDto,
   })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsProgramPerSociologyDto> {
-    return this.programPerSociologyService.findOne(id);
+    return this.service.findOne(id);
   }
 
   @Patch(':id')
@@ -86,11 +118,22 @@ export class ProgramPerSociologyController {
     description: "The program per sociology has been successfully updated.",
     type: DetailsProgramPerSociologyDto,
   })
+  @ApiParam({
+    name: "id",
+    description: "Program per sociology id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiBody({
+    type: UpdateProgramPerSociologyDto,
+    required: true,
+    description: "Program per sociology data",
+  })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProgramPerSociologyDto: UpdateProgramPerSociologyDto
+    @Body() body: UpdateProgramPerSociologyDto
   ): Promise<DetailsProgramPerSociologyDto> {
-    return this.programPerSociologyService.update(id, updateProgramPerSociologyDto);
+    return this.service.update(id, body);
   }
 
   @Delete(':id')
@@ -98,11 +141,17 @@ export class ProgramPerSociologyController {
     summary: "Delete a program per sociology",
     operationId: "removeProgramPerSociology"
   })
+  @ApiParam({
+    name: "id",
+    description: "Program per sociology id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: "The program per sociology has been successfully deleted.",
   })
   remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.programPerSociologyService.remove(id);
+    return this.service.remove(id);
   }
 }

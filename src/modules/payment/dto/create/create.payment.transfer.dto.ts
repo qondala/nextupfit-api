@@ -1,95 +1,108 @@
-import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum, IsNumber, IsOptional, IsString, IsInt } from "class-validator";
 
-import { PaymentStatusEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
+import { PaymentStatusEnum, PaymentMethodEnum } from "../../types";
 
 export class CreatePaymentTransferDto {
   @ApiProperty({
-    description: "Sender user Id",
-    example: 23234,
-    required: true
+    type: SwaggerType.INTEGER,
+    description: "Receiver user id",
   })
-  @IsNotEmpty()
-  @IsNumber()
-  senderUserId: number;
-
-
-  @ApiProperty({
-    description: "Sender gym Id",
-    example: 434,
-    required: true
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  senderGymId: number;
-
-
-  @ApiProperty({
-    description: "Receiver user Id",
-    example: 3453445,
-    required: true
-  })
-  @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   receiverUserId: number;
 
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Receiver manager id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  receiverManagerId?: number;
 
   @ApiProperty({
-    description: "Amount transfered",
-    example: 1000,
-    required: true
+    type: SwaggerType.INTEGER,
+    description: "Receiver gym id",
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
+  @IsInt()
+  receiverGymId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Sender manager id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  senderManagerId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Sender gym id",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  senderGymId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Transfer amount",
+  })
   @IsNumber()
-  amountTransferred: number;
+  amount: number;
 
   @ApiProperty({
-    description: "Payment currency",
-    example: "usd",
-    required: true
+    enum: PaymentStatusEnum,
+    enumName: "PaymentStatusEnum",
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
+  @IsEnum(PaymentStatusEnum)
+  status?: PaymentStatusEnum;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Stripe transfer id",
+  })
   @IsString()
-  currency: string;
+  stripeTransferId: string;
 
-  
   @ApiProperty({
-    description: "Transfer date",
-    example: Date(),
-    required: false
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: false,
   })
-  @IsNotEmpty()
-  @IsDate()
+  @IsOptional()
   operationDate?: Date;
 
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: false,
+  })
+  @IsOptional()
+  completionDate?: Date;
 
   @ApiProperty({
-    description: "Payment method",
-    example: "card",
-    required: true
+    enum: PaymentMethodEnum,
+    enumName: "PaymentMethodEnum",
+    required: false,
   })
-  @IsNotEmpty()
+  @IsOptional()
+  @IsEnum(PaymentMethodEnum)
+  paymentMethod?: PaymentMethodEnum;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Message",
+    required: false,
+  })
+  @IsOptional()
   @IsString()
-  paymentMethod: string;
-
-
-  @ApiProperty({
-    description: "Payment secret",
-    example: "eer453#ferr@erre$eger-gef_e!er",
-    required: true
-  })
-  @IsString()
-  @IsNotEmpty()
-  secret: string;
-
-
-  @ApiProperty({
-    description: "Transfer status",
-    example: PaymentStatusEnum.inprogress,
-    required: true
-  })
-  @IsNotEmpty()
-  @IsEnum(PaymentStatusEnum)
-  status: PaymentStatusEnum;
+  message?: string;
 }

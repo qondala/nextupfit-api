@@ -1,5 +1,33 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import {
+  BaseNutritionEntity,
+  BaseProgramGoalEntity,
+  BaseSociologyEntity,
+  BaseWorkoutEntity
+} from '@app/module/base/entity';
+
+import {
+  UserEntity,
+  UserInterestEntity
+} from '@app/module/user/entity';
+
+import {
+  GymEntity, 
+  GymManagerEntity,
+} from '@app/module/gym/entity';
+
+import {
+  ProgramEntity, 
+  ProgramStepActivityEntity, 
+  ProgramStepActivityWorkingsessionEntity, 
+  ProgramStepActivityWorkingsessionWorkoutEntity
+} from '@app/module/program/entity';
+
+import { UserInterestService } 
+from '@app/module/user/service';
+
 import {
   SocialAdvertisementEntity,
   SocialAffiliateLinkEntity,
@@ -8,9 +36,11 @@ import {
   SocialChatMessageTextEntity,
   SocialChatMessageEntity,
   SocialChatEntity,
-  SocialNewsEntity,
+  SocialUpdateEntity,
   SocialNotificationEntity,
-  SocialReviewEntity
+  SocialReviewEntity,
+  SocialRatingsEntity,
+  SocialAdvertisementInterestEntity
 } from './entity';
 import {
   SocialAdvertisementController,
@@ -19,10 +49,12 @@ import {
   SocialAffiliateSaleController,
   SocialChatMessageController,
   SocialChatController,
-  SocialNewsController,
+  SocialUpdateController,
   SocialNotificationController,
   SocialReviewController,
-  SocialChatMessageTextController
+  SocialChatMessageTextController,
+  SocialRatingsController,
+  SocialAdvertisementInterestController
 } from './controller';
 import {
   SocialAdvertisementService,
@@ -32,10 +64,13 @@ import {
   SocialChatMessageService,
   SocialChatMessageTextService,
   SocialChatService,
-  SocialNewsService,
+  SocialUpdateService,
   SocialNotificationService,
-  SocialReviewService
+  SocialReviewService,
+  SocialRatingsService,
+  SocialAdvertisementInterestService
 } from './service';
+
 
 @Module({
   imports: [
@@ -47,9 +82,31 @@ import {
       SocialChatMessageTextEntity,
       SocialChatMessageEntity,
       SocialChatEntity,
-      SocialNewsEntity,
+      SocialUpdateEntity,
       SocialNotificationEntity,
-      SocialReviewEntity
+      SocialReviewEntity,
+      SocialRatingsEntity,
+      SocialAdvertisementInterestEntity,
+    
+      // Importing base entities
+      BaseNutritionEntity,
+      BaseProgramGoalEntity,
+      BaseSociologyEntity,
+      BaseWorkoutEntity,
+
+      // Importing user entities
+      UserEntity,
+      UserInterestEntity,
+      
+      // Importing gym entities
+      GymEntity,
+      GymManagerEntity,
+
+      // Importing program entities
+      ProgramEntity,
+      ProgramStepActivityEntity,
+      ProgramStepActivityWorkingsessionEntity,
+      ProgramStepActivityWorkingsessionWorkoutEntity,
     ])
   ],
   controllers: [
@@ -60,9 +117,11 @@ import {
     SocialChatMessageTextController,
     SocialChatMessageController,
     SocialChatController,
-    SocialNewsController,
+    SocialUpdateController,
     SocialNotificationController,
-    SocialReviewController
+    SocialReviewController,
+    SocialRatingsController,
+    SocialAdvertisementInterestController
   ],
   providers: [
     SocialAdvertisementService,
@@ -72,9 +131,12 @@ import {
     SocialChatMessageTextService,
     SocialChatMessageService,
     SocialChatService,
-    SocialNewsService,
+    SocialUpdateService,
     SocialNotificationService,
-    SocialReviewService
+    SocialReviewService,
+    SocialRatingsService,
+    SocialAdvertisementInterestService,
+    UserInterestService
   ],
   exports: [
     SocialAdvertisementService,
@@ -84,9 +146,12 @@ import {
     SocialChatMessageTextService,
     SocialChatMessageService,
     SocialChatService,
-    SocialNewsService,
+    SocialUpdateService,
     SocialNotificationService,
-    SocialReviewService
+    SocialReviewService,
+    SocialRatingsService,
+    SocialAdvertisementInterestService,
+    UserInterestService
   ]
 })
 export class SocialModule {}

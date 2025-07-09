@@ -1,94 +1,91 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsNumber, IsArray, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
 import { SocialReviewItemTypeEnum } from "../../types";
-import { DetailsSocialReviewDto } from ".";
+import { SwaggerType } from "@app/common/types";
 
 
 export class DetailsSocialRatingsDto {
 
   @ApiProperty({
-    description: "Number of reviews",
-    example: 10,
+    type: SwaggerType.INTEGER,
+    description: "ID of the ratings record",
+    example: 1234,
     required: true,
   })
-  @IsNumber()
-  count: number;
-
+  @IsOptional()
+  @IsInt()
+  id?: number;
 
   @ApiProperty({
+     enum: SocialReviewItemTypeEnum,
+     description: "Item type rated",
+     required: true,
+     example: SocialReviewItemTypeEnum.gym,
+   })
+   @IsEnum(SocialReviewItemTypeEnum)
+   itemType: SocialReviewItemTypeEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Item id to be rated",
+    example: 1234,
+    required: true,
+  })
+  @IsInt()
+  itemId: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Average rating of the item",
     example: 3,
     required: true,
   })
   @IsNumber()
-  rating: number;
+  averageRating: number;
 
   @ApiProperty({
-    description: "Minimum rating of the item",
-    example: 1,
-    required: true,
-  })
-  @IsNumber()
-  minRating: number;
-
-
-  @ApiProperty({
-    description: "Maximum rating of the item",
-    example: 5,
-    required: true,
-  })
-  @IsNumber()
-  maxRating: number;
-
-
-  @ApiProperty({
-    description: "Item type to be rated",
-    example: SocialReviewItemTypeEnum.workingsession,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsEnum(SocialReviewItemTypeEnum)
-  itemType: SocialReviewItemTypeEnum;
-
-  @ApiProperty({
-    description: "Item id to be rated",
-    example: 1234,
-    required: true,
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  itemId: number;
-
-
-  @ApiProperty({
-    description: "Assess the ease of use of the Item on a scale of 10",
+    type: SwaggerType.NUMBER,
+    description: "Average ease of use of the item",
     example: 9,
     required: true,
   })
   @IsNumber()
-  easeOfUse: number;
-
+  averageEaseOfUse: number;
 
   @ApiProperty({
-    description: "Assess the effectiveness of the Item on a scale of 10",
+    type: SwaggerType.NUMBER,
+    description: "Average effectiveness of the item",
     example: 8,
     required: true,
   })
   @IsNumber()
-  effectiveness: number;
-
+  averageEffectiveness: number;
 
   @ApiProperty({
-    type: () => DetailsSocialReviewDto,
-    isArray: true,
-    description: "Reviews",
-    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Total number of reviews",
+    example: 10,
+    required: true,
   })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => DetailsSocialReviewDto)
-  reviews: DetailsSocialReviewDto[];
+  @IsInt()
+  totalReviews: number;
 
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Minimum rating of the item",
+    example: 1,
+    required: true,
+  })
+  @IsInt()
+  minRating: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Maximum rating of the item",
+    example: 5,
+    required: true,
+  })
+  @IsInt()
+  maxRating: number;
 }

@@ -22,6 +22,10 @@ export class GymManagerOverviewEntity {
 
 
   @Column({ nullable: true })
+  photoUrl?: string;
+
+
+  @Column({ nullable: true })
   coverUrl?: string;
 
 
@@ -58,10 +62,6 @@ export class GymManagerOverviewEntity {
 
 
   @Column({ nullable: true })
-  followersCount?: number;
-
-
-  @Column({ nullable: true })
   stripeAccountId?: string;
 
 
@@ -75,10 +75,6 @@ export class GymManagerOverviewEntity {
 
   @Column({ nullable: true })
   cityId: number;
-
-
-  @Column({ nullable: true })
-  attendeesCount?: number;
 
 
   @Column({
@@ -95,19 +91,6 @@ export class GymManagerOverviewEntity {
 
   @Column({ nullable: true })
   experiences: string;
-  
-
-  @Column({ nullable: true })
-  viewsCount: number;
-
-
-  @Column({ nullable: true })
-  ratingsAvg: number;
-
-
-  @Column({ nullable: true })
-  ratingsCount: number;
-
 
   @CreateDateColumn()
   createdAt: Date;

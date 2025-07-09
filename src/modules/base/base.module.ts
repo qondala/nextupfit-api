@@ -1,11 +1,14 @@
 import { Module } from "@nestjs/common";
+
+
+
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   BaseAppUpdateEntity,
   BaseBodyParamEntity,
   BaseFoodGroupEntity,
-  BaseFoodNutrientsEntity,
+  BaseFoodNutrientEntity,
   BaseFoodEntity,
   BaseMealFoodEntity,
   BaseMealEntity,
@@ -15,7 +18,18 @@ import {
   BaseWorkoutHowtoPerformStepEntity,
   BaseWorkoutNutrientBurnEntity,
   BaseWorkoutRecommendedRepetitionEntity,
-  BaseWorkoutEntity
+  BaseWorkoutEntity,
+  BaseNutritionTypeEntity,
+  BaseSociologyEntity,
+  BaseSociologyGroupEntity,
+  BaseNutritionEntity,
+  BaseNutritionToolEntity,
+  BaseRecipeItemEntity,
+  BaseRecipeInstructionTagEntity,
+  BaseRecipeInstructionEntity,
+  BaseRecipeEntity,
+  BaseCurrencyEntity,
+  BaseProgramGoalEntity
 } from "./entity";
 
 
@@ -23,24 +37,35 @@ import {
   BaseAppUpdateService,
   BaseBodyParamService,
   BaseFoodGroupService,
-  BaseFoodNutrientsService,
+  BaseFoodNutrientService,
   BaseFoodService,
   BaseMealFoodService,
   BaseMealService,
   BaseMuscleService,
   BaseNutrientService,
+  BaseNutritionTypeService,
   BaseUnitService,
   BaseWorkoutHowtoPerformStepService,
   BaseWorkoutNutrientBurnService,
   BaseWorkoutRecommendedRepetitionService,
-  BaseWorkoutService
-} from "./service";
+  BaseWorkoutService,
+  BaseSociologyService,
+  BaseSociologyGroupService,
+  BaseNutritionService,
+  BaseNutritionToolService,
+  BaseRecipeItemService,
+  BaseRecipeInstructionTagService,
+  BaseRecipeInstructionService,
+  BaseRecipeService,
+  BaseCurrencyService,
+  BaseProgramGoalService
+} from "./service"; // Added BaseProgramGoalService
 
 import {
   BaseAppUpdateController,
   BaseBodyParamController,
   BaseFoodGroupController,
-  BaseFoodNutrientsController,
+  BaseFoodNutrientController,
   BaseFoodController,
   BaseMealFoodController,
   BaseMealController,
@@ -50,9 +75,19 @@ import {
   BaseWorkoutHowtoPerformStepController,
   BaseWorkoutNutrientBurnController,
   BaseWorkoutRecommendedRepetitionController,
-  BaseWorkoutController
-
-} from "./controller";
+  BaseWorkoutController,
+  BaseSociologyController,
+  BaseSociologyGroupController,
+  BaseNutritionController,
+  BaseNutritionTypeController,
+  BaseNutritionToolController,
+  BaseRecipeItemController,
+  BaseRecipeInstructionTagController,
+  BaseRecipeInstructionController,
+  BaseRecipeController,
+  BaseCurrencyController,
+  BaseProgramGoalController
+} from "./controller"; // Added BaseProgramGoalController
 
 
 @Module({
@@ -61,65 +96,109 @@ import {
       BaseAppUpdateEntity,
       BaseBodyParamEntity,
       BaseFoodGroupEntity,
-      BaseFoodNutrientsEntity,
+      BaseFoodNutrientEntity,
       BaseFoodEntity,
       BaseMealFoodEntity,
       BaseMealEntity,
       BaseMuscleEntity,
       BaseNutrientEntity,
+      BaseNutritionEntity,
+      BaseNutritionToolEntity,
+      BaseRecipeItemEntity,
+      BaseRecipeInstructionTagEntity,
+      BaseRecipeInstructionEntity,
+      BaseNutritionTypeEntity,
       BaseUnitEntity,
       BaseWorkoutHowtoPerformStepEntity,
       BaseWorkoutNutrientBurnEntity,
       BaseWorkoutRecommendedRepetitionEntity,
-      BaseWorkoutEntity
+      BaseWorkoutEntity,
+      BaseSociologyEntity,
+      BaseSociologyGroupEntity,
+      BaseRecipeEntity,
+      BaseCurrencyEntity,
+      BaseProgramGoalEntity
     ])],
   controllers: [
     BaseAppUpdateController,
     BaseBodyParamController,
     BaseFoodGroupController,
-    BaseFoodNutrientsController,
+    BaseFoodNutrientController,
     BaseFoodController,
     BaseMealFoodController,
     BaseMealController,
     BaseMuscleController,
     BaseNutrientController,
+    BaseNutritionTypeController,
+    BaseNutritionToolController,
+    BaseRecipeItemController,
+    BaseRecipeInstructionTagController,
+    BaseRecipeInstructionController,
+    BaseNutritionController,
     BaseUnitController,
     BaseWorkoutHowtoPerformStepController,
     BaseWorkoutNutrientBurnController,
     BaseWorkoutRecommendedRepetitionController,
-    BaseWorkoutController
+    BaseWorkoutController,
+    BaseSociologyController,
+    BaseSociologyGroupController,
+    BaseRecipeController,
+    BaseCurrencyController,
+    BaseProgramGoalController
   ],
   providers: [
     BaseAppUpdateService,
     BaseBodyParamService,
     BaseFoodGroupService,
-    BaseFoodNutrientsService,
+    BaseFoodNutrientService,
     BaseFoodService,
     BaseMealFoodService,
     BaseMealService,
     BaseMuscleService,
     BaseNutrientService,
+    BaseNutritionTypeService,
+    BaseNutritionService,
+    BaseRecipeService,
     BaseUnitService,
     BaseWorkoutHowtoPerformStepService,
     BaseWorkoutNutrientBurnService,
     BaseWorkoutRecommendedRepetitionService,
-    BaseWorkoutService
+    BaseWorkoutService,
+    BaseSociologyService,
+    BaseSociologyGroupService,
+    BaseNutritionToolService,
+    BaseRecipeItemService,
+    BaseRecipeInstructionTagService,
+    BaseRecipeInstructionService,
+    BaseCurrencyService,
+    BaseProgramGoalService
   ],
   exports: [
     BaseAppUpdateService,
     BaseBodyParamService,
     BaseFoodGroupService,
-    BaseFoodNutrientsService,
+    BaseFoodNutrientService,
     BaseFoodService,
     BaseMealFoodService,
     BaseMealService,
     BaseMuscleService,
     BaseNutrientService,
+    BaseNutritionTypeService,
+    BaseNutritionService,
+    BaseRecipeService,
     BaseUnitService,
     BaseWorkoutHowtoPerformStepService,
     BaseWorkoutNutrientBurnService,
     BaseWorkoutRecommendedRepetitionService,
-    BaseWorkoutService
+    BaseWorkoutService,
+    BaseSociologyService,
+    BaseSociologyGroupService,
+    BaseNutritionToolService,
+    BaseRecipeItemService,
+    BaseRecipeInstructionTagService,
+    BaseRecipeInstructionService,
+    BaseCurrencyService,
+    BaseProgramGoalService
   ],
 })
 export class BaseModule {}

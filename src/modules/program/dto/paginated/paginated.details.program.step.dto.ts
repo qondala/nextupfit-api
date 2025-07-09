@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramStepDto extends PaginatedResponseDto<Details
     type: () => DetailsProgramStepDto,
     name: 'items',
     isArray: true,
-    description: 'List of program steps'
+    description: 'List of program steps',
+    required: true
   })
   @IsDefined()
   @IsArray()

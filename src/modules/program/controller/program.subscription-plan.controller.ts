@@ -9,95 +9,185 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+} from "@nestjs/swagger";
 
+import { SwaggerType } from "@app/common/types";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
 
-import { ProgramSubscriptionPlanService } from "../service";
 import {
   CreateProgramSubscriptionPlanDto,
   UpdateProgramSubscriptionPlanDto,
   DetailsProgramSubscriptionPlanDto,
-  PaginatedDetailsProgramSubscriptionPlanDto
+  PaginatedDetailsProgramSubscriptionPlanDto,
+  ProgramFindCriteriaSubscriptionPlanDto
 } from "../dto";
 
-@ApiTags("Programs")
+import { ProgramSubscriptionPlanService } from "../service";
+
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
 @Controller("program/subscription-plan")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramSubscriptionPlanController {
-  constructor(private readonly programSubscriptionPlanService: ProgramSubscriptionPlanService) {}
+  constructor(private readonly service: ProgramSubscriptionPlanService) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new program subscription plan" })
+  @ApiOperation({
+    summary: "Create a new program subscription plan",
+    operationId: "createProgramSubscriptionPlan"
+  })
+  @ApiBody({
+    type: CreateProgramSubscriptionPlanDto,
+    required: true,
+    description: "Program subscription plan data",
+  })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: "The program subscription plan has been successfully created.",
     type: DetailsProgramSubscriptionPlanDto,
   })
-  create(@Body() createProgramSubscriptionPlanDto: CreateProgramSubscriptionPlanDto): Promise<DetailsProgramSubscriptionPlanDto> {
-    return this.programSubscriptionPlanService.create(createProgramSubscriptionPlanDto);
+  create(@Body() body: CreateProgramSubscriptionPlanDto): Promise<DetailsProgramSubscriptionPlanDto> {
+    return this.service.create(body);
   }
 
   @Get()
-  @ApiOperation({ summary: "Get all program subscription plans with pagination" })
+  @ApiOperation({
+    summary: "Get all program subscription plans with pagination",
+    operationId: "findAllProgramSubscriptionPlan"
+  })
+  @ApiQuery({
+    description: "Program subscription plan criteria",
+    required: false,
+    type: ProgramFindCriteriaSubscriptionPlanDto,
+  })
+  @ApiQuery({
+    description: "Pagination options",
+    required: false,
+    type: PaginationOptionsDto,
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return all program subscription plans with pagination.",
     type: PaginatedDetailsProgramSubscriptionPlanDto,
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsProgramSubscriptionPlanDto> {
-    return this.programSubscriptionPlanService.findAll(options);
+  findAll(
+    @Query() criteria: ProgramFindCriteriaSubscriptionPlanDto,
+    @Query() pagination?: PaginationOptionsDto): Promise<PaginatedDetailsProgramSubscriptionPlanDto> {
+    return this.service.findAll(criteria, pagination);
   }
 
-  @Get("search")
-  @ApiOperation({ summary: "Search program subscription plans by name" })
-  @ApiResponse({
-    status: 200,
-    description: "Return program subscription plans matching the search query.",
-    type: PaginatedDetailsProgramSubscriptionPlanDto,
-  })
-  search(
-    @Query("query") query: string,
-    @Query() options: PaginationOptionsDto
-  ): Promise<PaginatedDetailsProgramSubscriptionPlanDto> {
-    return this.programSubscriptionPlanService.search(query, options);
-  }
+
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a program subscription plan by id" })
+  @ApiOperation({
+    summary: "Get a program subscription plan by id",
+    operationId: "findOneProgramSubscriptionPlan"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return the program subscription plan.",
     type: DetailsProgramSubscriptionPlanDto,
   })
   findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramSubscriptionPlanDto> {
-    return this.programSubscriptionPlanService.findOne(id);
+    return this.service.findOne(id);
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a program subscription plan" })
+  @ApiOperation({
+    summary: "Update a program subscription plan",
+    operationId: "updateProgramSubscriptionPlan"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program subscription plan id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiBody({
+    type: UpdateProgramSubscriptionPlanDto,
+    required: true,
+    description: "Program subscription plan data",
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The program subscription plan has been successfully updated.",
     type: DetailsProgramSubscriptionPlanDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateProgramSubscriptionPlanDto: UpdateProgramSubscriptionPlanDto
+    @Body() body: UpdateProgramSubscriptionPlanDto
   ): Promise<DetailsProgramSubscriptionPlanDto> {
-    return this.programSubscriptionPlanService.update(id, updateProgramSubscriptionPlanDto);
+    return this.service.update(id, body);
   }
 
-  @Delete(":id")
-  @ApiOperation({ summary: "Delete a program subscription plan" })
+  @Patch(":id/activate")
+  @ApiOperation({
+    summary: "Activate a program subscription plan",
+    operationId: "activateProgramSubscriptionPlan"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program subscription plan id",
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
+    description: "The program subscription plan has been successfully activated.",
+  })
+  async activate(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    return this.service.activate(id);
+  }
+  
+  @Patch(":id/deactivate")
+  @ApiOperation({
+    summary: "Deactivate a program subscription plan",
+    operationId: "deactivateProgramSubscriptionPlan"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program subscription plan id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "The program subscription plan has been successfully deactivated.",
+  })
+  async deactivate(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    await this.service.deactivate(id);
+    return;
+  }
+
+
+  @Delete(":id")
+  @ApiOperation({
+    summary: "Delete a program subscription plan",
+    operationId: "removeProgramSubscriptionPlan"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program subscription plan id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
     description: "The program subscription plan has been successfully deleted.",
   })
-  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
-    return this.programSubscriptionPlanService.remove(id);
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    await this.service.remove(id);
+    return;
   }
 }

@@ -1,13 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsDefined, IsEnum } from "class-validator";
+import { IsDefined, IsInt, IsOptional, ValidateNested } from "class-validator";
 
-import { UserProfileTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
+import { DetailsGymManagerDto } from "@app/module/gym/dto";
+import { Type } from "class-transformer";
 
 
 export class DetailsUserDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
@@ -15,7 +17,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User email",
     required: true,
   })
@@ -23,7 +25,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User first name",
     required: true,
   })
@@ -31,7 +33,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User last name",
     required: false,
   })
@@ -39,7 +41,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User phone number",
     required: false,
   })
@@ -47,7 +49,8 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "User birth date",
     example: "2025-05-02",
     required: false,
@@ -55,16 +58,9 @@ export class DetailsUserDto {
   birthDate?: Date;
 
 
-  @ApiProperty({
-    type: String,
-    description: "User password hash",
-    required: false,
-  })
-  passwordHash?: string;
-
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User profile image url",
     required: false,
   })
@@ -72,7 +68,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User cover image url",
     required: false,
   })
@@ -80,7 +76,7 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Boolean,
+    type: SwaggerType.BOOLEAN,
     description: "User email verified",
     required: true,
   })
@@ -88,7 +84,8 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "User last login",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -97,21 +94,50 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    enum: UserProfileTypeEnum,
-    enumName: "UserProfileTypeEnum",
-    isArray: true,
-    description: "User profile",
-    required: true,
-    example: Object.values(UserProfileTypeEnum),
+    type: SwaggerType.INTEGER,
+    description: "User's manager account ID",
+    example: 1,
+    required: false,
   })
-  @IsDefined()
-  @IsArray()
-  @IsEnum(UserProfileTypeEnum, { each: true })
-  userProfile: UserProfileTypeEnum[];
+  @IsOptional()
+  @IsInt()
+  managerAccountId?: number;
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.INTEGER,
+    description: "User's privilege level",
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  privilegeLevel?: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "User's age",
+    example: 25,
+    required: true,
+  })
+  @IsInt()
+  age: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "User's gender",
+    example: 1,
+    required: true,
+  })
+  @IsInt()
+  gender: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "User created at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",
@@ -120,10 +146,22 @@ export class DetailsUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "User updated at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",
   })
   updatedAt?: Date;
+
+  @ApiProperty({
+    type: () => DetailsGymManagerDto,
+    title: "DetailsGymManagerDto",
+    description: "Body param",
+    required: false,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsGymManagerDto)
+  managerAccount?: DetailsGymManagerDto;
 }

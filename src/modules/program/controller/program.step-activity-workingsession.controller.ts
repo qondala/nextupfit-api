@@ -11,7 +11,7 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiParam } from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -25,17 +25,20 @@ import {
   CreateProgramStepActivityWorkingsessionDto,
   UpdateProgramStepActivityWorkingsessionDto,
   DetailsProgramStepActivityWorkingsessionDto,
-  PaginatedDetailsProgramStepActivityWorkingsessionDto
+  PaginatedDetailsProgramStepActivityWorkingsessionDto,
+  ProgramFindCriteriaWorkingsessionDto
 } from "../dto";
 import { ProgramItemTypeEnum } from "../types";
+import { ProgramStepActivityWorkingsessionEntity } from "../entity";
+import { SwaggerType } from "@app/common/types";
 
-@ApiTags("Programs")
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("programs/step-activity-workingsessions")
+@Controller("program/step/activity/workingsessions")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramStepActivityWorkingsessionController {
   constructor(
-    private readonly programStepActivityWorkingsessionService: ProgramStepActivityWorkingsessionService,
+    private readonly service: ProgramStepActivityWorkingsessionService,
     private readonly programManagerService: ProgramManagerService,
     private readonly programPerSociologyService: ProgramPerSociologyService,
   ) {}
@@ -50,30 +53,48 @@ export class ProgramStepActivityWorkingsessionController {
     description: "The program step activity workingsession has been successfully created.",
     type: DetailsProgramStepActivityWorkingsessionDto,
   })
-  async create(@Body() createProgramStepActivityWorkingsessionDto: CreateProgramStepActivityWorkingsessionDto): Promise<DetailsProgramStepActivityWorkingsessionDto> {
-    const record = await this.programStepActivityWorkingsessionService.create(createProgramStepActivityWorkingsessionDto);
+  async create(@Body() body: CreateProgramStepActivityWorkingsessionDto): Promise<DetailsProgramStepActivityWorkingsessionDto> {
+    const record = await this.service.create(body);
 
-    const details: DetailsProgramStepActivityWorkingsessionDto = {
+    return {
       ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workingsession),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workingsession),
+      managers: [],
+      audience: [],
     };
-
-    return details;
   }
+
 
   @Get()
   @ApiOperation({
     summary: "Get all program step activity workingsessions with pagination",
     operationId: "findAllProgramStepActivityWorkingsessions"
   })
+  @ApiQuery({
+    type: ProgramFindCriteriaWorkingsessionDto,
+    required: false,
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Successfully retrieved program step activity workingsessions.",
     type: PaginatedDetailsProgramStepActivityWorkingsessionDto,
   })
-  findAll(@Query() paginationOptions: PaginationOptionsDto): Promise<PaginatedDetailsProgramStepActivityWorkingsessionDto> {
-    return this.programStepActivityWorkingsessionService.findAll(paginationOptions);
+  async findAll(
+    @Query() criteria: ProgramFindCriteriaWorkingsessionDto,
+    @Query() pagination?: PaginationOptionsDto): Promise<PaginatedDetailsProgramStepActivityWorkingsessionDto> {
+      const result = await this.service.findAll(criteria, pagination);
+
+      const details = await Promise.all(result.items.map(
+        async (workingsession) => await this.extractWorkingsessionDetails(workingsession)
+      ));
+  
+      return {
+        meta: result.meta,
+        items: details
+      };
   }
 
   @Get(':id')
@@ -81,19 +102,21 @@ export class ProgramStepActivityWorkingsessionController {
     summary: "Get a program step activity workingsession by ID",
     operationId: "findOneProgramStepActivityWorkingsession"
   })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+    description: "The ID of the program step activity workingsession to retrieve.",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Successfully retrieved program step activity workingsession.",
     type: DetailsProgramStepActivityWorkingsessionDto,
   })
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsProgramStepActivityWorkingsessionDto> {
-    const record = await this.programStepActivityWorkingsessionService.findOne(id);
+    const record = await this.service.findOne(id);
 
-    const details: DetailsProgramStepActivityWorkingsessionDto = {
-      ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workingsession),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workingsession),
-    };
+    const details = await this.extractWorkingsessionDetails(record);
 
     return details;
   }
@@ -103,6 +126,12 @@ export class ProgramStepActivityWorkingsessionController {
     summary: "Update a program step activity workingsession",
     operationId: "updateProgramStepActivityWorkingsession"
   })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+    description: "The ID of the program step activity workingsession to delete.",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "The program step activity workingsession has been successfully updated.",
@@ -110,15 +139,11 @@ export class ProgramStepActivityWorkingsessionController {
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProgramStepActivityWorkingsessionDto: UpdateProgramStepActivityWorkingsessionDto
+    @Body() body: UpdateProgramStepActivityWorkingsessionDto
   ): Promise<DetailsProgramStepActivityWorkingsessionDto> {
-    const record = await this.programStepActivityWorkingsessionService.update(id, updateProgramStepActivityWorkingsessionDto);
+    const record = await this.service.update(id, body);
 
-    const details: DetailsProgramStepActivityWorkingsessionDto = {
-      ...record,
-      managers: await this.programManagerService.fetchProgramItemManagers(record.id, ProgramItemTypeEnum.workingsession),
-      audience: await this.programPerSociologyService.fetchProgramItemSociology(record.id, ProgramItemTypeEnum.workingsession),
-    };
+    const details = await this.extractWorkingsessionDetails(record);
 
     return details;
   }
@@ -128,11 +153,38 @@ export class ProgramStepActivityWorkingsessionController {
     summary: "Delete a program step activity workingsession",
     operationId: "removeProgramStepActivityWorkingsession"
   })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    required: true,
+    description: "The ID of the program step activity workingsession to delete.",
+  })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: "The program step activity workingsession has been successfully deleted.",
   })
   async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.programStepActivityWorkingsessionService.remove(id);
+    return this.service.remove(id);
+  }
+
+  /**
+   * Extracts workingsession details including managers and audience.
+   * @param workingsession - The workingsession entity to extract details from.
+   * @returns A Promise that resolves to a DetailsProgramStepActivityWorkingsessionDto object containing the workingsession details.
+   */
+  private async extractWorkingsessionDetails(workingsession: ProgramStepActivityWorkingsessionEntity): Promise<DetailsProgramStepActivityWorkingsessionDto> {
+    const programCriteria = {
+      itemId: workingsession.id,
+      itemType: ProgramItemTypeEnum.workingsession,
+    };
+
+    const managersFound = await this.programManagerService.findAll(programCriteria);
+    const audienceFound = await this.programPerSociologyService.findAll(programCriteria);
+
+    return {
+      ...workingsession,
+      managers: managersFound.items.map((programManager) => programManager.manager), 
+      audience: audienceFound.items.map((programPerSociology) => programPerSociology.sociology),
+    };
   }
 }

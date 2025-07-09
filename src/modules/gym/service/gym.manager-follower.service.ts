@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -11,26 +11,33 @@ import { GymManagerFollowerEntity } from '../entity';
 export class GymManagerFollowerService {
   constructor(
     @InjectRepository(GymManagerFollowerEntity)
-    private readonly gymManagerFollowerRepository: Repository<GymManagerFollowerEntity>,
+    private readonly repository: Repository<GymManagerFollowerEntity>,
   ) {}
 
-  async create(createDto: CreateGymManagerFollowerDto, userId: number): Promise<GymManagerFollowerEntity> {
-    const follower = this.gymManagerFollowerRepository.create({
-      ...createDto,
-      followerUserId: createDto.followerUserId || userId,
-      acceptedDate: createDto.acceptedDate || new Date(),
-      createdAt: new Date()
-    });
-    return await this.gymManagerFollowerRepository.save(follower);
+  async create(createDto: CreateGymManagerFollowerDto): Promise<GymManagerFollowerEntity> {
+
+    if (await this.isFollowing(createDto.followerUserId, createDto.managerId)) {
+      throw new ConflictException(`User ${createDto.followerUserId} is already a follower of Gym ${createDto.managerUserId}`);
+    }
+
+    const follower = this.repository.create(createDto);
+    return await this.repository.save(follower);
   }
 
-  async findByManager(
+  async isFollowing(userId: number, managerId: number): Promise<GymManagerFollowerEntity> {
+    const follower = await this.repository.findOne({
+      where: { managerId, followerUserId: userId }
+    });
+    return follower;
+  }
+
+  async findAllFollowersOfManager(
     managerId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymManagerFollowerEntity>> {
-    const queryBuilder = this.gymManagerFollowerRepository.createQueryBuilder('follower')
-      .where('follower.managerId = :managerId', { managerId })
-      .orderBy('follower.createdAt', 'DESC');
+    const queryBuilder = this.repository.createQueryBuilder('mfollower')
+      .where('mfollower.managerId = :managerId', { managerId })
+      .orderBy('mfollower.acceptedDate', 'ASC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -52,13 +59,13 @@ export class GymManagerFollowerService {
     };
   }
 
-  async findByUser(
+  async findAllManagersFollowedByUser(
     userId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymManagerFollowerEntity>> {
-    const queryBuilder = this.gymManagerFollowerRepository.createQueryBuilder('follower')
-      .where('follower.followerUserId = :userId', { userId })
-      .orderBy('follower.createdAt', 'DESC');
+    const queryBuilder = this.repository.createQueryBuilder('mfollower')
+      .where('mfollower.followerUserId = :userId', { userId })
+      .orderBy('mfollower.acceptedDate', 'ASC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -81,21 +88,44 @@ export class GymManagerFollowerService {
   }
 
   async findOne(id: number): Promise<GymManagerFollowerEntity> {
-    return await this.gymManagerFollowerRepository.findOne({
+    return await this.repository.findOne({
       where: { id },
       relations: ['manager', 'follower']
     });
   }
 
-  async update(id: number, updateDto: UpdateGymManagerFollowerDto, userId: number): Promise<GymManagerFollowerEntity> {
-    await this.gymManagerFollowerRepository.update(
-      { id, followerUserId: userId },
-      updateDto
+  async acceptFollower(userId: number, managerId: number): Promise<void> {
+    await this.repository.update(
+      { managerId, followerUserId: userId },
+      { accepted: true, acceptedDate: new Date() }
     );
-    return this.findOne(id);
   }
 
-  async remove(id: number, userId: number): Promise<void> {
-    await this.gymManagerFollowerRepository.delete({ id, followerUserId: userId });
+  async stopFollowing(userId: number, managerId: number): Promise<void> {
+    await this.repository.update(
+      { managerId, followerUserId: userId },
+      { stopped: true, stoppedDate: new Date() }
+    );
+  }
+
+  async rejectFollower(userId: number, managerId: number): Promise<void> {
+    await this.repository.update(
+      { managerId, followerUserId: userId },
+      { rejected: true, rejectedDate: new Date() }
+    );
+  }
+
+  async blockFollower(managerId: number, userId: number): Promise<void> {
+    await this.repository.update(
+      { managerId, followerUserId: userId },
+      { blocked: true, blockedDate: new Date() }
+    );
+  }
+
+  async unblockFollower(managerId: number, userId: number): Promise<void> {
+    await this.repository.update(
+      { managerId, followerUserId: userId },
+      { blocked: false, blockedDate: null }
+    );
   }
 }

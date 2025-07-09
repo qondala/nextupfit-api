@@ -1,17 +1,18 @@
 
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
-
-import { DetailsGymDto, DetailsGymMembershipPlanFeaturesDto } from ".";
-import { IsArray, IsDefined, ValidateNested } from "class-validator";
+import { IsArray, IsDefined, IsInt, IsNotEmpty, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
+import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
+import { SwaggerType } from "@app/common/types";
 
+import { DetailsGymDto } from ".";
+import { DetailsContentDto } from "@app/module/content/dto";
 
 export class DetailsGymMembershipPlanDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
@@ -19,7 +20,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Gym id",
     required: true,
   })
@@ -27,7 +28,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Plan name",
     required: true,
   })
@@ -35,7 +36,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.NUMBER,
     description: "Price",
     required: true,
   })
@@ -43,7 +44,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Trial number days",
     required: false,
   })
@@ -59,7 +60,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Description",
     required: true,
   })
@@ -67,7 +68,7 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: "Trial number program activities",
     required: true,
   })
@@ -86,19 +87,27 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: () => DetailsGymMembershipPlanFeaturesDto,
-    isArray: true,
-    description: "Features",
+    type: SwaggerType.INTEGER,
+    description: "Content id",
     required: true,
   })
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => DetailsGymMembershipPlanFeaturesDto)
-  features: DetailsGymMembershipPlanFeaturesDto[];
-
+  @IsNotEmpty()
+  @IsInt()
+  contentId: number;
 
   @ApiProperty({
-    type: Date,
+    type: () => DetailsContentDto,
+    description: "Content details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsContentDto)
+  content: DetailsContentDto;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "Created at",
     example: new Date(),
     required: false,
@@ -107,11 +116,11 @@ export class DetailsGymMembershipPlanDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "Updated at",
     example: new Date(),
     required: false,
   })
   updatedAt?: Date;
-
 }

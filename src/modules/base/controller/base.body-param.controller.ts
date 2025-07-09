@@ -5,21 +5,36 @@ import {
   Put, 
   Delete, 
   Body, 
-  Param, 
-  NotFoundException,
+  Param,
   HttpStatus,
   HttpCode,
   Query,
   UseGuards
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBearerAuth,
+  ApiQuery,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
+import { SwaggerType } from '@app/common/types';
+
+import {
+  CreateBaseBodyParamDto,
+  UpdateBaseBodyParamDto,
+  PaginatedDetailsBaseBodyParamDto,
+  DetailsBaseBodyParamDto
+} from '../dto';
 
 import { BaseBodyParamService } from '../service';
-import { BaseBodyParamEntity } from '../entity';
-import { CreateBaseBodyParamDto, UpdateBaseBodyParamDto } from '../dto';
+import { ErrorResponseException, ErrorResponseExceptionType, SystemStatusCode } from '@app/common/exceptions';
 
 
 @ApiTags("Base module endpoints")
@@ -30,30 +45,45 @@ export class BaseBodyParamController {
   constructor(private readonly baseBodyParamService: BaseBodyParamService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new body parameter' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'The body parameter has been successfully created.',
-    type: BaseBodyParamEntity 
+  @ApiOperation({
+    summary: 'Create a new body parameter',
+    description: 'Create a new body parameter',
+    operationId: 'createBodyParam'
   })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseBodyParamDto: CreateBaseBodyParamDto): Promise<BaseBodyParamEntity> {
+  @ApiCreatedResponse({
+    description: 'The body parameter has been successfully created.',
+    type: DetailsBaseBodyParamDto
+  })
+  async create(@Body() createBaseBodyParamDto: CreateBaseBodyParamDto): Promise<DetailsBaseBodyParamDto> {
     return this.baseBodyParamService.create(createBaseBodyParamDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all body parameters with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    summary: 'Get all body parameters with pagination',
+    description: 'Get all body parameters with pagination',
+    operationId: 'findAllBodyParams'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
     description: 'Paginated list of body parameters',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseBodyParamDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseBodyParamEntity>> {
+  ): Promise<PaginatedDetailsBaseBodyParamDto> {
     return this.baseBodyParamService.findAll({
       page: +page,
       limit: +limit
@@ -61,20 +91,38 @@ export class BaseBodyParamController {
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search body parameters by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    summary: 'Search body parameters by query string with pagination',
+    description: 'Search body parameters by query string with pagination',
+    operationId: 'searchBodyParams'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
     description: 'Paginated search results of body parameters',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseBodyParamDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseBodyParamEntity>> {
+  ): Promise<PaginatedDetailsBaseBodyParamDto> {
     return this.baseBodyParamService.search(query, {
       page: +page,
       limit: +limit
@@ -82,70 +130,135 @@ export class BaseBodyParamController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific body parameter by ID' })
-  @ApiParam({ name: 'id', description: 'Body parameter ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found body parameter',
-    type: BaseBodyParamEntity
+  @ApiOperation({
+    summary: 'Get a specific body parameter by ID',
+    description: 'Get a specific body parameter by ID',
+    operationId: 'findBodyParamById'
   })
-  @ApiResponse({ status: 404, description: 'Body parameter not found' })
-  async findOne(@Param('id') id: string): Promise<BaseBodyParamEntity> {
+  @ApiParam({
+    name: 'id',
+    description: 'Body parameter ID',
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
+    description: 'The found body parameter',
+    type: DetailsBaseBodyParamDto
+  })
+  @ApiNotFoundResponse({
+    description: 'Body parameter not found',
+    type: ErrorResponseException,
+  })
+  async findOne(@Param('id') id: string): Promise<DetailsBaseBodyParamDto> {
     const param = await this.baseBodyParamService.findOne(+id);
     if (!param) {
-      throw new NotFoundException(`Body parameter with ID ${id} not found`);
+      throw new ErrorResponseException(
+        ErrorResponseExceptionType.DATABASE,
+        `Body parameter with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+        SystemStatusCode.NOT_FOUND
+      );
     }
     return param;
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a body parameter by ID' })
-  @ApiParam({ name: 'id', description: 'Body parameter ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated body parameter',
-    type: BaseBodyParamEntity
+  @ApiOperation({
+    summary: 'Update a body parameter by ID',
+    description: 'Update a body parameter by ID',
+    operationId: 'updateBodyParamById'
   })
-  @ApiResponse({ status: 404, description: 'Body parameter not found' })
+  @ApiParam({
+    name: 'id',
+    description: 'Body parameter ID',
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
+    description: 'The updated body parameter',
+    type: DetailsBaseBodyParamDto
+  })
+  @ApiNotFoundResponse({
+    description: 'Body parameter not found',
+    type: ErrorResponseException,
+  })
   async update(
     @Param('id') id: string,
     @Body() updateBaseBodyParamDto: UpdateBaseBodyParamDto,
-  ): Promise<BaseBodyParamEntity> {
+  ): Promise<DetailsBaseBodyParamDto> {
     const param = await this.baseBodyParamService.update(+id, updateBaseBodyParamDto);
     if (!param) {
-      throw new NotFoundException(`Body parameter with ID ${id} not found`);
+      throw new ErrorResponseException(
+        ErrorResponseExceptionType.DATABASE,
+        `Body parameter with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+        SystemStatusCode.NOT_FOUND
+      );
     }
     return param;
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a body parameter by ID' })
-  @ApiParam({ name: 'id', description: 'Body parameter ID' })
-  @ApiResponse({ status: 204, description: 'The body parameter has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Body parameter not found' })
+  @ApiOperation({
+    summary: 'Delete a body parameter by ID',
+    description: 'Delete a body parameter by ID',
+    operationId: 'deleteBodyParamById'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Body parameter ID',
+    type: SwaggerType.INTEGER
+  })
+  @ApiNoContentResponse({
+    description: 'The body parameter has been successfully deleted'
+  })
+  @ApiNotFoundResponse({
+    description: 'Body parameter not found',
+    type: ErrorResponseException,
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
     const result = await this.baseBodyParamService.remove(+id);
     if (!result) {
-      throw new NotFoundException(`Body parameter with ID ${id} not found`);
+      throw new ErrorResponseException(
+        ErrorResponseExceptionType.DATABASE,
+        `Body parameter with ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+        SystemStatusCode.NOT_FOUND
+      );
     }
   }
 
   @Get('unit/:unitId')
-  @ApiOperation({ summary: 'Get body parameters by unit ID' })
-  @ApiParam({ name: 'unitId', description: 'Unit ID' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiResponse({
-    status: 200,
+  @ApiOperation({
+    summary: 'Get body parameters by unit ID',
+    description: 'Get body parameters by unit ID',
+    operationId: 'findBodyParamsByUnitId'
+  })
+  @ApiParam({
+    name: 'unitId',
+    description: 'Unit ID',
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiOkResponse({
     description: 'Paginated list of body parameters for the specified unit',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseBodyParamDto
   })
   async findByUnitId(
     @Param('unitId') unitId: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseBodyParamEntity>> {
+  ): Promise<PaginatedDetailsBaseBodyParamDto> {
     return this.baseBodyParamService.findByUnitId(+unitId, {
       page: +page,
       limit: +limit

@@ -12,11 +12,13 @@ import {
 import { GymSpecialityEnum, GymVerifiedStatusEnum } from '../types';
 
 import {
+  GymInterestEntity,
   GymManagerEntity,
   GymMembershipPlanEntity,
+  GymOpenDayEntity,
+  GymSpecializedInNutritionEntity,
   GymSpecializedInWorkoutEntity
 } from './';
-import { UserEntity } from '@app/module/user/entity';
 
 @Entity('gym')
 export class GymEntity {
@@ -26,6 +28,12 @@ export class GymEntity {
 
   @Column({ nullable: false })
   createdByUserId: number;
+
+  @Column({ nullable: false })
+  createdByManagerId: number;
+
+  @Column({ nullable: false })
+  proprietorManagerId: number;
 
 
   @Column({ nullable: false })
@@ -122,18 +130,28 @@ export class GymEntity {
   @Column({ nullable: true })
   ratingsCount: number;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'createdByUserId' })
-  owner: UserEntity;
+  @ManyToOne(() => GymManagerEntity)
+  @JoinColumn({ name: 'createdByManagerId' })
+  owner: GymManagerEntity;
 
-  @OneToMany(() => GymManagerEntity, manager => manager.gym)
-  managers: GymManagerEntity[];
+  @ManyToOne(() => GymManagerEntity)
+  @JoinColumn({ name: 'proprietorManagerId' })
+  proprietor: GymManagerEntity
 
   @OneToMany(() => GymMembershipPlanEntity, plan => plan.gym)
   membershipPlans: GymMembershipPlanEntity[];
 
   @OneToMany(() => GymSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.gym)
   specializedWorkouts: GymSpecializedInWorkoutEntity[];
+
+  @OneToMany(() => GymSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.gym)
+  specializedNutritions: GymSpecializedInNutritionEntity[];
+
+  @OneToMany(() => GymOpenDayEntity, openDay => openDay.gym)
+  openDays: GymOpenDayEntity[];
+
+  @OneToMany(() => GymInterestEntity, interest => interest.gym)
+  interests: GymInterestEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

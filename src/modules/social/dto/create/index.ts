@@ -1,10 +1,14 @@
 export * from './create.social.advertisement.dto';
+export * from './create.social.advertisement-interest.dto';
 export * from './create.social.affiliate-link.dto';
 export * from './create.social.affiliate-program.dto';
 export * from './create.social.affiliate-sale.dto';
 export * from './create.social.chat-message.dto';
 export * from './create.social.chat.dto';
-export * from './create.social.news.dto';
 export * from './create.social.notification.dto';
 export * from './create.social.review.dto';
 export * from './create.social.chat-message-text.dto';
+export * from './create.social.ratings.dto';
+export * from './create.social.update.dto';
+export * from './create.social.update-content.dto';
+

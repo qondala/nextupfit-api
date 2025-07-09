@@ -12,7 +12,8 @@ export class PaginatedDetailsSocialReviewDto extends PaginatedResponseDto<Detail
     type: () => DetailsSocialReviewDto,
     name: 'items',
     isArray: true,
-    description: 'List of reviews'
+    description: 'List of reviews',
+    required: true
   })
   @IsDefined()
   @IsArray()

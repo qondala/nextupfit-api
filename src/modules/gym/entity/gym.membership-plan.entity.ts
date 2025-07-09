@@ -3,14 +3,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  OneToMany,
   UpdateDateColumn,
   JoinColumn,
   ManyToOne
 } from "typeorm";
 
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
-import { GymEntity, GymMembershipPlanFeaturesEntity } from "./";
+import { GymEntity } from "./";
+import { ContentEntity } from "@app/module/content/entity";
 
 @Entity("gym_membership_plan")
 export class GymMembershipPlanEntity {
@@ -47,15 +47,24 @@ export class GymMembershipPlanEntity {
   @Column({ nullable: true })
   trialNumberProgramActivities: number;
 
+
+  @Column({ nullable: true })
+  contentId: number;
+
+
+  @ManyToOne(() => ContentEntity)
+  @JoinColumn({ name: 'contentId' })
+  content: ContentEntity;
+
+
   @ManyToOne(() => GymEntity)
   @JoinColumn({ name: 'gymId' })
   gym: GymEntity;
 
-  @OneToMany(() => GymMembershipPlanFeaturesEntity, feature => feature.membershipPlan)
-  features: GymMembershipPlanFeaturesEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
+
 
   @UpdateDateColumn()
   updatedAt: Date;

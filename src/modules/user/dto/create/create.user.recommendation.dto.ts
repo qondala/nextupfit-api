@@ -1,40 +1,46 @@
-import { IsNotEmpty, IsOptional, IsDate, IsEnum, IsNumber } from "class-validator";
+import { IsNotEmpty, IsOptional, IsDate, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateUserRecommendationDto {
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Recommended coach user Id",
     example: 11234,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   recommendedManagerUserId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Recommender user id",
     example: 11234,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   recommenderUserId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Recommendee user id",
     example: 11234,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   recommendeeUserId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
     description: "Recommendation date",
     example: Date(),
     required: false,

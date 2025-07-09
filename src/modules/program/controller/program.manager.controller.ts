@@ -11,36 +11,59 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+  ApiBody
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { SwaggerType } from "@app/common/types";
+import {
+  JwtAuthGuard,
+  RolesGuard,
+} from "@app/common/guards";
+
 import { PaginationOptionsDto } from "@app/common/dto";
-import { ProgramManagerService } from "../service";
-import { ProgramItemTypeEnum } from "@app/module/program/types";
-import { CreateProgramManagerDto } from "../dto/create/create.program.manager.dto";
-import { UpdateProgramManagerDto } from "../dto/update/update.program.manager.dto";
-import { DetailsProgramManagerDto } from "../dto/details";
-import { PaginatedDetailsProgramManagerDto } from "../dto/paginated";
 
-@ApiTags("Programs")
+import {
+  CreateProgramManagerDto,
+  UpdateProgramManagerDto,
+  DetailsProgramManagerDto,
+  PaginatedDetailsProgramManagerDto,
+  ProgramFindCriteriaManagerDto
+} from "../dto";
+
+import { ProgramManagerService } from "../service";
+
+
+@ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("programs/managers")
+@Controller("program/manager")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramManagerController {
-  constructor(private readonly programManagerService: ProgramManagerService) {}
+  constructor(private readonly service: ProgramManagerService) {}
 
   @Post()
   @ApiOperation({
     summary: "Create a new program manager",
     operationId: "createProgramManager"
   })
+  @ApiBody({
+    type: CreateProgramManagerDto,
+    required: true,
+    description: "Program manager data",
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "The program manager has been successfully created.",
     type: DetailsProgramManagerDto,
   })
-  create(@Body() createProgramManagerDto: CreateProgramManagerDto): Promise<DetailsProgramManagerDto> {
-    return this.programManagerService.create(createProgramManagerDto);
+  create(@Body() body: CreateProgramManagerDto): Promise<DetailsProgramManagerDto> {
+    return this.service.create(body);
   }
 
   @Get()
@@ -48,13 +71,25 @@ export class ProgramManagerController {
     summary: "Get all program managers with pagination",
     operationId: "findAllProgramManagers"
   })
+  @ApiQuery({
+    type: ProgramFindCriteriaManagerDto,
+    required: false,
+    description: "Pagination options",
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+    description: "Pagination options",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Successfully retrieved program managers.",
     type: PaginatedDetailsProgramManagerDto,
   })
-  findAll(@Query() paginationOptions: PaginationOptionsDto): Promise<PaginatedDetailsProgramManagerDto> {
-    return this.programManagerService.findAll(paginationOptions);
+  findAll(
+    @Query() criteria: ProgramFindCriteriaManagerDto,
+    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsProgramManagerDto> {
+    return this.service.findAll(criteria, pagination);
   }
 
   @Get(':id')
@@ -62,50 +97,37 @@ export class ProgramManagerController {
     summary: "Get a program manager by ID",
     operationId: "findOneProgramManager"
   })
+  @ApiParam({
+    name: "id",
+    description: "Program manager id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Successfully retrieved program manager.",
     type: DetailsProgramManagerDto,
   })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsProgramManagerDto> {
-    return this.programManagerService.findOne(id);
+    return this.service.findOne(id);
   }
 
-  @Get('manager/:managerId')
-  @ApiOperation({
-    summary: "Get program managers by manager ID",
-    operationId: "findByManagerId"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Successfully retrieved program managers for the manager.",
-    type: [DetailsProgramManagerDto],
-  })
-  findByManagerId(@Param('managerId', ParseIntPipe) managerId: number): Promise<DetailsProgramManagerDto[]> {
-    return this.programManagerService.findByManagerId(managerId);
-  }
-
-  @Get('item/:itemType/:itemId')
-  @ApiOperation({
-    summary: "Get program managers by item type and ID",
-    operationId: "findByItemTypeAndItemId"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Successfully retrieved program managers for the item.",
-    type: [DetailsProgramManagerDto],
-  })
-  findByItemTypeAndItemId(
-    @Param('itemType') itemType: ProgramItemTypeEnum,
-    @Param('itemId', ParseIntPipe) itemId: number
-  ): Promise<DetailsProgramManagerDto[]> {
-    return this.programManagerService.findByItemTypeAndItemId(itemType, itemId);
-  }
 
   @Patch(':id')
   @ApiOperation({
     summary: "Update a program manager",
     operationId: "updateProgramManager"
+  })
+  @ApiParam({
+    name: "id",
+    description: "Program manager id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiBody({
+    type: UpdateProgramManagerDto,
+    required: true,
+    description: "Program manager data",
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -114,9 +136,9 @@ export class ProgramManagerController {
   })
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateProgramManagerDto: UpdateProgramManagerDto
+    @Body() body: UpdateProgramManagerDto
   ): Promise<DetailsProgramManagerDto> {
-    return this.programManagerService.update(id, updateProgramManagerDto);
+    return this.service.update(id, body);
   }
 
   @Delete(':id')
@@ -124,11 +146,17 @@ export class ProgramManagerController {
     summary: "Delete a program manager",
     operationId: "removeProgramManager"
   })
+  @ApiParam({
+    name: "id",
+    description: "Program manager id",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
     description: "The program manager has been successfully deleted.",
   })
   remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.programManagerService.remove(id);
+    return this.service.remove(id);
   }
 }

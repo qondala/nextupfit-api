@@ -1,5 +1,13 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+
+import { SwaggerType } from "@app/common/types";
 
 import { BaseUnitContainanceEnum } from "../../types";
 
@@ -7,6 +15,7 @@ import { BaseUnitContainanceEnum } from "../../types";
 export class CreateBaseUnitDto {
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Unit's name",
     example: "Kilogram",
     required: true
@@ -17,6 +26,7 @@ export class CreateBaseUnitDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Unit's abbreviation",
     example: "kg",
     required: true
@@ -27,6 +37,8 @@ export class CreateBaseUnitDto {
 
 
   @ApiProperty({
+    enum: BaseUnitContainanceEnum,
+    enumName: "BaseUnitContainanceEnum",
     description: "Unit's containance",
     example: BaseUnitContainanceEnum.weight,
     required: true,
@@ -37,10 +49,11 @@ export class CreateBaseUnitDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Unit's display order",
     example: 1,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   order?: number;
 }

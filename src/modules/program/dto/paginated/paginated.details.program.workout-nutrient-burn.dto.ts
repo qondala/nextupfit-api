@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramWorkoutNutrientBurnDto extends PaginatedResp
     type: () => DetailsProgramWorkoutNutrientBurnDto,
     name: 'items',
     isArray: true,
-    description: 'List of program workout nutrient burns'
+    description: 'List of program workout nutrient burns',
+    required: true
   })
   @IsDefined()
   @IsArray()

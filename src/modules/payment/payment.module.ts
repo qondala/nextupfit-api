@@ -3,37 +3,55 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
   PaymentEntity,
-  PaymentTransferEntity
+  PaymentTransferEntity,
+  PaymentCartEntity,
+  PaymentCartItemEntity,
 } from './entity';
-
 import {
   PaymentController,
-  PaymentTransferController
+  PaymentTransferController,
+  PaymentCartController,
+  PaymentCartItemController
 } from './controller';
-
 import {
   PaymentService,
-  PaymentTransferService
+  PaymentTransferService,
+  PaymentCartService,
+  PaymentCartItemService,
 } from './service';
+
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       PaymentEntity,
-      PaymentTransferEntity
-    ])
+      PaymentTransferEntity,
+      PaymentCartEntity,
+      PaymentCartItemEntity,
+    ]),
   ],
   controllers: [
     PaymentController,
-    PaymentTransferController
+    PaymentTransferController,
+    PaymentCartController,
+    PaymentCartItemController,
   ],
   providers: [
     PaymentService,
-    PaymentTransferService
+    PaymentTransferService,
+    PaymentCartService,
+    PaymentCartItemService,
   ],
   exports: [
     PaymentService,
-    PaymentTransferService
-  ]
+    PaymentTransferService,
+    PaymentCartService,
+    PaymentCartItemService,
+  ],
 })
 export class PaymentModule {}
+
+
+
+
+

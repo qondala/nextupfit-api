@@ -6,6 +6,7 @@ import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
 
 import { CreateGymMembershipDto, UpdateGymMembershipDto } from '../dto';
 import { GymMembershipEntity } from '../entity';
+import { GymMembershipStatusEnum } from '../types';
 
 @Injectable()
 export class GymMembershipService {
@@ -16,8 +17,10 @@ export class GymMembershipService {
 
   async create(createDto: CreateGymMembershipDto): Promise<GymMembershipEntity> {
 
-    if (await this.isMember(createDto.gymId, createDto.memberUserId)) {
-      throw new ConflictException(`User ${createDto.memberUserId} is already member of Gym ${createDto.gymId}`);
+    // Check if user is already a member of the gym in the plan
+    // NB: A user cannot request a membership with the same plan in the same gym
+    if (await this.isMemberWithPlanId(createDto.memberUserId,createDto.gymId, createDto.gymMembershipPlanId)) {
+      throw new ConflictException(`User ${createDto.memberUserId} is already member of Gym ${createDto.gymId} in the plan ${createDto.gymMembershipPlanId}`);
     }
 
     const membership = this.gymMembershipRepository.create({
@@ -27,14 +30,46 @@ export class GymMembershipService {
     return await this.gymMembershipRepository.save(membership);
   }
 
-  async isMember(gymId: number, userId: number): Promise<boolean> {
+  async isMemberWithPlanId(
+    userId: number,
+    gymId: number,
+    gymMembershipPlanId: number): Promise<boolean> {
     const openings = await this.gymMembershipRepository.find({
-      where: { gymId, memberUserId: userId }
+      where: { memberUserId: userId, gymId, gymMembershipPlanId }
     });
     return openings.length > 0;
   }
 
-  async findByGym(
+  async getUserGymMembershipWithPlanId(
+    userId: number,
+    gymId: number,
+    gymMembershipPlanId: number): Promise<GymMembershipEntity> {
+    return await this.gymMembershipRepository.findOne({
+      where: { memberUserId: userId, gymId, gymMembershipPlanId }
+    });
+  }
+
+  async updateGymMembershipStatusByPlanId(
+    userId: number,
+    gymId: number,
+    gymMembershipPlanId: number,
+    status: GymMembershipStatusEnum): Promise<void> {
+    await this.gymMembershipRepository.update(
+      { memberUserId: userId, gymId, gymMembershipPlanId },
+      { membershipStatus: status, lastStatusUpdate: new Date() }
+    );
+    return;
+  }
+
+  async updateGymMembershipStatusById(id: number, status: GymMembershipStatusEnum): Promise<void> {
+    await this.gymMembershipRepository.update(
+      { id },
+      { membershipStatus: status, lastStatusUpdate: new Date() }
+    );
+    return;
+  }
+
+  async getAllMembershipsOfGym(
     gymId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymMembershipEntity>> {
@@ -62,12 +97,42 @@ export class GymMembershipService {
     };
   }
 
-  async findByUser(
+  async getAllUserGymMemberships(
     userId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymMembershipEntity>> {
     const queryBuilder = this.gymMembershipRepository.createQueryBuilder('membership')
       .where('membership.memberUserId = :userId', { userId })
+      .orderBy('membership.createdAt', 'DESC');
+
+    const skip = (paginationOptions.page - 1) * paginationOptions.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(paginationOptions.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / paginationOptions.limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: paginationOptions.limit,
+        totalPages,
+        currentPage: paginationOptions.page
+      }
+    };
+  }
+
+  async getAllUserAndGymMemberships(
+    userId: number,
+    gymId: number,
+    paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedResponseDto<GymMembershipEntity>> {
+    const queryBuilder = this.gymMembershipRepository.createQueryBuilder('membership')
+      .where('membership.memberUserId = :userId', { userId })
+      .andWhere('membership.gymId = :gymId', { gymId })
       .orderBy('membership.createdAt', 'DESC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
@@ -97,9 +162,9 @@ export class GymMembershipService {
     });
   }
 
-  async update(id: number, updateDto: UpdateGymMembershipDto, userId: number): Promise<GymMembershipEntity> {
+  async update(id: number, updateDto: UpdateGymMembershipDto): Promise<GymMembershipEntity> {
     await this.gymMembershipRepository.update(
-      { id, memberUserId: userId },
+      { id },
       updateDto
     );
     return this.findOne(id);

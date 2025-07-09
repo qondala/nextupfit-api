@@ -1,67 +1,428 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  UseGuards,
+  HttpStatus,
+  ParseIntPipe,
+  ParseArrayPipe,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiQuery,
+  ApiParam,
+} from '@nestjs/swagger';
 
-import { User } from '@app/common/decorators';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginationOptionsDto } from '@app/common/dto';
 
-import { CreateGymManagerDto, UpdateGymManagerDto } from '../dto';
+import {
+  CreateGymManagerDto,
+  DetailsGymManagerDto,
+  UpdateGymManagerDto,
+  PaginatedDetailsGymManagerDto,
+} from '../dto';
 import { GymManagerService } from '../service';
-import { GymManagerEntity } from '../entity';
+import { SwaggerType } from '@app/common/types';
+import { GymManagerSpecialityEnum } from '../types';
+import { ParseEnumArrayPipe } from '@app/common/pipes';
 
 @ApiTags('Gym module endpoints')
 @ApiBearerAuth()
 @Controller('gym/manager')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class GymManagerController {
-  constructor(private readonly gymManagerService: GymManagerService) {}
+  constructor(
+    private readonly gymManagerService: GymManagerService
+  ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new gym manager' })
-  @ApiResponse({ status: 201, description: 'Gym manager created successfully.' })
-  create(
+  @ApiOperation({
+    summary: 'Create a new gym manager',
+    description: 'Create a new gym manager',
+    operationId: 'createGymManager',
+  })
+  @ApiBody({
+    required: true,
+    type: CreateGymManagerDto
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Gym manager created successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async create(
     @Body() createDto: CreateGymManagerDto,
-  ) {
-    return this.gymManagerService.create(createDto);
+  ): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.create(createDto);
   }
 
-  @Get('gym/:gymId')
-  @ApiOperation({ summary: 'Get all managers of a gym' })
-  async findByGym(
-    @Param('gymId') gymId: string,
-    @Query() paginationOptions: PaginationOptionsDto
-  ): Promise<PaginatedResponseDto<GymManagerEntity>> {
-    return this.gymManagerService.findByGym(+gymId, paginationOptions);
+
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Get gym manager by id',
+    description: 'Get gym manager by id',
+    operationId: 'getGymManagerById',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager retrieved successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async getManager(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.findOne(id);
+  }
+
+  @Get('flat/:id')
+  @ApiOperation({
+    summary: 'Get gym manager by id',
+    description: 'Get gym manager by id',
+    operationId: 'getGymManagerById',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager retrieved successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async getFlatManager(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.getFlatOne(id);
+  }
+
+  @Get('overview-and-user/:id')
+  @ApiOperation({
+    summary: 'Get gym manager by id',
+    description: 'Get gym manager by id',
+    operationId: 'getGymManagerById',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager retrieved successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async getManagerWithUserAndOverview(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.getManagerWithUserAndOverview(id);
+  }
+
+
+  @Get('overview/:id')
+  @ApiOperation({
+    summary: 'Get gym manager by id',
+    description: 'Get gym manager by id',
+    operationId: 'getGymManagerById',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager retrieved successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async getManagerWithOverview(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.getManagerWithOverview(id);
   }
 
   @Get('user/:userId')
-  @ApiOperation({ summary: 'Get all gyms managed by a user' })
-  async findByUser(
-    @Param('userId') userId: string,
-    @Query() paginationOptions: PaginationOptionsDto
-  ): Promise<PaginatedResponseDto<GymManagerEntity>> {
-    return this.gymManagerService.findByUser(+userId, paginationOptions);
+  @ApiOperation({
+    summary: 'Get gym manager by user id',
+    description: 'Get gym manager by user id',
+    operationId: 'getGymManagerByUserId',
+  })
+  @ApiParam({
+    name: 'userId',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager retrieved successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async findManagerWithUserId(@Param('userId', ParseIntPipe) userId: number): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.findManagerWithUserId(userId);
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get gym manager by id' })
-  findOne(@Param('id') id: string) {
-    return this.gymManagerService.findOne(+id);
+
+  @Get('best-rated-attended')
+  @ApiOperation({
+    operationId: 'findBestRatedAndAttendedGymManagers',
+    summary: 'Get best rated and attended gym managers'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of gym managers with best rated and attended overview.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findBestRatedAndAttendedGymManagers(
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return this.gymManagerService.findBestRatedAndAttendedGymManagers(pagination);
+  }
+
+  @Get('best-rated-attended-overview/specializations')
+  @ApiOperation({
+    operationId: 'findGymManagersWithBestRatedAndAttendedOverviewSpecializations',
+    summary: 'Get gym managers with best rated and attended overview by specializations'
+  })
+  @ApiQuery({
+    name: 'specialities',
+    required: true,
+    enum: GymManagerSpecialityEnum,
+    enumName: "GymManagerSpecialityEnum",
+    isArray: true,
+    description: 'Array of gym manager specialities (fitness, nutrition, dance)'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of gym managers with best rated and attended overview by specializations.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findGymManagersWithBestRatedAndAttendedOverviewSpecializations(
+    @Query('specialities', new ParseEnumArrayPipe(GymManagerSpecialityEnum)) specialities: GymManagerSpecialityEnum[],
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return this.gymManagerService.findGymManagersWithBestRatedAndAttendedOverviewSpecializations(
+      Array.isArray(specialities) ? specialities : [specialities],
+      pagination
+    );
+  }
+
+  @Get('best-rated-attended-overview/specialized-workouts-or-nutritions')
+  @ApiOperation({
+    operationId: 'findGymManagersWithBestRatedAndAttendedOverviewSpecializedInWorkoutsOrNutritions',
+    summary: 'Get gym managers with best rated and attended overview specialized in workouts OR nutritions'
+  })
+  @ApiQuery({
+    name: 'specializedNutritions',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of nutrition IDs'
+  })
+  @ApiQuery({
+    name: 'specializedWorkouts',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of workout IDs'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of gym managers with best rated and attended overview specialized in workouts or nutritions.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findGymManagersWithBestRatedAndAttendedOverviewSpecializedInWorkoutsOrNutritions(
+    @Query('specializedNutritions', new ParseArrayPipe({ items: Number })) specializedNutritions: number[],
+    @Query('specializedWorkouts', new ParseArrayPipe({ items: Number })) specializedWorkouts: number[],
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return this.gymManagerService.findGymManagersWithBestRatedAndAttendedOverviewSpecializedInWorkoutsOrNutritions(
+      Array.isArray(specializedNutritions) ? specializedNutritions : [specializedNutritions],
+      Array.isArray(specializedWorkouts) ? specializedWorkouts : [specializedWorkouts],
+      pagination
+    );
+  }
+
+  @Get('random/specialities')
+  @ApiOperation({
+    operationId: 'findRandomGymManagersWithSpecialities',
+    summary: 'Get random gym managers with specific specialities'
+  })
+  @ApiQuery({
+    name: 'specialities',
+    required: true,
+    type: SwaggerType.STRING,
+    isArray: true,
+    description: 'Array of gym manager specialities (fitness, nutrition, dance)'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of random gym managers with specific specialities.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findRandomGymManagersWithSpecialities(
+    @Query('specialities', new ParseEnumArrayPipe(GymManagerSpecialityEnum)) specialities: GymManagerSpecialityEnum[],
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return this.gymManagerService.findRandomGymManagersWithSpecialities(
+      Array.isArray(specialities) ? specialities : [specialities],
+      pagination
+    );
+  }
+
+  @Get('best-rated-attended/specialized-workouts-or-nutritions')
+  @ApiOperation({
+    operationId: 'findBestRatedAndAttendedGymManagersSpecializedInWorkoutsOrNutritions',
+    summary: 'Get best rated and attended gym managers specialized in workouts OR nutritions'
+  })
+  @ApiQuery({
+    name: 'specializedNutritions',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of nutrition IDs'
+  })
+  @ApiQuery({
+    name: 'specializedWorkouts',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of workout IDs'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of best rated and attended gym managers specialized in workouts or nutritions.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findBestRatedAndAttendedGymManagersSpecializedInWorkoutsOrNutritions(
+    @Query('specializedNutritions', new ParseArrayPipe({ items: Number })) specializedNutritions: number[],
+    @Query('specializedWorkouts', new ParseArrayPipe({ items: Number })) specializedWorkouts: number[],
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return this.gymManagerService.findBestRatedAndAttendedGymManagersSpecializedInWorkoutsOrNutritions(
+      Array.isArray(specializedNutritions) ? specializedNutritions : [specializedNutritions],
+      Array.isArray(specializedWorkouts) ? specializedWorkouts : [specializedWorkouts],
+      pagination
+    );
+  }
+
+  @Get('random/specialized-workouts-or-nutritions')
+  @ApiOperation({
+    operationId: 'findRandomGymManagersSpecializedInWorkoutsOrNutritions',
+    summary: 'Get random gym managers specialized in workouts OR nutritions'
+  })
+  @ApiQuery({
+    name: 'specializedNutritions',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of nutrition IDs'
+  })
+  @ApiQuery({
+    name: 'specializedWorkouts',
+    required: true,
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    description: 'Array of workout IDs'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of random gym managers specialized in workouts or nutritions.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async findRandomGymManagersSpecializedInWorkoutsOrNutritions(
+    @Query('specializedNutritions', new ParseArrayPipe({ items: Number })) specializedNutritions: number[],
+    @Query('specializedWorkouts', new ParseArrayPipe({ items: Number })) specializedWorkouts: number[],
+    @Query() pagination: PaginationOptionsDto
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return await this.gymManagerService.findRandomGymManagersSpecializedInWorkoutsOrNutritions(
+      Array.isArray(specializedNutritions) ? specializedNutritions : [specializedNutritions],
+      Array.isArray(specializedWorkouts) ? specializedWorkouts : [specializedWorkouts],
+      pagination
+    );
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update gym manager' })
-  update(
-    @Param('id') id: string,
+  @ApiOperation({
+    summary: 'Update gym manager',
+    description: 'Update gym manager',
+    operationId: 'updateGymManager',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiBody({
+    required: true,
+    type: UpdateGymManagerDto
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Gym manager updated successfully.',
+    type: DetailsGymManagerDto,
+  })
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateGymManagerDto,
-    @User('id') userId: number
-  ) {
-    return this.gymManagerService.update(+id, updateDto, userId);
+  ): Promise<DetailsGymManagerDto> {
+    return await this.gymManagerService.update(id, updateDto);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: 'Delete gym manager' })
-  remove(@Param('id') id: string, @User('id') userId: number) {
-    return this.gymManagerService.remove(+id, userId);
+  @Get('search')
+  @ApiOperation({
+    summary: 'Search gym managers',
+    description: 'Search gym managers',
+    operationId: 'searchGymManagers',
+  })
+  @ApiQuery({
+    name: 'query',
+    required: true,
+    type: SwaggerType.STRING,
+    description: 'Search query'
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of gym managers.',
+    type: PaginatedDetailsGymManagerDto,
+  })
+  async search(
+    @Query('query') query: string,
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsGymManagerDto> {
+    return await this.gymManagerService.search(query, pagination);
   }
 }

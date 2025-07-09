@@ -6,8 +6,10 @@ import {
   IsDate,
   IsString,
   IsEnum,
+  IsBoolean,
 } from "class-validator";
 import { ProgramStepActivityStatusEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateProgramStepActivityDto {
@@ -67,6 +69,14 @@ export class CreateProgramStepActivityDto {
   @IsNumber()
   ownerUserId: number;
   
+  @ApiProperty({
+    description: "Id of the gym manager owning the program",
+    example: 4335,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  ownerManagerId: number;
 
   @ApiProperty({
     description: "Date the program step activity was created",
@@ -190,4 +200,38 @@ export class CreateProgramStepActivityDto {
   @IsOptional()
   @IsNumber()
   position: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the activity a free tool?",
+    example: false,
+    required: false,
+    default: false
+  })
+  @IsOptional()
+  @IsBoolean()
+  isFreeTool?: boolean;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Price of the activity",
+    example: 0,
+    required: false,
+    default: 0
+  })
+  @IsOptional()
+  @IsNumber()
+  price?: number;
+  
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the activity a challenge?",
+    example: false,
+    required: false,
+    default: false
+  })
+  @IsOptional()
+  @IsBoolean()
+  isChallenge?: boolean;
 }

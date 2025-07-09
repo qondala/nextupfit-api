@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramStepActivityWorkingsessionDto extends Pagina
     type: () => DetailsProgramStepActivityWorkingsessionDto,
     name: 'items',
     isArray: true,
-    description: 'List of program step activity working sessions'
+    description: 'List of program step activity working sessions',
+    required: true
   })
   @IsDefined()
   @IsArray()

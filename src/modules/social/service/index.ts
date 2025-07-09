@@ -1,10 +1,14 @@
 export * from './social.advertisement.service';
+export * from './social.advertisement-interest.service';
 export * from './social.affiliate-link.service';
 export * from './social.affiliate-program.service';
 export * from './social.affiliate-sale.service';
 export * from './social.chat-message-text.service';
 export * from './social.chat-message.service';
 export * from './social.chat.service';
-export * from './social.news.service';
+export * from './social.update.service';
 export * from './social.notification.service';
 export * from './social.review.service';
+export * from './social.ratings.service';
+export * from './social.update-content.service';
+

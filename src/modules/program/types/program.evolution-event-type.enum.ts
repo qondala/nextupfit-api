@@ -1,4 +1,4 @@
-export enum ProgamEvolutionEventTypeEnum {
+export enum ProgramEvolutionEventTypeEnum {
   registered = "registered",
   started = "started",
   paused = "paused",
@@ -7,3 +7,4 @@ export enum ProgamEvolutionEventTypeEnum {
   canceled = "canceled",
   done = "done",
 }
+

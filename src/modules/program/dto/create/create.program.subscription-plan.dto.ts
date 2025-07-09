@@ -1,28 +1,32 @@
 import {
   IsNumber,
-  IsDate,
   IsString,
   IsEnum,
-  IsNotEmpty
+  IsNotEmpty,
+  IsInt,
+  IsDate
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
+import { SwaggerType } from "@app/common/types";
 
 
 export class CreateProgramSubscriptionPlanDto {
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Program subscription plan",
     example:"Starter",
     required: true,
   })
-  @IsNumber()
+  @IsString()
   planName: string;
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Plan price",
-    example: Date(),
+    example: 99.99,
     required: true,
   })
   @IsNumber()
@@ -30,15 +34,18 @@ export class CreateProgramSubscriptionPlanDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Trial plan number days",
     example: 10,
     required: false,
   })
   @IsNumber()
-  trialNumberDays: number;
+  trialNumberDays?: number;
 
 
   @ApiProperty({
+    enum: BaseSubscriptionPlanPeriodicityEnum,
+    enumName: "BaseSubscriptionPlanPeriodicityEnum",
     description: "Subscription plan periodicity",
     example: BaseSubscriptionPlanPeriodicityEnum.monthly,
     required: false,
@@ -48,6 +55,7 @@ export class CreateProgramSubscriptionPlanDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Subscription plan description",
     example: "This plan allows you to start with the mimimum budget and upgrade later",
     required: false,
@@ -57,29 +65,31 @@ export class CreateProgramSubscriptionPlanDto {
 
 
   @ApiProperty({
-    description: "Date user trial ends",
-    example: Date(),
-    required: false,
-  })
-  @IsDate()
-  trialEndDate: Date;
-
-
-  @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Number activities accessible by the user within the current trial plan",
     example: 3,
     required: false,
   })
   @IsNumber()
-  trialNumberProgramActivities: number;
+  trialNumberProgramActivities?: number;
 
 
   @ApiProperty({
-    description: "List features accessible by the user within this plan",
-    example: "Can access feature one, Can access feature two, Can access feature three",
+    description: "Program id",
+    example: 1234,
     required: true,
   })
   @IsNotEmpty()
-  @IsString()
-  planFeatures: string;
+  @IsInt()
+  programId: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Content id",
+    example: 1234,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsInt()
+  contentId: number;
 }

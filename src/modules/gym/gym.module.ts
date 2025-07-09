@@ -2,6 +2,29 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {
+  BaseNutritionEntity,
+  BaseProgramGoalEntity,
+  BaseSociologyEntity,
+  BaseWorkoutEntity
+} from '@app/module/base/entity';
+
+import {
+  UserEntity,
+  UserInterestEntity
+} from '@app/module/user/entity';
+
+import {
+  ProgramEntity,
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramStepActivityWorkingsessionWorkoutEntity,
+  ProgramStepEntity
+} from '@app/module/program/entity';
+
+import { ProgramService } from '@app/module/program/service';
+import { UserInterestService } from '@app/module/user/service';
+
+import {
   GymController,
   GymFollowerController,
   GymManagerController,
@@ -9,11 +32,16 @@ import {
   GymManagerQualificationController,
   GymManagerSpecializedInWorkoutController,
   GymMembershipPlanController,
-  GymMembershipPlanFeaturesController,
   GymManagerFollowerController,
   GymManagerRequestController,
   GymMembershipController,
   GymSpecializedInWorkoutController,
+  GymSpecializedInNutritionController,
+  GymManagerSpecializedInNutritionController,
+  GymOpenDayController,
+  GymHasManagerController,
+  GymManagerInterestController,
+  GymInterestController,
 } from './controller';
 
 import {
@@ -24,27 +52,38 @@ import {
   GymManagerQualificationService,
   GymManagerSpecializedInWorkoutService,
   GymMembershipPlanService,
-  GymMembershipPlanFeaturesService,
   GymManagerFollowerService,
   GymManagerRequestService,
   GymMembershipService,
   GymSpecializedInWorkoutService,
+  GymSpecializedInNutritionService,
+  GymManagerSpecializedInNutritionService,
+  GymOpenDayService,
+  GymHasManagerService,
+  GymInterestService,
+  GymManagerInterestService,
 } from './service';
 
 import {
   GymEntity,
   GymFollowerEntity,
   GymManagerEntity,
+  GymOpenDayEntity,
   GymManagerOverviewEntity,
   GymManagerQualificationEntity,
   GymManagerSpecializedInWorkoutEntity,
   GymMembershipPlanEntity,
-  GymMembershipPlanFeaturesEntity,
   GymManagerFollowerEntity,
   GymManagerRequestEntity,
   GymMembershipEntity,
   GymSpecializedInWorkoutEntity,
+  GymSpecializedInNutritionEntity,
+  GymManagerSpecializedInNutritionEntity,
+  GymHasManagerEntity,
+  GymInterestEntity,
+  GymManagerInterestEntity
 } from './entity';
+
 
 @Module({
   imports: [
@@ -52,15 +91,33 @@ import {
       GymEntity,
       GymFollowerEntity,
       GymManagerEntity,
+      GymOpenDayEntity,
       GymManagerOverviewEntity,
       GymManagerQualificationEntity,
       GymManagerSpecializedInWorkoutEntity,
       GymMembershipPlanEntity,
-      GymMembershipPlanFeaturesEntity,
       GymManagerFollowerEntity,
       GymManagerRequestEntity,
       GymMembershipEntity,
       GymSpecializedInWorkoutEntity,
+      GymSpecializedInNutritionEntity,
+      GymManagerSpecializedInNutritionEntity,
+      GymHasManagerEntity,
+      GymInterestEntity,
+      GymManagerInterestEntity,
+
+      // External entities
+      UserEntity,
+      UserInterestEntity,
+      ProgramEntity,
+      ProgramStepEntity,
+      ProgramStepActivityEntity,
+      ProgramStepActivityWorkingsessionEntity,
+      ProgramStepActivityWorkingsessionWorkoutEntity,
+      BaseNutritionEntity,
+      BaseProgramGoalEntity,
+      BaseSociologyEntity,
+      BaseWorkoutEntity
     ]),
   ],
   controllers: [
@@ -71,11 +128,16 @@ import {
     GymManagerQualificationController,
     GymManagerSpecializedInWorkoutController,
     GymMembershipPlanController,
-    GymMembershipPlanFeaturesController,
     GymManagerFollowerController,
     GymManagerRequestController,
     GymMembershipController,
     GymSpecializedInWorkoutController,
+    GymSpecializedInNutritionController,
+    GymManagerSpecializedInNutritionController,
+    GymOpenDayController,
+    GymHasManagerController,
+    GymInterestController,
+    GymManagerInterestController,
   ],
   providers: [
     GymService,
@@ -85,11 +147,20 @@ import {
     GymManagerQualificationService,
     GymManagerSpecializedInWorkoutService,
     GymMembershipPlanService,
-    GymMembershipPlanFeaturesService,
     GymManagerFollowerService,
     GymManagerRequestService,
     GymMembershipService,
     GymSpecializedInWorkoutService,
+    GymSpecializedInNutritionService,
+    GymManagerSpecializedInNutritionService,
+    GymOpenDayService,
+    GymHasManagerService,
+    GymInterestService,
+    GymManagerInterestService,
+
+    // External services
+    ProgramService,
+    UserInterestService,
   ],
   exports: [
     GymService,
@@ -99,11 +170,16 @@ import {
     GymManagerQualificationService,
     GymManagerSpecializedInWorkoutService,
     GymMembershipPlanService,
-    GymMembershipPlanFeaturesService,
     GymManagerFollowerService,
     GymManagerRequestService,
     GymMembershipService,
     GymSpecializedInWorkoutService,
+    GymSpecializedInNutritionService,
+    GymManagerSpecializedInNutritionService,
+    GymOpenDayService,
+    GymHasManagerService,
+    GymInterestService,
+    GymManagerInterestService,
   ],
 })
 export class GymModule {}

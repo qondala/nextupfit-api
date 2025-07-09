@@ -1,5 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { BaseSubscriptionPlanItemEnum, BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+import {
+  BaseSubscriptionPlanItemEnum,
+  BaseSubscriptionPlanStatusEnum
+} from "@app/module/base/types";
 
 
 @Entity("user_subscription_plan")
@@ -11,10 +20,13 @@ export class UserSubscriptionPlanEntity {
     type: "enum",
     enum: BaseSubscriptionPlanItemEnum,
   })
-  item: BaseSubscriptionPlanItemEnum;
+  itemType: BaseSubscriptionPlanItemEnum;
 
   @Column()
   itemId: number;
+
+  @Column()
+  userId: number;
 
   @Column({
     type: "enum",

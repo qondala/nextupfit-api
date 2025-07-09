@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramPerSociologyDto extends PaginatedResponseDto
     type: () => DetailsProgramPerSociologyDto,
     name: 'items',
     isArray: true,
-    description: 'List of program per sociology'
+    description: 'List of program per sociology',
+    required: true
   })
   @IsDefined()
   @IsArray()

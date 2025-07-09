@@ -1,16 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsPositive, IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsInt, Min, Max } from 'class-validator';
+import { SwaggerType } from '../types';
 
 
 export class PaginationOptionsDto {
   @ApiPropertyOptional({
     description: 'Page number (starts from 1)',
     default: 1,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @IsOptional()
-  @Type(() => Number)
   @IsInt()
   @Min(1)
   page: number = 1;
@@ -18,11 +17,11 @@ export class PaginationOptionsDto {
   @ApiPropertyOptional({
     description: 'Number of items per page',
     default: 10,
-    type: Number
+    type: SwaggerType.INTEGER
   })
   @IsOptional()
-  @Type(() => Number)
   @IsInt()
-  @IsPositive()
+  @Max(100)
+  @Min(1)
   limit: number = 10;
 }

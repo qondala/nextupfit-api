@@ -1,5 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
 
+import { BaseFoodNutrientEntity } from ".";
 
 @Entity("base_food")
 export class BaseFoodEntity {
@@ -30,6 +38,8 @@ export class BaseFoodEntity {
   @Column({ type: "varchar", nullable: true, unique: true })
   code?: string;
 
+  @OneToMany(() => BaseFoodNutrientEntity, (foodNutrient) => foodNutrient.food)
+  nutrients: BaseFoodNutrientEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

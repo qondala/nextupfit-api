@@ -1,8 +1,11 @@
 import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from "@nestjs/swagger";
+import {
+  DocumentBuilder,
+  SwaggerModule,
+} from "@nestjs/swagger";
 import { readFileSync } from 'node:fs';
 
-import { AppDataSource } from "./database/data-source";
+import { AppDataSource } from "./database";
 import { AppModule } from "./app.module";
 
 

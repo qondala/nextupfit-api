@@ -16,31 +16,28 @@ export class GymFollowerService {
 
   async create(createDto: CreateGymFollowerDto): Promise<GymFollowerEntity> {
 
-    if (await this.isFollowing(createDto.gymId, createDto.followerUserId)) {
+    if (await this.isFollowing(createDto.followerUserId, createDto.gymId)) {
       throw new ConflictException(`User ${createDto.followerUserId} is already a follower of Gym ${createDto.gymId}`);
     }
 
-    const follower = this.gymFollowerRepository.create({
-      ...createDto,
-      createdAt: new Date()
-    });
+    const follower = this.gymFollowerRepository.create(createDto);
     return await this.gymFollowerRepository.save(follower);
   }
 
-  async isFollowing(gymId: number, userId: number): Promise<boolean> {
-    const openings = await this.gymFollowerRepository.find({
+  async isFollowing(userId: number, gymId: number): Promise<GymFollowerEntity> {
+    const follower = await this.gymFollowerRepository.findOne({
       where: { gymId, followerUserId: userId }
     });
-    return openings.length > 0;
+    return follower;
   }
 
-  async findByGym(
+  async findAllFollowersOfGym(
     gymId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymFollowerEntity>> {
-    const queryBuilder = this.gymFollowerRepository.createQueryBuilder('follower')
-      .where('follower.gymId = :gymId', { gymId })
-      .orderBy('follower.createdAt', 'DESC');
+    const queryBuilder = this.gymFollowerRepository.createQueryBuilder('gfollower')
+      .where('gfollower.gymId = :gymId', { gymId })
+      .orderBy('gfollower.acceptedDate', 'ASC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -62,13 +59,13 @@ export class GymFollowerService {
     };
   }
 
-  async findByUser(
+  async findAllGymsFollowedByUser(
     userId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymFollowerEntity>> {
-    const queryBuilder = this.gymFollowerRepository.createQueryBuilder('follower')
-      .where('follower.followerUserId = :userId', { userId })
-      .orderBy('follower.createdAt', 'DESC');
+    const queryBuilder = this.gymFollowerRepository.createQueryBuilder('gfollower')
+      .where('gfollower.followerUserId = :userId', { userId })
+      .orderBy('gfollower.acceptedDate', 'ASC');
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -97,15 +94,38 @@ export class GymFollowerService {
     });
   }
 
-  async update(id: number, updateDto: UpdateGymFollowerDto): Promise<GymFollowerEntity> {
+  async acceptFollower(userId: number, gymId: number): Promise<void> {
     await this.gymFollowerRepository.update(
-      { id },
-      updateDto
+      { gymId, followerUserId: userId },
+      { accepted: true, acceptedDate: new Date() }
     );
-    return this.findOne(id);
   }
 
-  async remove(id: number): Promise<void> {
-    await this.gymFollowerRepository.delete({ id });
+  async stopFollowing(userId: number, gymId: number): Promise<void> {
+    await this.gymFollowerRepository.update(
+      { gymId, followerUserId: userId },
+      { stopped: true, stoppedDate: new Date() }
+    );
+  }
+
+  async rejectFollower(userId: number, gymId: number): Promise<void> {
+    await this.gymFollowerRepository.update(
+      { gymId, followerUserId: userId },
+      { rejected: true, rejectedDate: new Date() }
+    );
+  }
+
+  async blockFollower(gymId: number, userId: number): Promise<void> {
+    await this.gymFollowerRepository.update(
+      { gymId, followerUserId: userId },
+      { blocked: true, blockedDate: new Date() }
+    );
+  }
+
+  async unblockFollower(gymId: number, userId: number): Promise<void> {
+    await this.gymFollowerRepository.update(
+      { gymId, followerUserId: userId },
+      { blocked: false, blockedDate: null }
+    );
   }
 }

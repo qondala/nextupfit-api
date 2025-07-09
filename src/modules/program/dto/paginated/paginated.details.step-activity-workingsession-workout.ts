@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramStepActivityWorkingsessionWorkoutDto extends
     type: () => DetailsProgramStepActivityWorkingsessionWorkoutDto,
     name: 'items',
     isArray: true,
-    description: 'List of program step activity workout sessions workouts'
+    description: 'List of program step activity workout sessions workouts',
+    required: true
   })
   @IsDefined()
   @IsArray()

@@ -1,66 +1,78 @@
-import { IsOptional, IsNumber, IsString, IsEnum } from "class-validator";
+import {
+  IsOptional,
+  IsString,
+  IsEnum,
+  IsInt
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
+import { SwaggerType } from "@app/common/types";
 import { SocialAdvertisementActionEnum } from "../../types";
 
 export class CreateSocialAdvertisementDto {
 
   @ApiProperty({
-    description: "Video URL to be displayed",
-    example: "Sample video URL",
+    type: SwaggerType.INTEGER,
+    description: "ID of the program related to the advertisement",
+    example: 101,
     required: true,
   })
-  @IsOptional()
-  @IsString()
-  videoUrl?: string;
-
+  @IsInt()
+  actionProgramId: number;
 
   @ApiProperty({
-    description: "Image URL to be displayed",
-    example: "Sample image URL",
+    type: SwaggerType.INTEGER,
+    description: "ID of the gym related to the advertisement",
+    example: 202,
     required: true,
   })
-  @IsOptional()
-  @IsString()
-  imageUrl?: string;
-
+  @IsInt()
+  actionGymId: number;
 
   @ApiProperty({
-    description: "What we do when a user clicks on the advertisement",
+    type: SwaggerType.INTEGER,
+    description: "ID of the manager responsible for the advertisement action",
+    example: 303,
+    required: true,
+  })
+  @IsInt()
+  actionManagerId: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "ID of the manager who created the advertisement",
+    example: 404,
+    required: true,
+  })
+  @IsInt()
+  createdByManagerId: number;
+
+  @ApiProperty({
+    enum: SocialAdvertisementActionEnum,
+    enumName: "SocialAdvertisementActionEnum",
+    description: "Defines what happens when a user interacts with the advertisement",
     example: SocialAdvertisementActionEnum.openGymPage,
     required: true,
   })
-  @IsOptional()
   @IsEnum(SocialAdvertisementActionEnum)
-  action?: SocialAdvertisementActionEnum;
-
+  action: SocialAdvertisementActionEnum;
 
   @ApiProperty({
-    description: "URL of the web page to be opened when a user clicks on the advertisement",
-    example: "Any web URL",
-    required: true,
+    type: SwaggerType.STRING,
+    description: "URL of the page to open when a user clicks on the advertisement",
+    example: "https://example.com",
+    required: false,
   })
   @IsOptional()
   @IsString()
   actionLink?: string;
 
-
   @ApiProperty({
-    description: "Id of the program which's page will be opened when a user clicks on the advertisement",
-    example: 45656,
+    type: SwaggerType.INTEGER,
+    description: "ID of the content linked to the advertisement",
+    example: 123,
     required: true,
   })
-  @IsOptional()
-  @IsNumber()
-  actionProgramId?: number;
-
-
-  @ApiProperty({
-    description: "Id of the gym which's page will be opened when a user clicks on the advertisement",
-    example: 2323,
-    required: true,
-  })
-  @IsOptional()
-  @IsNumber()
-  actionGymId?: number;
+  @IsInt()
+  contentId: number;
 }

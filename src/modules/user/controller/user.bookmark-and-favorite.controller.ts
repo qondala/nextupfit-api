@@ -8,21 +8,38 @@ import {
   Param,
   Query,
   UseGuards,
+  HttpStatus,
+  ParseIntPipe,
+  ParseEnumPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { SwaggerType } from '@app/common/types';
+import { PaginationOptionsDto } from '@app/common/dto';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { User } from '@app/common/decorators';
 
 import { UserBookmarkAndFavoriteService } from '../service';
 import { UserBookmarkAndFavoriteItemTypeEnum } from '../types';
-import { DetailsUserBookmarkAndFavoriteDto } from '../dto';
+import {
+  CreateUserBookmarkAndFavoriteDto,
+  DetailsUserBookmarkAndFavoriteDto,
+  PaginatedDetailsUserBookmarkAndFavoriteDto,
+  UpdateUserBookmarkAndFavoriteDto
+} from '../dto';
+
 
 
 @ApiTags("User module endpoints")
 @ApiBearerAuth()
-@Controller("user/program-evolution")
+@Controller("user/bookmark-and-favorite")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserBookmarkAndFavoriteController {
   constructor(
@@ -30,91 +47,368 @@ export class UserBookmarkAndFavoriteController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: "Create a user bookmark/favorite",
+    description: "Create a user bookmark/favorite"
+  })
+  @ApiBody({
+    type: CreateUserBookmarkAndFavoriteDto,
+    required: true,
+    description: "User bookmark/favorite creation payload"
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "User bookmark/favorite created successfully",
+    type: DetailsUserBookmarkAndFavoriteDto
+  })
   async create(
-    @User('id') userId: number,
-    @Body() body: {
-      itemId: number;
-      bookmarkType: UserBookmarkAndFavoriteItemTypeEnum;
-      isBookMark?: boolean;
-      isFavorite?: boolean;
-    },
-  ) {
-    return await this.bookmarkAndFavoriteService.create(
-      userId,
-      body.itemId,
-      body.bookmarkType,
-      body.isBookMark,
-      body.isFavorite,
-    );
+    @Body() body: CreateUserBookmarkAndFavoriteDto) {
+    return await this.bookmarkAndFavoriteService.create(body);
   }
 
-  @Get()
+  @Get('user/:userId')
+  @ApiOperation({
+    summary: "Get all user bookmarks/favorites",
+    description: "Get all user bookmarks/favorites"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmarks/favorites list retrieved successfully",
+    type: PaginatedDetailsUserBookmarkAndFavoriteDto
+  })
   async findAll(
-    @User('id') userId: number,
-    @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
-    return await this.bookmarkAndFavoriteService.findAll(userId, paginationOptions);
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
+    return await this.bookmarkAndFavoriteService.findAll(userId, pagination);
   }
 
-  @Get('type/:type')
+  @Get('type/:type/user/:userId')
+  @ApiOperation({
+    summary: "Get all user bookmarks/favorites by type",
+    description: "Get all user bookmarks/favorites by type"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiParam({
+    name: "type",
+    required: true,
+    enum: UserBookmarkAndFavoriteItemTypeEnum,
+    enumName: "UserBookmarkAndFavoriteItemTypeEnum",
+    description: "Item type",
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmarks/favorites list retrieved successfully",
+    type: PaginatedDetailsUserBookmarkAndFavoriteDto
+  })
   async findByType(
-    @User('id') userId: number,
-    @Param('type') type: UserBookmarkAndFavoriteItemTypeEnum,
-    @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('type', new ParseEnumPipe(UserBookmarkAndFavoriteItemTypeEnum)) type: UserBookmarkAndFavoriteItemTypeEnum,
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findByType(
       userId,
       type,
-      paginationOptions,
+      pagination,
     );
   }
 
-  @Get('bookmarks')
+  @Get('bookmarks/user/:userId')
+  @ApiOperation({
+    summary: "Get all user bookmarks",
+    description: "Get all user bookmarks"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmarks list retrieved successfully",
+    type: PaginatedDetailsUserBookmarkAndFavoriteDto
+  })
   async findBookmarks(
-    @User('id') userId: number,
-    @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findBookmarks(
       userId,
-      paginationOptions,
+      pagination,
     );
   }
 
-  @Get('favorites')
+  @Get('favorites/user/:userId')
+  @ApiOperation({
+    summary: "Get all user favorites",
+    description: "Get all user favorites"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User favorites list retrieved successfully",
+    type: PaginatedDetailsUserBookmarkAndFavoriteDto
+  })
   async findFavorites(
-    @User('id') userId: number,
-    @Query() paginationOptions: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<DetailsUserBookmarkAndFavoriteDto>> {
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findFavorites(
       userId,
-      paginationOptions,
+      pagination,
     );
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: "Update a user bookmark/favorite",
+    description: "Update a user bookmark/favorite"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User bookmark/favorite id",
+    example: 1
+  })
+  @ApiBody({
+    type: UpdateUserBookmarkAndFavoriteDto,
+    required: true,
+    description: "User bookmark/favorite update payload"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmark/favorite updated successfully",
+    type: DetailsUserBookmarkAndFavoriteDto
+  })
   async update(
-    @Param('id') id: number,
-    @Body() body: { isBookMark?: boolean; isFavorite?: boolean },
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateUserBookmarkAndFavoriteDto,
   ): Promise<DetailsUserBookmarkAndFavoriteDto> {
-    return await this.bookmarkAndFavoriteService.update(
-      id,
-      body.isBookMark,
-      body.isFavorite,
-    );
+    return await this.bookmarkAndFavoriteService.update(id, body);
   }
 
+
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<void> {
+  @ApiOperation({
+    summary: "Delete a user bookmark/favorite",
+    description: "Delete a user bookmark/favorite"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User bookmark/favorite id",
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "User bookmark/favorite deleted successfully"
+  })
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.bookmarkAndFavoriteService.delete(id);
   }
 
-  @Get('check')
+  @Get('check/user/:userId')
+  @ApiOperation({
+    summary: "Check if a user bookmark/favorite exists",
+    description: "Check if a user bookmark/favorite exists"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "itemId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "Item id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "type",
+    required: true,
+    enum: UserBookmarkAndFavoriteItemTypeEnum,
+    enumName: "UserBookmarkAndFavoriteItemTypeEnum",
+    description: "Item type",
+    example: UserBookmarkAndFavoriteItemTypeEnum.program
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmark/favorite checked successfully",
+    type: DetailsUserBookmarkAndFavoriteDto
+  })
   async checkBookmarkAndFavorite(
-    @User('id') userId: number,
-    @Query('itemId') itemId: number,
-    @Query('type') type: UserBookmarkAndFavoriteItemTypeEnum,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query('itemId', ParseIntPipe) itemId: number,
+    @Query('type', new ParseEnumPipe(UserBookmarkAndFavoriteItemTypeEnum)) type: UserBookmarkAndFavoriteItemTypeEnum,
   ): Promise<DetailsUserBookmarkAndFavoriteDto> {
     return await this.bookmarkAndFavoriteService.findByItemId(
+      userId,
+      itemId,
+      type,
+    );
+  }
+
+  
+  @Get('has-bookmarked/user/:userId/item/:itemId/type/:type')
+  @ApiOperation({
+    summary: "Check if a user bookmark exists",
+    description: "Check if a user bookmark exists"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 1
+  })
+  @ApiParam({
+    name: "itemId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "Item id",
+    example: 1
+  })
+  @ApiParam({
+    name: "type",
+    required: true,
+    enum: UserBookmarkAndFavoriteItemTypeEnum,
+    enumName: "UserBookmarkAndFavoriteItemTypeEnum",
+    description: "Item type",
+    example: UserBookmarkAndFavoriteItemTypeEnum.program
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User bookmark checked successfully",
+    type: Boolean
+  })
+  async isBookmarked(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('itemId', ParseIntPipe) itemId: number,
+    @Param('type', new ParseEnumPipe(UserBookmarkAndFavoriteItemTypeEnum)) type: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    return await this.bookmarkAndFavoriteService.isBookmarked(
+      userId,
+      itemId,
+      type,
+    );
+  }
+
+  @Get('has-favorite/user/:userId/item/:itemId/type/:type')
+  @ApiOperation({
+    summary: "Check if a user favorite exists",
+    description: "Check if a user favorite exists"
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+  })
+  @ApiParam({
+    name: "itemId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "Item id",
+  })
+  @ApiParam({
+    name: "type",
+    required: true,
+    enum: UserBookmarkAndFavoriteItemTypeEnum,
+    enumName: "UserBookmarkAndFavoriteItemTypeEnum",
+    description: "Item type",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User favorite checked successfully",
+    type: Boolean
+  })
+  async isFavorite(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('itemId', ParseIntPipe) itemId: number,
+    @Param('type', new ParseEnumPipe(UserBookmarkAndFavoriteItemTypeEnum)) type: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    return await this.bookmarkAndFavoriteService.isFavorite(
       userId,
       itemId,
       type,

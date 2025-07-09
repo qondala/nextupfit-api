@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserBookmarkAndFavoriteEntity } from '../entity/user.bookmark-and-favorite.entity';
-import { UserBookmarkAndFavoriteItemTypeEnum } from '../types';
 import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+
+import { UserBookmarkAndFavoriteEntity } from '../entity';
+import { UserBookmarkAndFavoriteItemTypeEnum } from '../types';
+import { UpdateUserBookmarkAndFavoriteDto } from '../dto';
 
 @Injectable()
 export class UserBookmarkAndFavoriteService {
@@ -12,20 +14,8 @@ export class UserBookmarkAndFavoriteService {
     private readonly bookmarkAndFavoriteRepository: Repository<UserBookmarkAndFavoriteEntity>,
   ) {}
 
-  async create(
-    userId: number,
-    itemId: number,
-    bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
-    isBookMark: boolean = false,
-    isFavorite: boolean = false,
-  ): Promise<UserBookmarkAndFavoriteEntity> {
-    const bookmarkAndFavorite = this.bookmarkAndFavoriteRepository.create({
-      userId,
-      itemId,
-      bookmarkType,
-      isBookMark,
-      isFavorite,
-    });
+  async create(dto: UpdateUserBookmarkAndFavoriteDto): Promise<UserBookmarkAndFavoriteEntity> {
+    const bookmarkAndFavorite = this.bookmarkAndFavoriteRepository.create(dto);
     return await this.bookmarkAndFavoriteRepository.save(bookmarkAndFavorite);
   }
 
@@ -33,10 +23,13 @@ export class UserBookmarkAndFavoriteService {
     userId: number,
     options: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<UserBookmarkAndFavoriteEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
     const [items, total] = await this.bookmarkAndFavoriteRepository.findAndCount({
       where: { userId },
-      skip: options.page,
-      take: options.limit,
+      skip,
+      take: limit,
       order: { createdAt: 'DESC' },
     });
 
@@ -57,10 +50,13 @@ export class UserBookmarkAndFavoriteService {
     bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
     options: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<UserBookmarkAndFavoriteEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
     const [items, total] = await this.bookmarkAndFavoriteRepository.findAndCount({
       where: { userId, bookmarkType },
-      skip: options.page,
-      take: options.limit,
+      skip,
+      take: limit,
       order: { createdAt: 'DESC' },
     });
 
@@ -80,10 +76,13 @@ export class UserBookmarkAndFavoriteService {
     userId: number,
     options: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<UserBookmarkAndFavoriteEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
     const [items, total] = await this.bookmarkAndFavoriteRepository.findAndCount({
       where: { userId, isBookMark: true },
-      skip: options.page,
-      take: options.limit,
+      skip,
+      take: limit,
       order: { createdAt: 'DESC' },
     });
 
@@ -103,10 +102,13 @@ export class UserBookmarkAndFavoriteService {
     userId: number,
     options: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<UserBookmarkAndFavoriteEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
     const [items, total] = await this.bookmarkAndFavoriteRepository.findAndCount({
       where: { userId, isFavorite: true },
-      skip: options.page,
-      take: options.limit,
+      skip,
+      take: limit,
       order: { createdAt: 'DESC' },
     });
 
@@ -124,22 +126,22 @@ export class UserBookmarkAndFavoriteService {
 
   async update(
     id: number,
-    isBookMark?: boolean,
-    isFavorite?: boolean,
+    dto: UpdateUserBookmarkAndFavoriteDto,
   ): Promise<UserBookmarkAndFavoriteEntity> {
     const bookmarkAndFavorite = await this.bookmarkAndFavoriteRepository.findOne({
       where: { id },
     });
 
     if (!bookmarkAndFavorite) {
-      throw new Error('Bookmark or favorite not found');
+      throw new NotFoundException('Bookmark or favorite not found');
     }
 
-    if (isBookMark !== undefined) {
-      bookmarkAndFavorite.isBookMark = isBookMark;
+    if (dto?.isBookMark !== undefined) {
+      bookmarkAndFavorite.isBookMark = dto.isBookMark;
     }
-    if (isFavorite !== undefined) {
-      bookmarkAndFavorite.isFavorite = isFavorite;
+
+    if (dto?.isFavorite !== undefined) {
+      bookmarkAndFavorite.isFavorite = dto.isFavorite;
     }
 
     return await this.bookmarkAndFavoriteRepository.save(bookmarkAndFavorite);
@@ -157,5 +159,27 @@ export class UserBookmarkAndFavoriteService {
     return await this.bookmarkAndFavoriteRepository.findOne({
       where: { userId, itemId, bookmarkType },
     });
+  }
+
+  async isBookmarked(
+    userId: number,
+    itemId: number,
+    bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    const bookmarkAndFavorite = await this.bookmarkAndFavoriteRepository.findOne({
+      where: { userId, itemId, bookmarkType },
+    });
+    return !!bookmarkAndFavorite;
+  }
+
+  async isFavorite(
+    userId: number,
+    itemId: number,
+    bookmarkType: UserBookmarkAndFavoriteItemTypeEnum,
+  ): Promise<boolean> {
+    const bookmarkAndFavorite = await this.bookmarkAndFavoriteRepository.findOne({
+      where: { userId, itemId, bookmarkType },
+    });
+    return !!bookmarkAndFavorite;
   }
 }

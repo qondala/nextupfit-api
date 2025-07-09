@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramManagerDto extends PaginatedResponseDto<Deta
     type: () => DetailsProgramManagerDto,
     name: 'items',
     isArray: true,
-    description: 'List of program managers'
+    description: 'List of program managers',
+    required: true
   })
   @IsDefined()
   @IsArray()

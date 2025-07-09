@@ -2,10 +2,20 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+
+import {
+  ProgramEvolutionEventTypeEnum,
+  ProgramItemTypeEnum,
+} from "@app/module/program/types";
+import { SocialActorEnum } from "@app/module/social/types";
 
 import { UserProgramEvolutionEntity } from "../entity";
-import { CreateUserProgramEvolutionEventDto, UpdateUserProgramEvolutionDto } from "../dto";
+import {
+  CreateUserProgramEvolutionEventDto,
+  UpdateUserProgramEvolutionDto,
+} from "../dto";
+
 
 
 @Injectable()
@@ -20,24 +30,36 @@ export class UserProgramEvolutionService {
     return await this.userProgramEvolutionRepository.save(userProgramEvolution);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<[UserProgramEvolutionEntity[], number]> {
+  async findAll(
+    userId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userProgramEvolutionRepository.findAndCount({
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
+      where: { userId, receiverType: SocialActorEnum.user },
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 
   async findOne(id: number): Promise<UserProgramEvolutionEntity> {
     const userProgramEvolution = await this.userProgramEvolutionRepository.findOne({ where: { id } });
-    if (!userProgramEvolution) {
-      throw new Error(`User program evolution with ID ${id} not found`);
-    }
     return userProgramEvolution;
   }
 
@@ -52,17 +74,125 @@ export class UserProgramEvolutionService {
     await this.userProgramEvolutionRepository.remove(userProgramEvolution);
   }
 
-  async findByUserId(userId: number, options: PaginationOptionsDto): Promise<[UserProgramEvolutionEntity[], number]> {
+
+
+  async findByType(
+    userId: number,
+    eventType: ProgramItemTypeEnum,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    return await this.userProgramEvolutionRepository.findAndCount({
-      where: { userId },
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
+      where: { userId, programItem: eventType, receiverType: SocialActorEnum.user },
       skip,
       take: limit,
       order: {
         createdAt: "DESC",
       },
     });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
+  }
+
+  async findByItemIdAndType(
+    userId: number,
+    itemId: number,
+    eventType: ProgramItemTypeEnum,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
+      where: { userId, programItem: eventType, programItemId: itemId, receiverType: SocialActorEnum.user },
+      skip,
+      take: limit,
+      order: {
+        createdAt: "DESC",
+      },
+    });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
+  }
+
+
+
+  async findByStatus(
+    userId: number,
+    eventStatus: ProgramEvolutionEventTypeEnum,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
+      where: { userId, event: eventStatus, receiverType: SocialActorEnum.user },
+      skip,
+      take: limit,
+      order: {
+        createdAt: "DESC",
+      },
+    });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
+  }
+
+  async findByTypeAndStatus(
+    userId: number,
+    eventType: ProgramItemTypeEnum,
+    eventStatus: ProgramEvolutionEventTypeEnum,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
+    const { page = 1, limit = 10 } = options;
+    const skip = (page - 1) * limit;
+
+    const [items, total] = await this.userProgramEvolutionRepository.findAndCount({
+      where: { userId, programItem: eventType, event: eventStatus, receiverType: SocialActorEnum.user },
+      skip,
+      take: limit,
+      order: {
+        createdAt: "DESC",
+      },
+    });
+
+    return {
+      items,
+      meta: {
+        totalItems: total,
+        itemCount: items.length,
+        itemsPerPage: limit,
+        totalPages: Math.ceil(total / limit),
+        currentPage: page,
+      },
+    };
   }
 }

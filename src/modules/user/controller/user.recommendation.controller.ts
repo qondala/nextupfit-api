@@ -9,21 +9,24 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiQuery, ApiParam } from "@nestjs/swagger";
 
-import { PaginationOptionsDto } from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
 
 import {
   CreateUserRecommendationDto,
   DetailsUserRecommendationDto,
+  PaginatedDetailsUserRecommendationDto,
   UpdateUserRecommendationDto
 } from "../dto";
 
 
 import { UserRecommendationService } from "../service";
+import { SwaggerType } from "@app/common/types";
 
 
 @ApiTags("User module endpoints")
@@ -34,87 +37,186 @@ export class UserRecommendationController {
   constructor(private readonly userRecommendationService: UserRecommendationService) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new user recommendation" })
+  @ApiOperation({
+    summary: "Create a new user recommendation",
+    operationId: "createUserRecommendation"
+  })
+  @ApiBody({
+    required: true,
+    type: CreateUserRecommendationDto
+  })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: "The user recommendation has been successfully created.",
     type: DetailsUserRecommendationDto,
   })
-  create(@Body() createUserRecommendationDto: CreateUserRecommendationDto): Promise<DetailsUserRecommendationDto> {
-    return this.userRecommendationService.create(createUserRecommendationDto);
+  async create(@Body() createUserRecommendationDto: CreateUserRecommendationDto): Promise<DetailsUserRecommendationDto> {
+    return await this.userRecommendationService.create(createUserRecommendationDto);
   }
 
   @Get()
-  @ApiOperation({ summary: "Get all user recommendations with pagination" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all user recommendations with pagination.",
-    type: [DetailsUserRecommendationDto],
+  @ApiOperation({
+    summary: "Get all user recommendations with pagination",
+    operationId: "findAllUserRecommendations"
   })
-  findAll(@Query() paginationDto: PaginationOptionsDto): Promise<[DetailsUserRecommendationDto[], number]> {
-    return this.userRecommendationService.findAll(paginationDto);
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all user recommendations with pagination.",
+    type: PaginatedDetailsUserRecommendationDto,
+  })
+  async findAll(@Query() paginationDto: PaginationOptionsDto): Promise<PaginatedDetailsUserRecommendationDto> {
+    return await this.userRecommendationService.findAll(paginationDto);
   }
 
   @Get("recommender/:recommenderId")
-  @ApiOperation({ summary: "Get all user recommendations made by a specific user" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all user recommendations made by the specified user.",
-    type: [DetailsUserRecommendationDto],
+  @ApiOperation({
+    summary: "Get all user recommendations made by a specific user",
+    operationId: "findByRecommenderIdUserRecommendations"
   })
-  findByRecommenderId(
+  @ApiParam({
+    name: "recommenderId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User recommendation id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all user recommendations made by the specified user.",
+    type: PaginatedDetailsUserRecommendationDto,
+  })
+  async findByRecommenderId(
     @Param("recommenderId", ParseIntPipe) recommenderId: number,
     @Query() paginationDto: PaginationOptionsDto
-  ): Promise<[DetailsUserRecommendationDto[], number]> {
-    return this.userRecommendationService.findByRecommenderId(recommenderId, paginationDto);
+  ): Promise<PaginatedDetailsUserRecommendationDto> {
+    return await this.userRecommendationService.findByRecommenderId(recommenderId, paginationDto);
   }
 
   @Get("recommendee/:recommendeeId")
-  @ApiOperation({ summary: "Get all user recommendations received by a specific user" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all user recommendations received by the specified user.",
-    type: [DetailsUserRecommendationDto],
+  @ApiOperation({
+    summary: "Get all user recommendations received by a specific user",
+    operationId: "findByRecommendeeIdUserRecommendations"
   })
-  findByRecommendeeId(
+  @ApiParam({
+    name: "recommendeeId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User recommendation id",
+    example: 1
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page",
+    example: 10
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all user recommendations received by the specified user.",
+    type: PaginatedDetailsUserRecommendationDto,
+  })
+  async findByRecommendeeId(
     @Param("recommendeeId", ParseIntPipe) recommendeeId: number,
     @Query() paginationDto: PaginationOptionsDto
-  ): Promise<[DetailsUserRecommendationDto[], number]> {
-    return this.userRecommendationService.findByRecommendeeId(recommendeeId, paginationDto);
+  ): Promise<PaginatedDetailsUserRecommendationDto> {
+    return await this.userRecommendationService.findByRecommendeeId(recommendeeId, paginationDto);
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a user recommendation by id" })
+  @ApiOperation({
+    summary: "Get a user recommendation by id",
+    operationId: "findUserRecommendationById"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return the user recommendation.",
     type: DetailsUserRecommendationDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserRecommendationDto> {
-    return this.userRecommendationService.findOne(id);
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserRecommendationDto> {
+    return await this.userRecommendationService.findOne(id);
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a user recommendation" })
+  @ApiOperation({
+    summary: "Update a user recommendation",
+    operationId: "updateUserRecommendation"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User recommendation id",
+    example: 1
+  })
+  @ApiBody({
+    required: true,
+    type: UpdateUserRecommendationDto
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The user recommendation has been successfully updated.",
     type: DetailsUserRecommendationDto,
   })
-  update(
+  async update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateUserRecommendationDto: UpdateUserRecommendationDto
   ): Promise<DetailsUserRecommendationDto> {
-    return this.userRecommendationService.update(id, updateUserRecommendationDto);
+    return await this.userRecommendationService.update(id, updateUserRecommendationDto);
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a user recommendation" })
+  @ApiOperation({
+    summary: "Delete a user recommendation",
+    operationId: "removeUserRecommendation"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User recommendation id",
+    example: 1
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.NO_CONTENT,
     description: "The user recommendation has been successfully deleted.",
   })
-  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
-    return this.userRecommendationService.remove(id);
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
+    return await this.userRecommendationService.remove(id);
   }
 }

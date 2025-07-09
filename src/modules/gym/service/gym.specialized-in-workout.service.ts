@@ -2,10 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import {
+  PaginatedResponseDto,
+  PaginationOptionsDto,
+} from '@app/common/dto';
 
-import { CreateGymSpecializedInWorkoutDto, UpdateGymSpecializedInWorkoutDto } from '../dto';
 import { GymSpecializedInWorkoutEntity } from '../entity';
+
+import {
+  CreateGymSpecializedInWorkoutDto,
+  UpdateGymSpecializedInWorkoutDto,
+} from '../dto';
+
 
 @Injectable()
 export class GymSpecializedInWorkoutService {
@@ -64,5 +72,33 @@ export class GymSpecializedInWorkoutService {
 
   async remove(id: number): Promise<void> {
     await this.gymSpecializedInWorkoutRepository.delete(id);
+  }
+
+  async findManagersSpecializedInWorkouts(
+    workoutIds: number[],
+    paginationOptions: PaginationOptionsDto
+  ): Promise<PaginatedResponseDto<GymSpecializedInWorkoutEntity>> {
+    const queryBuilder = this.gymSpecializedInWorkoutRepository.createQueryBuilder('workout')
+      .where('workout.workoutId IN (:...workoutIds)', { workoutIds })
+      .orderBy('RANDOM()');
+
+    const skip = (paginationOptions.page - 1) * paginationOptions.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(paginationOptions.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / paginationOptions.limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: paginationOptions.limit,
+        totalPages,
+        currentPage: paginationOptions.page
+      }
+    };
   }
 }

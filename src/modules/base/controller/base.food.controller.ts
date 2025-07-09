@@ -8,19 +8,32 @@ import {
   Param, 
   NotFoundException,
   HttpStatus,
-  HttpCode,
   Query,
   BadRequestException,
-  UseGuards
+  UseGuards,
+  ParseIntPipe
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+  ApiBearerAuth
+} from '@nestjs/swagger';
 
+import { SwaggerType } from '@app/common/types';
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginatedResponseDto } from '@app/common/dto';
+
+import {
+  CreateBaseFoodDto,
+  UpdateBaseFoodDto,
+  DetailsBaseFoodDto,
+  PaginatedDetailsBaseFoodDto
+} from '../dto';
 
 import { BaseFoodService } from '../service';
-import { BaseFoodEntity } from '../entity';
-import { CreateBaseFoodDto, UpdateBaseFoodDto } from '../dto';
+
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -30,18 +43,21 @@ export class BaseFoodController {
   constructor(private readonly baseFoodService: BaseFoodService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new food' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'The food has been successfully created.',
-    type: BaseFoodEntity 
+  @ApiOperation({ 
+    summary: 'Create a new food',
+    description: 'Create a new food with the given details',
+    operationId: 'createBaseFood'
   })
   @ApiResponse({ 
-    status: 400, 
+    status: HttpStatus.CREATED, 
+    description: 'The food has been successfully created.',
+    type: () => DetailsBaseFoodDto 
+  })
+  @ApiResponse({ 
+    status: HttpStatus.BAD_REQUEST, 
     description: 'Bad request. Code already exists or invalid input.' 
   })
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createBaseFoodDto: CreateBaseFoodDto): Promise<BaseFoodEntity> {
+  async create(@Body() createBaseFoodDto: CreateBaseFoodDto): Promise<DetailsBaseFoodDto> {
     try {
       return await this.baseFoodService.create(createBaseFoodDto);
     } catch (error) {
@@ -53,22 +69,45 @@ export class BaseFoodController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all foods with pagination' })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
-  @ApiQuery({ name: 'userId', description: 'Filter by creator user ID', required: false, type: Number })
-  @ApiQuery({ name: 'foodGroupId', description: 'Filter by food group ID', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Get all foods with pagination',
+    operationId: 'findAllBaseFoods'
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'Filter by creator user ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'foodGroupId',
+    description: 'Filter by food group ID',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated list of foods',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseFoodDto
   })
   async findAll(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Query('userId') userId?: number,
     @Query('foodGroupId') foodGroupId?: number
-  ): Promise<PaginatedResponseDto<BaseFoodEntity>> {
+  ): Promise<PaginatedDetailsBaseFoodDto> {
     return this.baseFoodService.findAll({
       page: +page,
       limit: +limit
@@ -76,20 +115,38 @@ export class BaseFoodController {
   }
 
   @Get('search')
-  @ApiOperation({ summary: 'Search foods by query string with pagination' })
-  @ApiQuery({ name: 'q', description: 'Search query string', required: true })
-  @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
-  @ApiQuery({ name: 'limit', description: 'Number of items per page', required: false, type: Number })
+  @ApiOperation({
+    summary: 'Search foods by query string with pagination',
+    operationId: 'searchBaseFoods'
+  })
+  @ApiQuery({
+    name: 'q',
+    description: 'Search query string',
+    required: true,
+    type: SwaggerType.STRING
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Paginated search results of foods',
-    type: PaginatedResponseDto
+    type: PaginatedDetailsBaseFoodDto
   })
   async search(
     @Query('q') query: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10
-  ): Promise<PaginatedResponseDto<BaseFoodEntity>> {
+  ): Promise<PaginatedDetailsBaseFoodDto> {
     return this.baseFoodService.search(query, {
       page: +page,
       limit: +limit
@@ -97,15 +154,21 @@ export class BaseFoodController {
   }
 
   @Get('code/:code')
-  @ApiOperation({ summary: 'Get food by code' })
-  @ApiParam({ name: 'code', description: 'Food code' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found food',
-    type: BaseFoodEntity
+  @ApiOperation({
+    summary: 'Get food by code',
+    operationId: 'getFoodByCode'
   })
-  @ApiResponse({ status: 404, description: 'Food not found' })
-  async findByCode(@Param('code') code: string): Promise<BaseFoodEntity> {
+  @ApiParam({
+    name: 'code',
+    description: 'Food code'
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found food',
+    type: DetailsBaseFoodDto
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Food not found' })
+  async findByCode(@Param('code') code: string): Promise<DetailsBaseFoodDto> {
     const food = await this.baseFoodService.findByCode(code);
     if (!food) {
       throw new NotFoundException(`Food with code '${code}' not found`);
@@ -114,16 +177,24 @@ export class BaseFoodController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a specific food by ID' })
-  @ApiParam({ name: 'id', description: 'Food ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The found food',
-    type: BaseFoodEntity
+  @ApiOperation({
+    summary: 'Get a specific food by ID',
+    operationId: 'getFoodById'
   })
-  @ApiResponse({ status: 404, description: 'Food not found' })
-  async findOne(@Param('id') id: string): Promise<BaseFoodEntity> {
-    const food = await this.baseFoodService.findOne(+id);
+  @ApiParam({
+    name: 'id',
+    description: 'Food ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The found food',
+    type: DetailsBaseFoodDto
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Food not found' })
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsBaseFoodDto> {
+    const food = await this.baseFoodService.findOne(id);
     if (!food) {
       throw new NotFoundException(`Food with ID ${id} not found`);
     }
@@ -131,21 +202,35 @@ export class BaseFoodController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a food by ID' })
-  @ApiParam({ name: 'id', description: 'Food ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'The updated food',
-    type: BaseFoodEntity
+  @ApiOperation({
+    summary: 'Update a food by ID',
+    operationId: 'updateFoodById'
   })
-  @ApiResponse({ status: 404, description: 'Food not found' })
-  @ApiResponse({ status: 400, description: 'Bad request. Code already exists or invalid input.' })
+  @ApiParam({
+    name: 'id',
+    description: 'Food ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The updated food',
+    type: DetailsBaseFoodDto
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Food not found'
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request. Code already exists or invalid input.'
+  })
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateBaseFoodDto: UpdateBaseFoodDto,
-  ): Promise<BaseFoodEntity> {
+  ): Promise<DetailsBaseFoodDto> {
     try {
-      const food = await this.baseFoodService.update(+id, updateBaseFoodDto);
+      const food = await this.baseFoodService.update(id, updateBaseFoodDto);
       if (!food) {
         throw new NotFoundException(`Food with ID ${id} not found`);
       }
@@ -159,15 +244,28 @@ export class BaseFoodController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a food by ID' })
-  @ApiParam({ name: 'id', description: 'Food ID' })
-  @ApiResponse({ status: 204, description: 'The food has been successfully deleted' })
-  @ApiResponse({ status: 404, description: 'Food not found' })
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id') id: string): Promise<void> {
-    const result = await this.baseFoodService.remove(+id);
+  @ApiOperation({
+    summary: 'Delete a food by ID',
+    operationId: 'deleteFoodById'
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Food ID',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'The food has been successfully deleted'
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Food not found'
+  })
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    const result = await this.baseFoodService.remove(id);
     if (!result) {
       throw new NotFoundException(`Food with ID ${id} not found`);
     }
   }
-} 
+}

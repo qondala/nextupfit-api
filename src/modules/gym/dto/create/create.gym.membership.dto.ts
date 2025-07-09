@@ -1,17 +1,20 @@
 import {
-    IsNumber,
-    IsOptional,
-    IsBoolean,
-    IsDate,
-    IsEnum, 
-    IsNotEmpty} from "class-validator";
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsDate,
+  IsEnum, 
+  IsNotEmpty
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
+import { SwaggerType } from "@app/common/types";
 import { GymMembershipStatusEnum } from "../../types";
-  
+
 export class CreateGymMembershipDto {
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "UserId of the member",
     example: 256789,
     required: true,
@@ -22,6 +25,8 @@ export class CreateGymMembershipDto {
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: "Date user started being member",
     example: "2025-04-15",
     required: false,
@@ -32,6 +37,8 @@ export class CreateGymMembershipDto {
 
 
   @ApiProperty({
+    enum: GymMembershipStatusEnum,
+    enumName: "GymMembershipStatusEnum",
     description: "Membership status of the user",
     example: GymMembershipStatusEnum.active,
     required: false,
@@ -42,6 +49,7 @@ export class CreateGymMembershipDto {
 
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
     description: "Gym id",
     example: 345,
     required: true,
@@ -52,15 +60,17 @@ export class CreateGymMembershipDto {
 
 
   @ApiProperty({
-    description: "Date user stopped being member of the Gym",
-    example: Date(),
-    required: false,
+    type: SwaggerType.NUMBER,
+    description: "Gym membership plan id",
+    example: 345,
+    required: true,
   })
-  @IsOptional()
-  @IsDate()
-  stoppedDate?: Date;
+  @IsNotEmpty()
+  @IsNumber()
+  gymMembershipPlanId: number;
 
   @ApiProperty({
+    type: SwaggerType.BOOLEAN,
     description: "Whether user is favorire member of the Gym (Like page top fan on Facebook)",
     example: false,
     required: false,
@@ -68,13 +78,4 @@ export class CreateGymMembershipDto {
   @IsOptional()
   @IsBoolean()
   isFavorite?: boolean;
-
-  @ApiProperty({
-    description: "Date the user's membership to the gym has been suspended",
-    example: Date(),
-    required: false,
-  })
-  @IsOptional()
-  @IsDate()
-  suspendedDate: Date;
 }

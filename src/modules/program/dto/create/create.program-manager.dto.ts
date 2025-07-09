@@ -2,10 +2,13 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { ProgramItemTypeEnum } from "../../types";
 import { IsNotEmpty, IsNumber, IsEnum } from "class-validator";
+import { SwaggerType } from "@app/common/types";
 
 export class CreateProgramManagerDto {
 
   @ApiProperty({
+    enumName: "ProgramItemTypeEnum",
+    enum: ProgramItemTypeEnum,
     description: "Item type",
     example: ProgramItemTypeEnum.program,
     required: true,
@@ -16,6 +19,7 @@ export class CreateProgramManagerDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Item id",
     example: 43354534,
     required: true,
@@ -26,6 +30,7 @@ export class CreateProgramManagerDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Id of the gym manager",
     example: 43354534,
     required: true,
@@ -33,5 +38,4 @@ export class CreateProgramManagerDto {
   @IsNotEmpty()
   @IsNumber()
   managerUserId: number;
-
 }

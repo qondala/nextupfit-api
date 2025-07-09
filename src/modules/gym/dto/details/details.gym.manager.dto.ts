@@ -1,20 +1,32 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { GymManagerRoleEnum } from "../../types";
 import {
-  DetailsGymDto,
-  DetailsGymManagerOverviewDto,
-  DetailsGymManagerQualificationDto,
-  DetailsGymManagerSpecializedInWorkoutDto
-} from "./";
-import { IsNotEmpty, IsNumber, IsOptional, IsEnum, IsBoolean } from "class-validator";
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsEnum,
+  IsArray,
+  ValidateNested,
+  IsString,
+  IsInt
+} from "class-validator";
 import { Type } from "class-transformer";
 
+import { SwaggerType } from "@app/common/types";
+import { DetailsUserDto } from "@app/module/user/dto";
+
+import { GymManagerSpecialityEnum } from "../../types";
+import {
+  DetailsGymManagerOverviewDto,
+  DetailsGymManagerQualificationDto,
+  DetailsGymManagerSpecializedInNutritionDto,
+  DetailsGymManagerSpecializedInWorkoutDto
+} from "./";
 
 
 export class DetailsGymManagerDto {
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'ID of the gym manager',
     example: 1,
     required: true,
@@ -23,20 +35,19 @@ export class DetailsGymManagerDto {
   @IsNumber()
   id: number;
 
-
   @ApiProperty({
-    type: Number,
-    description: 'ID of the gym',
-    example: 1,
+    type: SwaggerType.STRING,
+    description: 'Name of the gym manager',
+    example: 'John Doe',
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
-  gymId: number;
+  @IsString()
+  name: string;
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'ID of the gym manager user',
     example: 1,
     required: true,
@@ -47,132 +58,201 @@ export class DetailsGymManagerDto {
 
 
   @ApiProperty({
-    type: Number,
+    type: SwaggerType.INTEGER,
     description: 'ID of the gym manager overview',
     example: 1,
     required: false,
   })
   @IsOptional()
   @IsNumber()
-  managerOverviewId?: number;
+  managerOverviewId: number;
 
 
   @ApiProperty({
-    type: String,
-    description: 'Role of the gym manager',
-    example: 'owner',
-    enum: GymManagerRoleEnum,
+    description: 'Speciality of the gym manager',
+    enum: GymManagerSpecialityEnum,
+    enumName: "GymManagerSpecialityEnum",
+    title: "GymManagerSpecialityEnum",
+    example: GymManagerSpecialityEnum.fitness,
     required: true,
   })
   @IsNotEmpty()
-  @IsEnum(GymManagerRoleEnum)
-  role: GymManagerRoleEnum;
+  @IsEnum(GymManagerSpecialityEnum)
+  speciality: GymManagerSpecialityEnum;
 
 
   @ApiProperty({
-    type: Date,
-    description: 'Date of enrollment of the gym manager',
-    example: '2022-01-01T00:00:00.000Z',
-    required: false,
+    type: () => DetailsUserDto,
+    title: "DetailsUserDto",
+    description: 'User of the gym manager',
+    required: true,
   })
-  @IsOptional()
-  @Type(() => Date)
-  dateEnrollment?: Date;
-
-
-  @ApiProperty({
-    type: Boolean,
-    description: 'Suspended status of the gym manager',
-    example: false,
-    required: false,
-  })
-  @IsOptional()
-  @IsBoolean()
-  suspended?: boolean;
+  @Type(() => DetailsUserDto)
+  user: DetailsUserDto;
 
 
   @ApiProperty({
     type: () => DetailsGymManagerOverviewDto,
+    title: "DetailsGymManagerOverviewDto",
     description: 'Overview of the gym manager',
-    example: {
-      id: 1,
-      gymManagerId: 1,
-      name: 'John Doe',
-      description: 'John Doe is a gym manager',
-      createdAt: '2022-01-01T00:00:00.000Z',
-      updatedAt: '2022-01-01T00:00:00.000Z'
-    },
     required: false,
   })
+  @Type(() => DetailsGymManagerOverviewDto)
   overview?: DetailsGymManagerOverviewDto;
 
 
   @ApiProperty({
-    type: () => DetailsGymDto,
-    description: 'Gym of the gym manager',
-    example: {
-      id: 1,
-      name: 'Gym 1',
-      description: 'Gym 1 is a gym',
-      createdAt: '2022-01-01T00:00:00.000Z',
-      updatedAt: '2022-01-01T00:00:00.000Z'
-    },
-    required: false,
+    type: SwaggerType.INTEGER,
+    description: 'Views count of the gym manager',
+    example: 0,
+    required: true,
+    default: 0
   })
-  @Type(() => DetailsGymDto)
-  gym?: DetailsGymDto;
+  viewsCount: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Attendees count of the gym manager',
+    example: 0,
+    required: true,
+    default: 0
+  })
+  attendeesCount: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: 'Ratings average of the gym manager',
+    example: 0.0,
+    required: true,
+    default: 0.0
+  })
+  ratingsAvg: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Followers count of the gym manager',
+    example: 0,
+    required: true,
+    default: 0
+  })
+  followersCount: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Ratings count of the gym manager',
+    example: 0,
+    required: true,
+    default: 0
+  })
+  ratingsCount: number;
 
 
   @ApiProperty({
-    type: () => DetailsGymManagerQualificationDto,
-    description: 'Qualifications of the gym manager',
-    example: {
-      id: 1,
-      gymManagerId: 1,
-      name: 'John Doe',
-      description: 'John Doe is a gym manager',
-      createdAt: '2022-01-01T00:00:00.000Z',
-      updatedAt: '2022-01-01T00:00:00.000Z'
-    },
-    required: false, 
+    type: SwaggerType.INTEGER,
+    required: true,
   })
+  @IsInt()
+  age: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @IsInt()
+  gender: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @IsInt()
+  yearsOfExperience: number;
+
+
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    required: false,
+  })
+  @IsOptional()
+  certified?: boolean;
+
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    required: false,
+  })
+  @IsOptional()
+  verified?: boolean;
+
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    required: false,
+  })
+  @IsInt()
+  @IsOptional()
+  level?: number;
+
+  @ApiProperty({
+    type: () => DetailsGymManagerQualificationDto,
+    isArray: true,
+    title: "DetailsGymManagerQualificationDto[]",
+    description: 'Qualifications of the gym manager',
+    required: false,
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => DetailsGymManagerQualificationDto)
   qualifications?: DetailsGymManagerQualificationDto[];
 
 
   @ApiProperty({
     type: () => DetailsGymManagerSpecializedInWorkoutDto,
+    isArray: true,
+    title: "DetailsGymManagerSpecializedInWorkoutDto[]",
     description: 'Specialized workouts of the gym manager',
-    example: {
-      id: 1,
-      gymManagerId: 1,
-      name: 'John Doe',
-      description: 'John Doe is a gym manager',
-      createdAt: '2022-01-01T00:00:00.000Z',
-      updatedAt: '2022-01-01T00:00:00.000Z'
-    },
     required: false,
   })
+  @IsArray()
+  @ValidateNested({ each: true })
   @Type(() => DetailsGymManagerSpecializedInWorkoutDto)
   specializedWorkouts?: DetailsGymManagerSpecializedInWorkoutDto[];
 
 
   @ApiProperty({
-    type: Date,
+    type: () => DetailsGymManagerSpecializedInNutritionDto,
+    isArray: true,
+    title: "DetailsGymManagerSpecializedInNutritionDto[]",
+    description: 'Specialized nutritions of the gym manager',
+    required: false,
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetailsGymManagerSpecializedInNutritionDto)
+  specializedNutritions?: DetailsGymManagerSpecializedInNutritionDto[];
+
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: 'Created at of the gym manager',
     example: '2022-01-01T00:00:00.000Z',
     required: true,
-  })
+  }) 
+  @IsNotEmpty()
   @Type(() => Date)
   createdAt: Date;
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: 'date-time',
     description: 'Updated at of the gym manager',
     example: '2022-01-01T00:00:00.000Z',
     required: true,
-  })
+  }) 
+  @IsNotEmpty()
   @Type(() => Date)
   updatedAt: Date;
 }

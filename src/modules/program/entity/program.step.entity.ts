@@ -32,6 +32,9 @@ export class ProgramStepEntity {
   @Column()
   ownerUserId: number;
 
+  @Column()
+  ownerManagerId: number;
+
   @Column({ nullable: true })
   iconUrl: string;
 

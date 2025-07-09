@@ -26,6 +26,8 @@ export class GymMembershipEntity {
   @Column({ nullable: false })
   memberUserId: number;
 
+  @Column({ nullable: false })
+  gymMembershipPlanId: number;
 
   @Column({ type: "timestamp", nullable: true, default: new Date() })
   startedDate?: Date;
@@ -38,17 +40,14 @@ export class GymMembershipEntity {
   })
   membershipStatus: GymMembershipStatusEnum;
 
-  @Column({ type: "timestamp", nullable: true })
-  stoppedDate?: Date;
-
   @Column({ type: "boolean", nullable: true })
   isFavorite?: boolean;
 
   @Column({ type: "timestamp", nullable: true })
-  suspendedDate: Date;
+  lastStatusUpdate?: Date;
 
   @ManyToOne(() => GymMembershipPlanEntity)
-  @JoinColumn({ name: 'membershipPlanId' })
+  @JoinColumn({ name: 'gymMembershipPlanId' })
   membershipPlan: GymMembershipPlanEntity;
 
   @ManyToOne(() => UserEntity)

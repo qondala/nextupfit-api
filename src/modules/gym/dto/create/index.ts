@@ -5,9 +5,15 @@ export * from './create.gym.manager-overview.dto';
 export * from './create.gym.manager-qualification.dto';
 export * from './create.gym.manager-request.dto';
 export * from './create.gym.manager-specialized-in-workout.dto';
+export * from './create.gym.manager-specialized-in-nutrition.dto';
 export * from './create.gym.manager.dto';
-export * from './create.gym.membership-plan-features.dto';
 export * from './create.gym.membership-plan.dto';
 export * from './create.gym.membership.dto';
 export * from './create.gym.open-day.dto';
 export * from './create.gym.specialized-in-workout.dto';
+export * from './create.gym.specialized-in-nutrition.dto';
+export * from './create.gym.has-manager.dto';
+export * from './create.gym.has-program.dto';
+export * from './create.gym.interest.dto';
+export * from './create.gym.manager-interest.dto';
+

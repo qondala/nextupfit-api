@@ -36,6 +36,12 @@ export class GymFollowerEntity {
   blockedDate?: Date;
 
   @Column({
+    type: "timestamp",
+    nullable: true,
+  })
+  rejectedDate?: Date;
+
+  @Column({
     type: "boolean",
     nullable: true,
     default: true
@@ -49,13 +55,20 @@ export class GymFollowerEntity {
   })
   blocked?: boolean;
   
-  
+
   @Column({
     type: "boolean",
     nullable: true,
     default: false
   })
   stopped?: boolean;
+
+  @Column({
+    type: "boolean",
+    nullable: true,
+    default: false
+  })
+  rejected?: boolean;
 
   @ManyToOne(() => GymEntity)
   @JoinColumn({ name: 'gymId' })
@@ -64,11 +77,4 @@ export class GymFollowerEntity {
   @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'followerUserId' })
   follower: UserEntity;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

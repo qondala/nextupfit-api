@@ -27,8 +27,9 @@ export class UserService {
     const user = this.userRepository.create({
       ...createUserDto,
       passwordHash: hashedPassword,
+      managerAccountId: 0,
+      privilegeLevel: 1,
     });
-
 
     return await this.userRepository.save(user);
   }
@@ -95,7 +96,7 @@ export class UserService {
       .where("user.email ILIKE :query OR user.firstName ILIKE :query OR user.lastName ILIKE :query", { query: `%${query}%` })
       .skip(skip)
       .take(limit)
-      .orderBy("user.createdAt", "DESC")
+      .orderBy('RANDOM()')
       .getManyAndCount();
 
     return {
@@ -108,5 +109,12 @@ export class UserService {
         currentPage: page
       }
     };
+  }
+
+
+  async findUserWithManagerAccountId(managerAccountId: number): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { managerAccountId }
+    });
   }
 }

@@ -9,8 +9,17 @@ import {
   Query,
   ParseIntPipe,
   UseGuards,
+  HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiQuery,
+  ApiParam
+} from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
 
@@ -19,8 +28,10 @@ import {
   CreateUserBodyParamDto,
   UpdateUserBodyParamDto,
   DetailsUserBodyParamDto,
+  PaginatedDetailsUserBodyParamDto,
 } from "../dto";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { SwaggerType } from "@app/common/types";
 
 
 
@@ -32,9 +43,16 @@ export class UserBodyParamController {
   constructor(private readonly userBodyParamService: UserBodyParamService) {}
 
   @Post()
-  @ApiOperation({ summary: "Create a new user body param" })
+  @ApiOperation({
+    summary: "Create a new user body param",
+    operationId: "createUserBodyParam"
+  })
+  @ApiBody({
+    required: true,
+    type: CreateUserBodyParamDto
+  })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: "The user body param has been successfully created.",
     type: DetailsUserBodyParamDto,
   })
@@ -43,34 +61,61 @@ export class UserBodyParamController {
   }
 
   @Get()
-  @ApiOperation({ summary: "Get all user body params with pagination" })
-  @ApiResponse({
-    status: 200,
-    description: "Return all user body params with pagination.",
-    type: [DetailsUserBodyParamDto],
+  @ApiOperation({
+    summary: "Get all user body params with pagination",
+    operationId: "findAllUserBodyParams"
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<[DetailsUserBodyParamDto[], number]> {
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number for pagination"
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Number of items per page"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return all user body params with pagination.",
+    type: PaginatedDetailsUserBodyParamDto,
+  })
+  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsUserBodyParamDto> {
     return this.userBodyParamService.findAll(options);
   }
 
   @Get("user/:userId")
-  @ApiOperation({ summary: "Get all user body params for a specific user" })
+  @ApiOperation({
+    summary: "Get all user body params for a specific user",
+    operationId: "findByUserId"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return all user body params for the specified user.",
-    type: [DetailsUserBodyParamDto],
+    type: PaginatedDetailsUserBodyParamDto,
   })
   findByUserId(
     @Param("userId", ParseIntPipe) userId: number,
     @Query() options: PaginationOptionsDto
-  ): Promise<[DetailsUserBodyParamDto[], number]> {
+  ): Promise<PaginatedDetailsUserBodyParamDto> {
     return this.userBodyParamService.findByUserId(userId, options);
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a user body param by id" })
+  @ApiOperation({
+    summary: "Get a user body param by id",
+    operationId: "findOneUserBodyParam"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User body param ID"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Return the user body param.",
     type: DetailsUserBodyParamDto,
   })
@@ -79,9 +124,22 @@ export class UserBodyParamController {
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Update a user body param" })
+  @ApiOperation({
+    summary: "Update a user body param",
+    operationId: "updateUserBodyParam"
+  })
+  @ApiParam({
+    name: "id",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User body param ID"
+  })
+  @ApiBody({
+    required: true,
+    type: UpdateUserBodyParamDto
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The user body param has been successfully updated.",
     type: DetailsUserBodyParamDto,
   })
@@ -93,12 +151,16 @@ export class UserBodyParamController {
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a user body param" })
+  @ApiOperation({
+    summary: "Delete a user body param",
+    operationId: "removeUserBodyParam"
+  })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "The user body param has been successfully deleted.",
   })
   remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.userBodyParamService.remove(id);
   }
+
 }

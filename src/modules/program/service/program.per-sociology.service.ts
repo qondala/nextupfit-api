@@ -2,20 +2,28 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+import {
+  FindOrderByEnum,
+  PaginatedResponseDto,
+  PaginationOptionsDto,
+} from "@app/common/dto";
 
-import { ProgramPerSociologyEntity } from "../entity";
-import { CreateProgramPerSociologyDto, UpdateProgramPerSociologyDto } from "../dto";
 import { ProgramItemTypeEnum } from "../types";
-import { BaseSociologyEntity } from "@app/module/base/entity";
+import { ProgramPerSociologyEntity } from "../entity";
+import {
+  CreateProgramPerSociologyDto,
+  ProgramFindCriteriaPerSociologyDto,
+  UpdateProgramPerSociologyDto,
+} from "../dto";
+
+import { ProgramService } from "../service";
 
 @Injectable()
 export class ProgramPerSociologyService {
   constructor(
     @InjectRepository(ProgramPerSociologyEntity)
     private readonly programPerSociologyRepository: Repository<ProgramPerSociologyEntity>,
-    @InjectRepository(BaseSociologyEntity)
-    private readonly baseSociologyRepository: Repository<BaseSociologyEntity>
+    private readonly programService: ProgramService,
   ) {}
 
   async create(createProgramPerSociologyDto: CreateProgramPerSociologyDto): Promise<ProgramPerSociologyEntity> {
@@ -23,19 +31,53 @@ export class ProgramPerSociologyService {
     return await this.programPerSociologyRepository.save(programPerSociology);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramPerSociologyEntity>> {
-    const { page = 1, limit = 10 } = options;
-    const skip = (page - 1) * limit;
+  async findAll(
+    criteria: ProgramFindCriteriaPerSociologyDto,
+    pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramPerSociologyEntity>> {
 
     const queryBuilder = this.programPerSociologyRepository.createQueryBuilder("programPerSociology");
+
+    queryBuilder.where("programPerSociology.id != 0");
+
+    if (criteria.itemType) {
+      queryBuilder.andWhere("programPerSociology.itemType = :itemType", { itemType: criteria.itemType });
+    }
+    if (criteria.itemId) {
+      queryBuilder.andWhere("programPerSociology.itemId = :itemId", { itemId: criteria.itemId });
+    }
+    if (criteria.baseSociologyId) {
+      queryBuilder.andWhere("programPerSociology.baseSociologyId = :baseSociologyId", { baseSociologyId: criteria.baseSociologyId });
+    }
+    if (criteria.baseSociologyIds) {
+      queryBuilder.andWhere("programPerSociology.baseSociologyId IN (:...baseSociologyIds)", { baseSociologyIds: criteria.baseSociologyIds });
+    }
+
+    if (criteria.orderBy) {
+      switch (criteria.orderBy) {
+        case FindOrderByEnum.random:
+          queryBuilder.addOrderBy('RANDOM()');
+          break;
+        case FindOrderByEnum.date:
+          queryBuilder.addOrderBy('programPerSociology.createdAt', 'DESC');
+          break;
+        default:
+          queryBuilder.addOrderBy('programPerSociology.createdAt', 'DESC');
+          break;
+      }
+    }
+
+    const { page, limit } = pagination || { page: 1, limit: 10 };
+    const skip = (page - 1) * limit;
 
     const [items, totalItems] = await queryBuilder
       .skip(skip)
       .take(limit)
-      .orderBy("programPerSociology.createdAt", "DESC")
       .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / limit);
+    for (const item of items) {
+      item.item = await this.programService.getProgramItem(item.itemType, item.itemId);
+    }
 
     return {
       items,
@@ -51,8 +93,8 @@ export class ProgramPerSociologyService {
 
   async findOne(id: number): Promise<ProgramPerSociologyEntity> {
     const programPerSociology = await this.programPerSociologyRepository.findOne({ where: { id } });
-    if (!programPerSociology) {
-      throw new Error(`Program per sociology with ID ${id} not found`);
+    if (programPerSociology) {
+      programPerSociology.item = await this.programService.getProgramItem(programPerSociology.itemType, programPerSociology.itemId);
     }
     return programPerSociology;
   }
@@ -65,32 +107,5 @@ export class ProgramPerSociologyService {
 
   async remove(id: number): Promise<void> {
     await this.programPerSociologyRepository.delete(id);
-  }
-
-
-  /**
-   * Fetches the sociology of a program item.
-   * 
-   * @param itemId The ID of the program item.
-   * @param itemType The type of the program item.
-   * @returns An array of sociology.
-   */
-  async fetchProgramItemSociology(itemId: number, itemType: ProgramItemTypeEnum): Promise<BaseSociologyEntity[]> {
-    const programPerSociologies = await this.programPerSociologyRepository.find({
-      where: {
-        itemType,
-        itemId
-      }
-    });
-
-    const audience = [];
-    for (const programPerSociology of programPerSociologies) {
-      const sociology = this.baseSociologyRepository.findOne({
-        where: { id: programPerSociology.baseSociologyId },
-      });
-      audience.push(sociology);
-    }
-
-    return audience;
   }
 }

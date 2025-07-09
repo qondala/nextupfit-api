@@ -2,13 +2,27 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
+  BaseNutritionEntity,
+  BaseProgramGoalEntity,
+  BaseSociologyEntity,
+  BaseWorkoutEntity,
+} from "@app/module/base/entity";
+
+import {
   UserEntity,
   UserBodyParamEntity,
   UserProgramEvolutionEntity,
   UserRecommendationEntity,
   UserSubscriptionPlanEntity,
-  UserBookmarkAndFavoriteEntity
+  UserCommitmentEntity,
+  UserConsumptionItemEntity,
+  UserBookmarkAndFavoriteEntity,
+  UserRecipeEntity,
+  UserConsumptionEntity,
+  UserScheduleEntity,
+  UserCommitmentCompletedItemEntity,
 } from "./entity";
+
 
 import {
   UserController,
@@ -16,8 +30,15 @@ import {
   UserProgramEvolutionController,
   UserRecommendationController,
   UserSubscriptionPlanController,
-  UserBookmarkAndFavoriteController
+  UserBookmarkAndFavoriteController,
+  UserRecipeController,
+  UserCommitmentController,
+  UserConsumptionItemController,
+  UserConsumptionController,
+  UserScheduleController,
+  UserCommitmentCompletedItemController
 } from "./controller";
+
 
 import {
   UserService,
@@ -25,7 +46,13 @@ import {
   UserProgramEvolutionService,
   UserRecommendationService,
   UserSubscriptionPlanService,
-  UserBookmarkAndFavoriteService
+  UserBookmarkAndFavoriteService,
+  UserRecipeService,
+  UserCommitmentService,
+  UserConsumptionItemService,
+  UserConsumptionService,
+  UserScheduleService,
+  UserCommitmentCompletedItemService,
 } from "./service";
 
 @Module({
@@ -35,8 +62,20 @@ import {
       UserBodyParamEntity,
       UserProgramEvolutionEntity,
       UserRecommendationEntity,
+      UserCommitmentEntity,
+      UserConsumptionEntity,
+      UserConsumptionItemEntity,
+      UserBookmarkAndFavoriteEntity,
+      UserRecipeEntity,
       UserSubscriptionPlanEntity,
-      UserBookmarkAndFavoriteEntity
+      UserScheduleEntity,
+      UserCommitmentCompletedItemEntity,
+
+      // Base entities for user interest
+      BaseNutritionEntity,
+      BaseProgramGoalEntity,
+      BaseSociologyEntity,
+      BaseWorkoutEntity,
     ]),
   ],
   controllers: [
@@ -45,7 +84,13 @@ import {
     UserProgramEvolutionController,
     UserRecommendationController,
     UserSubscriptionPlanController,
-    UserBookmarkAndFavoriteController
+    UserBookmarkAndFavoriteController,
+    UserRecipeController,
+    UserCommitmentController,
+    UserConsumptionItemController,
+    UserConsumptionController,
+    UserScheduleController,
+    UserCommitmentCompletedItemController
   ],
   providers: [
     UserService,
@@ -53,15 +98,27 @@ import {
     UserProgramEvolutionService,
     UserRecommendationService,
     UserSubscriptionPlanService,
-    UserBookmarkAndFavoriteService
-  ],
+    UserBookmarkAndFavoriteService,
+    UserRecipeService,
+    UserCommitmentService,
+    UserConsumptionItemService,
+    UserConsumptionService,
+    UserScheduleService,
+    UserCommitmentCompletedItemService,
+   ],
   exports: [
     UserService,
     UserBodyParamService,
     UserProgramEvolutionService,
     UserRecommendationService,
     UserSubscriptionPlanService,
-    UserBookmarkAndFavoriteService
-  ],
+    UserBookmarkAndFavoriteService,
+    UserRecipeService,
+    UserCommitmentService,
+    UserConsumptionItemService,
+    UserConsumptionService,
+    UserScheduleService,
+    UserCommitmentCompletedItemService,
+   ],
 })
 export class UserModule {}

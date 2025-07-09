@@ -1,11 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+  HttpStatus,
+  ParseIntPipe,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiQuery
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
 import { PaginationOptionsDto, LocationRadiusDto } from '@app/common/dto';
 
-import { CreateMapDto, DetailsMapDto, PaginatedDetailsMapDto, UpdateMapDto } from '../dto';
+import {
+  CreateMapDto,
+  DetailsMapDto,
+  PaginatedDetailsMapDto,
+  UpdateMapDto
+} from '../dto';
 import { MapService } from '../service';
+import { SwaggerType } from '@app/common/types';
 
 
 @ApiTags('Map module endpoints')
@@ -39,6 +65,36 @@ export class MapController {
     description: 'List of gyms and users locations within radius.',
     type: PaginatedDetailsMapDto,
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'latitude',
+    description: 'Latitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'longitude',
+    description: 'Longitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'radius',
+    description: 'Radius in meters',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   async findGymsAndManagersWithinRadius(
     @Query() locationRadiusDto: LocationRadiusDto,
     @Query() paginationOptions: PaginationOptionsDto
@@ -55,6 +111,36 @@ export class MapController {
   @ApiOkResponse({
     description: 'List of gyms locations.',
     type: PaginatedDetailsMapDto
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'latitude',
+    description: 'Latitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'longitude',
+    description: 'Longitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'radius',
+    description: 'Radius in meters',
+    required: true,
+    type: SwaggerType.INTEGER
   })
   async getAllGymsLocations(
     @Query() locationRadiusDto: LocationRadiusDto,
@@ -73,6 +159,36 @@ export class MapController {
     description: 'List of managers locations.',
     type: PaginatedDetailsMapDto
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'latitude',
+    description: 'Latitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'longitude',
+    description: 'Longitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'radius',
+    description: 'Radius in meters',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   async getAllManagersLocations(
     @Query() locationRadiusDto: LocationRadiusDto,
     @Query() paginationOptions: PaginationOptionsDto
@@ -89,6 +205,36 @@ export class MapController {
   @ApiOkResponse({
     description: 'List of attendees locations.',
     type: PaginatedDetailsMapDto
+  })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'latitude',
+    description: 'Latitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'longitude',
+    description: 'Longitude of the location',
+    required: true,
+    type: SwaggerType.NUMBER
+  })
+  @ApiQuery({
+    name: 'radius',
+    description: 'Radius in meters',
+    required: true,
+    type: SwaggerType.INTEGER
   })
   async getAllAttendeesLocations(
     @Query() locationRadiusDto: LocationRadiusDto,
@@ -107,8 +253,26 @@ export class MapController {
     description: 'List of gym locations.',
     type: PaginatedDetailsMapDto
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'gymId',
+    description: 'Gym id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   async findByGym(
-    @Param('gymId') gymId: string,
+    @Param('gymId', ParseIntPipe) gymId: number,
     @Query() paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedDetailsMapDto> {
     return this.mapService.findByGym(+gymId, paginationOptions);
@@ -124,8 +288,26 @@ export class MapController {
     description: 'List of locations of a User.',
     type: PaginatedDetailsMapDto
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page number',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'limit',
+    description: 'Number of items per page',
+    required: false,
+    type: SwaggerType.INTEGER
+  })
+  @ApiQuery({
+    name: 'userId',
+    description: 'User id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   async findByUser(
-    @Param('userId') targetUserId: string,
+    @Param('userId', ParseIntPipe) targetUserId: number,
     @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsMapDto> {
     return this.mapService.findByUser(+targetUserId, paginationOptions);
@@ -141,8 +323,14 @@ export class MapController {
     description: 'Map record by id.',
     type: DetailsMapDto
   })
-  findOne(@Param('id') id: string): Promise<DetailsMapDto> {
-    return this.mapService.findOne(+id);
+  @ApiQuery({
+    name: 'id',
+    description: 'Map record id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsMapDto> {
+    return this.mapService.findOne(id);
   }
 
 
@@ -155,11 +343,17 @@ export class MapController {
     description: 'Updated map record.',
     type: DetailsMapDto
   })
+  @ApiQuery({
+    name: 'id',
+    description: 'Map record id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateMapDto
   ): Promise<DetailsMapDto> {
-    return this.mapService.update(+id, updateDto);
+    return this.mapService.update(id, updateDto);
   }
 
 
@@ -172,7 +366,13 @@ export class MapController {
     description: 'Deleted map record.',
     type: DetailsMapDto
   })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.mapService.remove(+id);
+  @ApiQuery({
+    name: 'id',
+    description: 'Map record id',
+    required: true,
+    type: SwaggerType.INTEGER
+  })
+  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.mapService.remove(id);
   }
 }

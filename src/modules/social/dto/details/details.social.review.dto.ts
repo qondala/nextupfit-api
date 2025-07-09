@@ -1,20 +1,30 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum, 
+  IsInt, 
+  IsNotEmpty, 
+  IsOptional, 
+  IsString 
+} from "class-validator";
+import { SwaggerType } from "@app/common/types";
+
 import { SocialReviewItemTypeEnum } from "../../types";
 
 export class DetailsSocialReviewDto {
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "User's rating on the item",
     example: 3,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   rating: number;
 
 
   @ApiProperty({
+    type: SwaggerType.STRING,
     description: "Users's comment",
     example: "I really enjoyed attending Pillates workout session",
     required: false,
@@ -25,6 +35,8 @@ export class DetailsSocialReviewDto {
 
  
   @ApiProperty({
+    enum: SocialReviewItemTypeEnum,
+    enumName: "SocialReviewItemTypeEnum",
     description: "Item type to be rated",
     example: SocialReviewItemTypeEnum.workingsession,
     required: true,
@@ -35,31 +47,34 @@ export class DetailsSocialReviewDto {
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "User id performing rating",
     example: 12342343,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   userId: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Assess the ease of use of the Item on a scale of 10",
     example: 9,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   easeOfUse?: number;
 
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Assess the effectiveness of the Item on a scale of 10",
     example: 8,
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   effectiveness?: number;
 }

@@ -1,11 +1,24 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { BaseSociologyEntity } from "@app/module/base/entity";
-import { GymManagerEntity } from "@app/module/gym/entity";
+import {
+  BaseNutritionEntity,
+  BaseProgramGoalEntity,
+  BaseSociologyEntity,
+  BaseWorkoutEntity
+} from '@app/module/base/entity';
 
 import {
-  ProgramActivityContentEntity,
+  UserEntity,
+  UserInterestEntity
+} from "@app/module/user/entity";
+import { GymManagerEntity } from "@app/module/gym/entity";
+
+import { UserInterestService } from "@app/module/user/service";
+
+
+
+import {
   ProgramEntity,
   ProgramPerSociologyEntity,
   ProgramStepActivityEntity,
@@ -14,12 +27,17 @@ import {
   ProgramStepEntity,
   ProgramSubscriptionPlanEntity,
   ProgramWorkoutNutrientBurnEntity,
-  ProgramManagerEntity
+  ProgramManagerEntity,
+  ProgramFreetoolInterestEntity,
+  ProgramFreetoolEntity,
+  ProgramInterestEntity
 } from "./entity";
 
 import {
-  ProgramActivityContentController,
   ProgramController, 
+  ProgramFreetoolController, 
+  ProgramFreetoolInterestController, 
+  ProgramInterestController, 
   ProgramManagerController, 
   ProgramPerSociologyController, 
   ProgramStepActivityController,
@@ -31,7 +49,9 @@ import {
 } from "./controller";
 
 import {
-  ProgramActivityContentService,
+  ProgramFreetoolInterestService,
+  ProgramFreetoolService,
+  ProgramInterestService,
   ProgramManagerService,
   ProgramPerSociologyService,
   ProgramService,
@@ -40,10 +60,8 @@ import {
   ProgramStepActivityWorkingsessionWorkoutService,
   ProgramStepService,
   ProgramSubscriptionPlanService,
-  ProgramWorkoutNutrientBurnService
+  ProgramWorkoutNutrientBurnService,
 } from "./service";
-
-
 
 
 @Module({
@@ -56,13 +74,21 @@ import {
       ProgramWorkoutNutrientBurnEntity,
       ProgramStepActivityWorkingsessionEntity,
       ProgramStepActivityWorkingsessionWorkoutEntity,
-      ProgramActivityContentEntity,
       ProgramPerSociologyEntity,
       ProgramManagerEntity,
+      ProgramFreetoolEntity,
+      ProgramInterestEntity,
+      ProgramFreetoolInterestEntity,
 
+      // External modules
       BaseSociologyEntity,
       GymManagerEntity,
-
+      BaseNutritionEntity,
+      BaseProgramGoalEntity,
+      BaseSociologyEntity,
+      BaseWorkoutEntity,
+      UserEntity,
+      UserInterestEntity
     ]),
   ],
   controllers: [
@@ -73,9 +99,11 @@ import {
     ProgramWorkoutNutrientBurnController,
     ProgramStepActivityWorkingsessionController,
     ProgramStepActivityWorkingsessionWorkoutController,
-    ProgramActivityContentController,
     ProgramPerSociologyController,
-    ProgramManagerController
+    ProgramManagerController,
+    ProgramFreetoolController,
+    ProgramInterestController,
+    ProgramFreetoolInterestController,
   ],
   providers: [
     ProgramService,
@@ -85,9 +113,12 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
-    ProgramActivityContentService,
     ProgramPerSociologyService,
-    ProgramManagerService
+    ProgramManagerService,
+    ProgramFreetoolService,
+    ProgramInterestService,
+    ProgramFreetoolInterestService,
+    UserInterestService
   ],
   exports: [
     ProgramService,
@@ -97,9 +128,12 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
-    ProgramActivityContentService,
     ProgramPerSociologyService,
-    ProgramManagerService
+    ProgramManagerService,
+    ProgramFreetoolService,
+    ProgramInterestService,
+    ProgramFreetoolInterestService,
+    UserInterestService
   ],
 })
 export class ProgramModule {}

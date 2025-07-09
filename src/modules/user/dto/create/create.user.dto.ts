@@ -1,11 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, IsEmail, IsOptional, IsArray, IsDate, IsBoolean, IsEnum } from "class-validator";
+import { IsNotEmpty, IsString, IsEmail, IsOptional, IsArray, IsDate, IsBoolean, IsEnum, IsInt } from "class-validator";
 
 import { UserProfileTypeEnum } from "../../types";
+import { SwaggerType } from "@app/common/types";
 
 export class CreateUserDto {
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's email",
     example: "test@example.com",
     required: true,
@@ -16,7 +17,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's first name",
     example: "John",
     required: true,
@@ -27,7 +28,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's last name",
     example: "Doe",
     required: true,
@@ -38,7 +39,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Numero de telephone",
     example: "+1 (612) 508-8704",
   })
@@ -48,7 +49,8 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: "date-time",
     description: "User's birthdate",
     example: "2025-05-02",
     required: false,
@@ -59,7 +61,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's password",
     example: "Password123",
     required: true,
@@ -70,7 +72,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's profile image URL",
     example: "https://example.com/profile-picture.jpg",
     required: false,
@@ -81,7 +83,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "User's cover image URL",
     example: "https://example.com/profile-picture.jpg",
     required: false,
@@ -92,7 +94,7 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: Boolean,
+    type: SwaggerType.BOOLEAN,
     description: "Whether user has confirmed successfully his email",
     example: true,
     required: false,
@@ -104,7 +106,8 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: "date-time",
     description: "User last connexion",
     example: Date(),
     required: false,
@@ -115,15 +118,21 @@ export class CreateUserDto {
 
 
   @ApiProperty({
-    enum: UserProfileTypeEnum,
-    // name: "UserProfileTypeEnums",
-    isArray: true,
-    description: "User's profile types",
-    example: Object.values(UserProfileTypeEnum),
-    required: false,
+    type: SwaggerType.INTEGER,
+    description: "User's age",
+    example: 25,
+    required: true,
   })
-  @IsOptional()
-  @IsArray()
-  @IsEnum(UserProfileTypeEnum, { each: true })
-  userProfile?: UserProfileTypeEnum[];
+  @IsInt()
+  age: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "User's gender",
+    example: 1,
+    required: true,
+  })
+  @IsInt()
+  gender: number;
 }

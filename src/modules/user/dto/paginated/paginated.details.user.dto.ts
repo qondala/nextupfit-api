@@ -11,7 +11,8 @@ export class PaginatedDetailsUserDto extends PaginatedResponseDto<DetailsUserDto
     type: () => DetailsUserDto,
     name: 'items',
     isArray: true,
-    description: 'List of users'
+    description: 'List of users',
+    required: true
   })
   @IsDefined()
   @IsArray()

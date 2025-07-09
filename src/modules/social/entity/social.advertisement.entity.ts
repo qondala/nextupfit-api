@@ -1,16 +1,32 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
 import { SocialAdvertisementActionEnum } from '../types';
+import { ContentEntity } from '@app/module/content/entity';
+
+import { SocialAdvertisementInterestEntity } from '.';
 
 @Entity('social_advertisement')
 export class SocialAdvertisementEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  videoUrl?: string;
+  @Column()
+  actionProgramId: number;
 
-  @Column({ nullable: true })
-  imageUrl?: string;
+  @Column()
+  actionGymId: number;
+
+  @Column()
+  actionManagerId: number;
 
   @Column({
     type: 'enum',
@@ -22,11 +38,21 @@ export class SocialAdvertisementEntity {
   actionLink?: string;
 
   @Column()
-  userId: number;
+  contentId: number;
+
+  @Column()
+  createdByManagerId: number;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToOne(() => ContentEntity)
+  @JoinColumn({ name: 'contentId' })
+  content: ContentEntity;
+
+  @OneToMany(() => SocialAdvertisementInterestEntity, (interest) => interest.advertisement)
+  interests: SocialAdvertisementInterestEntity[];
 }

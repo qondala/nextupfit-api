@@ -11,7 +11,8 @@ export class PaginatedDetailsProgramSubscriptionPlanDto extends PaginatedRespons
     type: () => DetailsProgramSubscriptionPlanDto,
     name: 'items',
     isArray: true,
-    description: 'List of program subscription plans'
+    description: 'List of program subscription plans',
+    required: true
   })
   @IsDefined()
   @IsArray()

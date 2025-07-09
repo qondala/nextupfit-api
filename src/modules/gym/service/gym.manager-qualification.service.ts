@@ -11,22 +11,22 @@ import { GymManagerQualificationEntity } from '../entity';
 export class GymManagerQualificationService {
   constructor(
     @InjectRepository(GymManagerQualificationEntity)
-    private readonly gymManagerQualificationRepository: Repository<GymManagerQualificationEntity>,
+    private readonly repository: Repository<GymManagerQualificationEntity>,
   ) {}
 
   async create(createDto: CreateGymManagerQualificationDto): Promise<GymManagerQualificationEntity> {
-    const qualification = this.gymManagerQualificationRepository.create({
+    const qualification = this.repository.create({
       ...createDto,
       createdAt: new Date()
     });
-    return await this.gymManagerQualificationRepository.save(qualification);
+    return await this.repository.save(qualification);
   }
 
   async findByManager(
     managerId: number,
     paginationOptions: PaginationOptionsDto
   ): Promise<PaginatedResponseDto<GymManagerQualificationEntity>> {
-    const queryBuilder = this.gymManagerQualificationRepository.createQueryBuilder('qualification')
+    const queryBuilder = this.repository.createQueryBuilder('qualification')
       .where('qualification.managerId = :managerId', { managerId })
       .orderBy('qualification.yearObtained', 'DESC');
 
@@ -51,18 +51,18 @@ export class GymManagerQualificationService {
   }
 
   async findOne(id: number): Promise<GymManagerQualificationEntity> {
-    return await this.gymManagerQualificationRepository.findOne({
+    return await this.repository.findOne({
       where: { id },
       relations: ['manager']
     });
   }
 
   async update(id: number, updateDto: UpdateGymManagerQualificationDto): Promise<GymManagerQualificationEntity> {
-    await this.gymManagerQualificationRepository.update(id, updateDto);
+    await this.repository.update(id, updateDto);
     return this.findOne(id);
   }
 
   async remove(id: number): Promise<void> {
-    await this.gymManagerQualificationRepository.delete(id);
+    await this.repository.delete(id);
   }
 }

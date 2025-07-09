@@ -1,7 +1,20 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { ProgramStepActivityStatusEnum } from "../types";
-import { ProgramStepEntity } from "./program.step.entity";
-import { ProgramStepActivityWorkingsessionEntity } from "./program.step-activity-workingsession.entity";
+import {
+  ProgramStepEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramFreetoolInterestEntity
+} from ".";
 
 
 @Entity("program_step_activity")
@@ -26,6 +39,9 @@ export class ProgramStepActivityEntity {
 
   @Column()
   ownerUserId: number;
+
+  @Column()
+  ownerManagerId: number;
 
   @Column({ nullable: true })
   iconUrl: string;
@@ -64,6 +80,15 @@ export class ProgramStepActivityEntity {
   @Column({ default: 0 })
   position: number;
 
+  @Column({ default: false })
+  isFreeTool: boolean;
+
+  @Column({ default: 0 })
+  price: number;
+
+  @Column({ default: false })
+  isChallenge: boolean;
+
   @ManyToOne(() => ProgramStepEntity, step => step.activities)
   @JoinColumn({ name: 'programStepId' })
   step: ProgramStepEntity;
@@ -76,4 +101,7 @@ export class ProgramStepActivityEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => ProgramFreetoolInterestEntity, interest => interest.activity)
+  interests: ProgramFreetoolInterestEntity[];
 }

@@ -1,5 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { UserProfileTypeEnum } from "../types";
+import { GymManagerEntity } from "@app/module/gym/entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from "typeorm";
+
 
 @Entity("user")
 export class UserEntity {
@@ -36,13 +45,17 @@ export class UserEntity {
   @Column({ type: "timestamp", nullable: true })
   lastLogin: Date;
 
-  @Column({
-    type: "enum",
-    enum: UserProfileTypeEnum,
-    array: true,
-    default: [UserProfileTypeEnum.attendee],
-  })
-  userProfile: UserProfileTypeEnum[];
+  @Column({ type: "bigint", nullable: true, default: 1 })
+  managerAccountId: number;
+
+  @Column({ type: "integer", nullable: true, default: 1 })
+  privilegeLevel: number;
+
+  @Column({ nullable: true })
+  age: number;
+
+  @Column({ nullable: true })
+  gender: number;
 
   @CreateDateColumn()
   createdAt: Date;

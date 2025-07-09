@@ -5,3 +5,5 @@ export * from "./card.dto";
 export * from "./coach.dto";
 export * from "./geopoint.dto";
 export * from "./location-radius.dto";
+export * from "./find.order-by.enum";
+export * from "./interest-pagination.dto";

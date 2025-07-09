@@ -28,6 +28,6 @@ export class GymManagerSpecializedInWorkoutEntity {
   manager: GymManagerEntity;
 
   @ManyToOne(() => BaseWorkoutEntity)
-  @JoinColumn({ name: 'workoutId' })
+  @JoinColumn({ name: 'baseWorkoutId' })
   baseWorkout: BaseWorkoutEntity;
 }

@@ -1,4 +1,3 @@
-export * from "./details.program.activity-content.dto";
 export * from "./details.program.dto";
 export * from "./details.program.per-sociology.dto";
 export * from "./details.program.step-activity-workingsession-workout.dto";
@@ -8,3 +7,6 @@ export * from "./details.program.step.dto";
 export * from "./details.program.subscription-plan.dto";
 export * from "./details.program.workout-nutrient-burn.dto";
 export * from "./details.program-manager.dto";
+export * from "./details.program.freetool.dto";
+export * from "./details.program.interest.dto";
+export * from "./details.program.freetool-interest.dto";

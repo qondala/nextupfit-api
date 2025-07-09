@@ -1,19 +1,35 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { SwaggerType } from '@app/common/types';
 
 export class PaginationMetaDto {
-  @ApiProperty({ description: 'Total number of items' })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Total number of items'
+  })
   totalItems?: number;
 
-  @ApiProperty({ description: 'Number of items on current page' })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Number of items on current page'
+  })
   itemCount?: number;
 
-  @ApiProperty({ description: 'Number of items per page' })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Number of items per page'
+  })
   itemsPerPage?: number;
 
-  @ApiProperty({ description: 'Total number of pages' })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Total number of pages'
+  })
   totalPages?: number;
 
-  @ApiProperty({ description: 'Current page number' })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: 'Current page number'
+  })
   currentPage?: number;
 }
 
