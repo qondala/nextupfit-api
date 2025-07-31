@@ -10,3 +10,4 @@ export * from './program.manager.controller';
 export * from './program.interest.controller';
 export * from './program.freetool-interest.controller';
 export * from './program.freetool.controller';
+export * from './program.subscription.controller';

@@ -1,13 +1,23 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  Injectable
+} from "@nestjs/common";
+import {
+  InjectRepository
+} from "@nestjs/typeorm";
+import {
+  LessThan,
+  MoreThan,
+  Repository
+} from "typeorm";
 
 import {
   PaginatedResponseDto,
   PaginationOptionsDto
 } from "@app/common/dto";
 
-import { ProgramStepEntity } from "../entity";
+import {
+  ProgramStepEntity
+} from "../entity";
 import {
   CreateProgramStepDto,
   ProgramFindOrderStepEnum,
@@ -20,7 +30,7 @@ import {
 export class ProgramStepService {
   constructor(
     @InjectRepository(ProgramStepEntity)
-    private readonly repository: Repository<ProgramStepEntity>
+    private readonly repository: Repository<ProgramStepEntity>,
   ) {}
 
   async create(body: CreateProgramStepDto): Promise<ProgramStepEntity> {
@@ -160,6 +170,24 @@ export class ProgramStepService {
   async findOne(id: number): Promise<ProgramStepEntity> {
     const step = await this.repository.findOne({ where: { id } });
     return step;
+  }
+
+  async findFirst(programId: number): Promise<ProgramStepEntity> {
+    const step = await this.repository.findOne({ where: { programId }, order: { position: "ASC" } });
+    return step;
+  }
+
+
+  async findNext(stepId: number): Promise<ProgramStepEntity> {
+    const step = await this.findOne(stepId);
+    const nextStep = await this.repository.findOne({ where: { programId: step.programId, position: MoreThan(step.position) }, order: { position: "ASC" } });
+    return nextStep;
+  }
+
+  async findPrevious(stepId: number): Promise<ProgramStepEntity> {
+    const step = await this.findOne(stepId);
+    const previousStep = await this.repository.findOne({ where: { programId: step.programId, position: LessThan(step.position) }, order: { position: "DESC" } });
+    return previousStep;
   }
 
   async update(id: number, body: UpdateProgramStepDto): Promise<ProgramStepEntity> {

@@ -10,3 +10,4 @@ export * from "./update.program-manager.dto";
 export * from "./update.program.freetool.dto";
 export * from "./update.program.interest.dto";
 export * from "./update.program.freetool-interest.dto";
+export * from "./update.program.subscription.dto";

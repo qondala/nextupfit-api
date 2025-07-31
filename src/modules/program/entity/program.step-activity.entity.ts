@@ -7,15 +7,26 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ValueTransformer
 } from "typeorm";
 
-import { ProgramStepActivityStatusEnum } from "../types";
+import {
+  ProgramStepActivityStatusEnum,
+  ProgramVisibilityEnum,
+  ProgramAccessibilityEnum
+} from "../types";
 import {
   ProgramStepEntity,
   ProgramStepActivityWorkingsessionEntity,
   ProgramFreetoolInterestEntity
 } from ".";
 
+
+// Transformer to convert between string[] and number[]
+const BigintArrayTransformer: ValueTransformer = {
+  to: (value: number[]) => value, // JS numbers → stored as PostgreSQL bigint
+  from: (value: string[]) => value.map((v) => Number(v)), // PostgreSQL bigint[] → JS number[]
+};
 
 @Entity("program_step_activity")
 export class ProgramStepActivityEntity {
@@ -88,6 +99,37 @@ export class ProgramStepActivityEntity {
 
   @Column({ default: false })
   isChallenge: boolean;
+
+  @Column({
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    default: ProgramAccessibilityEnum.public,
+    nullable: false
+  })
+  accessibility: ProgramAccessibilityEnum;
+
+  @Column({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    nullable: false
+  })
+  visibility: ProgramVisibilityEnum;
+
+  @Column({
+    type: "bigint",
+    array: true,
+    nullable: true,
+    transformer: BigintArrayTransformer
+  })
+  authorizedMembershipPlanIds?: number[];
+
+  @Column({
+    type: "bigint",
+    array: true,
+    nullable: true,
+    transformer: BigintArrayTransformer
+  })
+  authorizedProgramSubscriptionPlanIds?: number[];
 
   @ManyToOne(() => ProgramStepEntity, step => step.activities)
   @JoinColumn({ name: 'programStepId' })

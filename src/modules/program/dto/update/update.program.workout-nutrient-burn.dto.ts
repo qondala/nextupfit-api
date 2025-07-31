@@ -1,5 +1,9 @@
-import { SwaggerType } from "@app/common/types";
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsOptional,
   IsInt

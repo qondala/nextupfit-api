@@ -1,4 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+
 import {
   IsNotEmpty,
   IsInt,
@@ -9,11 +12,15 @@ import {
 } from "class-validator";
 
 
-import { SwaggerType } from "@app/common/types";
+import {
+  SwaggerType
+} from "@app/common/types";
 
 import {
+  ProgramAccessibilityEnum,
   ProgramStatusEnum,
   ProgramTypeEnum,
+  ProgramVisibilityEnum,
 } from "../../types";
 
 
@@ -27,6 +34,15 @@ export class CreateProgramDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Program description",
+    example: "Daily workout",
+    required: false,
+  })
+  @IsString()
+  description?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -184,4 +200,33 @@ export class CreateProgramDto {
   @IsOptional()
   @IsInt()
   difficultyLevel?: number;
+
+
+  @ApiProperty({
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    nullable: false
+  })
+  accessibility: ProgramAccessibilityEnum;
+
+  @ApiProperty({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    nullable: false
+  })
+  visibility: ProgramVisibilityEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    nullable: true
+  })
+  authorizedMembershipPlanIds?: number[];
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    nullable: true
+  })
+  authorizedProgramSubscriptionPlanIds?: number[];
 }

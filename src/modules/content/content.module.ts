@@ -9,7 +9,6 @@ import {
   ContentChatWithCoachEntity,
   ContentCommitmentEntity,
   ContentConsumptionEntity,
-  ContentEntity,
   ContentEquipmentEntity,
   ContentFaqEntity,
   ContentGoalsEntity,
@@ -28,6 +27,7 @@ import {
   ContentVideoEntity,
   ContentWarningEntity,
   ContentWorkoutEntity,
+  ContentEntity,
   // Item Entities
   ContentAccordionItemEntity,
   ContentCarouselItemEntity,
@@ -42,6 +42,7 @@ import {
   ContentSusbcriptionPlanItemEntity,
   ContentTipsItemEntity,
   ContentUnorderedlistItemEntity,
+  ContentGalleryItemEntity,
   ContentGalleryEntity,
 } from './entity';
 
@@ -143,7 +144,6 @@ import {
     ContentChatWithCoachEntity,
     ContentCommitmentEntity,
     ContentConsumptionEntity,
-    ContentEntity,
     ContentEquipmentEntity,
     ContentFaqEntity,
     ContentGoalsEntity,
@@ -163,6 +163,7 @@ import {
     ContentWarningEntity,
     ContentWorkoutEntity,
     ContentGalleryEntity,
+    ContentEntity,
 
     // Item Entities
     ContentAccordionItemEntity,
@@ -178,6 +179,7 @@ import {
     ContentSusbcriptionPlanItemEntity,
     ContentTipsItemEntity,
     ContentUnorderedlistItemEntity,
+    ContentGalleryItemEntity,
     ]),
   ],
   controllers: [
@@ -188,7 +190,6 @@ import {
     ContentChatWithCoachController,
     ContentCommitmentController,
     ContentConsumptionController,
-    ContentController,
     ContentEquipmentController,
     ContentFaqController,
     ContentGoalsController,
@@ -208,6 +209,7 @@ import {
     ContentWarningController,
     ContentWorkoutController,
     ContentGalleryController,
+    ContentController,
 
     // Item controllers
     ContentAccordionItemController,
@@ -232,7 +234,6 @@ import {
     ContentChatWithCoachService,
     ContentCommitmentService,
     ContentConsumptionService,
-    ContentService,
     ContentEquipmentService,
     ContentFaqService,
     ContentGoalsService,
@@ -252,6 +253,7 @@ import {
     ContentWarningService,
     ContentWorkoutService,
     ContentGalleryService,
+    ContentService,
 
     // Item Services
     ContentAccordionItemService,
@@ -276,7 +278,6 @@ import {
     ContentChatWithCoachService,
     ContentCommitmentService,
     ContentConsumptionService,
-    ContentService,
     ContentEquipmentService,
     ContentFaqService,
     ContentGoalsService,
@@ -296,6 +297,7 @@ import {
     ContentWarningService,
     ContentWorkoutService,
     ContentGalleryService,
+    ContentService,
 
     // Item Services
     ContentAccordionItemService,

@@ -1,4 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsNumber,
   IsOptional,
@@ -7,8 +9,16 @@ import {
   IsEnum,
   IsInt,
 } from "class-validator";
-import { ProgramStepStatusEnum } from "../../types";
-import { SwaggerType } from "@app/common/types";
+
+import {
+  SwaggerType
+} from "@app/common/types";
+
+import {
+  ProgramAccessibilityEnum,
+  ProgramStepStatusEnum,
+  ProgramVisibilityEnum
+} from "../../types";
 
 
 export class UpdateProgramStepDto {

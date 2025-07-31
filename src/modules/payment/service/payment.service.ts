@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 
 import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
 import { BaseSubscriptionPlanItemEnum } from '@app/module/base/types';
 
 import { CreatePaymentDto, UpdatePaymentDto } from '../dto';
 import { PaymentEntity } from '../entity';
-import { PaymentPayableItemEnum } from '../types';
+import { PaymentPayableItemEnum, PaymentScopeEnum, PaymentStatusEnum } from '../types';
 
 
 
@@ -307,5 +307,81 @@ export class PaymentService {
 
   async remove(id: number, userId: number): Promise<void> {
     await this.paymentRepository.delete({ id, userId });
+  }
+
+  async countUserGymMembershipPlanPaymentsWithinPeriod(
+    userId: number,
+    gymMembershipPlanId: number,
+    gymId: number,
+    dateStart: Date,
+    dateEnd: Date,
+  ): Promise<number> {
+    return await this.paymentRepository.count({
+      where: { 
+        userId, 
+        gymMembershipPlanId,
+        receiverGymId: gymId,
+        subscriptionType: BaseSubscriptionPlanItemEnum.gym,
+        paymentScope: PaymentScopeEnum.subscription,
+        status: PaymentStatusEnum.done,
+        createdAt: Between(dateStart, dateEnd),
+      },
+    });
+  }
+
+  async countUserProgramSubscriptionPlanPaymentsWithinPeriod(
+    userId: number,
+    programSubscriptionPlanId: number,
+    dateStart: Date,
+    dateEnd: Date,
+  ): Promise<number> {
+    return await this.paymentRepository.count({
+      where: { 
+        userId, 
+        programSubscriptionPlanId,
+        subscriptionType: BaseSubscriptionPlanItemEnum.program,
+        paymentScope: PaymentScopeEnum.subscription,
+        status: PaymentStatusEnum.done,
+        createdAt: Between(dateStart, dateEnd),
+      },
+    });
+  }
+
+  async getUserLastPaymentForGymMembershipPlan(
+    userId: number,
+    gymMembershipPlanId: number,
+    gymId: number,
+  ): Promise<PaymentEntity> {
+    return this.paymentRepository.findOne({
+      where: { 
+        userId, 
+        gymMembershipPlanId,
+        receiverGymId: gymId,
+        subscriptionType: BaseSubscriptionPlanItemEnum.gym,
+        paymentScope: PaymentScopeEnum.subscription,
+        status: PaymentStatusEnum.done,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
+  async getUserLastPaymentForProgramSubscriptionPlan(
+    subscriberUserId: number,
+    programSubscriptionPlanId: number,
+  ): Promise<PaymentEntity | null> {
+    return this.paymentRepository.findOne({
+      where: { 
+        userId: subscriberUserId, 
+        programSubscriptionPlanId,
+        subscriptionType: BaseSubscriptionPlanItemEnum.program,
+        paymentScope: PaymentScopeEnum.subscription,
+        status: PaymentStatusEnum.done,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }

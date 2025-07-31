@@ -1,11 +1,23 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  Injectable
+} from "@nestjs/common";
+import {
+  InjectRepository
+} from "@nestjs/typeorm";
+import {
+  Repository
+} from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
-import { PaginatedResponseDto } from "@app/common/dto";
+import {
+  PaginationOptionsDto
+} from "@app/common/dto";
+import {
+  PaginatedResponseDto
+} from "@app/common/dto";
 
-import { ProgramSubscriptionPlanEntity } from "../entity";
+import {
+  ProgramSubscriptionPlanEntity
+} from "../entity";
 import {
   CreateProgramSubscriptionPlanDto,
   UpdateProgramSubscriptionPlanDto,
@@ -43,8 +55,8 @@ export class ProgramSubscriptionPlanService {
     if (criteria.priceLessThan) {
       queryBuilder.andWhere("programSubscriptionPlan.price <= :priceLessThan", { priceLessThan: criteria.priceLessThan });
     }
-    if (criteria.periodity) {
-      queryBuilder.andWhere("programSubscriptionPlan.periodity = :periodity", { periodity: criteria.periodity });
+    if (criteria.periodicity) {
+      queryBuilder.andWhere("programSubscriptionPlan.periodicity = :periodicity", { periodicity: criteria.periodicity });
     }
     if (criteria.description) {
       queryBuilder.andWhere("programSubscriptionPlan.description ILIKE :description", { description: `%${criteria.description}%` });
@@ -105,7 +117,10 @@ export class ProgramSubscriptionPlanService {
         currentPage: page
       }
     };
-    
+  }
+
+  async getAllSubscriptionPlansOfProgram(programId: number): Promise<ProgramSubscriptionPlanEntity[]> {
+    return await this.repository.find({ where: { programId } });
   }
 
   async findOne(id: number): Promise<ProgramSubscriptionPlanEntity> {

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, MoreThan, Repository } from "typeorm";
 
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
@@ -194,5 +194,38 @@ export class UserProgramEvolutionService {
         currentPage: page,
       },
     };
+  }
+
+  async getNumberOfUserActivityEventsDoneSince(
+    userId: number,
+    gymId: number,
+    activityId: number,
+    date: Date,
+  ): Promise<number> {
+    return await this.userProgramEvolutionRepository.count({
+      where: {
+        userId,
+        gymId,
+        programItemId: activityId,
+        programItem: ProgramItemTypeEnum.activity,
+        event: ProgramEvolutionEventTypeEnum.done,
+        createdAt: MoreThan(date),
+      },
+    });
+  }
+
+  async didUserEverStartedOrCompleted(
+    userId: number,
+    programItemId: number,
+    eventType: ProgramItemTypeEnum,
+  ): Promise<boolean> {
+    return await this.userProgramEvolutionRepository.findOne({
+      where: {
+        userId,
+        programItemId,
+        programItem: eventType,
+        event: In([ProgramEvolutionEventTypeEnum.done, ProgramEvolutionEventTypeEnum.started]),
+      },
+    }) !== null;
   }
 }

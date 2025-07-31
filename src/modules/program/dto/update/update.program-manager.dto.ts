@@ -1,9 +1,19 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsOptional, IsInt } from "class-validator";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+import {
+  IsEnum,
+  IsOptional,
+  IsInt
+} from "class-validator";
 
-import { SwaggerType } from "@app/common/types";
+import {
+  SwaggerType
+} from "@app/common/types";
 
-import { ProgramItemTypeEnum } from "../../types";
+import {
+  ProgramItemTypeEnum
+} from "../../types";
 
 export class UpdateProgramManagerDto {
 

@@ -2,8 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
-import { ContentRecipeEntity } from "../entity";
+import {
+  PaginatedResponseDto,
+  PaginationOptionsDto
+} from "@app/common/dto";
+import {
+  ContentRecipeEntity
+} from "../entity";
 import {
   CreateContentRecipeDto,
   UpdateContentRecipeDto,

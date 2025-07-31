@@ -155,6 +155,18 @@ export class GymMembershipService {
     };
   }
 
+  async getUserGymMemberships(
+    userId: number,
+    gymId: number
+  ): Promise<GymMembershipEntity[]> {
+    const queryBuilder = this.gymMembershipRepository.createQueryBuilder('membership')
+      .where('membership.memberUserId = :userId', { userId })
+      .andWhere('membership.gymId = :gymId', { gymId })
+      .orderBy('membership.createdAt', 'DESC');
+
+    return await queryBuilder.getMany();
+  }
+
   async findOne(id: number): Promise<GymMembershipEntity> {
     return await this.gymMembershipRepository.findOne({
       where: { id },

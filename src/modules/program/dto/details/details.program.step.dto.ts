@@ -1,4 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsInt,
@@ -10,14 +12,27 @@ import {
   ValidateNested,
   IsNumber,
 } from "class-validator";
-import { Type } from "class-transformer";
+import {
+  Type
+} from "class-transformer";
 
-import { DetailsGymManagerDto } from "@app/module/gym/dto";
-import { DetailsBaseSociologyDto } from "@app/module/base/dto";
+import {
+  SwaggerType
+} from "@app/common/types";
 
-import { ProgramStepStatusEnum } from "../../types";
-import { DetailsProgramStepActivityDto } from "..";
-import { SwaggerType } from "@app/common/types";
+import {
+  DetailsGymManagerDto
+} from "@app/module/gym/dto";
+import {
+  DetailsBaseSociologyDto
+} from "@app/module/base/dto";
+
+import {
+  ProgramStepStatusEnum
+} from "../../types";
+import {
+  DetailsProgramStepActivityDto
+} from "..";
 
 
 export class DetailsProgramStepDto {

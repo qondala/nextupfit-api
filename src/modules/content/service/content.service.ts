@@ -2,7 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+import {
+  PaginatedResponseDto,
+  PaginationOptionsDto
+} from "@app/common/dto";
 
 import { ContentEntity } from "../entity";
 import {
@@ -19,33 +22,31 @@ import {
 } from "../types";
 
 
-import {
-  ContentTextService,
-  ContentTextareaService,
-  ContentVideoService,
-  ContentImageService,
-  ContentAccordionService,
-  ContentCarouselService,
-  ContentCommitmentService,
-  ContentWorkoutService,
-  ContentOrderedlistService,
-  ContentUnorderedlistService,
-  ContentConsumptionService,
-  ContentGoalsService,
-  ContentWarningService,
-  ContentTipsService,
-  ContentInstructionsService,
-  ContentInformationService,
-  ContentUsersupportService,
-  ContentFaqService,
-  ContentPrerequisitesService,
-  ContentChallengesService,
-  ContentEquipmentService,
-  ContentSusbcriptionPlanService,
-  ContentRecipeService,
-  ContentGalleryService,
-  ContentChatWithCoachService,
-} from ".";
+import { ContentTextService } from "./content.text.service";
+import { ContentTextareaService } from "./content.textarea.service";
+import { ContentVideoService } from "./content.video.service";
+import { ContentImageService } from "./content.image.service";
+import { ContentAccordionService } from "./content.accordion.service";
+import { ContentCarouselService } from "./content.carousel.service";
+import { ContentCommitmentService } from "./content.commitment.service";
+import { ContentWorkoutService } from "./content.workout.service";
+import { ContentOrderedlistService } from "./content.orderedlist.service";
+import { ContentUnorderedlistService } from "./content.unorderedlist.service";
+import { ContentConsumptionService } from "./content.consumption.service";
+import { ContentGoalsService } from "./content.goals.service";
+import { ContentWarningService } from "./content.warning.service";
+import { ContentTipsService } from "./content.tips.service";
+import { ContentInstructionsService } from "./content.instructions.service";
+import { ContentInformationService } from "./content.information.service";
+import { ContentUsersupportService } from "./content.usersupport.service";
+import { ContentFaqService } from "./content.faq.service";
+import { ContentPrerequisitesService } from "./content.prerequisites.service";
+import { ContentChallengesService } from "./content.challenges.service";
+import { ContentEquipmentService } from "./content.equipment.service";
+import { ContentSusbcriptionPlanService } from "./content.susbcription-plan.service";
+import { ContentRecipeService } from "./content.recipe.service";
+import { ContentGalleryService } from "./content.gallery.service";
+import { ContentChatWithCoachService } from "./content.chatwithcoach.service";
 import { SocialActorEnum } from "@app/module/social/types";
 
 
@@ -70,7 +71,7 @@ export class ContentService {
     private readonly contentTipsService: ContentTipsService,
     private readonly contentInstructionsService: ContentInstructionsService,
     private readonly contentInformationService: ContentInformationService,
-    private readonly contentChatwithcoachService: ContentChatWithCoachService,
+    private readonly contentChatWithCoachService: ContentChatWithCoachService,
     private readonly contentUsersupportService: ContentUsersupportService,
     private readonly contentFaqService: ContentFaqService,
     private readonly contentPrerequisitesService: ContentPrerequisitesService,
@@ -287,7 +288,7 @@ export class ContentService {
         composite.information = await this.contentInformationService.findOneWithContentId(contentId);
         break;
       case ContentTypeEnum.chatwithcoach:
-        composite.chatwithcoach = await this.contentChatwithcoachService.findOneWithContentId(contentId);
+        composite.chatwithcoach = await this.contentChatWithCoachService.findOneWithContentId(contentId);
         break;
       case ContentTypeEnum.usersupport:
         composite.usersupport = await this.contentUsersupportService.findOneWithContentId(contentId);

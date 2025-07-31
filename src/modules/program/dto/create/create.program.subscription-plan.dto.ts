@@ -51,7 +51,7 @@ export class CreateProgramSubscriptionPlanDto {
     required: false,
   })
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
-  periodity: BaseSubscriptionPlanPeriodicityEnum;
+  periodicity: BaseSubscriptionPlanPeriodicityEnum;
 
 
   @ApiProperty({

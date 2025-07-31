@@ -1,5 +1,9 @@
-import { SwaggerType } from "@app/common/types";
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsNumber,
@@ -11,14 +15,25 @@ import {
   ValidateNested,
   IsBoolean,
 } from "class-validator";
-import { Type } from "class-transformer";
+import {
+  Type
+} from "class-transformer";
 
-import { DetailsGymManagerDto } from "@app/module/gym/dto";
-import { DetailsBaseSociologyDto } from "@app/module/base/dto";
+import {
+  DetailsGymManagerDto
+} from "@app/module/gym/dto";
+import {
+  DetailsBaseSociologyDto
+} from "@app/module/base/dto";
 
-import { DetailsProgramStepActivityWorkingsessionDto } from ".";
-import { ProgramStepActivityStatusEnum } from "../../types";
-
+import {
+  ProgramAccessibilityEnum,
+  ProgramStepActivityStatusEnum,
+  ProgramVisibilityEnum
+} from "../../types";
+import {
+  DetailsProgramStepActivityWorkingsessionDto
+} from ".";
 
 export class DetailsProgramStepActivityDto {
 
@@ -276,7 +291,36 @@ export class DetailsProgramStepActivityDto {
   @IsBoolean()
   isChallenge?: boolean;
 
-  @ApiProperty({  
+  @ApiProperty({
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    required: true
+  })
+  accessibility: ProgramAccessibilityEnum;
+
+  @ApiProperty({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    required: true
+  })
+  visibility: ProgramVisibilityEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  authorizedMembershipPlanIds?: number[];
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  authorizedProgramSubscriptionPlanIds?: number[];
+
+
+  @ApiProperty({
     type: () => DetailsProgramStepActivityWorkingsessionDto,
     isArray: true,
     description: "Program step activity workingsessions",

@@ -1,9 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
-import { SwaggerType } from '@app/common/types';
-import { ProgramItemCompositeDto, ProgramItemTypeEnum } from '../../types';
-import { DetailsGymDto, DetailsGymManagerDto } from '@app/module/gym/dto';
+import {
+  SwaggerType
+} from '@app/common/types';
+import {
+  DetailsGymDto,
+  DetailsGymManagerDto
+} from '@app/module/gym/dto';
+
+import {
+  ProgramItemCompositeDto,
+  ProgramItemTypeEnum
+} from '../../types';
+
 
 export class DetailsProgramFreetoolDto {
   @ApiProperty({

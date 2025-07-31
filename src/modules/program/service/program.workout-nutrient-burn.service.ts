@@ -1,12 +1,27 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  Injectable
+} from "@nestjs/common";
+import {
+  InjectRepository
+} from "@nestjs/typeorm";
+import {
+  Repository
+} from "typeorm";
 
-import { PaginationOptionsDto } from "@app/common/dto";
-import { PaginatedResponseDto } from "@app/common/dto";
+import {
+  PaginationOptionsDto
+} from "@app/common/dto";
+import {
+  PaginatedResponseDto
+} from "@app/common/dto";
 
-import { ProgramWorkoutNutrientBurnEntity } from "../entity";
-import { CreateProgramWorkoutNutrientBurnDto, UpdateProgramWorkoutNutrientBurnDto } from "../dto";
+import {
+  ProgramWorkoutNutrientBurnEntity
+} from "../entity";
+import {
+  CreateProgramWorkoutNutrientBurnDto,
+  UpdateProgramWorkoutNutrientBurnDto
+} from "../dto";
 
 
 @Injectable()

@@ -1,4 +1,7 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+
 import {
   IsNotEmpty,
   IsNumber,
@@ -8,19 +11,39 @@ import {
   IsArray,
   ValidateNested,
   IsDefined,
-  IsBoolean,
   IsInt,
 } from "class-validator";
-import { Type } from "class-transformer";
 
-import { DetailsSocialRatingsDto } from "@app/module/social/dto/details";
-import { SwaggerType } from "@app/common/types";
+import {
+  Type
+} from "class-transformer";
 
-import { DetailsGymDto, DetailsGymManagerDto } from "@app/module/gym/dto";
-import { DetailsBaseSociologyDto } from "@app/module/base/dto";
 
-import { ProgramStatusEnum, ProgramTypeEnum } from "../../types";
-import { DetailsProgramStepDto, DetailsProgramSubscriptionPlanDto } from ".";
+import {
+  SwaggerType
+} from "@app/common/types";
+
+import {
+  DetailsBaseSociologyDto
+} from "@app/module/base/dto";
+import {
+  DetailsGymDto,
+  DetailsGymManagerDto
+} from "@app/module/gym/dto";
+import {
+  DetailsSocialRatingsDto
+} from "@app/module/social/dto/details";
+
+import {
+  ProgramAccessibilityEnum,
+  ProgramStatusEnum,
+  ProgramTypeEnum,
+  ProgramVisibilityEnum
+} from "../../types";
+import {
+  DetailsProgramStepDto,
+  DetailsProgramSubscriptionPlanDto
+} from ".";
 
 
 export class DetailsProgramDto {
@@ -45,6 +68,16 @@ export class DetailsProgramDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Program description",
+    example: "Daily workout",
+    required: false,
+  })
+  @IsString()
+  description?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -282,13 +315,30 @@ export class DetailsProgramDto {
 
 
   @ApiProperty({
-    type: SwaggerType.BOOLEAN,
-    description: "Is program favorited by the user",
-    example: false,
-    required: false,
-    default: false
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    required: true
   })
-  @IsOptional()
-  @IsBoolean()
-  isFavorite?: boolean;
+  accessibility: ProgramAccessibilityEnum;
+
+  @ApiProperty({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    required: true
+  })
+  visibility: ProgramVisibilityEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  authorizedMembershipPlanIds?: number[];
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  authorizedProgramSubscriptionPlanIds?: number[];
 }

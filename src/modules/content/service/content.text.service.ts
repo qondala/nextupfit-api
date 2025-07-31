@@ -1,9 +1,25 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
-import { ContentTextEntity } from "../entity";
-import { CreateContentTextDto, UpdateContentTextDto } from "../dto";
+import {
+  Injectable
+} from "@nestjs/common";
+import {
+  InjectRepository
+} from "@nestjs/typeorm";
+import {
+  Repository
+} from "typeorm";
+
+import {
+  PaginatedResponseDto,
+  PaginationOptionsDto
+} from "@app/common/dto";
+import {
+  ContentTextEntity
+} from "../entity";
+import {
+  CreateContentTextDto,
+  UpdateContentTextDto
+} from "../dto";
+
 
 @Injectable()
 export class ContentTextService {

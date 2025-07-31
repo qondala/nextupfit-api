@@ -16,6 +16,7 @@ import {
 } from '../dto';
 
 import { ProgramFreetoolEntity } from '../entity';
+import { ProgramItemTypeEnum } from '../types';
 
 @Injectable()
 export class ProgramFreetoolService {
@@ -106,6 +107,13 @@ export class ProgramFreetoolService {
       record.item = await this.programService.getProgramItem(record.itemType, record.itemId);
     }
     return record;
+  }
+
+  async isGymFreeToolActivity(activityId: number, gymId: number): Promise<boolean> {
+    const record = await this.programFreetoolRepository.findOne({
+      where: { itemId: activityId, itemType: ProgramItemTypeEnum.activity, gymId },
+    });
+    return !!record;
   }
 
   async update(

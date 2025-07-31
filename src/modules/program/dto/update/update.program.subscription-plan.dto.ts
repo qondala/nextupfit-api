@@ -2,12 +2,19 @@ import {
   IsNumber,
   IsString,
   IsEnum,
-  IsNotEmpty,
   IsInt
 } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
-import { SwaggerType } from "@app/common/types";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  BaseSubscriptionPlanPeriodicityEnum
+} from "@app/module/base/types";
+
 
 
 export class UpdateProgramSubscriptionPlanDto {
@@ -51,7 +58,7 @@ export class UpdateProgramSubscriptionPlanDto {
     required: false,
   })
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
-  periodity?: BaseSubscriptionPlanPeriodicityEnum;
+  periodicity?: BaseSubscriptionPlanPeriodicityEnum;
 
 
   @ApiProperty({
@@ -81,5 +88,14 @@ export class UpdateProgramSubscriptionPlanDto {
   })
   @IsInt()
   contentId?: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Subscription plan active",
+    example: true,
+    required: false,
+  })
+  active?: boolean;
 }
 

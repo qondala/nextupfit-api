@@ -46,7 +46,7 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
 
 
   @ApiProperty({
-    name: "periodity",
+    name: "periodicity",
     enum: BaseSubscriptionPlanPeriodicityEnum,
     enumName: "BaseSubscriptionPlanPeriodicityEnum",
     description: "Subscription plan periodicity",
@@ -54,7 +54,7 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
     required: false,
   })
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
-  periodity?: BaseSubscriptionPlanPeriodicityEnum;
+  periodicity?: BaseSubscriptionPlanPeriodicityEnum;
 
 
   @ApiProperty({

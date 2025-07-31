@@ -18,6 +18,8 @@ import { SocialModule } from "@app/module/social/social.module";
 import { PaymentModule } from "@app/module/payment/payment.module";
 import { MapModule } from "@app/module/map/map.module";
 import { ContentModule } from "@app/module/content/content.module";
+import { NavigationModule } from "@app/module/navigation/navigation.module";
+
 
 @Module({
   imports: [
@@ -41,7 +43,8 @@ import { ContentModule } from "@app/module/content/content.module";
     ProgramModule,
     SocialModule,
     PaymentModule,
-    MapModule
+    MapModule,
+    NavigationModule
   ],
   controllers: [AppController],
   providers: [AppService],

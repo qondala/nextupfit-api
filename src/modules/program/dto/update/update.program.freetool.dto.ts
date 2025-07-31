@@ -1,8 +1,19 @@
-import { IsOptional, IsEnum, IsInt } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsOptional,
+  IsEnum,
+  IsInt
+} from "class-validator";
+import {
+  ApiPropertyOptional
+} from "@nestjs/swagger";
 
-import { ProgramItemTypeEnum } from '../../types';
-import { SwaggerType } from '@app/common/types';
+import {
+  SwaggerType
+} from "@app/common/types";
+
+import {
+  ProgramItemTypeEnum
+} from "../../types";
 
 export class UpdateProgramFreetoolDto {
   @ApiPropertyOptional({

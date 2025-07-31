@@ -10,3 +10,4 @@ export * from './paginated.details.program-manager.dto';
 export * from './paginated.details.program.freetool.dto';
 export * from './paginated.details.program.interest.dto';
 export * from './paginated.details.program.freetool-interest.dto';
+export * from './paginated.details.program.subscription.dto';

@@ -41,6 +41,9 @@
       "@app/module/program/*": [
         "src/modules/program/*"
       ],
+      "@app/module/navigation/*": [
+        "src/modules/navigation/*"
+      ],
       "@app/module/social/*": [
         "src/modules/social/*"
       ],

@@ -1,4 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsNumber,
@@ -8,8 +10,14 @@ import {
   IsEnum,
   IsInt,
 } from "class-validator";
-import { ProgramStepActivityStatusEnum } from "../../types";
-import { SwaggerType } from "@app/common/types";
+
+import {
+  SwaggerType
+} from "@app/common/types";
+
+import {
+  ProgramStepActivityStatusEnum
+} from "../../types";
 
 
 export class UpdateProgramStepActivityWorkingsessionWorkoutDto {

@@ -1,10 +1,14 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsInt
 } from "class-validator";
 
-import { SwaggerType } from "@app/common/types";
+import {
+  SwaggerType
+} from "@app/common/types";
 
 export class DetailsProgramWorkoutNutrientBurnDto {
 

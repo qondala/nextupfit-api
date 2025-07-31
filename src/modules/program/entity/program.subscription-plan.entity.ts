@@ -30,13 +30,11 @@ export class ProgramSubscriptionPlanEntity {
     enum: BaseSubscriptionPlanPeriodicityEnum,
     default: BaseSubscriptionPlanPeriodicityEnum.monthly,
   })
-  periodity: BaseSubscriptionPlanPeriodicityEnum;
+  periodicity: BaseSubscriptionPlanPeriodicityEnum;
 
   @Column({ nullable: true })
   description: string;
 
-  @Column({ type: "timestamp", nullable: true })
-  trialEndDate: Date;
 
   @Column({ default: 0 })
   trialNumberProgramActivities: number;

@@ -10,3 +10,4 @@ export * from "./program.manager.entity";
 export * from "./program.freetool.entity";
 export * from "./program.interest.entity";
 export * from "./program.freetool-interest.entity";
+export * from "./program.subscription.entity";

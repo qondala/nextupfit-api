@@ -1,6 +1,5 @@
 export * from "./user.entity";
 export * from "./user.program-evolution-event.entity";
-export * from "./user.subscription-plan.entity";
 export * from "./user.recipe.entity";
 export * from "./user.body-param.entity";
 export * from "./user.recommendation.entity";

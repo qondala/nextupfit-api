@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
@@ -19,19 +19,19 @@ import {
 export class ProgramStepActivityWorkingsessionWorkoutService {
   constructor(
     @InjectRepository(ProgramStepActivityWorkingsessionWorkoutEntity)
-    private readonly service: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>,
+    private readonly repository: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>,
   ) {}
 
   async create(body: CreateProgramStepActivityWorkingsessionWorkoutDto): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
-    const workout = this.service.create(body);
-    return await this.service.save(workout);
+    const workout = this.repository.create(body);
+    return await this.repository.save(workout);
   }
 
   async findAll(
     criteria: ProgramFindCriteriaWorkoutDto,
     pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityWorkingsessionWorkoutEntity>> {
 
-    const queryBuilder = this.service.createQueryBuilder("workoutQuery");
+    const queryBuilder = this.repository.createQueryBuilder("workoutQuery");
 
     queryBuilder.where("workoutQuery.id != 0");
 
@@ -163,21 +163,33 @@ export class ProgramStepActivityWorkingsessionWorkoutService {
   }
 
   async findOne(id: number): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
-    const workout = await this.service.findOne({ where: { id } });
+    const workout = await this.repository.findOne({ where: { id } });
+    return workout;
+  }
 
-    if (!workout) {
-      throw new Error(`Program step activity workingsession workout with ID ${id} not found`);
-    }
+  async findFirst(workingSessionId: number): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
+    const workout = await this.repository.findOne({ where: { workingSessionId }, order: { position: "ASC" } });
+    return workout;
+  }
+
+  async findPrevious(workoutId: number): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
+    const workout = await this.findOne(workoutId);
+    const previousWorkout = await this.repository.findOne({ where: { workingSessionId: workout.workingSessionId, position: LessThan(workout.position) }, order: { position: "DESC" } });
+    return previousWorkout;
+  }
+
+  async findLast(workingSessionId: number): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
+    const workout = await this.repository.findOne({ where: { workingSessionId }, order: { position: "DESC" } });
     return workout;
   }
 
   async update(id: number, body: UpdateProgramStepActivityWorkingsessionWorkoutDto): Promise<ProgramStepActivityWorkingsessionWorkoutEntity> {
     const workout = await this.findOne(id);
     Object.assign(workout, body);
-    return await this.service.save(workout);
+    return await this.repository.save(workout);
   }
 
   async remove(id: number): Promise<void> {
-    await this.service.delete(id);
+    await this.repository.delete(id);
   }
 }

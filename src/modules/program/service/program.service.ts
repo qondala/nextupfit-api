@@ -60,7 +60,7 @@ export class ProgramService {
     queryBuilder.where('program.id != 0');
 
     if (criteria.name) {
-      queryBuilder.andWhere("program.name ILIKE :name", { name: `%${criteria.name}%` });
+      queryBuilder.andWhere("program.name ILIKE :name OR program.description ILIKE :name", { name: `%${criteria.name}%` });
     }
     if (criteria.type) {
       queryBuilder.andWhere("program.type = :type", { type: criteria.type });
@@ -134,9 +134,6 @@ export class ProgramService {
 
   async findOne(id: number): Promise<ProgramEntity> {
     const program = await this.repository.findOne({ where: { id } });
-    if (!program) {
-      throw new Error(`Program with ID ${id} not found`);
-    }
     return program;
   }
 

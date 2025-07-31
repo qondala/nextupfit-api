@@ -1,8 +1,9 @@
 
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsInt,
-  IsDate,
   IsString,
   IsEnum,
   IsNotEmpty,
@@ -12,11 +13,19 @@ import {
   IsOptional,
   IsBoolean
 } from "class-validator";
-import { Type } from "class-transformer";
+import {
+  Type
+} from "class-transformer";
 
-import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
-import { SwaggerType } from "@app/common/types";
-import { DetailsContentDto } from "@app/module/content/dto";
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  BaseSubscriptionPlanPeriodicityEnum
+} from "@app/module/base/types";
+import {
+  DetailsContentDto
+} from "@app/module/content/dto";
 
 
 export class DetailsProgramSubscriptionPlanDto {
@@ -72,7 +81,7 @@ export class DetailsProgramSubscriptionPlanDto {
     required: false,
   })
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
-  periodity: BaseSubscriptionPlanPeriodicityEnum;
+  periodicity: BaseSubscriptionPlanPeriodicityEnum;
 
 
   @ApiProperty({

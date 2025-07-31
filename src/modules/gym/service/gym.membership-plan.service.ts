@@ -50,6 +50,10 @@ export class GymMembershipPlanService {
     };
   }
 
+  async getAllMembershipPlansOfGym(gymId: number): Promise<GymMembershipPlanEntity[]> {
+    return await this.gymMembershipPlanRepository.find({ where: { gymId } });
+  }
+
   async findOne(id: number): Promise<GymMembershipPlanEntity> {
     return await this.gymMembershipPlanRepository.findOne({
       where: { id },

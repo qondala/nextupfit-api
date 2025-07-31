@@ -1,13 +1,22 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  Injectable
+} from "@nestjs/common";
+import {
+  InjectRepository
+} from "@nestjs/typeorm";
+import {
+  LessThan,
+  Repository
+} from "typeorm";
 
 import {
   PaginatedResponseDto,
   PaginationOptionsDto
 } from "@app/common/dto";
 
-import { ProgramStepActivityEntity } from "../entity";
+import {
+  ProgramStepActivityEntity
+} from "../entity";
 import {
   CreateProgramStepActivityDto,
   ProgramFindOrderActivityEnum,
@@ -20,19 +29,19 @@ import {
 export class ProgramStepActivityService {
   constructor(
     @InjectRepository(ProgramStepActivityEntity)
-    private readonly service: Repository<ProgramStepActivityEntity>
+    private readonly repository: Repository<ProgramStepActivityEntity>
   ) {}
 
   async create(body: CreateProgramStepActivityDto): Promise<ProgramStepActivityEntity> {
-    const activity = this.service.create(body);
-    return await this.service.save(activity);
+    const activity = this.repository.create(body);
+    return await this.repository.save(activity);
   }
 
   async findAll(
     criteria: ProgramFindCriteriaActivityDto,
     pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramStepActivityEntity>> {
 
-    const queryBuilder = this.service.createQueryBuilder("activityQuery");
+    const queryBuilder = this.repository.createQueryBuilder("activityQuery");
 
     queryBuilder.where("activityQuery.id != 0");
 
@@ -156,19 +165,35 @@ export class ProgramStepActivityService {
   }
 
   async findOne(id: number): Promise<ProgramStepActivityEntity> {
-    const activity = await this.service.findOne({ where: { id } });
+    const activity = await this.repository.findOne({ where: { id } });
+    return activity;
+  }
+
+  async findFirst(programStepId: number): Promise<ProgramStepActivityEntity> {
+    const activity = await this.repository.findOne({ where: { programStepId }, order: { position: "ASC" } });
+    return activity;
+  }
+
+  async findPrevious(activityId: number): Promise<ProgramStepActivityEntity> {
+    const activity = await this.findOne(activityId);
+    const previousActivity = await this.repository.findOne({ where: { programStepId: activity.programStepId, position: LessThan(activity.position) }, order: { position: "DESC" } });
+    return previousActivity;
+  }
+
+  async findLast(programStepId: number): Promise<ProgramStepActivityEntity> {
+    const activity = await this.repository.findOne({ where: { programStepId }, order: { position: "DESC" } });
     return activity;
   }
 
   async update(id: number, body: UpdateProgramStepActivityDto): Promise<ProgramStepActivityEntity> {
     const activity = await this.findOne(id);
     Object.assign(activity, body);
-    return await this.service.save(activity);
+    return await this.repository.save(activity);
   }
 
   async remove(id: number): Promise<void> {
     const activity = await this.findOne(id);
-    await this.service.remove(activity);
+    await this.repository.remove(activity);
   }
 
 }

@@ -5,12 +5,21 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from 'typeorm';
+  UpdateDateColumn,
+} from "typeorm";
 
-import { GymEntity, GymMembershipPlanEntity } from './';
-import { UserEntity } from '@app/module/user/entity';
-import { GymMembershipStatusEnum } from '../types';
+import {
+  UserEntity,
+} from "@app/module/user/entity";
+
+import {
+  GymMembershipStatusEnum,
+} from "../types";
+
+import {
+  GymEntity,
+  GymMembershipPlanEntity,
+} from "./";
 
 
 @Entity('gym_membership')

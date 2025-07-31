@@ -6,16 +6,23 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  ValueTransformer
 } from "typeorm";
 
 import { GymEntity } from "@app/module/gym/entity";
 
-import { ProgramStatusEnum, ProgramTypeEnum } from "../types";
+import { ProgramAccessibilityEnum, ProgramStatusEnum, ProgramTypeEnum, ProgramVisibilityEnum } from "../types";
 import { ProgramStepEntity, ProgramSubscriptionPlanEntity } from ".";
 
 import { ProgramInterestEntity } from ".";
 
+
+// Transformer to convert between string[] and number[]
+const BigintArrayTransformer: ValueTransformer = {
+  to: (value: number[]) => value, // JS numbers → stored as PostgreSQL bigint
+  from: (value: string[]) => value.map((v) => Number(v)), // PostgreSQL bigint[] → JS number[]
+};
 
 @Entity("program")
 export class ProgramEntity {
@@ -27,6 +34,9 @@ export class ProgramEntity {
 
   @Column({ nullable: true })
   gymId?: number;
+
+  @Column({ nullable: true })
+  description?: string;
 
   @Column()
   ownerUserId: number;
@@ -90,6 +100,38 @@ export class ProgramEntity {
 
   @Column({ nullable: true })
   points?: number;
+
+  @Column({
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    default: ProgramAccessibilityEnum.public,
+    nullable: false
+  })
+  accessibility: ProgramAccessibilityEnum;
+
+  @Column({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    default: ProgramVisibilityEnum.public,
+    nullable: false
+  })
+  visibility: ProgramVisibilityEnum;
+
+  @Column({
+    type: "bigint",
+    array: true,
+    nullable: true,
+    transformer: BigintArrayTransformer
+  })
+  authorizedMembershipPlanIds?: number[];
+
+  @Column({
+    type: "bigint",
+    array: true,
+    nullable: true,
+    transformer: BigintArrayTransformer
+  })
+  authorizedProgramSubscriptionPlanIds?: number[];
 
 
   @ManyToOne(() => GymEntity)

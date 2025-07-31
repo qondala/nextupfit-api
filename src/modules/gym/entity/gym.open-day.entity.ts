@@ -1,7 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 
-import { BaseWeekDaysEnum } from "@app/module/base/types";
-import { GymEntity } from "./gym.entity";
+import {
+  BaseWeekDaysEnum,
+} from "@app/module/base/types";
+
+import {
+  GymEntity,
+} from "./gym.entity";
 
 
 @Entity("gym_open_day")

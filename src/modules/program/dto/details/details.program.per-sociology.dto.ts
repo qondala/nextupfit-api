@@ -1,17 +1,28 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  ValidateNested,
+  ValidateNested
 } from "class-validator";
+import {
+  Type
+} from "class-transformer";
 
 
-import { SwaggerType } from "@app/common/types";
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  DetailsBaseSociologyDto
+} from "@app/module/base/dto";
 
-import { ProgramItemCompositeDto, ProgramItemTypeEnum } from "../../types";
-import { DetailsBaseSociologyDto } from "@app/module/base/dto";
-import { Type } from "class-transformer";
+import {
+  ProgramItemCompositeDto,
+  ProgramItemTypeEnum
+} from "../../types";
 
 
 export class DetailsProgramPerSociologyDto {

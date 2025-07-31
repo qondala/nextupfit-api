@@ -5,28 +5,26 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import {
-  BaseSubscriptionPlanItemEnum,
-  BaseSubscriptionPlanStatusEnum
-} from "@app/module/base/types";
+import { BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
 
 
-@Entity("user_subscription_plan")
-export class UserSubscriptionPlanEntity {
+@Entity("program_subscription")
+export class ProgramSubscriptionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: "enum",
-    enum: BaseSubscriptionPlanItemEnum,
-  })
-  itemType: BaseSubscriptionPlanItemEnum;
 
   @Column()
-  itemId: number;
+  programId: number;
 
   @Column()
-  userId: number;
+  subscriberUserId: number;
+
+  @Column({ nullable: false })
+  programSubscriptionPlanId: number;
+
+  @Column({ type: "timestamp", nullable: true, default: new Date() })
+  startedDate?: Date;
 
   @Column({
     type: "enum",

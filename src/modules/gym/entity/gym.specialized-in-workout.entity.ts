@@ -1,8 +1,22 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { BaseWorkoutEntity } from '@app/module/base/entity';
-import { GymEntity } from './';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('gym_specialized_in_workout')
+import {
+  BaseWorkoutEntity,
+} from "@app/module/base/entity";
+
+import {
+  GymEntity,
+} from "./gym.entity";
+
+@Entity("gym_specialized_in_workout")
 export class GymSpecializedInWorkoutEntity {
   @PrimaryGeneratedColumn()
   id: number;

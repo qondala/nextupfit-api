@@ -9,7 +9,7 @@ import {
 
 import { SwaggerType } from "@app/common/types";
 
-import { ProgramStatusEnum, ProgramTypeEnum } from "../../types";
+import { ProgramAccessibilityEnum, ProgramStatusEnum, ProgramTypeEnum, ProgramVisibilityEnum } from "../../types";
 
 
 export class UpdateProgramDto {
@@ -22,6 +22,15 @@ export class UpdateProgramDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Program description",
+    example: "Daily workout",
+    required: false,
+  })
+  @IsOptional()
+  description?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -180,5 +189,37 @@ export class UpdateProgramDto {
   @IsOptional()
   @IsInt()
   difficultyLevel?: number;
+
+  @ApiProperty({
+    enum: ProgramAccessibilityEnum,
+    enumName: "ProgramAccessibilityEnum",
+    required: false
+  })
+  @IsOptional()
+  accessibility?: ProgramAccessibilityEnum;
+
+  @ApiProperty({
+    enum: ProgramVisibilityEnum,
+    enumName: "ProgramVisibilityEnum",
+    required: false
+  })
+  @IsOptional()
+  visibility?: ProgramVisibilityEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  @IsOptional()
+  authorizedMembershipPlanIds?: number[];
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    isArray: true,
+    required: false
+  })
+  @IsOptional()
+  authorizedProgramSubscriptionPlanIds?: number[];
 }
 

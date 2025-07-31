@@ -1,10 +1,22 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+import {
+  Type
+} from "class-transformer";
+import {
+  ValidateNested
+} from "class-validator";
 
-import { SwaggerType } from "@app/common/types";
-import { UserInterestTypeEnum } from "@app/module/user/types";
-import { DetailsProgramDto } from ".";
+import {
+  SwaggerType
+} from "@app/common/types";
+import {
+  UserInterestTypeEnum
+} from "@app/module/user/types";
+import {
+  DetailsProgramDto
+} from ".";
 
 
 export class DetailsProgramInterestDto {

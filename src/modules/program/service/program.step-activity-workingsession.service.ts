@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { LessThan, Repository } from "typeorm";
 
 import {
   PaginatedResponseDto,
@@ -177,6 +177,22 @@ export class ProgramStepActivityWorkingsessionService {
 
   async findOne(id: number): Promise<ProgramStepActivityWorkingsessionEntity> {
     const workingsession = await this.repository.findOne({ where: { id } });
+    return workingsession;
+  }
+
+  async findFirst(programStepActivityId: number): Promise<ProgramStepActivityWorkingsessionEntity> {
+    const workingsession = await this.repository.findOne({ where: { programStepActivityId }, order: { position: "ASC" } });
+    return workingsession;
+  }
+
+  async findPrevious(workingsessionId: number): Promise<ProgramStepActivityWorkingsessionEntity> {
+    const workingsession = await this.findOne(workingsessionId);
+    const previousWorkingsession = await this.repository.findOne({ where: { programStepActivityId: workingsession.programStepActivityId, position: LessThan(workingsession.position) }, order: { position: "DESC" } });
+    return previousWorkingsession;
+  }
+
+  async findLast(programStepActivityId: number): Promise<ProgramStepActivityWorkingsessionEntity> {
+    const workingsession = await this.repository.findOne({ where: { programStepActivityId }, order: { position: "DESC" } });
     return workingsession;
   }
 
