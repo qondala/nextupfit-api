@@ -53,7 +53,9 @@ export class ContentCommitmentController {
     status: HttpStatus.CREATED,
     type: DetailsContentCommitmentDto,
   })
-  async create(@Body() dto: CreateContentCommitmentDto): Promise<DetailsContentCommitmentDto> {
+  async create(
+    @Body() dto: CreateContentCommitmentDto,
+  ): Promise<DetailsContentCommitmentDto> {
     return await this.service.create(dto);
   }
 
@@ -102,7 +104,9 @@ export class ContentCommitmentController {
     status: HttpStatus.OK,
     type: DetailsContentCommitmentDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentCommitmentDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentCommitmentDto> {
     return await this.service.findOne(id);
   }
 

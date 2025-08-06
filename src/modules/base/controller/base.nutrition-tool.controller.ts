@@ -8,14 +8,14 @@ import {
   Patch,
   Post,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -24,7 +24,7 @@ import {
   CreateBaseNutritionToolDto,
   UpdateBaseNutritionToolDto,
   DetailsBaseNutritionToolDto,
-  PaginatedDetailsBaseNutritionToolDto
+  PaginatedDetailsBaseNutritionToolDto,
 } from "../dto";
 import { BaseNutritionToolService } from "../service";
 
@@ -32,20 +32,22 @@ import { BaseNutritionToolService } from "../service";
 @ApiBearerAuth()
 @Controller("base/nutrition-tool")
 export class BaseNutritionToolController {
-  constructor(private readonly nutritionToolService: BaseNutritionToolService) {}
+  constructor(
+    private readonly nutritionToolService: BaseNutritionToolService,
+  ) {}
 
   @Post()
   @ApiOperation({
     summary: "Create a nutrition tool",
-    operationId: "createBaseNutritionTool"
+    operationId: "createBaseNutritionTool",
   })
   @ApiCreatedResponse({
     description: "Nutrition tool created successfully.",
     type: DetailsBaseNutritionToolDto,
-    status: HttpStatus.CREATED
+    status: HttpStatus.CREATED,
   })
   create(
-    @Body() createDto: CreateBaseNutritionToolDto
+    @Body() createDto: CreateBaseNutritionToolDto,
   ): Promise<DetailsBaseNutritionToolDto> {
     return this.nutritionToolService.create(createDto);
   }
@@ -53,14 +55,14 @@ export class BaseNutritionToolController {
   @Get()
   @ApiOperation({
     summary: "Get all nutrition tools",
-    operationId: "findAllBaseNutritionTools"
+    operationId: "findAllBaseNutritionTools",
   })
   @ApiOkResponse({
     description: "List of nutrition tools.",
-    type: PaginatedDetailsBaseNutritionToolDto
+    type: PaginatedDetailsBaseNutritionToolDto,
   })
   async findAll(
-    @Query() paginationOptions: PaginationOptionsDto
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsBaseNutritionToolDto> {
     return this.nutritionToolService.findAll(paginationOptions);
   }
@@ -68,28 +70,30 @@ export class BaseNutritionToolController {
   @Get(":id")
   @ApiOperation({
     summary: "Get nutrition tool by id",
-    operationId: "findBaseNutritionToolById"
+    operationId: "findBaseNutritionToolById",
   })
   @ApiOkResponse({
     description: "Nutrition tool by id.",
-    type: DetailsBaseNutritionToolDto
+    type: DetailsBaseNutritionToolDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseNutritionToolDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseNutritionToolDto> {
     return this.nutritionToolService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update nutrition tool",
-    operationId: "updateBaseNutritionTool"
+    operationId: "updateBaseNutritionTool",
   })
   @ApiOkResponse({
     description: "Updated nutrition tool.",
-    type: DetailsBaseNutritionToolDto
+    type: DetailsBaseNutritionToolDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateDto: UpdateBaseNutritionToolDto
+    @Body() updateDto: UpdateBaseNutritionToolDto,
   ): Promise<DetailsBaseNutritionToolDto> {
     return this.nutritionToolService.update(id, updateDto);
   }
@@ -97,7 +101,7 @@ export class BaseNutritionToolController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete nutrition tool",
-    operationId: "removeBaseNutritionTool"
+    operationId: "removeBaseNutritionTool",
   })
   @ApiOkResponse({ description: "Nutrition tool deleted successfully." })
   remove(@Param("id", ParseIntPipe) id: number) {

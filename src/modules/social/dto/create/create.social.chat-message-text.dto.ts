@@ -11,7 +11,6 @@ export class CreateSocialChatMessageTextDto {
   @IsString()
   text?: string;
 
-
   @ApiProperty({
     description: "Date the chat message was sent",
     example: Date(),

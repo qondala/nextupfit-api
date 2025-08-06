@@ -1,6 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
-import { IsBoolean, IsDate, IsInt, IsNotEmpty, IsOptional } from "class-validator";
+import {
+  IsBoolean,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+} from "class-validator";
 
 export class CreateUserCommitmentDto {
   @ApiProperty({

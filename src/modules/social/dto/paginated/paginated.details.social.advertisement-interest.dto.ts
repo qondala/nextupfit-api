@@ -4,15 +4,15 @@ import { Type } from "class-transformer";
 
 import { DetailsSocialAdvertisementInterestDto } from "..";
 
-import { PaginatedResponseDto } from '@app/common/dto';
+import { PaginatedResponseDto } from "@app/common/dto";
 
 export class PaginatedDetailsSocialAdvertisementInterestDto extends PaginatedResponseDto<DetailsSocialAdvertisementInterestDto> {
   @ApiProperty({
     type: () => DetailsSocialAdvertisementInterestDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of social advertisement interests',
-    required: true
+    description: "List of social advertisement interests",
+    required: true,
   })
   @IsDefined()
   @IsArray()

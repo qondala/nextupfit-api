@@ -10,7 +10,7 @@ export class PaginatedDetailsContentChallengesItemDto extends PaginatedResponseD
     type: () => DetailsContentChallengesItemDto,
     isArray: true,
     description: "Challenges items",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

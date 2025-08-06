@@ -6,7 +6,7 @@ export class DetailsSocialRatingStatsDto {
     type: SwaggerType.INTEGER,
     name: "totalReviews",
     description: "Total number of reviews",
-    required: true
+    required: true,
   })
   totalReviews: number;
 
@@ -14,7 +14,7 @@ export class DetailsSocialRatingStatsDto {
     type: SwaggerType.NUMBER,
     name: "averageRating",
     description: "Average rating of the item",
-    required: true
+    required: true,
   })
   averageRating: number;
 
@@ -23,7 +23,7 @@ export class DetailsSocialRatingStatsDto {
     name: "items",
     isArray: true,
     description: "List of social ratings",
-    required: true
+    required: true,
   })
   items: number[];
 }

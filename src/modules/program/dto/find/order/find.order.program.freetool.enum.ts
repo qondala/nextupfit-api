@@ -1,0 +1,15 @@
+export enum ProgramFindOrderFreetoolEnum {
+  date = "date",
+  random = "random",
+  name = "name",
+  price = "price",
+  gym = "gym",
+  owner = "owner",
+  status = "status",
+  attendeesCount = "attendeesCount",
+  viewsCount = "viewsCount",
+  ratingsAvg = "ratingsAvg",
+  ratingsCount = "ratingsCount",
+  difficultyLevel = "difficultyLevel",
+  position = "position",
+}

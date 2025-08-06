@@ -18,7 +18,7 @@ export class GymManagerSpecializedInNutritionService {
   ) {}
 
   async create(
-    dto: CreateGymManagerSpecializedInNutritionDto
+    dto: CreateGymManagerSpecializedInNutritionDto,
   ): Promise<GymManagerSpecializedInNutritionEntity> {
     const entity = this.repository.create({ ...dto, createdAt: new Date() });
     return this.repository.save(entity);
@@ -59,8 +59,10 @@ export class GymManagerSpecializedInNutritionService {
 
     const query = this.repository
       .createQueryBuilder("specializedNutrition")
-      .where("specializedNutrition.baseNutritionId IN (:...nutritionIds)", { nutritionIds })
-      .orderBy('RANDOM()')
+      .where("specializedNutrition.baseNutritionId IN (:...nutritionIds)", {
+        nutritionIds,
+      })
+      .orderBy("RANDOM()")
       .skip((page - 1) * limit)
       .take(limit);
 
@@ -79,7 +81,10 @@ export class GymManagerSpecializedInNutritionService {
   }
 
   async findOne(id: number): Promise<GymManagerSpecializedInNutritionEntity> {
-    return this.repository.findOne({ where: { id }, relations: ["baseNutrition"] });
+    return this.repository.findOne({
+      where: { id },
+      relations: ["baseNutrition"],
+    });
   }
 
   async update(

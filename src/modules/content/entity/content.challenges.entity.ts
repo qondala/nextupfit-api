@@ -1,19 +1,12 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ContentChallengesItemEntity } from "./items";
-
-
 
 @Entity("content_challenges")
 export class ContentChallengesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: "bigint"})
+  @Column({ type: "bigint" })
   contentId: number;
 
   @Column()

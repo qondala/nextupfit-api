@@ -3,9 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class CreateBaseMealFoodDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Meal Id",
@@ -15,7 +13,6 @@ export class CreateBaseMealFoodDto {
   @IsNotEmpty()
   @IsInt()
   mealId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -27,10 +24,10 @@ export class CreateBaseMealFoodDto {
   @IsInt()
   foodId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Quantity of food this food required to consitute this meal. Example, in order to have a Standard cup of coffee (meal), we need one cup ",
+    description:
+      "Quantity of food this food required to consitute this meal. Example, in order to have a Standard cup of coffee (meal), we need one cup ",
     example: 1,
     required: true,
   })
@@ -38,10 +35,10 @@ export class CreateBaseMealFoodDto {
   @IsInt()
   foodQty: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Unit taken for the food quantity. Exemple, 13 = ml (see Units database)",
+    description:
+      "Unit taken for the food quantity. Exemple, 13 = ml (see Units database)",
     example: 13,
     required: true,
   })
@@ -49,4 +46,3 @@ export class CreateBaseMealFoodDto {
   @IsInt()
   foodQtyUnitId: number;
 }
- 

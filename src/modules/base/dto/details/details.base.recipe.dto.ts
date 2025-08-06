@@ -4,80 +4,80 @@ import { SwaggerType } from "@app/common/types";
 
 export class DetailsBaseRecipeDto {
   @ApiProperty({
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   id: number;
 
   @ApiProperty({
-    type: SwaggerType.STRING
+    type: SwaggerType.STRING,
   })
   name: string;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   description?: string;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   imageUrl?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   calories?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   protein?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   carbs?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   fat?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   code?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   nbPersons?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   ownerManagerId?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    required: false
+    format: "date-time",
+    required: false,
   })
   createdAt?: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    required: false
+    format: "date-time",
+    required: false,
   })
   updatedAt?: Date;
 }

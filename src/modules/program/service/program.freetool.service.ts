@@ -1,22 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 import {
   FindOrderByEnum,
   PaginatedResponseDto,
   PaginationOptionsDto,
-} from '@app/common/dto';
+} from "@app/common/dto";
 
-import { ProgramService } from './program.service';
+import { ProgramService } from "./program.service";
 import {
   CreateProgramFreetoolDto,
   ProgramFindCriteriaFreetoolDto,
   UpdateProgramFreetoolDto,
-} from '../dto';
+} from "../dto";
 
-import { ProgramFreetoolEntity } from '../entity';
-import { ProgramItemTypeEnum } from '../types';
+import { ProgramFreetoolEntity } from "../entity";
 
 @Injectable()
 export class ProgramFreetoolService {
@@ -26,44 +25,51 @@ export class ProgramFreetoolService {
     private readonly programService: ProgramService,
   ) {}
 
-  async create(createDto: CreateProgramFreetoolDto): Promise<ProgramFreetoolEntity> {
+  async create(
+    createDto: CreateProgramFreetoolDto,
+  ): Promise<ProgramFreetoolEntity> {
     const entity = this.programFreetoolRepository.create(createDto);
     return await this.programFreetoolRepository.save(entity);
   }
 
   async findAll(
     criteria: ProgramFindCriteriaFreetoolDto,
-    pagination?: PaginationOptionsDto
+    pagination?: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<ProgramFreetoolEntity>> {
-    const queryBuilder = this.programFreetoolRepository.createQueryBuilder('programFreetool')
-      .leftJoinAndSelect('programFreetool.gym', 'gym')
-      .leftJoinAndSelect('programFreetool.manager', 'manager')
+    const queryBuilder = this.programFreetoolRepository
+      .createQueryBuilder("programFreetool")
+      .leftJoinAndSelect("programFreetool.activity", "activity")
+      .leftJoinAndSelect("programFreetool.gym", "gym")
+      .leftJoinAndSelect("programFreetool.manager", "manager");
 
-    queryBuilder.where('programFreetool.id != 0');
+    queryBuilder.where("programFreetool.id != 0");
 
-    if (criteria.itemType) {
-      queryBuilder.andWhere('programFreetool.itemType = :itemType', { itemType: criteria.itemType });
-    }
-    if (criteria.itemId) {
-      queryBuilder.andWhere('programFreetool.itemId = :itemId', { itemId: criteria.itemId });
+    if (criteria.activityId) {
+      queryBuilder.andWhere("programFreetool.activityId = :activityId", {
+        activityId: criteria.activityId,
+      });
     }
     if (criteria.managerId) {
-      queryBuilder.andWhere('programFreetool.managerId = :managerId', { managerId: criteria.managerId });
+      queryBuilder.andWhere("programFreetool.managerId = :managerId", {
+        managerId: criteria.managerId,
+      });
     }
     if (criteria.gymId) {
-      queryBuilder.andWhere('programFreetool.gymId = :gymId', { gymId: criteria.gymId });
+      queryBuilder.andWhere("programFreetool.gymId = :gymId", {
+        gymId: criteria.gymId,
+      });
     }
 
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case FindOrderByEnum.random:
-          queryBuilder.addOrderBy('RANDOM()');
+          queryBuilder.addOrderBy("RANDOM()");
           break;
         case FindOrderByEnum.date:
-          queryBuilder.addOrderBy('programFreetool.createdAt', 'DESC');
+          queryBuilder.addOrderBy("programFreetool.createdAt", "DESC");
           break;
         default:
-          queryBuilder.addOrderBy('programFreetool.createdAt', 'DESC');
+          queryBuilder.addOrderBy("programFreetool.createdAt", "DESC");
           break;
       }
     }
@@ -78,10 +84,6 @@ export class ProgramFreetoolService {
 
     const totalPages = Math.ceil(totalItems / limit);
 
-    for (const item of items) {
-      item.item = await this.programService.getProgramItem(item.itemType, item.itemId);
-    }
-
     return {
       items,
       meta: {
@@ -89,41 +91,35 @@ export class ProgramFreetoolService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
   async findOne(id: number): Promise<ProgramFreetoolEntity> {
     const record = await this.programFreetoolRepository.findOne({
       where: { id },
-      relations: [
-        'gym',
-        'manager',
-      ]
+      relations: ["activity", "gym", "manager"],
     });
 
-    if (record) {
-      record.item = await this.programService.getProgramItem(record.itemType, record.itemId);
-    }
     return record;
   }
 
-  async isGymFreeToolActivity(activityId: number, gymId: number): Promise<boolean> {
+  async isGymFreeToolActivity(
+    activityId: number,
+    gymId: number,
+  ): Promise<boolean> {
     const record = await this.programFreetoolRepository.findOne({
-      where: { itemId: activityId, itemType: ProgramItemTypeEnum.activity, gymId },
+      where: { activityId, gymId },
     });
     return !!record;
   }
 
   async update(
     id: number,
-    updateDto: UpdateProgramFreetoolDto
+    updateDto: UpdateProgramFreetoolDto,
   ): Promise<ProgramFreetoolEntity> {
-    await this.programFreetoolRepository.update(
-      { id },
-      updateDto
-    );
+    await this.programFreetoolRepository.update({ id }, updateDto);
     return this.findOne(id);
   }
 

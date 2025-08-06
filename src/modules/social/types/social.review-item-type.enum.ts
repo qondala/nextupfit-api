@@ -6,4 +6,5 @@ export enum SocialReviewItemTypeEnum {
   workout = "workout",
   manager = "manager",
   gym = "gym",
+  nutrition = "nutrition",
 }

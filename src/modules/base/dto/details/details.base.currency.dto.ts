@@ -6,21 +6,37 @@ import { SwaggerType } from "@app/common/types";
 import { BaseCurrencySymbolPositionEnum } from "../../types";
 
 export class DetailsBaseCurrencyDto {
-  @ApiProperty({ type: SwaggerType.INTEGER, description: "Identifier", example: 1 })
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Identifier",
+    example: 1,
+  })
   @IsNumber()
   id: number;
 
-  @ApiProperty({ type: SwaggerType.STRING, description: "Currency symbol", example: "$" })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Currency symbol",
+    example: "$",
+  })
   @IsString()
   @IsNotEmpty()
   symbol: string;
 
-  @ApiProperty({ type: SwaggerType.STRING, description: "Currency acronym", example: "USD" })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Currency acronym",
+    example: "USD",
+  })
   @IsString()
   @IsNotEmpty()
   acronym: string;
 
-  @ApiProperty({ type: SwaggerType.STRING, description: "Currency name", example: "United States Dollar" })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Currency name",
+    example: "United States Dollar",
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -34,9 +50,17 @@ export class DetailsBaseCurrencyDto {
   @IsEnum(BaseCurrencySymbolPositionEnum)
   symbolPosition: BaseCurrencySymbolPositionEnum;
 
-  @ApiProperty({ type: SwaggerType.STRING, format: "date-time", description: "Creation timestamp" })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    description: "Creation timestamp",
+  })
   createdAt: Date;
 
-  @ApiProperty({ type: SwaggerType.STRING, format: "date-time", description: "Last update timestamp" })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    description: "Last update timestamp",
+  })
   updatedAt: Date;
 }

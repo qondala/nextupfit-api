@@ -55,10 +55,14 @@ export class BaseCurrencyController {
     @Body() createDto: CreateBaseCurrencyDto,
   ): Promise<DetailsBaseCurrencyDto> {
     try {
-      return (await this.baseCurrencyService.create(createDto)) as unknown as DetailsBaseCurrencyDto;
+      return (await this.baseCurrencyService.create(
+        createDto,
+      )) as unknown as DetailsBaseCurrencyDto;
     } catch (error) {
       if (error.code === "23505") {
-        throw new BadRequestException("Currency with these details already exists");
+        throw new BadRequestException(
+          "Currency with these details already exists",
+        );
       }
       throw error;
     }
@@ -70,8 +74,18 @@ export class BaseCurrencyController {
     description: "Get all currencies with pagination",
     operationId: "getAllCurrencies",
   })
-  @ApiQuery({ name: "page", description: "Page number", required: false, type: SwaggerType.INTEGER })
-  @ApiQuery({ name: "limit", description: "Number of items per page", required: false, type: SwaggerType.INTEGER })
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "Number of items per page",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Paginated list of currencies",
@@ -81,7 +95,10 @@ export class BaseCurrencyController {
     @Query("page") page = 1,
     @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseCurrencyDto> {
-    return (await this.baseCurrencyService.findAll({ page: +page, limit: +limit })) as unknown as PaginatedDetailsBaseCurrencyDto;
+    return (await this.baseCurrencyService.findAll({
+      page: +page,
+      limit: +limit,
+    })) as unknown as PaginatedDetailsBaseCurrencyDto;
   }
 
   @Get("search")
@@ -90,9 +107,24 @@ export class BaseCurrencyController {
     description: "Search currencies by query string with pagination",
     operationId: "searchCurrencies",
   })
-  @ApiQuery({ name: "q", description: "Search query string", required: true, type: SwaggerType.STRING })
-  @ApiQuery({ name: "page", description: "Page number", required: false, type: SwaggerType.INTEGER })
-  @ApiQuery({ name: "limit", description: "Number of items per page", required: false, type: SwaggerType.INTEGER })
+  @ApiQuery({
+    name: "q",
+    description: "Search query string",
+    required: true,
+    type: SwaggerType.STRING,
+  })
+  @ApiQuery({
+    name: "page",
+    description: "Page number",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    name: "limit",
+    description: "Number of items per page",
+    required: false,
+    type: SwaggerType.INTEGER,
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Paginated list of currencies",
@@ -103,15 +135,31 @@ export class BaseCurrencyController {
     @Query("page") page = 1,
     @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseCurrencyDto> {
-    return (await this.baseCurrencyService.search(query, { page: +page, limit: +limit })) as unknown as PaginatedDetailsBaseCurrencyDto;
+    return (await this.baseCurrencyService.search(query, {
+      page: +page,
+      limit: +limit,
+    })) as unknown as PaginatedDetailsBaseCurrencyDto;
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get a currency by ID", description: "Get a currency by ID", operationId: "getCurrency" })
-  @ApiParam({ name: "id", type: SwaggerType.INTEGER, description: "Identifier" })
+  @ApiOperation({
+    summary: "Get a currency by ID",
+    description: "Get a currency by ID",
+    operationId: "getCurrency",
+  })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    description: "Identifier",
+  })
   @ApiResponse({ status: HttpStatus.OK, type: DetailsBaseCurrencyDto })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Currency not found" })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseCurrencyDto> {
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: "Currency not found",
+  })
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseCurrencyDto> {
     const currency = await this.baseCurrencyService.findOne(id);
     if (!currency) {
       throw new NotFoundException("Currency not found");
@@ -120,10 +168,21 @@ export class BaseCurrencyController {
   }
 
   @Put(":id")
-  @ApiOperation({ summary: "Update a currency", description: "Update a currency", operationId: "updateCurrency" })
-  @ApiParam({ name: "id", type: SwaggerType.INTEGER, description: "Identifier" })
+  @ApiOperation({
+    summary: "Update a currency",
+    description: "Update a currency",
+    operationId: "updateCurrency",
+  })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    description: "Identifier",
+  })
   @ApiResponse({ status: HttpStatus.OK, type: DetailsBaseCurrencyDto })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: "Currency not found" })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: "Currency not found",
+  })
   async update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateDto: UpdateBaseCurrencyDto,
@@ -136,9 +195,20 @@ export class BaseCurrencyController {
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Delete a currency", description: "Delete a currency", operationId: "deleteCurrency" })
-  @ApiParam({ name: "id", type: SwaggerType.INTEGER, description: "Identifier" })
-  @ApiResponse({ status: HttpStatus.NO_CONTENT, description: "Currency deleted" })
+  @ApiOperation({
+    summary: "Delete a currency",
+    description: "Delete a currency",
+    operationId: "deleteCurrency",
+  })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    description: "Identifier",
+  })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: "Currency deleted",
+  })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     const removed = await this.baseCurrencyService.remove(id);
     if (!removed) {

@@ -7,9 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 
-import {
-  PaymentStatusEnum,
-} from "../types";
+import { PaymentStatusEnum } from "../types";
 import { PaymentCartItemEntity } from ".";
 
 @Entity("payment_cart")

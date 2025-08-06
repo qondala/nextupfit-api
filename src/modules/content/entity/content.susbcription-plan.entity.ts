@@ -10,7 +10,6 @@ import {
 import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 import { ContentSusbcriptionPlanItemEntity } from "./items";
 
-
 @Entity("content_susbcription_plan")
 export class ContentSusbcriptionPlanEntity {
   @PrimaryGeneratedColumn({ type: "bigint" })
@@ -46,6 +45,9 @@ export class ContentSusbcriptionPlanEntity {
   @Column({ name: "createdByManagerId", type: "bigint", default: 0 })
   createdByManagerId: number;
 
-  @OneToMany(() => ContentSusbcriptionPlanItemEntity, (item) => item.contentSubscriptionPlanId)
+  @OneToMany(
+    () => ContentSusbcriptionPlanItemEntity,
+    (item) => item.contentSubscriptionPlanId,
+  )
   items: ContentSusbcriptionPlanItemEntity[];
 }

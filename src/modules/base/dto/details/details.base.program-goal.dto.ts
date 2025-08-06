@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { ProgramTypeEnum } from "@app/module/program/types";
@@ -67,7 +73,7 @@ export class DetailsBaseProgramGoalDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record creation timestamp",
     required: true,
   })
@@ -75,7 +81,7 @@ export class DetailsBaseProgramGoalDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record last update timestamp",
     required: true,
   })

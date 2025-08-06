@@ -6,7 +6,7 @@ import {
   UseGuards,
   Req,
   Query,
-  Request
+  Request,
 } from "@nestjs/common";
 
 import {
@@ -28,11 +28,10 @@ import {
   LoginDto,
 } from "./dto";
 
-
 import {
   LocalAuthGuard,
   JwtRefreshTokenAuthGuard,
-  JwtAuthGuard
+  JwtAuthGuard,
 } from "@app/common/guards";
 
 import { Public, User } from "@app/common/decorators";
@@ -41,27 +40,27 @@ import { DetailsUserDto } from "@app/module/user/dto";
 @ApiTags("Authentication")
 @Controller("auth")
 export class AuthController {
-
   constructor(private authService: AuthService) {}
 
   @Public()
   @Post("register")
   @ApiCreatedResponse({
     description: "User registered successfully.",
-    type: DetailsUserDto
+    type: DetailsUserDto,
   })
   async register(@Body() registerDto: RegisterDto): Promise<DetailsUserDto> {
     return this.authService.register(registerDto);
   }
 
-
   @Public()
   @Post("signup/id-token")
   @ApiCreatedResponse({
     description: "User registered successfully.",
-    type: AuthTokenDto
+    type: AuthTokenDto,
   })
-  async signupWithIdToken(@Body() idTokenDto: IdTokenDto): Promise<AuthTokenDto> {
+  async signupWithIdToken(
+    @Body() idTokenDto: IdTokenDto,
+  ): Promise<AuthTokenDto> {
     const res = await this.authService.signUpWithIdToken(idTokenDto);
     console.log("Signup with id token:", res);
     return res;
@@ -71,9 +70,11 @@ export class AuthController {
   @Post("signin/id-token")
   @ApiOkResponse({
     description: "User signed in successfully.",
-    type: AuthTokenDto
+    type: AuthTokenDto,
   })
-  async signinWithIdToken(@Body() idTokenDto: IdTokenDto): Promise<AuthTokenDto> {
+  async signinWithIdToken(
+    @Body() idTokenDto: IdTokenDto,
+  ): Promise<AuthTokenDto> {
     return this.authService.signInWithIdToken(idTokenDto);
   }
 
@@ -82,7 +83,7 @@ export class AuthController {
   @Post("login")
   @ApiOkResponse({
     description: "User signed in successfully.",
-    type: AuthTokenDto
+    type: AuthTokenDto,
   })
   async login(@Body() loginDto: LoginDto): Promise<AuthTokenDto> {
     return this.authService.login(loginDto);
@@ -91,14 +92,18 @@ export class AuthController {
   @Public()
   @Post("forgot-password")
   @ApiOkResponse({ description: "Password reset email sent" })
-  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+  async forgotPassword(
+    @Body() forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<void> {
     return this.authService.forgotPassword(forgotPasswordDto);
   }
 
   @Public()
   @Post("reset-password")
   @ApiOkResponse({ description: "Password reset successful" })
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto): Promise<void> {
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<void> {
     return this.authService.resetPassword(resetPasswordDto);
   }
 
@@ -114,7 +119,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOkResponse({
     description: "User profile",
-    type: DetailsUserDto
+    type: DetailsUserDto,
   })
   getProfile(@User() user: DetailsUserDto): DetailsUserDto {
     return user;
@@ -125,7 +130,7 @@ export class AuthController {
   @Post("refresh-token")
   @ApiOkResponse({
     description: "Token refreshed successfully.",
-    type: AccessTokenDto
+    type: AccessTokenDto,
   })
   async refreshToken(@Request() req): Promise<AccessTokenDto> {
     const refreshToken = req.body.refreshToken;

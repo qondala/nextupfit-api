@@ -24,4 +24,5 @@ export * from "./base.recipe-instruction.entity";
 export * from "./base.recipe.entity";
 export * from "./base.currency.entity";
 export * from "./base.program-goal.entity";
-
+export * from "./base.ingredient.entity";
+export * from "./base.ingredient-nutrient.entity";

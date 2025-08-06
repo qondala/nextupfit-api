@@ -6,7 +6,11 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsPaymentTransferDto } from "../details";
 
 export class PaginatedDetailsPaymentTransferDto extends PaginatedResponseDto<DetailsPaymentTransferDto> {
-  @ApiProperty({ type: () => DetailsPaymentTransferDto, isArray: true, required: true })
+  @ApiProperty({
+    type: () => DetailsPaymentTransferDto,
+    isArray: true,
+    required: true,
+  })
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })

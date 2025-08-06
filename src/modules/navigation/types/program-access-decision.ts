@@ -1,6 +1,4 @@
-import {
-  ProgramNavigationReasonEnum,
-} from ".";
+import { ProgramNavigationReasonEnum } from ".";
 
 export class ProgramAccessDecision {
   ok: boolean;

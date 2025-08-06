@@ -45,7 +45,6 @@ import {
 
 import { ContentService } from "../service";
 
-
 @ApiTags("Content module endpoints")
 @ApiBearerAuth()
 @Controller("content")
@@ -161,7 +160,7 @@ export class ContentController {
   })
   async findAll(
     @Query() criteria: ContentFindCriteriaDto,
-    @Query() pagination: PaginationOptionsDto
+    @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentDto> {
     return await this.service.findAll(criteria, pagination);
   }
@@ -220,19 +219,21 @@ export class ContentController {
   async findSocialActorContents(
     @Param("ownerSocialActorId", ParseIntPipe) ownerSocialActorId: number,
     @Param("socialActorType") socialActorType: SocialActorEnum,
-    @Query("mediaContentTypes", new ParseEnumArrayPipe(ContentTypeEnum, true)) mediaContentTypes: ContentTypeEnum[],
-    @Query("contentPrivacies", new ParseEnumArrayPipe(ContentPrivacyEnum, true)) contentPrivacies: ContentPrivacyEnum[],
-    @Query() pagination: PaginationOptionsDto
+    @Query("mediaContentTypes", new ParseEnumArrayPipe(ContentTypeEnum, true))
+    mediaContentTypes: ContentTypeEnum[],
+    @Query("contentPrivacies", new ParseEnumArrayPipe(ContentPrivacyEnum, true))
+    contentPrivacies: ContentPrivacyEnum[],
+    @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentDto> {
     return await this.service.findSocialActorContents(
       ownerSocialActorId,
       socialActorType,
       mediaContentTypes,
       contentPrivacies,
-      pagination
+      pagination,
     );
   }
-  
+
   @Get(":id")
   @ApiOperation({
     summary: "Get content",
@@ -248,7 +249,9 @@ export class ContentController {
     type: DetailsContentDto,
     description: "Content found successfully",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentDto> {
     return await this.service.findOne(id);
   }
 

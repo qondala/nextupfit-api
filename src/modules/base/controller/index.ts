@@ -23,3 +23,5 @@ export * from "./base.recipe-instruction.controller";
 export * from "./base.recipe.controller";
 export * from "./base.currency.controller";
 export * from "./base.program-goal.controller";
+export * from "./base.ingredient.controller";
+export * from "./base.ingredient-nutrient.controller";

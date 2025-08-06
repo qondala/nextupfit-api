@@ -12,7 +12,6 @@ import { Type } from "class-transformer";
 import { SwaggerType } from "@app/common/types";
 import { DetailsContentAccordionItemDto } from "../details/items";
 
-
 export class UpdateContentAccordionDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,

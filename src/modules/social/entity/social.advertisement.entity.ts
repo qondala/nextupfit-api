@@ -7,14 +7,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-import { SocialAdvertisementActionEnum } from '../types';
-import { ContentEntity } from '@app/module/content/entity';
+import { SocialAdvertisementActionEnum } from "../types";
+import { ContentEntity } from "@app/module/content/entity";
 
-import { SocialAdvertisementInterestEntity } from '.';
+import { SocialAdvertisementInterestEntity } from ".";
 
-@Entity('social_advertisement')
+@Entity("social_advertisement")
 export class SocialAdvertisementEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,8 +29,8 @@ export class SocialAdvertisementEntity {
   actionManagerId: number;
 
   @Column({
-    type: 'enum',
-    enum: SocialAdvertisementActionEnum
+    type: "enum",
+    enum: SocialAdvertisementActionEnum,
   })
   action: SocialAdvertisementActionEnum;
 
@@ -50,9 +50,12 @@ export class SocialAdvertisementEntity {
   updatedAt: Date;
 
   @OneToOne(() => ContentEntity)
-  @JoinColumn({ name: 'contentId' })
+  @JoinColumn({ name: "contentId" })
   content: ContentEntity;
 
-  @OneToMany(() => SocialAdvertisementInterestEntity, (interest) => interest.advertisement)
+  @OneToMany(
+    () => SocialAdvertisementInterestEntity,
+    (interest) => interest.advertisement,
+  )
   interests: SocialAdvertisementInterestEntity[];
 }

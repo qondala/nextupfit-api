@@ -4,15 +4,13 @@ import { DetailsUserScheduleDto } from "../details/details.user.schedule.dto";
 import { IsArray, IsDefined, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
-
 export class PaginatedDetailsUserScheduleDto extends PaginatedResponseDto<DetailsUserScheduleDto> {
-
   @ApiProperty({
     type: () => DetailsUserScheduleDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of users schedules',
-    required: true
+    description: "List of users schedules",
+    required: true,
   })
   @IsDefined()
   @IsArray()

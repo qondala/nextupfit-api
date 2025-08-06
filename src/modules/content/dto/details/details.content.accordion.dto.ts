@@ -24,7 +24,6 @@ export class DetailsContentAccordionDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "content id",
@@ -63,7 +62,6 @@ export class DetailsContentAccordionDto {
   })
   @IsBoolean()
   displayTitle: boolean;
-
 
   @ApiProperty({
     type: () => DetailsContentAccordionItemDto,

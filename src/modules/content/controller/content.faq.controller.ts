@@ -55,7 +55,9 @@ export class ContentFaqController {
     type: DetailsContentFaqDto,
     description: "FAQ created successfully",
   })
-  async create(@Body() dto: CreateContentFaqDto): Promise<DetailsContentFaqDto> {
+  async create(
+    @Body() dto: CreateContentFaqDto,
+  ): Promise<DetailsContentFaqDto> {
     return await this.service.create(dto);
   }
 
@@ -106,7 +108,9 @@ export class ContentFaqController {
     type: DetailsContentFaqDto,
     description: "FAQ found successfully",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentFaqDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentFaqDto> {
     return await this.service.findOne(id);
   }
 

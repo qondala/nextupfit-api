@@ -1,53 +1,43 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
-import { SwaggerType } from '@app/common/types';
-import { FindOrderByEnum } from '@app/common/dto';
+import { SwaggerType } from "@app/common/types";
+import { FindOrderByEnum } from "@app/common/dto";
 
-import { ProgramItemTypeEnum } from '../../types';
+import { ProgramItemTypeEnum } from "../../types";
 
 export class ProgramFindCriteriaFreetoolDto {
-
   @ApiProperty({
-    name: 'itemType',
-    description: 'The type of program item',
-    enum: ProgramItemTypeEnum,
-    example: ProgramItemTypeEnum.activity,
-    required: false,
-  })
-  itemType?: ProgramItemTypeEnum;
-
-  @ApiProperty({
-    name: 'itemId',
+    name: "activityId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the program item',
+    description: "The ID of the activity",
     example: 1,
     required: false,
   })
-  itemId?: number;
+  activityId?: number;
 
   @ApiProperty({
-    name: 'managerId',
+    name: "managerId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the manager',
+    description: "The ID of the manager",
     example: 1,
     required: false,
   })
   managerId?: number;
 
   @ApiProperty({
-    name: 'gymId',
+    name: "gymId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the gym',
+    description: "The ID of the gym",
     example: 1,
     required: false,
   })
   gymId?: number;
 
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: FindOrderByEnum,
     enumName: "FindOrderByEnum",
-    description: 'The order by for the program freetools',
+    description: "The order by for the program freetools",
     required: false,
   })
   orderBy?: FindOrderByEnum;

@@ -10,7 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -19,192 +19,203 @@ import {
   ApiBody,
   ApiResponse,
   ApiBearerAuth,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginationOptionsDto } from '@app/common/dto';
-import { SwaggerType } from '@app/common/types';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
+import { SwaggerType } from "@app/common/types";
 
 import {
   CreateSocialUpdateContentDto,
   UpdateSocialUpdateContentDto,
   DetailsSocialUpdateContentDto,
   PaginatedDetailsSocialUpdateContentDto,
-} from '../dto';
+} from "../dto";
 
-import { SocialUpdateContentService } from '../service';
+import { SocialUpdateContentService } from "../service";
 
-
-@ApiTags('Social Update Content')
+@ApiTags("Social Update Content")
 @ApiBearerAuth()
-@Controller('social/update/content')
+@Controller("social/update/content")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialUpdateContentController {
-  constructor(private readonly socialUpdateContentService: SocialUpdateContentService) {}
+  constructor(
+    private readonly socialUpdateContentService: SocialUpdateContentService,
+  ) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new social update content',
-    operationId: 'createSocialUpdateContent',
+    summary: "Create a new social update content",
+    operationId: "createSocialUpdateContent",
   })
   @ApiBody({
     type: CreateSocialUpdateContentDto,
-    description: 'Social update content data to create',
+    description: "Social update content data to create",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Social update content created successfully',
+    description: "Social update content created successfully",
     type: DetailsSocialUpdateContentDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input data',
+    description: "Invalid input data",
   })
-  async create(@Body() createSocialUpdateContentDto: CreateSocialUpdateContentDto) {
-    return await this.socialUpdateContentService.create(createSocialUpdateContentDto);
+  async create(
+    @Body() createSocialUpdateContentDto: CreateSocialUpdateContentDto,
+  ) {
+    return await this.socialUpdateContentService.create(
+      createSocialUpdateContentDto,
+    );
   }
 
   @Get()
   @ApiOperation({
-    summary: 'Get all social update content with pagination',
-    operationId: 'getAllSocialUpdateContent',
+    summary: "Get all social update content with pagination",
+    operationId: "getAllSocialUpdateContent",
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
     required: false,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     type: SwaggerType.INTEGER,
-    description: 'Items per page',
+    description: "Items per page",
     example: 10,
     required: false,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content retrieved successfully',
+    description: "Social update content retrieved successfully",
     type: PaginatedDetailsSocialUpdateContentDto,
   })
   async findAll(@Query() paginationOptions: PaginationOptionsDto) {
     return await this.socialUpdateContentService.findAll(paginationOptions);
   }
 
-  @Get('social-update/:socialUpdateId')
+  @Get("social-update/:socialUpdateId")
   @ApiOperation({
-    summary: 'Get social update content by social update ID',
-    operationId: 'getSocialUpdateContentBySocialUpdateId',
+    summary: "Get social update content by social update ID",
+    operationId: "getSocialUpdateContentBySocialUpdateId",
   })
   @ApiParam({
-    name: 'socialUpdateId',
+    name: "socialUpdateId",
     type: SwaggerType.INTEGER,
-    description: 'Social update ID',
+    description: "Social update ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
     required: false,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     type: SwaggerType.INTEGER,
-    description: 'Items per page',
+    description: "Items per page",
     example: 10,
     required: false,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content retrieved successfully',
+    description: "Social update content retrieved successfully",
     type: PaginatedDetailsSocialUpdateContentDto,
   })
   async findBySocialUpdateId(
-    @Param('socialUpdateId', ParseIntPipe) socialUpdateId: number,
+    @Param("socialUpdateId", ParseIntPipe) socialUpdateId: number,
     @Query() paginationOptions: PaginationOptionsDto,
   ) {
-    return await this.socialUpdateContentService.findBySocialUpdateId(socialUpdateId, paginationOptions);
+    return await this.socialUpdateContentService.findBySocialUpdateId(
+      socialUpdateId,
+      paginationOptions,
+    );
   }
 
-  @Get('content/:contentId')
+  @Get("content/:contentId")
   @ApiOperation({
-    summary: 'Get social update content by content ID',
-    operationId: 'getSocialUpdateContentByContentId',
+    summary: "Get social update content by content ID",
+    operationId: "getSocialUpdateContentByContentId",
   })
   @ApiParam({
-    name: 'contentId',
+    name: "contentId",
     type: SwaggerType.INTEGER,
-    description: 'Content ID',
+    description: "Content ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
     required: false,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     type: SwaggerType.INTEGER,
-    description: 'Items per page',
+    description: "Items per page",
     example: 10,
     required: false,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content retrieved successfully',
+    description: "Social update content retrieved successfully",
     type: PaginatedDetailsSocialUpdateContentDto,
   })
   async findByContentId(
-    @Param('contentId', ParseIntPipe) contentId: number,
+    @Param("contentId", ParseIntPipe) contentId: number,
     @Query() paginationOptions: PaginationOptionsDto,
   ) {
-    return await this.socialUpdateContentService.findByContentId(contentId, paginationOptions);
+    return await this.socialUpdateContentService.findByContentId(
+      contentId,
+      paginationOptions,
+    );
   }
 
-  @Get('social-update/:socialUpdateId/content/:contentId')
+  @Get("social-update/:socialUpdateId/content/:contentId")
   @ApiOperation({
-    summary: 'Get social update content by social update ID and content ID',
-    operationId: 'getSocialUpdateContentBySocialUpdateIdAndContentId',
+    summary: "Get social update content by social update ID and content ID",
+    operationId: "getSocialUpdateContentBySocialUpdateIdAndContentId",
   })
   @ApiParam({
-    name: 'socialUpdateId',
+    name: "socialUpdateId",
     type: SwaggerType.INTEGER,
-    description: 'Social update ID',
+    description: "Social update ID",
     example: 1,
   })
   @ApiParam({
-    name: 'contentId',
+    name: "contentId",
     type: SwaggerType.INTEGER,
-    description: 'Content ID',
+    description: "Content ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
     required: false,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     type: SwaggerType.INTEGER,
-    description: 'Items per page',
+    description: "Items per page",
     example: 10,
     required: false,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content retrieved successfully',
+    description: "Social update content retrieved successfully",
     type: PaginatedDetailsSocialUpdateContentDto,
   })
   async findBySocialUpdateIdAndContentId(
-    @Param('socialUpdateId', ParseIntPipe) socialUpdateId: number,
-    @Param('contentId', ParseIntPipe) contentId: number,
+    @Param("socialUpdateId", ParseIntPipe) socialUpdateId: number,
+    @Param("contentId", ParseIntPipe) contentId: number,
     @Query() paginationOptions: PaginationOptionsDto,
   ) {
     return await this.socialUpdateContentService.findBySocialUpdateIdAndContentId(
@@ -214,85 +225,88 @@ export class SocialUpdateContentController {
     );
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
-    summary: 'Get social update content by ID',
-    operationId: 'getSocialUpdateContentById',
+    summary: "Get social update content by ID",
+    operationId: "getSocialUpdateContentById",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update content ID',
+    description: "Social update content ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content retrieved successfully',
+    description: "Social update content retrieved successfully",
     type: DetailsSocialUpdateContentDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update content not found',
+    description: "Social update content not found",
   })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param("id", ParseIntPipe) id: number) {
     return await this.socialUpdateContentService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update social update content by ID',
-    operationId: 'updateSocialUpdateContent',
+    summary: "Update social update content by ID",
+    operationId: "updateSocialUpdateContent",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update content ID',
+    description: "Social update content ID",
     example: 1,
   })
   @ApiBody({
     type: UpdateSocialUpdateContentDto,
-    description: 'Social update content data to update',
+    description: "Social update content data to update",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update content updated successfully',
+    description: "Social update content updated successfully",
     type: DetailsSocialUpdateContentDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update content not found',
+    description: "Social update content not found",
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input data',
+    description: "Invalid input data",
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body() updateSocialUpdateContentDto: UpdateSocialUpdateContentDto,
   ) {
-    return await this.socialUpdateContentService.update(id, updateSocialUpdateContentDto);
+    return await this.socialUpdateContentService.update(
+      id,
+      updateSocialUpdateContentDto,
+    );
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete social update content by ID',
-    operationId: 'deleteSocialUpdateContent',
+    summary: "Delete social update content by ID",
+    operationId: "deleteSocialUpdateContent",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update content ID',
+    description: "Social update content ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Social update content deleted successfully',
+    description: "Social update content deleted successfully",
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update content not found',
+    description: "Social update content not found",
   })
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param("id", ParseIntPipe) id: number) {
     return await this.socialUpdateContentService.remove(id);
   }
 }

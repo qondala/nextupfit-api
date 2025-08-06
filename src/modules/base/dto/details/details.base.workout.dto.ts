@@ -6,28 +6,22 @@ import {
   IsArray,
   IsEnum,
   IsDate,
-  IsInt
+  IsInt,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-import {
-  BaseExerciseTargetEnum,
-  BaseWorkoutDisciplineEnum
-} from "../../types";
-
+import { BaseExerciseTargetEnum, BaseWorkoutDisciplineEnum } from "../../types";
 
 export class DetailsBaseWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "record id"  ,
+    description: "record id",
     required: true,
   })
   @IsNotEmpty()
   @IsInt()
   id: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -38,7 +32,6 @@ export class DetailsBaseWorkoutDto {
   @IsString()
   name: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout description",
@@ -47,7 +40,6 @@ export class DetailsBaseWorkoutDto {
   @IsOptional()
   @IsString()
   description?: string;
-
 
   @ApiProperty({
     enum: BaseExerciseTargetEnum,
@@ -62,7 +54,6 @@ export class DetailsBaseWorkoutDto {
   @IsEnum(BaseExerciseTargetEnum, { each: true })
   targets: BaseExerciseTargetEnum[];
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Created by user id",
@@ -71,7 +62,6 @@ export class DetailsBaseWorkoutDto {
   @IsNotEmpty()
   @IsInt()
   createdByUserId: number;
-
 
   @ApiProperty({
     enum: BaseWorkoutDisciplineEnum,
@@ -84,7 +74,6 @@ export class DetailsBaseWorkoutDto {
   @IsEnum(BaseWorkoutDisciplineEnum)
   discipline: BaseWorkoutDisciplineEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Apple code",
@@ -93,7 +82,6 @@ export class DetailsBaseWorkoutDto {
   @IsOptional()
   @IsString()
   appleCode?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -104,7 +92,6 @@ export class DetailsBaseWorkoutDto {
   @IsString()
   fitbitCode?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Withings code",
@@ -113,7 +100,6 @@ export class DetailsBaseWorkoutDto {
   @IsOptional()
   @IsString()
   withingsCode?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -125,7 +111,6 @@ export class DetailsBaseWorkoutDto {
   @IsString()
   imageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Illustration url",
@@ -135,7 +120,6 @@ export class DetailsBaseWorkoutDto {
   @IsOptional()
   @IsString()
   illustrationUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -147,7 +131,6 @@ export class DetailsBaseWorkoutDto {
   @IsString()
   videoUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Code",
@@ -158,10 +141,9 @@ export class DetailsBaseWorkoutDto {
   @IsString()
   code?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: false,
     example: "2025-05-04T09:34:42.000Z",
@@ -170,10 +152,9 @@ export class DetailsBaseWorkoutDto {
   @IsDate()
   createdAt?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: false,
     example: "2025-05-04T09:34:42.000Z",
@@ -182,4 +163,3 @@ export class DetailsBaseWorkoutDto {
   @IsDate()
   updatedAt?: Date;
 }
-

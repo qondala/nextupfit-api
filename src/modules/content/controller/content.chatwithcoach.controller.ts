@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiQuery,
   ApiBody,
-  ApiParam
+  ApiParam,
 } from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
@@ -43,7 +43,7 @@ export class ContentChatWithCoachController {
   @Post()
   @ApiOperation({
     summary: "Create chatwithcoach",
-    operationId: "createContentChatWithCoach"
+    operationId: "createContentChatWithCoach",
   })
   @ApiBody({
     type: CreateContentChatWithCoachDto,
@@ -51,16 +51,18 @@ export class ContentChatWithCoachController {
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    type: DetailsContentChatWithCoachDto
+    type: DetailsContentChatWithCoachDto,
   })
-  async create(@Body() dto: CreateContentChatWithCoachDto): Promise<DetailsContentChatWithCoachDto> {
+  async create(
+    @Body() dto: CreateContentChatWithCoachDto,
+  ): Promise<DetailsContentChatWithCoachDto> {
     return await this.service.create(dto);
   }
 
   @Get("content/:contentId")
   @ApiOperation({
     summary: "Get chatwithcoach",
-    operationId: "findAllContentChatWithCoach"
+    operationId: "findAllContentChatWithCoach",
   })
   @ApiQuery({
     name: "page",
@@ -74,7 +76,7 @@ export class ContentChatWithCoachController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: PaginatedDetailsContentChatWithCoachDto
+    type: PaginatedDetailsContentChatWithCoachDto,
   })
   async findAll(
     @Param("contentId", ParseIntPipe) contentId: number,
@@ -86,7 +88,7 @@ export class ContentChatWithCoachController {
   @Get(":id")
   @ApiOperation({
     summary: "Get chatwithcoach",
-    operationId: "findOneContentChatWithCoach"
+    operationId: "findOneContentChatWithCoach",
   })
   @ApiParam({
     name: "id",
@@ -95,16 +97,18 @@ export class ContentChatWithCoachController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: DetailsContentChatWithCoachDto
+    type: DetailsContentChatWithCoachDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentChatWithCoachDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentChatWithCoachDto> {
     return await this.service.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update chatwithcoach",
-    operationId: "updateContentChatWithCoach"
+    operationId: "updateContentChatWithCoach",
   })
   @ApiParam({
     name: "id",
@@ -117,7 +121,7 @@ export class ContentChatWithCoachController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: DetailsContentChatWithCoachDto
+    type: DetailsContentChatWithCoachDto,
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
@@ -129,7 +133,7 @@ export class ContentChatWithCoachController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete chatwithcoach",
-    operationId: "removeContentChatWithCoach"
+    operationId: "removeContentChatWithCoach",
   })
   @ApiParam({
     name: "id",
@@ -137,7 +141,7 @@ export class ContentChatWithCoachController {
     type: SwaggerType.INTEGER,
   })
   @ApiResponse({
-    status: HttpStatus.NO_CONTENT
+    status: HttpStatus.NO_CONTENT,
   })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.service.remove(id);

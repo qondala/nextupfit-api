@@ -1,32 +1,28 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 import {
   FindOrderByEnum,
-  InterestPaginationDto,
   PaginatedResponseDto,
   PaginationOptionsDto,
 } from "@app/common/dto";
-
-import { UserInterestService } from "@app/module/user/service";
+import { UserInterestEntity } from "@app/module/user/entity";
 
 import { ProgramEntity, ProgramInterestEntity } from "../entity";
 import {
   CreateProgramInterestDto,
   UpdateProgramInterestDto,
   ProgramFindCriteriaInterestDto,
+  ProgramFindOrderInterestEnum,
 } from "../dto";
-import { UserInterestEntity } from "@app/module/user/entity";
-
-
 
 @Injectable()
 export class ProgramInterestService {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(ProgramInterestEntity)
     private readonly repository: Repository<ProgramInterestEntity>,
-    private readonly userInterestsService: UserInterestService,
   ) {}
 
   async create(body: CreateProgramInterestDto): Promise<ProgramInterestEntity> {
@@ -34,36 +30,44 @@ export class ProgramInterestService {
     return await this.repository.save(interest);
   }
 
-  async findAll(criteria: ProgramFindCriteriaInterestDto, pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<ProgramInterestEntity>> {
-    
+  async findAll(
+    criteria: ProgramFindCriteriaInterestDto,
+    pagination?: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ProgramInterestEntity>> {
     const queryBuilder = this.repository.createQueryBuilder("programInterest");
-    
+
     queryBuilder.where("programInterest.id != 0");
-    
+
     if (criteria.interestType) {
-      queryBuilder.andWhere("programInterest.interestType = :interestType", { interestType: criteria.interestType });
+      queryBuilder.andWhere("programInterest.interestType = :interestType", {
+        interestType: criteria.interestType,
+      });
     }
     if (criteria.interestId) {
-      queryBuilder.andWhere("programInterest.interestId = :interestId", { interestId: criteria.interestId });
+      queryBuilder.andWhere("programInterest.interestId = :interestId", {
+        interestId: criteria.interestId,
+      });
     }
     if (criteria.programId) {
-      queryBuilder.andWhere("programInterest.programId = :programId", { programId: criteria.programId });
+      queryBuilder.andWhere("programInterest.programId = :programId", {
+        programId: criteria.programId,
+      });
     }
-    
+
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case FindOrderByEnum.random:
-          queryBuilder.addOrderBy('RANDOM()');
+          queryBuilder.addOrderBy("RANDOM()");
           break;
         case FindOrderByEnum.date:
-          queryBuilder.addOrderBy('programInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("programInterest.createdAt", "DESC");
           break;
         default:
-          queryBuilder.addOrderBy('programInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("programInterest.createdAt", "DESC");
           break;
       }
     }
-    
+
     const { page, limit } = pagination || { page: 1, limit: 10 };
 
     const skip = (page - 1) * limit;
@@ -81,8 +85,8 @@ export class ProgramInterestService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
@@ -93,8 +97,10 @@ export class ProgramInterestService {
     return interest;
   }
 
-
-  async update(id: number, body: UpdateProgramInterestDto): Promise<ProgramInterestEntity> {
+  async update(
+    id: number,
+    body: UpdateProgramInterestDto,
+  ): Promise<ProgramInterestEntity> {
     const interest = await this.repository.findOne({
       where: { id },
     });
@@ -108,46 +114,65 @@ export class ProgramInterestService {
     return;
   }
 
-  async getUserInterests(userId: number, pagination: InterestPaginationDto): Promise<UserInterestEntity[]> {
-    const interests = await this.userInterestsService.findAll(userId, pagination.user);
-    return interests.items;
-  }
+  async getUserInterestedPrograms(
+    userId: number,
+    pagination: PaginationOptionsDto,
+    order: ProgramFindOrderInterestEnum,
+  ): Promise<PaginatedResponseDto<ProgramEntity>> {
+    const queryBuilder = this.dataSource
+      .getRepository(ProgramEntity)
+      .createQueryBuilder("program")
+      .leftJoinAndSelect("program.gym", "gym")
+      .leftJoinAndSelect("program.manager", "manager")
+      .innerJoin("program.interests", "programInterest")
+      .innerJoin(
+        UserInterestEntity,
+        "userInterest",
+        "userInterest.interestType = programInterest.interestType AND userInterest.interestId = programInterest.interestId",
+      )
+      .where("userInterest.userId = :userId", { userId });
 
-  async getProgramsByUserInterests(userId: number, pagination: InterestPaginationDto): Promise<PaginatedResponseDto<ProgramEntity>> {
-    const userInterests = await this.getUserInterests(userId, pagination);
-
-    const programs: ProgramEntity[] = [];
-    const programIds: number[] = [];
-
-    // Loop through user interests
-    for (const userInterest of userInterests) {
-
-      // And find programs with that interest
-      const programsInterests = await this.findAll(
-        {
-          interestId: userInterest.interestId,
-          interestType: userInterest.interestType,
-        },
-        pagination.local
-      );
-
-      programsInterests.items.forEach(interest => {
-        if (!programIds.includes(interest.program.id)) {
-          programIds.push(interest.program.id);
-          programs.push(interest.program);
-        }
-      });
+    switch (order) {
+      case ProgramFindOrderInterestEnum.date:
+        queryBuilder.addOrderBy("program.createdAt", "DESC");
+        break;
+      case ProgramFindOrderInterestEnum.name:
+        queryBuilder.addOrderBy("program.name", "ASC");
+        break;
+      case ProgramFindOrderInterestEnum.attendeesCount:
+        queryBuilder.addOrderBy("program.attendeesCount", "ASC");
+        break;
+      case ProgramFindOrderInterestEnum.viewsCount:
+        queryBuilder.addOrderBy("program.viewsCount", "ASC");
+        break;
+      case ProgramFindOrderInterestEnum.ratingsAvg:
+        queryBuilder.addOrderBy("program.ratingsAvg", "DESC");
+        break;
+      case ProgramFindOrderInterestEnum.ratingsCount:
+        queryBuilder.addOrderBy("program.ratingsCount", "ASC");
+        break;
+      case ProgramFindOrderInterestEnum.random:
+        queryBuilder.addOrderBy("RANDOM()");
+        break;
     }
 
+    const skip = (pagination.page - 1) * pagination.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / pagination.limit);
+
     return {
-      items: programs,
+      items,
       meta: {
-        totalItems: programs.length,
-        itemCount: programs.length,
-        itemsPerPage: 99,
-        totalPages: 1,
-        currentPage: 1
-      }
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: pagination.limit,
+        totalPages,
+        currentPage: pagination.page,
+      },
     };
   }
 }

@@ -23,4 +23,5 @@ export * from "./base.recipe-instruction.service";
 export * from "./base.recipe.service";
 export * from "./base.currency.service";
 export * from "./base.program-goal.service";
-
+export * from "./base.ingredient.service";
+export * from "./base.ingredient-nutrient.service";

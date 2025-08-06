@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateSocialChatMessageTextDto } from '../create';
+import { PartialType } from "@nestjs/swagger";
+import { CreateSocialChatMessageTextDto } from "../create";
 
-export class UpdateSocialChatMessageTextDto extends PartialType(CreateSocialChatMessageTextDto) {}
+export class UpdateSocialChatMessageTextDto extends PartialType(
+  CreateSocialChatMessageTextDto,
+) {}

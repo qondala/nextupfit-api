@@ -54,7 +54,9 @@ export class ContentUnorderedlistItemController {
     status: HttpStatus.CREATED,
     type: DetailsContentUnorderedlistItemDto,
   })
-  async create(@Body() dto: CreateContentUnorderedlistItemDto): Promise<DetailsContentUnorderedlistItemDto> {
+  async create(
+    @Body() dto: CreateContentUnorderedlistItemDto,
+  ): Promise<DetailsContentUnorderedlistItemDto> {
     return await this.service.create(dto);
   }
 
@@ -84,7 +86,8 @@ export class ContentUnorderedlistItemController {
     type: PaginatedDetailsContentUnorderedlistItemDto,
   })
   async findAll(
-    @Param("contentUnorderedlistId", ParseIntPipe) contentUnorderedlistId: number,
+    @Param("contentUnorderedlistId", ParseIntPipe)
+    contentUnorderedlistId: number,
     @Query() query: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentUnorderedlistItemDto> {
     return this.service.findAll(contentUnorderedlistId, query);
@@ -104,7 +107,9 @@ export class ContentUnorderedlistItemController {
     status: HttpStatus.OK,
     type: DetailsContentUnorderedlistItemDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentUnorderedlistItemDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentUnorderedlistItemDto | null> {
     return await this.service.findOne(id);
   }
 

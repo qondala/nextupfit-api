@@ -1,15 +1,14 @@
 import {
   IsOptional,
   IsBoolean,
-  IsDate, 
+  IsDate,
   IsNotEmpty,
-  IsInt
+  IsInt,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
-  
-export class UpdateGymManagerFollowerDto {
 
+export class UpdateGymManagerFollowerDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Manager (coach, nutritionist, instructor) id",
@@ -30,7 +29,6 @@ export class UpdateGymManagerFollowerDto {
   @IsInt()
   managerUserId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Follower user id",
@@ -41,10 +39,9 @@ export class UpdateGymManagerFollowerDto {
   @IsInt()
   followerUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date follower started to follow",
     example: Date(),
     required: false,
@@ -53,10 +50,9 @@ export class UpdateGymManagerFollowerDto {
   @IsDate()
   acceptedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date follower stopped following",
     example: Date(),
     required: false,
@@ -67,7 +63,7 @@ export class UpdateGymManagerFollowerDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date follower rejected the follow request",
     example: Date(),
     required: false,
@@ -76,10 +72,9 @@ export class UpdateGymManagerFollowerDto {
   @IsDate()
   rejectedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date manager/follower blocked each other",
     example: Date(),
     required: false,
@@ -88,37 +83,34 @@ export class UpdateGymManagerFollowerDto {
   @IsDate()
   blockedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the manager accepted the follow request",
     example: true,
     required: false,
-    default: true
+    default: true,
   })
   @IsOptional()
   @IsBoolean()
   accepted?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the manager/follower has blocked each other",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
   blocked?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the follower has stopped following the manager",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
@@ -129,10 +121,9 @@ export class UpdateGymManagerFollowerDto {
     description: "Whether the follower has rejected the follow request",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
   rejected?: boolean;
 }
-  

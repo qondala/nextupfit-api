@@ -7,7 +7,7 @@ export class CreateGymSpecializedInNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Gym id",
     example: 235,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -17,7 +17,7 @@ export class CreateGymSpecializedInNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Nutrition id",
     example: 12,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()

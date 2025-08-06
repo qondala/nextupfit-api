@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateGymManagerOverviewDto, UpdateGymManagerOverviewDto } from '../dto';
-import { GymManagerOverviewEntity } from '../entity';
+import {
+  CreateGymManagerOverviewDto,
+  UpdateGymManagerOverviewDto,
+} from "../dto";
+import { GymManagerOverviewEntity } from "../entity";
 
 @Injectable()
 export class GymManagerOverviewService {
@@ -14,21 +17,25 @@ export class GymManagerOverviewService {
     private readonly repository: Repository<GymManagerOverviewEntity>,
   ) {}
 
-  async create(createDto: CreateGymManagerOverviewDto, userId: number): Promise<GymManagerOverviewEntity> {
+  async create(
+    createDto: CreateGymManagerOverviewDto,
+    userId: number,
+  ): Promise<GymManagerOverviewEntity> {
     const overview = this.repository.create({
       ...createDto,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.repository.save(overview);
   }
 
   async findByManager(
     managerId: number,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymManagerOverviewEntity>> {
-    const queryBuilder = this.repository.createQueryBuilder('overview')
-      .where('overview.managerUserId = :managerId', { managerId })
-      .orderBy('overview.createdAt', 'DESC');
+    const queryBuilder = this.repository
+      .createQueryBuilder("overview")
+      .where("overview.managerUserId = :managerId", { managerId })
+      .orderBy("overview.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -45,17 +52,18 @@ export class GymManagerOverviewService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findBestRatedAndAttented(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymManagerOverviewEntity>> {
-    const queryBuilder = this.repository.createQueryBuilder('overview')
-      .orderBy('overview.ratingsAvg', 'DESC')
-      .orderBy('overview.attendeesCount', 'DESC');
+    const queryBuilder = this.repository
+      .createQueryBuilder("overview")
+      .orderBy("overview.ratingsAvg", "DESC")
+      .orderBy("overview.attendeesCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -72,19 +80,22 @@ export class GymManagerOverviewService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
-    
 
   async findOne(id: number): Promise<GymManagerOverviewEntity> {
     return await this.repository.findOne({
-      where: { id }
+      where: { id },
     });
   }
 
-  async update(id: number, updateDto: UpdateGymManagerOverviewDto, userId: number): Promise<GymManagerOverviewEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateGymManagerOverviewDto,
+    userId: number,
+  ): Promise<GymManagerOverviewEntity> {
     await this.repository.update(id, updateDto);
     return this.findOne(id);
   }

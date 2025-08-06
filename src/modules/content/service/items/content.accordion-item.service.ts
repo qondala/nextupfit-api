@@ -17,21 +17,28 @@ export class ContentAccordionItemService {
     private readonly accordionItemRepository: Repository<ContentAccordionItemEntity>,
   ) {}
 
-  async create(dto: CreateContentAccordionItemDto): Promise<ContentAccordionItemEntity> {
+  async create(
+    dto: CreateContentAccordionItemDto,
+  ): Promise<ContentAccordionItemEntity> {
     const entity = this.accordionItemRepository.create(dto);
     return await this.accordionItemRepository.save(entity);
   }
 
-  async findAll(accordionId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentAccordionItemEntity>> {
+  async findAll(
+    accordionId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentAccordionItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    const [items, totalItems] = await this.accordionItemRepository.findAndCount({
-      skip,
-      take: limit,
-      where: { accordionId },
-      order: { position: "ASC" },
-    });
+    const [items, totalItems] = await this.accordionItemRepository.findAndCount(
+      {
+        skip,
+        take: limit,
+        where: { accordionId },
+        order: { position: "ASC" },
+      },
+    );
 
     const totalPages = Math.ceil(totalItems / limit);
 
@@ -48,14 +55,19 @@ export class ContentAccordionItemService {
   }
 
   async findOne(id: number): Promise<ContentAccordionItemEntity> {
-    const entity = await this.accordionItemRepository.findOne({ where: { id } });
+    const entity = await this.accordionItemRepository.findOne({
+      where: { id },
+    });
     if (!entity) {
       throw new Error(`Content accordion item with ID ${id} not found`);
     }
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentAccordionItemDto): Promise<ContentAccordionItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentAccordionItemDto,
+  ): Promise<ContentAccordionItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return await this.accordionItemRepository.save(entity);

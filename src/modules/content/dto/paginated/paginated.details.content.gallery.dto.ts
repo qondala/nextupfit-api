@@ -6,7 +6,6 @@ import { PaginatedResponseDto } from "@app/common/dto";
 
 import { DetailsContentGalleryDto } from "../details";
 
-
 export class PaginatedDetailsContentGalleryDto extends PaginatedResponseDto<DetailsContentGalleryDto> {
   @ApiProperty({
     type: () => DetailsContentGalleryDto,

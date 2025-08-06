@@ -2,9 +2,12 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsInt, IsOptional } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { ContentTypeEnum, ContentContainerTypeEnum, ContentPrivacyEnum } from "../../types";
+import {
+  ContentTypeEnum,
+  ContentContainerTypeEnum,
+  ContentPrivacyEnum,
+} from "../../types";
 import { SocialActorEnum } from "../../../social/types";
-
 
 export class UpdateContentDto {
   @ApiProperty({
@@ -89,7 +92,6 @@ export class UpdateContentDto {
   @IsOptional()
   @IsEnum(SocialActorEnum)
   ownerType?: SocialActorEnum;
-
 
   @ApiProperty({
     enum: ContentPrivacyEnum,

@@ -1,30 +1,16 @@
-import {
-  Injectable
-} from "@nestjs/common";
-import {
-  InjectRepository
-} from "@nestjs/typeorm";
-import {
-  LessThan,
-  MoreThan,
-  Repository
-} from "typeorm";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { LessThan, MoreThan, Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import {
-  ProgramStepEntity
-} from "../entity";
+import { ProgramStepEntity } from "../entity";
 import {
   CreateProgramStepDto,
   ProgramFindOrderStepEnum,
   UpdateProgramStepDto,
-  ProgramFindCriteriaStepDto
+  ProgramFindCriteriaStepDto,
 } from "../dto";
-
 
 @Injectable()
 export class ProgramStepService {
@@ -40,62 +26,86 @@ export class ProgramStepService {
 
   async findAll(
     criteria: ProgramFindCriteriaStepDto,
-    pagination?: PaginationOptionsDto
+    pagination?: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<ProgramStepEntity>> {
-
     const queryBuilder = this.repository.createQueryBuilder("stepQuery");
 
     queryBuilder.where("stepQuery.id != 0");
 
     if (criteria.search) {
-      queryBuilder.andWhere("stepQuery.name LIKE :search", { search: `%${criteria.search}%` });
-      queryBuilder.andWhere("stepQuery.description LIKE :search", { search: `%${criteria.search}%` });
+      queryBuilder.andWhere("stepQuery.name LIKE :search", {
+        search: `%${criteria.search}%`,
+      });
+      queryBuilder.andWhere("stepQuery.description LIKE :search", {
+        search: `%${criteria.search}%`,
+      });
     }
 
     if (criteria.gymId) {
-      queryBuilder.andWhere("stepQuery.gymId = :gymId", { gymId: criteria.gymId });
+      queryBuilder.andWhere("stepQuery.gymId = :gymId", {
+        gymId: criteria.gymId,
+      });
     }
 
     if (criteria.programId) {
-      queryBuilder.andWhere("stepQuery.programId = :programId", { programId: criteria.programId });
+      queryBuilder.andWhere("stepQuery.programId = :programId", {
+        programId: criteria.programId,
+      });
     }
 
     if (criteria.ownerUserId) {
-      queryBuilder.andWhere("stepQuery.ownerUserId = :ownerUserId", { ownerUserId: criteria.ownerUserId });
+      queryBuilder.andWhere("stepQuery.ownerUserId = :ownerUserId", {
+        ownerUserId: criteria.ownerUserId,
+      });
     }
 
     if (criteria.ownerManagerId) {
-      queryBuilder.andWhere("stepQuery.ownerManagerId = :ownerManagerId", { ownerManagerId: criteria.ownerManagerId });
+      queryBuilder.andWhere("stepQuery.ownerManagerId = :ownerManagerId", {
+        ownerManagerId: criteria.ownerManagerId,
+      });
     }
 
     if (criteria.status) {
-      queryBuilder.andWhere("stepQuery.status = :status", { status: criteria.status });
+      queryBuilder.andWhere("stepQuery.status = :status", {
+        status: criteria.status,
+      });
     }
 
     if (criteria.attendeesCount) {
-      queryBuilder.andWhere("stepQuery.attendeesCount = :attendeesCount", { attendeesCount: criteria.attendeesCount });
+      queryBuilder.andWhere("stepQuery.attendeesCount = :attendeesCount", {
+        attendeesCount: criteria.attendeesCount,
+      });
     }
 
     if (criteria.viewsCount) {
-      queryBuilder.andWhere("stepQuery.viewsCount = :viewsCount", { viewsCount: criteria.viewsCount });
+      queryBuilder.andWhere("stepQuery.viewsCount = :viewsCount", {
+        viewsCount: criteria.viewsCount,
+      });
     }
 
     if (criteria.ratingsAvg) {
-      queryBuilder.andWhere("stepQuery.ratingsAvg = :ratingsAvg", { ratingsAvg: criteria.ratingsAvg });
+      queryBuilder.andWhere("stepQuery.ratingsAvg = :ratingsAvg", {
+        ratingsAvg: criteria.ratingsAvg,
+      });
     }
 
     if (criteria.ratingsCount) {
-      queryBuilder.andWhere("stepQuery.ratingsCount = :ratingsCount", { ratingsCount: criteria.ratingsCount });
+      queryBuilder.andWhere("stepQuery.ratingsCount = :ratingsCount", {
+        ratingsCount: criteria.ratingsCount,
+      });
     }
 
     if (criteria.duration) {
-      queryBuilder.andWhere("stepQuery.duration = :duration", { duration: criteria.duration });
+      queryBuilder.andWhere("stepQuery.duration = :duration", {
+        duration: criteria.duration,
+      });
     }
 
     if (criteria.difficultyLevel) {
-      queryBuilder.andWhere("stepQuery.difficultyLevel = :difficultyLevel", { difficultyLevel: criteria.difficultyLevel });
+      queryBuilder.andWhere("stepQuery.difficultyLevel = :difficultyLevel", {
+        difficultyLevel: criteria.difficultyLevel,
+      });
     }
-
 
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
@@ -139,8 +149,7 @@ export class ProgramStepService {
           queryBuilder.addOrderBy("stepQuery.createdAt", "DESC");
           break;
       }
-    }
-    else {
+    } else {
       queryBuilder.addOrderBy("stepQuery.createdAt", "DESC");
       queryBuilder.addOrderBy("stepQuery.position", "ASC");
     }
@@ -162,8 +171,8 @@ export class ProgramStepService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
@@ -173,24 +182,35 @@ export class ProgramStepService {
   }
 
   async findFirst(programId: number): Promise<ProgramStepEntity> {
-    const step = await this.repository.findOne({ where: { programId }, order: { position: "ASC" } });
+    const step = await this.repository.findOne({
+      where: { programId },
+      order: { position: "ASC" },
+    });
     return step;
   }
 
-
   async findNext(stepId: number): Promise<ProgramStepEntity> {
     const step = await this.findOne(stepId);
-    const nextStep = await this.repository.findOne({ where: { programId: step.programId, position: MoreThan(step.position) }, order: { position: "ASC" } });
+    const nextStep = await this.repository.findOne({
+      where: { programId: step.programId, position: MoreThan(step.position) },
+      order: { position: "ASC" },
+    });
     return nextStep;
   }
 
   async findPrevious(stepId: number): Promise<ProgramStepEntity> {
     const step = await this.findOne(stepId);
-    const previousStep = await this.repository.findOne({ where: { programId: step.programId, position: LessThan(step.position) }, order: { position: "DESC" } });
+    const previousStep = await this.repository.findOne({
+      where: { programId: step.programId, position: LessThan(step.position) },
+      order: { position: "DESC" },
+    });
     return previousStep;
   }
 
-  async update(id: number, body: UpdateProgramStepDto): Promise<ProgramStepEntity> {
+  async update(
+    id: number,
+    body: UpdateProgramStepDto,
+  ): Promise<ProgramStepEntity> {
     const step = await this.findOne(id);
     Object.assign(step, body);
     return await this.repository.save(step);
@@ -200,5 +220,4 @@ export class ProgramStepService {
     const step = await this.findOne(id);
     await this.repository.remove(step);
   }
-
-} 
+}

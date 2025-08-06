@@ -5,4 +5,3 @@ export enum ProgramAccessibilityEnum {
   programSubscribersOnly = "programSubscribersOnly",
   gymMembersAndProgramSubscribersOnly = "gymMembersAndProgramSubscribersOnly",
 }
-

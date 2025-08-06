@@ -54,7 +54,9 @@ export class ContentPrerequisitesController {
     status: HttpStatus.CREATED,
     type: DetailsContentPrerequisitesDto,
   })
-  async create(@Body() dto: CreateContentPrerequisitesDto): Promise<DetailsContentPrerequisitesDto> {
+  async create(
+    @Body() dto: CreateContentPrerequisitesDto,
+  ): Promise<DetailsContentPrerequisitesDto> {
     return await this.service.create(dto);
   }
 
@@ -104,7 +106,9 @@ export class ContentPrerequisitesController {
     status: HttpStatus.OK,
     type: DetailsContentPrerequisitesDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentPrerequisitesDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentPrerequisitesDto | null> {
     return await this.service.findOne(id);
   }
 

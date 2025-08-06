@@ -65,7 +65,9 @@ export class ContentWarningController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentWarningDto): Promise<DetailsContentWarningDto> {
+  async create(
+    @Body() dto: CreateContentWarningDto,
+  ): Promise<DetailsContentWarningDto> {
     return await this.service.create(dto);
   }
 
@@ -131,7 +133,9 @@ export class ContentWarningController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentWarningDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentWarningDto | null> {
     return await this.service.findOne(id);
   }
 

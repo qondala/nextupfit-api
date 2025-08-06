@@ -9,23 +9,27 @@ import {
   CreateContentGalleryDto,
   DetailsContentGalleryDto,
   UpdateContentGalleryDto,
-  PaginatedDetailsContentGalleryDto
+  PaginatedDetailsContentGalleryDto,
 } from "../dto";
 
 @Injectable()
 export class ContentGalleryService {
   constructor(
     @InjectRepository(ContentGalleryEntity)
-    private readonly repository: Repository<ContentGalleryEntity>
+    private readonly repository: Repository<ContentGalleryEntity>,
   ) {}
 
-  async create(createDto: CreateContentGalleryDto): Promise<DetailsContentGalleryDto> {
+  async create(
+    createDto: CreateContentGalleryDto,
+  ): Promise<DetailsContentGalleryDto> {
     const entity = this.repository.create(createDto);
     const savedEntity = await this.repository.save(entity);
     return savedEntity;
   }
 
-  async findAll(paginationQuery: PaginationOptionsDto): Promise<PaginatedDetailsContentGalleryDto> {
+  async findAll(
+    paginationQuery: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentGalleryDto> {
     const { page, limit } = paginationQuery;
     const skip = (page - 1) * limit;
 
@@ -57,7 +61,9 @@ export class ContentGalleryService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<DetailsContentGalleryDto> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<DetailsContentGalleryDto> {
     const entity = await this.repository.findOne({
       where: { contentId },
       relations: ["items"],
@@ -66,12 +72,15 @@ export class ContentGalleryService {
     return entity;
   }
 
-  async update(id: number, updateDto: UpdateContentGalleryDto): Promise<DetailsContentGalleryDto> {
+  async update(
+    id: number,
+    updateDto: UpdateContentGalleryDto,
+  ): Promise<DetailsContentGalleryDto> {
     const entity = await this.findOne(id);
-    
+
     Object.assign(entity, updateDto);
     const updatedEntity = await this.repository.save(entity);
-    
+
     return updatedEntity;
   }
 
@@ -79,7 +88,10 @@ export class ContentGalleryService {
     await this.repository.delete(id);
   }
 
-  async findByContentId(contentId: number, paginationQuery: PaginationOptionsDto): Promise<PaginatedDetailsContentGalleryDto> {
+  async findByContentId(
+    contentId: number,
+    paginationQuery: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentGalleryDto> {
     const { page, limit } = paginationQuery;
     const skip = (page - 1) * limit;
 

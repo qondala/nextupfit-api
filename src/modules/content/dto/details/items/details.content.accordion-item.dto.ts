@@ -63,5 +63,4 @@ export class DetailsContentAccordionItemDto {
   @IsNotEmpty()
   @IsInt()
   position: number;
-
 }

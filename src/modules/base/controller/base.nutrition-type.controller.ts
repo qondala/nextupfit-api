@@ -1,4 +1,4 @@
-import { 
+import {
   Controller,
   Get,
   Post,
@@ -9,7 +9,7 @@ import {
   Query,
   HttpStatus,
   UseGuards,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -17,7 +17,7 @@ import {
   ApiResponse,
   ApiParam,
   ApiQuery,
-  ApiBearerAuth
+  ApiBearerAuth,
 } from "@nestjs/swagger";
 
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
@@ -27,36 +27,43 @@ import {
   CreateBaseNutritionTypeDto,
   UpdateBaseNutritionTypeDto,
   PaginatedDetailsBaseNutritionTypeDto,
-  DetailsBaseNutritionTypeDto
+  DetailsBaseNutritionTypeDto,
 } from "../dto";
 import { SwaggerType } from "@app/common/types";
-import { ErrorResponseException, ErrorResponseExceptionType, SystemStatusCode } from "@app/common/exceptions";
-
+import {
+  ErrorResponseException,
+  ErrorResponseExceptionType,
+  SystemStatusCode,
+} from "@app/common/exceptions";
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
 @Controller("base/nutrition-type")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BaseNutritionTypeController {
-  constructor(private readonly nutritionTypeService: BaseNutritionTypeService) {}
+  constructor(
+    private readonly nutritionTypeService: BaseNutritionTypeService,
+  ) {}
 
   @Post()
   @ApiOperation({
     summary: "Create a new nutrition type",
     description: "Create a new nutrition type",
-    operationId: "createBaseNutritionType"
+    operationId: "createBaseNutritionType",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "Nutrition type created successfully",
-    type: DetailsBaseNutritionTypeDto
+    type: DetailsBaseNutritionTypeDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
     description: "Nutrition type with this code already exists",
     type: ErrorResponseException,
   })
-  async create(@Body() dto: CreateBaseNutritionTypeDto): Promise<DetailsBaseNutritionTypeDto> {
+  async create(
+    @Body() dto: CreateBaseNutritionTypeDto,
+  ): Promise<DetailsBaseNutritionTypeDto> {
     try {
       return await this.nutritionTypeService.create(dto);
     } catch (error) {
@@ -65,7 +72,7 @@ export class BaseNutritionTypeController {
           ErrorResponseExceptionType.DATABASE,
           "Nutrition type with this code already exists",
           HttpStatus.BAD_REQUEST,
-          SystemStatusCode.DUPLICATE
+          SystemStatusCode.DUPLICATE,
         );
       }
       throw error;
@@ -76,26 +83,26 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Get all nutrition types",
     description: "Get all nutrition types",
-    operationId: "findAllBaseNutritionTypes"
+    operationId: "findAllBaseNutritionTypes",
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Paginated list of nutrition types",
-    type: PaginatedDetailsBaseNutritionTypeDto
+    type: PaginatedDetailsBaseNutritionTypeDto,
   })
   @ApiQuery({
     name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
     name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   async findAll(
     @Query("page") page = 1,
-    @Query("limit") limit = 10
+    @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseNutritionTypeDto> {
     return this.nutritionTypeService.findAll({ page: +page, limit: +limit });
   }
@@ -104,27 +111,27 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Search nutrition types",
     description: "Search nutrition types",
-    operationId: "searchBaseNutritionTypes"
+    operationId: "searchBaseNutritionTypes",
   })
   @ApiQuery({
     name: "q",
     required: true,
-    type: SwaggerType.STRING
+    type: SwaggerType.STRING,
   })
   @ApiQuery({
     name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
     name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   async search(
     @Query("q") q: string,
     @Query("page") page = 1,
-    @Query("limit") limit = 10
+    @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseNutritionTypeDto> {
     return this.nutritionTypeService.search(q, { page: +page, limit: +limit });
   }
@@ -133,30 +140,32 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Get nutrition type by code",
     description: "Get nutrition type by code",
-    operationId: "findByCodeBaseNutritionType"
+    operationId: "findByCodeBaseNutritionType",
   })
   @ApiParam({
     name: "code",
     required: true,
-    type: SwaggerType.STRING
+    type: SwaggerType.STRING,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Nutrition type found successfully",
-    type: DetailsBaseNutritionTypeDto
+    type: DetailsBaseNutritionTypeDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Nutrition type not found"
+    description: "Nutrition type not found",
   })
-  async findByCode(@Param("code") code: string): Promise<DetailsBaseNutritionTypeDto> {
+  async findByCode(
+    @Param("code") code: string,
+  ): Promise<DetailsBaseNutritionTypeDto> {
     const nt = await this.nutritionTypeService.findByCode(code);
     if (!nt) {
       throw new ErrorResponseException(
         ErrorResponseExceptionType.DATABASE,
         `Nutrition type with code '${code}' not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
     return nt;
@@ -166,31 +175,33 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Get nutrition type by id",
     description: "Get nutrition type by id",
-    operationId: "findOneBaseNutritionType"
+    operationId: "findOneBaseNutritionType",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Nutrition type found successfully",
-    type: DetailsBaseNutritionTypeDto
+    type: DetailsBaseNutritionTypeDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: "Nutrition type not found",
     type: ErrorResponseException,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseNutritionTypeDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseNutritionTypeDto> {
     const nt = await this.nutritionTypeService.findOne(+id);
     if (!nt) {
       throw new ErrorResponseException(
         ErrorResponseExceptionType.DATABASE,
         `Nutrition type with id ${id} not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
     return nt;
@@ -200,17 +211,17 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Update nutrition type",
     description: "Update nutrition type",
-    operationId: "updateBaseNutritionType"
+    operationId: "updateBaseNutritionType",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Nutrition type updated successfully",
-    type: DetailsBaseNutritionTypeDto
+    type: DetailsBaseNutritionTypeDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -224,7 +235,7 @@ export class BaseNutritionTypeController {
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateBaseNutritionTypeDto
+    @Body() dto: UpdateBaseNutritionTypeDto,
   ): Promise<DetailsBaseNutritionTypeDto> {
     try {
       const nt = await this.nutritionTypeService.update(id, dto);
@@ -233,7 +244,7 @@ export class BaseNutritionTypeController {
           ErrorResponseExceptionType.DATABASE,
           `Nutrition type with id ${id} not found`,
           HttpStatus.NOT_FOUND,
-          SystemStatusCode.NOT_FOUND
+          SystemStatusCode.NOT_FOUND,
         );
       }
       return nt;
@@ -243,7 +254,7 @@ export class BaseNutritionTypeController {
           ErrorResponseExceptionType.DATABASE,
           "Nutrition type with this code already exists",
           HttpStatus.BAD_REQUEST,
-          SystemStatusCode.DUPLICATE
+          SystemStatusCode.DUPLICATE,
         );
       }
       throw error;
@@ -254,16 +265,16 @@ export class BaseNutritionTypeController {
   @ApiOperation({
     summary: "Delete nutrition type",
     description: "Delete nutrition type",
-    operationId: "removeBaseNutritionType"
+    operationId: "removeBaseNutritionType",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "Nutrition type deleted successfully"
+    description: "Nutrition type deleted successfully",
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -277,7 +288,7 @@ export class BaseNutritionTypeController {
         ErrorResponseExceptionType.DATABASE,
         `Nutrition type with id ${id} not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
   }

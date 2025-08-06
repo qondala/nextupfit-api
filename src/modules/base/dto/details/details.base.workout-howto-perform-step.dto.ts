@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { SwaggerType } from "@app/common/types";
 import { BaseHighlightColorEnum } from "../../types";
 
@@ -7,7 +13,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Identifier",
-    example: 1
+    example: 1,
   })
   @IsNumber()
   id: number;
@@ -15,7 +21,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Description",
-    example: "Keep your back straight..."
+    example: "Keep your back straight...",
   })
   @IsNotEmpty()
   @IsString()
@@ -25,7 +31,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
     type: SwaggerType.STRING,
     description: "Illustration URL",
     example: "https://...",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -35,7 +41,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
     enum: BaseHighlightColorEnum,
     enumName: "BaseHighlightColorEnum",
     description: "Highlight color",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsEnum(BaseHighlightColorEnum)
@@ -44,7 +50,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Related workout ID",
-    example: 5
+    example: 5,
   })
   @IsNumber()
   baseWorkoutId: number;
@@ -52,7 +58,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Unique code",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -61,7 +67,7 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Order",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
@@ -69,15 +75,15 @@ export class DetailsBaseWorkoutHowtoPerformStepDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: "Creation timestamp"
+    format: "date-time",
+    description: "Creation timestamp",
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: "Last update timestamp"
+    format: "date-time",
+    description: "Last update timestamp",
   })
   updatedAt: Date;
 }

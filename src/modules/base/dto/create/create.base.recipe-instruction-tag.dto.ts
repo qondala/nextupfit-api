@@ -10,7 +10,7 @@ export class CreateBaseRecipeInstructionTagDto {
     enum: BaseRecipeInstructionTagEnum,
     enumName: "BaseRecipeInstructionTagEnum",
     example: BaseRecipeInstructionTagEnum.tool,
-    description: "Tag type"
+    description: "Tag type",
   })
   @IsNotEmpty()
   @IsEnum(BaseRecipeInstructionTagEnum)
@@ -19,7 +19,7 @@ export class CreateBaseRecipeInstructionTagDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     example: 4,
-    description: "Referenced tag id"
+    description: "Referenced tag id",
   })
   @IsNotEmpty()
   @IsInt()
@@ -29,7 +29,7 @@ export class CreateBaseRecipeInstructionTagDto {
     type: SwaggerType.INTEGER,
     required: false,
     example: 3,
-    description: "Order index"
+    description: "Order index",
   })
   @IsOptional()
   @IsInt()
@@ -38,7 +38,7 @@ export class CreateBaseRecipeInstructionTagDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     example: 1,
-    description: "Recipe instruction id"
+    description: "Recipe instruction id",
   })
   @IsNotEmpty()
   @IsInt()

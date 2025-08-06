@@ -8,14 +8,9 @@ import {
   JoinColumn,
 } from "typeorm";
 
-import {
-  BaseWeekDaysEnum,
-} from "@app/module/base/types";
+import { BaseWeekDaysEnum } from "@app/module/base/types";
 
-import {
-  GymEntity,
-} from "./gym.entity";
-
+import { GymEntity } from "./gym.entity";
 
 @Entity("gym_open_day")
 export class GymOpenDayEntity {
@@ -28,7 +23,7 @@ export class GymOpenDayEntity {
   @Column({
     type: "enum",
     enum: BaseWeekDaysEnum,
-    nullable: false
+    nullable: false,
   })
   day: BaseWeekDaysEnum;
 
@@ -51,6 +46,6 @@ export class GymOpenDayEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
 }

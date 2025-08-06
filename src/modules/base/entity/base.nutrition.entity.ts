@@ -1,9 +1,16 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, JoinColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  JoinColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { BaseNutritionTypeEntity } from "./base.nutrition-type.entity";
 
 @Entity("base_nutrition")
 export class BaseNutritionEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,7 +32,10 @@ export class BaseNutritionEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => BaseNutritionTypeEntity, (nutritionType) => nutritionType.nutritions)
+  @ManyToOne(
+    () => BaseNutritionTypeEntity,
+    (nutritionType) => nutritionType.nutritions,
+  )
   @JoinColumn({ name: "baseNutritionTypeId" })
   nutritionType: BaseNutritionTypeEntity;
 }

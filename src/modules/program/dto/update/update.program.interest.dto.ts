@@ -1,18 +1,8 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  IsEnum,
-  IsInt,
-  IsOptional
-} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum, IsInt, IsOptional } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  UserInterestTypeEnum
-} from "@app/module/user/types";
+import { SwaggerType } from "@app/common/types";
+import { UserInterestTypeEnum } from "@app/module/user/types";
 
 export class UpdateProgramInterestDto {
   @ApiProperty({

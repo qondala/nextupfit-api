@@ -15,7 +15,6 @@ import { PaymentStatusEnum } from "../../types";
 
 import { DetailsPaymentCartItemDto } from ".";
 
-
 export class DetailsPaymentCartDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -38,7 +37,6 @@ export class DetailsPaymentCartDto {
   @IsInt()
   userId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
@@ -54,7 +52,6 @@ export class DetailsPaymentCartDto {
   @IsEnum(PaymentStatusEnum)
   status: PaymentStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     format: "date-time",
@@ -68,7 +65,6 @@ export class DetailsPaymentCartDto {
     required: true,
   })
   updatedAt: Date;
-
 
   @ApiProperty({
     type: () => DetailsPaymentCartItemDto,

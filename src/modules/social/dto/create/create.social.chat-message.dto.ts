@@ -11,7 +11,6 @@ export class CreateSocialChatMessageDto {
   @IsNumber()
   chatId: number;
 
-
   @ApiProperty({
     description: "Chat message sender user id",
     example: 1234,
@@ -21,17 +20,16 @@ export class CreateSocialChatMessageDto {
   @IsNumber()
   senderUserId: number;
 
-  
   @ApiProperty({
-    description: "auto=0 normal user sent message\nauto=1 missed audio call\nauto=2 missed video call\nauto=3 sender deleted message (last message text == null)",
+    description:
+      "auto=0 normal user sent message\nauto=1 missed audio call\nauto=2 missed video call\nauto=3 sender deleted message (last message text == null)",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   auto?: number;
-
 
   @ApiProperty({
     description: "Id of the message text",
@@ -41,7 +39,6 @@ export class CreateSocialChatMessageDto {
   @IsNotEmpty()
   @IsNumber()
   messageTextId: number;
-
 
   @ApiProperty({
     description: "Date the chat message was sent",

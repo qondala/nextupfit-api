@@ -4,20 +4,14 @@ import {
   IsBoolean,
   IsDefined,
   IsNotEmpty,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import {
-  UserGymFollowerStatus,
-} from "../followership";
-import {
-  UserGymMembershipPlanStatus,
-} from "../user-subscription-plan-status";
-
+import { UserGymFollowerStatus } from "../followership";
+import { UserGymMembershipPlanStatus } from "../user-subscription-plan-status";
 
 export class UserGymAccessStatus {
-
   @ApiProperty({
     type: () => UserGymFollowerStatus,
     title: "UserGymFollowerStatus",
@@ -42,7 +36,7 @@ export class UserGymAccessStatus {
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    description: 'Member status of the gym membership',
+    description: "Member status of the gym membership",
     example: true,
     required: true,
   })

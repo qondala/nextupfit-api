@@ -8,23 +8,21 @@ import {
 } from "typeorm";
 import { ContentCommitmentEntity } from "../content.commitment.entity";
 
-
-
 @Entity("content_commitment_item")
 export class ContentCommitmentItemEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   commitmentId: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   completeBefore: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   completeBeforeTimeUnitId: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   position: number;
 
   @CreateDateColumn()

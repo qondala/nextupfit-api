@@ -53,7 +53,9 @@ export class ContentConsumptionController {
     status: HttpStatus.CREATED,
     type: DetailsContentConsumptionDto,
   })
-  async create(@Body() dto: CreateContentConsumptionDto): Promise<DetailsContentConsumptionDto> {
+  async create(
+    @Body() dto: CreateContentConsumptionDto,
+  ): Promise<DetailsContentConsumptionDto> {
     return await this.service.create(dto);
   }
 
@@ -102,7 +104,9 @@ export class ContentConsumptionController {
     status: HttpStatus.OK,
     type: DetailsContentConsumptionDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentConsumptionDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentConsumptionDto> {
     return await this.service.findOne(id);
   }
 

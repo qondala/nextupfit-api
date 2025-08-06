@@ -10,7 +10,7 @@ export class PaginatedDetailsContentCommitmentItemDto extends PaginatedResponseD
     type: () => DetailsContentCommitmentItemDto,
     isArray: true,
     description: "Commitment items",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

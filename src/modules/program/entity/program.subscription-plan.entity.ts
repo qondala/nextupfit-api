@@ -5,11 +5,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   JoinColumn,
-  ManyToOne
+  ManyToOne,
 } from "typeorm";
+
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 import { ContentEntity } from "@app/module/content/entity";
-import { ProgramEntity } from "./program.entity";
+
+import { ProgramEntity } from ".";
 
 @Entity("program_subscription_plan")
 export class ProgramSubscriptionPlanEntity {
@@ -35,7 +37,6 @@ export class ProgramSubscriptionPlanEntity {
   @Column({ nullable: true })
   description: string;
 
-
   @Column({ default: 0 })
   trialNumberProgramActivities: number;
 
@@ -55,10 +56,10 @@ export class ProgramSubscriptionPlanEntity {
   active: boolean;
 
   @ManyToOne(() => ContentEntity)
-  @JoinColumn({ name: 'contentId' })
+  @JoinColumn({ name: "contentId" })
   content: ContentEntity;
 
   @ManyToOne(() => ProgramEntity)
-  @JoinColumn({ name: 'programId' })
+  @JoinColumn({ name: "programId" })
   program: ProgramEntity;
 }

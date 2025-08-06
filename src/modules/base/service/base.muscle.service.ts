@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { BaseMuscleEntity } from '../entity';
-import { CreateBaseMuscleDto, UpdateBaseMuscleDto } from '../dto';
+import { BaseMuscleEntity } from "../entity";
+import { CreateBaseMuscleDto, UpdateBaseMuscleDto } from "../dto";
 
 @Injectable()
 export class BaseMuscleService {
@@ -14,26 +14,30 @@ export class BaseMuscleService {
     private readonly baseMuscleRepository: Repository<BaseMuscleEntity>,
   ) {}
 
-  async create(createBaseMuscleDto: CreateBaseMuscleDto): Promise<BaseMuscleEntity> {
+  async create(
+    createBaseMuscleDto: CreateBaseMuscleDto,
+  ): Promise<BaseMuscleEntity> {
     const newMuscle = this.baseMuscleRepository.create(createBaseMuscleDto);
     return this.baseMuscleRepository.save(newMuscle);
   }
 
   async findAll(
     options: PaginationOptionsDto,
-    createdByUserId?: number
+    createdByUserId?: number,
   ): Promise<PaginatedResponseDto<BaseMuscleEntity>> {
-    const queryBuilder = this.baseMuscleRepository.createQueryBuilder('muscle');
-    
+    const queryBuilder = this.baseMuscleRepository.createQueryBuilder("muscle");
+
     if (createdByUserId) {
-      queryBuilder.where('muscle.createdByUserId = :createdByUserId', { createdByUserId });
+      queryBuilder.where("muscle.createdByUserId = :createdByUserId", {
+        createdByUserId,
+      });
     }
-    
+
     queryBuilder
       .skip((options.page - 1) * options.limit)
       .take(options.limit)
-      .orderBy('muscle.id', 'DESC');
-    
+      .orderBy("muscle.id", "DESC");
+
     const [items, total] = await queryBuilder.getManyAndCount();
 
     return {
@@ -43,22 +47,22 @@ export class BaseMuscleService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseMuscleEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseMuscleEntity>> {
     const searchTerm = `%${query}%`;
-    
+
     const [items, total] = await this.baseMuscleRepository.findAndCount({
-      where: [
-        { name: Like(searchTerm) },
-        { code: Like(searchTerm) }
-      ],
+      where: [{ name: Like(searchTerm) }, { code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -68,8 +72,8 @@ export class BaseMuscleService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -85,12 +89,15 @@ export class BaseMuscleService {
     id: number,
     updateBaseMuscleDto: UpdateBaseMuscleDto,
   ): Promise<BaseMuscleEntity | null> {
-    const result = await this.baseMuscleRepository.update(id, updateBaseMuscleDto);
-    
+    const result = await this.baseMuscleRepository.update(
+      id,
+      updateBaseMuscleDto,
+    );
+
     if (result.affected === 0) {
       return null;
     }
-    
+
     return this.findOne(id);
   }
 
@@ -98,4 +105,4 @@ export class BaseMuscleService {
     const result = await this.baseMuscleRepository.delete(id);
     return result.affected > 0;
   }
-} 
+}

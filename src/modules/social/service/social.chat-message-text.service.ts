@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateSocialChatMessageTextDto, UpdateSocialChatMessageTextDto } from '../dto';
-import { SocialChatMessageTextEntity } from '../entity';
-
+import {
+  CreateSocialChatMessageTextDto,
+  UpdateSocialChatMessageTextDto,
+} from "../dto";
+import { SocialChatMessageTextEntity } from "../entity";
 
 @Injectable()
 export class SocialChatMessageTextService {
@@ -15,22 +17,26 @@ export class SocialChatMessageTextService {
     private readonly chatMessageTextRepository: Repository<SocialChatMessageTextEntity>,
   ) {}
 
-  async create(createDto: CreateSocialChatMessageTextDto, messageId: number): Promise<SocialChatMessageTextEntity> {
+  async create(
+    createDto: CreateSocialChatMessageTextDto,
+    messageId: number,
+  ): Promise<SocialChatMessageTextEntity> {
     const chatMessageText = this.chatMessageTextRepository.create({
       ...createDto,
       messageId,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.chatMessageTextRepository.save(chatMessageText);
   }
 
   async findAll(
     paginationOptions: PaginationOptionsDto,
-    messageId: number
+    messageId: number,
   ): Promise<PaginatedResponseDto<SocialChatMessageTextEntity>> {
-    const queryBuilder = this.chatMessageTextRepository.createQueryBuilder('chatMessageText')
-      .where('chatMessageText.messageId = :messageId', { messageId })
-      .orderBy('chatMessageText.createdAt', 'DESC');
+    const queryBuilder = this.chatMessageTextRepository
+      .createQueryBuilder("chatMessageText")
+      .where("chatMessageText.messageId = :messageId", { messageId })
+      .orderBy("chatMessageText.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -47,19 +53,24 @@ export class SocialChatMessageTextService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<SocialChatMessageTextEntity> {
-    return await this.chatMessageTextRepository.findOneOrFail({ where: { id } });
+    return await this.chatMessageTextRepository.findOneOrFail({
+      where: { id },
+    });
   }
 
-  async update(id: number, updateDto: UpdateSocialChatMessageTextDto): Promise<SocialChatMessageTextEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateSocialChatMessageTextDto,
+  ): Promise<SocialChatMessageTextEntity> {
     await this.chatMessageTextRepository.update(id, {
       ...updateDto,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
     return this.findOne(id);
   }

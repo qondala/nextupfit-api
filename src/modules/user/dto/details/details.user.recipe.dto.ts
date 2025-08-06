@@ -26,7 +26,7 @@ export class DetailsUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Started at",
     required: false,
   })
@@ -34,7 +34,7 @@ export class DetailsUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Finished at",
     required: false,
   })
@@ -49,7 +49,7 @@ export class DetailsUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: true,
   })
@@ -57,7 +57,7 @@ export class DetailsUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: true,
   })

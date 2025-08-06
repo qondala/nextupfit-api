@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateContentImageDto {
@@ -7,18 +13,26 @@ export class UpdateContentImageDto {
     type: SwaggerType.INTEGER,
     description: "content id",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
   contentId?: number;
 
-  @ApiProperty({ type: SwaggerType.STRING, example: "Cover photo", required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    example: "Cover photo",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   title?: string;
 
-  @ApiProperty({ type: SwaggerType.STRING, example: "Description", required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    example: "Description",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   description?: string;
@@ -32,7 +46,7 @@ export class UpdateContentImageDto {
     type: SwaggerType.STRING,
     description: "image file id",
     example: 55,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()

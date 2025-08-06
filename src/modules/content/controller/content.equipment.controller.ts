@@ -54,7 +54,9 @@ export class ContentEquipmentController {
     status: HttpStatus.CREATED,
     type: DetailsContentEquipmentDto,
   })
-  async create(@Body() dto: CreateContentEquipmentDto): Promise<DetailsContentEquipmentDto> {
+  async create(
+    @Body() dto: CreateContentEquipmentDto,
+  ): Promise<DetailsContentEquipmentDto> {
     return await this.service.create(dto);
   }
 
@@ -103,7 +105,9 @@ export class ContentEquipmentController {
     status: HttpStatus.OK,
     type: DetailsContentEquipmentDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentEquipmentDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentEquipmentDto | null> {
     return await this.service.findOne(id);
   }
 

@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   // Core Entities
@@ -44,7 +44,7 @@ import {
   ContentUnorderedlistItemEntity,
   ContentGalleryItemEntity,
   ContentGalleryEntity,
-} from './entity';
+} from "./entity";
 
 import {
   // Core Services
@@ -89,7 +89,7 @@ import {
   ContentSusbcriptionPlanItemService,
   ContentTipsItemService,
   ContentUnorderedlistItemService,
-} from './service';
+} from "./service";
 
 import {
   ContentAccordionController,
@@ -118,7 +118,6 @@ import {
   ContentWarningController,
   ContentWorkoutController,
   ContentGalleryController,
-
   ContentAccordionItemController,
   ContentCarouselItemController,
   ContentChallengesItemController,
@@ -132,54 +131,54 @@ import {
   ContentSusbcriptionPlanItemController,
   ContentTipsItemController,
   ContentUnorderedlistItemController,
-} from './controller';
+} from "./controller";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-    // Core Entities
-    ContentAccordionEntity,
-    ContentCarouselEntity,
-    ContentChallengesEntity,
-    ContentChatWithCoachEntity,
-    ContentCommitmentEntity,
-    ContentConsumptionEntity,
-    ContentEquipmentEntity,
-    ContentFaqEntity,
-    ContentGoalsEntity,
-    ContentImageEntity,
-    ContentInformationEntity,
-    ContentInstructionsEntity,
-    ContentOrderedlistEntity,
-    ContentPrerequisitesEntity,
-    ContentRecipeEntity,
-    ContentSusbcriptionPlanEntity,
-    ContentTextEntity,
-    ContentTextareaEntity,
-    ContentTipsEntity,
-    ContentUnorderedlistEntity,
-    ContentUsersupportEntity,
-    ContentVideoEntity,
-    ContentWarningEntity,
-    ContentWorkoutEntity,
-    ContentGalleryEntity,
-    ContentEntity,
+      // Core Entities
+      ContentAccordionEntity,
+      ContentCarouselEntity,
+      ContentChallengesEntity,
+      ContentChatWithCoachEntity,
+      ContentCommitmentEntity,
+      ContentConsumptionEntity,
+      ContentEquipmentEntity,
+      ContentFaqEntity,
+      ContentGoalsEntity,
+      ContentImageEntity,
+      ContentInformationEntity,
+      ContentInstructionsEntity,
+      ContentOrderedlistEntity,
+      ContentPrerequisitesEntity,
+      ContentRecipeEntity,
+      ContentSusbcriptionPlanEntity,
+      ContentTextEntity,
+      ContentTextareaEntity,
+      ContentTipsEntity,
+      ContentUnorderedlistEntity,
+      ContentUsersupportEntity,
+      ContentVideoEntity,
+      ContentWarningEntity,
+      ContentWorkoutEntity,
+      ContentGalleryEntity,
+      ContentEntity,
 
-    // Item Entities
-    ContentAccordionItemEntity,
-    ContentCarouselItemEntity,
-    ContentChallengesItemEntity,
-    ContentCommitmentItemEntity,
-    ContentConsumptionItemEntity,
-    ContentEquipmentItemEntity,
-    ContentFaqItemEntity,
-    ContentGoalsItemEntity,
-    ContentOrderedlistItemEntity,
-    ContentPrerequisitesItemEntity,
-    ContentSusbcriptionPlanItemEntity,
-    ContentTipsItemEntity,
-    ContentUnorderedlistItemEntity,
-    ContentGalleryItemEntity,
+      // Item Entities
+      ContentAccordionItemEntity,
+      ContentCarouselItemEntity,
+      ContentChallengesItemEntity,
+      ContentCommitmentItemEntity,
+      ContentConsumptionItemEntity,
+      ContentEquipmentItemEntity,
+      ContentFaqItemEntity,
+      ContentGoalsItemEntity,
+      ContentOrderedlistItemEntity,
+      ContentPrerequisitesItemEntity,
+      ContentSusbcriptionPlanItemEntity,
+      ContentTipsItemEntity,
+      ContentUnorderedlistItemEntity,
+      ContentGalleryItemEntity,
     ]),
   ],
   controllers: [

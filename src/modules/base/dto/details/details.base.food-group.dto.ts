@@ -1,10 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsInt,
-} from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, IsInt } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 export class DetailsBaseFoodGroupDto {
@@ -62,7 +57,7 @@ export class DetailsBaseFoodGroupDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record creation timestamp",
     required: true,
   })
@@ -70,7 +65,7 @@ export class DetailsBaseFoodGroupDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record last update timestamp",
     required: true,
   })

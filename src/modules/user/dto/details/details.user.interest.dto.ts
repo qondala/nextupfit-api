@@ -1,8 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsDefined, IsEnum, IsInt, ValidateNested } from "class-validator";
+import {
+  IsDate,
+  IsDefined,
+  IsEnum,
+  IsInt,
+  ValidateNested,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { UserInterestCompositeDto, UserInterestTypeEnum } from "@app/module/user/types";
+import {
+  UserInterestCompositeDto,
+  UserInterestTypeEnum,
+} from "@app/module/user/types";
 import { Type } from "class-transformer";
 
 export class DetailsUserInterestDto {

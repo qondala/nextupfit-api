@@ -18,6 +18,9 @@ export class ContentPrerequisitesEntity {
   @Column({ type: "boolean", nullable: true })
   displayTitle?: boolean;
 
-  @OneToMany(() => ContentPrerequisitesItemEntity, (item) => item.prerequisitesId)
+  @OneToMany(
+    () => ContentPrerequisitesItemEntity,
+    (item) => item.prerequisitesId,
+  )
   items: ContentPrerequisitesItemEntity[];
 }

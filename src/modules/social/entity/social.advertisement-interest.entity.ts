@@ -35,7 +35,10 @@ export class SocialAdvertisementInterestEntity {
   @UpdateDateColumn({ name: "updatedAt" })
   updatedAt: Date;
 
-  @ManyToOne(() => SocialAdvertisementEntity, (advertisement) => advertisement.interests)
-  @JoinColumn({ name: 'advertisementId', referencedColumnName: 'id' })
+  @ManyToOne(
+    () => SocialAdvertisementEntity,
+    (advertisement) => advertisement.interests,
+  )
+  @JoinColumn({ name: "advertisementId", referencedColumnName: "id" })
   advertisement: SocialAdvertisementEntity;
 }

@@ -1,20 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto,
-} from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateSocialUpdateDto,
   UpdateSocialUpdateDto,
   SocialUpdatesFindCriteriaDto,
   SocialUpdatesFindOrderEnum,
-} from '../dto';
+} from "../dto";
 
-import { SocialUpdateEntity } from '../entity';
+import { SocialUpdateEntity } from "../entity";
 
 @Injectable()
 export class SocialUpdateService {
@@ -30,43 +27,57 @@ export class SocialUpdateService {
 
   async findAll(
     criteria: SocialUpdatesFindCriteriaDto,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialUpdateEntity>> {
-    const queryBuilder = this.socialUpdateRepository.createQueryBuilder('socialUpdate')
-      .leftJoinAndSelect('socialUpdate.authorUser', 'authorUser')
-      .leftJoinAndSelect('socialUpdate.authorManager', 'authorManager')
+    const queryBuilder = this.socialUpdateRepository
+      .createQueryBuilder("socialUpdate")
+      .leftJoinAndSelect("socialUpdate.authorUser", "authorUser")
+      .leftJoinAndSelect("socialUpdate.authorManager", "authorManager");
 
     if (criteria.authorUserId) {
-      queryBuilder.andWhere('socialUpdate.authorUserId = :authorUserId', { authorUserId: criteria.authorUserId });
+      queryBuilder.andWhere("socialUpdate.authorUserId = :authorUserId", {
+        authorUserId: criteria.authorUserId,
+      });
     }
 
     if (criteria.authorManagerId) {
-      queryBuilder.andWhere('socialUpdate.authorManagerId = :authorManagerId', { authorManagerId: criteria.authorManagerId });
+      queryBuilder.andWhere("socialUpdate.authorManagerId = :authorManagerId", {
+        authorManagerId: criteria.authorManagerId,
+      });
     }
 
     if (criteria.socialActorType) {
-      queryBuilder.andWhere('socialUpdate.socialActorType = :socialActorType', { socialActorType: criteria.socialActorType });
+      queryBuilder.andWhere("socialUpdate.socialActorType = :socialActorType", {
+        socialActorType: criteria.socialActorType,
+      });
     }
 
     if (criteria.socialActorId) {
-      queryBuilder.andWhere('socialUpdate.socialActorId = :socialActorId', { socialActorId: criteria.socialActorId });
+      queryBuilder.andWhere("socialUpdate.socialActorId = :socialActorId", {
+        socialActorId: criteria.socialActorId,
+      });
     }
 
     if (criteria.socialUpdateType) {
-      queryBuilder.andWhere('socialUpdate.socialUpdateType = :socialUpdateType', { socialUpdateType: criteria.socialUpdateType });
+      queryBuilder.andWhere(
+        "socialUpdate.socialUpdateType = :socialUpdateType",
+        { socialUpdateType: criteria.socialUpdateType },
+      );
     }
 
     if (criteria.privacy) {
-      queryBuilder.andWhere('socialUpdate.privacy = :privacy', { privacy: criteria.privacy });
+      queryBuilder.andWhere("socialUpdate.privacy = :privacy", {
+        privacy: criteria.privacy,
+      });
     }
 
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case SocialUpdatesFindOrderEnum.date:
-          queryBuilder.orderBy('socialUpdate.createdAt', 'DESC');
+          queryBuilder.orderBy("socialUpdate.createdAt", "DESC");
           break;
         case SocialUpdatesFindOrderEnum.random:
-          queryBuilder.orderBy('RANDOM()');
+          queryBuilder.orderBy("RANDOM()");
           break;
       }
     }
@@ -86,29 +97,23 @@ export class SocialUpdateService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<SocialUpdateEntity> {
     return await this.socialUpdateRepository.findOne({
       where: { id },
-      relations: [
-        'authorUser',
-        'authorManager',
-      ]
+      relations: ["authorUser", "authorManager"],
     });
   }
 
   async update(
     id: number,
-    updateDto: UpdateSocialUpdateDto
+    updateDto: UpdateSocialUpdateDto,
   ): Promise<SocialUpdateEntity> {
-    await this.socialUpdateRepository.update(
-      { id },
-      updateDto
-    );
+    await this.socialUpdateRepository.update({ id }, updateDto);
     return this.findOne(id);
   }
 
@@ -116,5 +121,4 @@ export class SocialUpdateService {
     await this.socialUpdateRepository.delete({ id });
     return;
   }
-
 }

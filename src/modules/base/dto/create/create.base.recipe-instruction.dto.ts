@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
@@ -7,7 +13,7 @@ export class CreateBaseRecipeInstructionDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Title",
-    maxLength: 255
+    maxLength: 255,
   })
   @IsNotEmpty()
   @IsString()
@@ -17,7 +23,7 @@ export class CreateBaseRecipeInstructionDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     required: false,
-    description: "Description"
+    description: "Description",
   })
   @IsOptional()
   @IsString()
@@ -26,7 +32,7 @@ export class CreateBaseRecipeInstructionDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     required: false,
-    description: "Image URL"
+    description: "Image URL",
   })
   @IsOptional()
   @IsString()
@@ -35,7 +41,7 @@ export class CreateBaseRecipeInstructionDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
-    description: "Order index"
+    description: "Order index",
   })
   @IsOptional()
   @IsInt()

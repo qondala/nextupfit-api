@@ -6,4 +6,3 @@ export * from "./details.social.notification.dto";
 export * from "./details.social.rating-stats.dto";
 export * from "./details.social.update.dto";
 export * from "./details.social.update-content.dto";
-

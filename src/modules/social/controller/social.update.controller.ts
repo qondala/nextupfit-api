@@ -10,7 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -19,17 +19,17 @@ import {
   ApiBody,
   ApiResponse,
   ApiBearerAuth,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { SwaggerType } from '@app/common/types';
-import { PaginationOptionsDto } from '@app/common/dto';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { SwaggerType } from "@app/common/types";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   SocialActorEnum,
   SocialUpdatePrivacyEnum,
   SocialUpdateTypeEnum,
-} from '../types';
+} from "../types";
 
 import {
   CreateSocialUpdateDto,
@@ -38,56 +38,57 @@ import {
   PaginatedDetailsSocialUpdateDto,
   SocialUpdatesFindOrderEnum,
   SocialUpdatesFindCriteriaDto,
-} from '../dto';
+} from "../dto";
 
-import { SocialUpdateService } from '../service';
+import { SocialUpdateService } from "../service";
 
-
-@ApiTags('Social module endpoints')
+@ApiTags("Social module endpoints")
 @ApiBearerAuth()
-@Controller('social/update')
+@Controller("social/update")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialUpdateController {
   constructor(private readonly socialUpdateService: SocialUpdateService) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new social update record',
-    operationId: 'createSocialUpdate',
+    summary: "Create a new social update record",
+    operationId: "createSocialUpdate",
   })
   @ApiBody({
     type: CreateSocialUpdateDto,
-    description: 'Social update data to create',
+    description: "Social update data to create",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Social update record created successfully',
+    description: "Social update record created successfully",
     type: DetailsSocialUpdateDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input data',
+    description: "Invalid input data",
   })
-  create(@Body() createSocialUpdateDto: CreateSocialUpdateDto): Promise<DetailsSocialUpdateDto> {
+  create(
+    @Body() createSocialUpdateDto: CreateSocialUpdateDto,
+  ): Promise<DetailsSocialUpdateDto> {
     return this.socialUpdateService.create(createSocialUpdateDto);
   }
 
   @Get()
   @ApiOperation({
-    summary: 'Get all social update records with pagination',
-    operationId: 'findAllSocialUpdate',
+    summary: "Get all social update records with pagination",
+    operationId: "findAllSocialUpdate",
   })
   @ApiQuery({
     name: "authorUserId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author user',
+    description: "The ID of the author user",
     example: 1,
     required: false,
   })
   @ApiQuery({
     name: "authorManagerId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author manager',
+    description: "The ID of the author manager",
     example: 1,
     required: false,
   })
@@ -95,14 +96,14 @@ export class SocialUpdateController {
     name: "socialActorType",
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
-    description: 'The type of social actor',
+    description: "The type of social actor",
     example: SocialActorEnum.user,
     required: false,
   })
   @ApiQuery({
     name: "socialActorId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the social actor',
+    description: "The ID of the social actor",
     example: 1,
     required: false,
   })
@@ -110,7 +111,7 @@ export class SocialUpdateController {
     name: "socialUpdateType",
     enum: SocialUpdateTypeEnum,
     enumName: "SocialUpdateTypeEnum",
-    description: 'The type of social update',
+    description: "The type of social update",
     example: SocialUpdateTypeEnum.status,
     required: false,
   })
@@ -118,7 +119,7 @@ export class SocialUpdateController {
     name: "privacy",
     enum: SocialUpdatePrivacyEnum,
     enumName: "SocialUpdatePrivacyEnum",
-    description: 'The privacy setting for the social update',
+    description: "The privacy setting for the social update",
     example: SocialUpdatePrivacyEnum.public,
     required: false,
   })
@@ -126,27 +127,27 @@ export class SocialUpdateController {
     name: "orderBy",
     enum: SocialUpdatesFindOrderEnum,
     enumName: "SocialUpdatesFindOrderEnum",
-    description: 'The order by for the social updates',
+    description: "The order by for the social updates",
     example: SocialUpdatesFindOrderEnum.date,
     required: false,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number (default: 1)',
+    description: "Page number (default: 1)",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of records per page (default: 10)',
+    description: "Number of records per page (default: 10)",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update records retrieved successfully',
+    description: "Social update records retrieved successfully",
     type: PaginatedDetailsSocialUpdateDto,
   })
   findAll(
@@ -156,85 +157,87 @@ export class SocialUpdateController {
     return this.socialUpdateService.findAll(criteria, paginationOptions);
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
-    summary: 'Get a social update record by ID',
-    operationId: 'findOneSocialUpdate',
+    summary: "Get a social update record by ID",
+    operationId: "findOneSocialUpdate",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update record ID',
+    description: "Social update record ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update record retrieved successfully',
+    description: "Social update record retrieved successfully",
     type: DetailsSocialUpdateDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update record not found',
+    description: "Social update record not found",
   })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsSocialUpdateDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsSocialUpdateDto> {
     return this.socialUpdateService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update a social update record by ID',
-    operationId: 'updateSocialUpdate',
+    summary: "Update a social update record by ID",
+    operationId: "updateSocialUpdate",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update record ID',
+    description: "Social update record ID",
     example: 1,
   })
   @ApiBody({
     type: UpdateSocialUpdateDto,
-    description: 'Social update data to update',
+    description: "Social update data to update",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Social update record updated successfully',
+    description: "Social update record updated successfully",
     type: DetailsSocialUpdateDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update record not found',
+    description: "Social update record not found",
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid input data',
+    description: "Invalid input data",
   })
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body() updateSocialUpdateDto: UpdateSocialUpdateDto,
   ): Promise<DetailsSocialUpdateDto> {
     return this.socialUpdateService.update(id, updateSocialUpdateDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete a social update record by ID',
-    operationId: 'removeSocialUpdate',
+    summary: "Delete a social update record by ID",
+    operationId: "removeSocialUpdate",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     type: SwaggerType.INTEGER,
-    description: 'Social update record ID',
+    description: "Social update record ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Social update record deleted successfully',
+    description: "Social update record deleted successfully",
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Social update record not found',
+    description: "Social update record not found",
   })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.socialUpdateService.remove(id);
   }
 }

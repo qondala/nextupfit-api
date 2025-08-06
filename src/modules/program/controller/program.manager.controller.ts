@@ -18,14 +18,11 @@ import {
   ApiResponse,
   ApiBearerAuth,
   ApiParam,
-  ApiBody
+  ApiBody,
 } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import {
-  JwtAuthGuard,
-  RolesGuard,
-} from "@app/common/guards";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
 import { PaginationOptionsDto } from "@app/common/dto";
 
@@ -34,11 +31,10 @@ import {
   UpdateProgramManagerDto,
   DetailsProgramManagerDto,
   PaginatedDetailsProgramManagerDto,
-  ProgramFindCriteriaManagerDto
+  ProgramFindCriteriaManagerDto,
 } from "../dto";
 
 import { ProgramManagerService } from "../service";
-
 
 @ApiTags("Program module endpoints")
 @ApiBearerAuth()
@@ -50,7 +46,7 @@ export class ProgramManagerController {
   @Post()
   @ApiOperation({
     summary: "Create a new program manager",
-    operationId: "createProgramManager"
+    operationId: "createProgramManager",
   })
   @ApiBody({
     type: CreateProgramManagerDto,
@@ -62,14 +58,16 @@ export class ProgramManagerController {
     description: "The program manager has been successfully created.",
     type: DetailsProgramManagerDto,
   })
-  create(@Body() body: CreateProgramManagerDto): Promise<DetailsProgramManagerDto> {
+  create(
+    @Body() body: CreateProgramManagerDto,
+  ): Promise<DetailsProgramManagerDto> {
     return this.service.create(body);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all program managers with pagination",
-    operationId: "findAllProgramManagers"
+    operationId: "findAllProgramManagers",
   })
   @ApiQuery({
     type: ProgramFindCriteriaManagerDto,
@@ -88,14 +86,15 @@ export class ProgramManagerController {
   })
   findAll(
     @Query() criteria: ProgramFindCriteriaManagerDto,
-    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsProgramManagerDto> {
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsProgramManagerDto> {
     return this.service.findAll(criteria, pagination);
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
     summary: "Get a program manager by ID",
-    operationId: "findOneProgramManager"
+    operationId: "findOneProgramManager",
   })
   @ApiParam({
     name: "id",
@@ -108,15 +107,16 @@ export class ProgramManagerController {
     description: "Successfully retrieved program manager.",
     type: DetailsProgramManagerDto,
   })
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsProgramManagerDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramManagerDto> {
     return this.service.findOne(id);
   }
 
-
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
     summary: "Update a program manager",
-    operationId: "updateProgramManager"
+    operationId: "updateProgramManager",
   })
   @ApiParam({
     name: "id",
@@ -135,16 +135,16 @@ export class ProgramManagerController {
     type: DetailsProgramManagerDto,
   })
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() body: UpdateProgramManagerDto
+    @Param("id", ParseIntPipe) id: number,
+    @Body() body: UpdateProgramManagerDto,
   ): Promise<DetailsProgramManagerDto> {
     return this.service.update(id, body);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
     summary: "Delete a program manager",
-    operationId: "removeProgramManager"
+    operationId: "removeProgramManager",
   })
   @ApiParam({
     name: "id",
@@ -156,7 +156,7 @@ export class ProgramManagerController {
     status: HttpStatus.NO_CONTENT,
     description: "The program manager has been successfully deleted.",
   })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.service.remove(id);
   }
 }

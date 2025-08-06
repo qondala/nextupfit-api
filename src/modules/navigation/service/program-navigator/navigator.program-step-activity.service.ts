@@ -1,27 +1,12 @@
-import {
-  Injectable,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
-import {
-  ProgramItemTypeEnum,
-} from "@app/module/program/types";
-import {
-  ProgramStepActivityWorkingsessionService,
-} from "@app/module/program/service";
+import { ProgramItemTypeEnum } from "@app/module/program/types";
+import { ProgramStepActivityWorkingsessionService } from "@app/module/program/service";
 
-import {
-  ProgramNavigationReasonEnum,
-} from "../../types";
-import {
-  ProgramNavigationNode,
-} from "../../dto";
-import {
-  BrowserPreviousFromStepActivityService,
-} from "../previous-browser";
-import {
-  ProgramAccessRequirementsCheckerService,
-} from "../access-requirements-checker";
-
+import { ProgramNavigationReasonEnum } from "../../types";
+import { ProgramNavigationNode } from "../../dto";
+import { BrowserPreviousFromStepActivityService } from "../previous-browser";
+import { ProgramAccessRequirementsCheckerService } from "../access-requirements-checker";
 
 @Injectable()
 export class NavigatorProgramStepActivityService {
@@ -32,7 +17,6 @@ export class NavigatorProgramStepActivityService {
   ) {}
 
   async next(current: ProgramNavigationNode): Promise<ProgramNavigationNode> {
-
     const next = {
       programItemType: ProgramItemTypeEnum.workingsession,
       programItemId: null,
@@ -48,10 +32,13 @@ export class NavigatorProgramStepActivityService {
       return next;
     }
 
-    const programStepActivityWorkingsession = 
-      await this.programStepActivityWorkingsessionService.findFirst(current.programItemId);
+    const programStepActivityWorkingsession =
+      await this.programStepActivityWorkingsessionService.findFirst(
+        current.programItemId,
+      );
     if (!programStepActivityWorkingsession) {
-      next.reasonCannotNavigate = ProgramNavigationReasonEnum.resourceDoesNotExist;
+      next.reasonCannotNavigate =
+        ProgramNavigationReasonEnum.resourceDoesNotExist;
       return next;
     }
 
@@ -60,9 +47,11 @@ export class NavigatorProgramStepActivityService {
     next.description = programStepActivityWorkingsession.description;
     next.icon = programStepActivityWorkingsession.imageUrl;
 
-    const programAccessRequirementsCheckResult = 
-    await this.programAccessRequirementsCheckerService
-      .check(programStepActivityWorkingsession.programId, current.userId);
+    const programAccessRequirementsCheckResult =
+      await this.programAccessRequirementsCheckerService.check(
+        programStepActivityWorkingsession.programId,
+        current.userId,
+      );
     if (!programAccessRequirementsCheckResult.ok) {
       next.reasonCannotNavigate = programAccessRequirementsCheckResult.reason;
       return next;
@@ -74,14 +63,16 @@ export class NavigatorProgramStepActivityService {
     return next;
   }
 
-/**
- * Browse the activity hierarchy backward in order to find the previous smallest node unit (workout ?? workingsession ?? activity ?? step ?? program).
- * In the course of browsing the trail backward, we aim at finding the earliest and smallest node unit that the user has started or completed.
- * 
- * @param current The current activity navigation node (ProgramNavigationNode).
- * @returns The previous smallest node unit (ProgramNavigationNode).
- */
-  async previous(current: ProgramNavigationNode): Promise<ProgramNavigationNode> {
+  /**
+   * Browse the activity hierarchy backward in order to find the previous smallest node unit (workout ?? workingsession ?? activity ?? step ?? program).
+   * In the course of browsing the trail backward, we aim at finding the earliest and smallest node unit that the user has started or completed.
+   *
+   * @param current The current activity navigation node (ProgramNavigationNode).
+   * @returns The previous smallest node unit (ProgramNavigationNode).
+   */
+  async previous(
+    current: ProgramNavigationNode,
+  ): Promise<ProgramNavigationNode> {
     return await this.browserPreviousFromStepActivityService.browse(current);
   }
 }

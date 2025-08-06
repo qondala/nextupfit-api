@@ -1,6 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('social_chat_message_text')
+@Entity("social_chat_message_text")
 export class SocialChatMessageTextEntity {
   @PrimaryGeneratedColumn()
   id: number;

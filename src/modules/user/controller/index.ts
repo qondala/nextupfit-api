@@ -9,4 +9,3 @@ export * from "./user.commitment.controller";
 export * from "./user.consumption-item.controller";
 export * from "./user.schedule.controller";
 export * from "./user.commitment-completed-item.controller";
-

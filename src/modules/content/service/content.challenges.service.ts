@@ -14,11 +14,16 @@ export class ContentChallengesService {
     private readonly repository: Repository<ContentChallengesEntity>,
   ) {}
 
-  async create(dto: CreateContentChallengesDto): Promise<ContentChallengesEntity> {
+  async create(
+    dto: CreateContentChallengesDto,
+  ): Promise<ContentChallengesEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentChallengesEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentChallengesEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,12 +49,17 @@ export class ContentChallengesService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentChallengesEntity> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentChallengesEntity> {
     const entity = await this.repository.findOne({ where: { contentId } });
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentChallengesDto): Promise<ContentChallengesEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentChallengesDto,
+  ): Promise<ContentChallengesEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

@@ -1,13 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
-
-import { BaseFoodGroupEntity } from '../entity';
-import { CreateBaseFoodGroupDto, UpdateBaseFoodGroupDto } from '../dto';
-
+import { BaseFoodGroupEntity } from "../entity";
+import { CreateBaseFoodGroupDto, UpdateBaseFoodGroupDto } from "../dto";
 
 @Injectable()
 export class BaseFoodGroupService {
@@ -16,26 +14,33 @@ export class BaseFoodGroupService {
     private readonly baseFoodGroupRepository: Repository<BaseFoodGroupEntity>,
   ) {}
 
-  async create(createBaseFoodGroupDto: CreateBaseFoodGroupDto): Promise<BaseFoodGroupEntity> {
-    const newFoodGroup = this.baseFoodGroupRepository.create(createBaseFoodGroupDto);
+  async create(
+    createBaseFoodGroupDto: CreateBaseFoodGroupDto,
+  ): Promise<BaseFoodGroupEntity> {
+    const newFoodGroup = this.baseFoodGroupRepository.create(
+      createBaseFoodGroupDto,
+    );
     return this.baseFoodGroupRepository.save(newFoodGroup);
   }
 
   async findAll(
     options: PaginationOptionsDto,
-    createdByUserId?: number
+    createdByUserId?: number,
   ): Promise<PaginatedResponseDto<BaseFoodGroupEntity>> {
-    const queryBuilder = this.baseFoodGroupRepository.createQueryBuilder('foodGroup');
-    
+    const queryBuilder =
+      this.baseFoodGroupRepository.createQueryBuilder("foodGroup");
+
     if (createdByUserId) {
-      queryBuilder.where('foodGroup.createdByUserId = :createdByUserId', { createdByUserId });
+      queryBuilder.where("foodGroup.createdByUserId = :createdByUserId", {
+        createdByUserId,
+      });
     }
-    
+
     queryBuilder
       .skip((options.page - 1) * options.limit)
       .take(options.limit)
-      .orderBy('foodGroup.id', 'DESC');
-    
+      .orderBy("foodGroup.id", "DESC");
+
     const [items, total] = await queryBuilder.getManyAndCount();
 
     return {
@@ -45,22 +50,22 @@ export class BaseFoodGroupService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodGroupEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodGroupEntity>> {
     const searchTerm = `%${query}%`;
-    
+
     const [items, total] = await this.baseFoodGroupRepository.findAndCount({
-      where: [
-        { name: Like(searchTerm) },
-        { code: Like(searchTerm) }
-      ],
+      where: [{ name: Like(searchTerm) }, { code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -70,8 +75,8 @@ export class BaseFoodGroupService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -87,12 +92,15 @@ export class BaseFoodGroupService {
     id: number,
     updateBaseFoodGroupDto: UpdateBaseFoodGroupDto,
   ): Promise<BaseFoodGroupEntity | null> {
-    const result = await this.baseFoodGroupRepository.update(id, updateBaseFoodGroupDto);
-    
+    const result = await this.baseFoodGroupRepository.update(
+      id,
+      updateBaseFoodGroupDto,
+    );
+
     if (result.affected === 0) {
       return null;
     }
-    
+
     return this.findOne(id);
   }
 

@@ -35,7 +35,6 @@ import {
 
 import { ProgramSubscriptionService } from "../service";
 
-
 @ApiTags("Program module endpoints")
 @ApiBearerAuth()
 @Controller("program/subscription")
@@ -46,7 +45,7 @@ export class ProgramSubscriptionController {
   @Post()
   @ApiOperation({
     summary: "Create a new program subscription",
-    operationId: "createProgramSubscription"
+    operationId: "createProgramSubscription",
   })
   @ApiBody({
     type: CreateProgramSubscriptionDto,
@@ -58,14 +57,16 @@ export class ProgramSubscriptionController {
     description: "The program subscription has been successfully created.",
     type: DetailsProgramSubscriptionDto,
   })
-  create(@Body() body: CreateProgramSubscriptionDto): Promise<DetailsProgramSubscriptionDto> {
+  create(
+    @Body() body: CreateProgramSubscriptionDto,
+  ): Promise<DetailsProgramSubscriptionDto> {
     return this.service.create(body);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all program subscriptions with pagination",
-    operationId: "findAllProgramSubscription"
+    operationId: "findAllProgramSubscription",
   })
   @ApiQuery({
     description: "Program subscription find criteria",
@@ -82,15 +83,17 @@ export class ProgramSubscriptionController {
     description: "Return all program subscriptions with pagination.",
     type: PaginatedDetailsProgramSubscriptionDto,
   })
-  findAll(@Query() criteria: ProgramFindCriteriaSubscriptionDto, @Query() pagination?: PaginationOptionsDto): Promise<PaginatedDetailsProgramSubscriptionDto> {
+  findAll(
+    @Query() criteria: ProgramFindCriteriaSubscriptionDto,
+    @Query() pagination?: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsProgramSubscriptionDto> {
     return this.service.findAll(criteria, pagination);
   }
-
 
   @Get(":id")
   @ApiOperation({
     summary: "Get a program subscription by id",
-    operationId: "findOneProgramSubscription"
+    operationId: "findOneProgramSubscription",
   })
   @ApiParam({
     name: "id",
@@ -103,14 +106,16 @@ export class ProgramSubscriptionController {
     description: "Return the program subscription.",
     type: DetailsProgramSubscriptionDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramSubscriptionDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramSubscriptionDto> {
     return this.service.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update a program subscription",
-    operationId: "updateProgramSubscription"
+    operationId: "updateProgramSubscription",
   })
   @ApiParam({
     name: "id",
@@ -130,7 +135,7 @@ export class ProgramSubscriptionController {
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() body: UpdateProgramSubscriptionDto
+    @Body() body: UpdateProgramSubscriptionDto,
   ): Promise<DetailsProgramSubscriptionDto> {
     return this.service.update(id, body);
   }
@@ -138,13 +143,13 @@ export class ProgramSubscriptionController {
   @Patch(":id/activate")
   @ApiOperation({
     summary: "Activate a program subscription",
-    operationId: "activateProgramSubscription"
+    operationId: "activateProgramSubscription",
   })
   @ApiParam({
     name: "id",
     description: "Program subscription ID",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -153,11 +158,11 @@ export class ProgramSubscriptionController {
   async activate(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.service.activate(id);
   }
-  
+
   @Patch(":id/deactivate")
   @ApiOperation({
     summary: "Deactivate a program subscription",
-    operationId: "deactivateProgramSubscription"
+    operationId: "deactivateProgramSubscription",
   })
   @ApiParam({
     name: "id",
@@ -177,7 +182,7 @@ export class ProgramSubscriptionController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete a program subscription",
-    operationId: "removeProgramSubscription"
+    operationId: "removeProgramSubscription",
   })
   @ApiParam({
     name: "id",

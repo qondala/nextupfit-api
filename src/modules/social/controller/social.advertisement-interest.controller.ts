@@ -22,14 +22,8 @@ import {
 } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import {
-  JwtAuthGuard,
-  RolesGuard,
-} from "@app/common/guards";
-import {
-  InterestPaginationDto,
-  PaginationOptionsDto,
-} from "@app/common/dto";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateSocialAdvertisementInterestDto,
@@ -41,10 +35,9 @@ import {
 } from "../dto";
 import { SocialAdvertisementInterestService } from "../service";
 
-
 @ApiTags("Social module endpoints")
 @ApiBearerAuth()
-@Controller("social/advertisement/interests")
+@Controller("social/advertisement/interest")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialAdvertisementInterestController {
   constructor(private readonly service: SocialAdvertisementInterestService) {}
@@ -64,7 +57,9 @@ export class SocialAdvertisementInterestController {
     description: "Social advertisement interest created successfully",
     type: DetailsSocialAdvertisementInterestDto,
   })
-  async create(@Body() body: CreateSocialAdvertisementInterestDto): Promise<DetailsSocialAdvertisementInterestDto> {
+  async create(
+    @Body() body: CreateSocialAdvertisementInterestDto,
+  ): Promise<DetailsSocialAdvertisementInterestDto> {
     return this.service.create(body);
   }
 
@@ -75,12 +70,12 @@ export class SocialAdvertisementInterestController {
   })
   @ApiQuery({
     type: SocialFindCriteriaAdvertisementInterestDto,
-    description: 'Social advertisement interests find criteria',
+    description: "Social advertisement interests find criteria",
     required: true,
   })
   @ApiQuery({
     type: PaginationOptionsDto,
-    description: 'Pagination options',
+    description: "Pagination options",
     required: true,
   })
   @ApiResponse({
@@ -107,8 +102,8 @@ export class SocialAdvertisementInterestController {
     required: true,
   })
   @ApiQuery({
-    type: InterestPaginationDto,
-    description: 'Pagination options',
+    type: PaginationOptionsDto,
+    description: "Pagination options",
     required: true,
   })
   @ApiResponse({
@@ -116,11 +111,14 @@ export class SocialAdvertisementInterestController {
     description: "User advertisement interests retrieved successfully",
     type: PaginatedDetailsSocialAdvertisementDto,
   })
-  async getUserInterests(
+  async getUserInterestedAdvertisements(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: InterestPaginationDto,
+    @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialAdvertisementDto> {
-    return await this.service.getAdvertisementsByUserInterests(userId, pagination);
+    return await this.service.findUserInterestedAdvertisements(
+      userId,
+      pagination,
+    );
   }
 
   @Get(":id")
@@ -139,7 +137,9 @@ export class SocialAdvertisementInterestController {
     description: "Social advertisement interest retrieved successfully",
     type: DetailsSocialAdvertisementInterestDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsSocialAdvertisementInterestDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsSocialAdvertisementInterestDto> {
     return this.service.findOne(id);
   }
 

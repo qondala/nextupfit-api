@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { UserInterestTypeEnum } from "@app/module/user/types";
+
 import { ProgramEntity } from ".";
 
 @Entity({ name: "program_interest" })
@@ -36,6 +37,6 @@ export class ProgramInterestEntity {
   updatedAt: Date;
 
   @ManyToOne(() => ProgramEntity, (program) => program.interests)
-  @JoinColumn({ name: 'programId', referencedColumnName: 'id' })
+  @JoinColumn({ name: "programId", referencedColumnName: "id" })
   program: ProgramEntity;
 }

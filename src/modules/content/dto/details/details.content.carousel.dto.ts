@@ -34,7 +34,6 @@ export class DetailsContentCarouselDto {
   @IsInt()
   contentId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "title",
@@ -44,7 +43,6 @@ export class DetailsContentCarouselDto {
   @IsOptional()
   @IsString()
   title?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -56,7 +54,6 @@ export class DetailsContentCarouselDto {
   @IsString()
   description?: string;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "display title",
@@ -66,7 +63,6 @@ export class DetailsContentCarouselDto {
   @IsOptional()
   @IsBoolean()
   displayTitle?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -78,7 +74,6 @@ export class DetailsContentCarouselDto {
   @IsInt()
   mediaType: number;
 
-  
   @ApiProperty({
     type: () => DetailsContentCarouselItemDto,
     title: "DetailsContentCarouselItemDto",

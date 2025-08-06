@@ -1,4 +1,6 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateSocialAffiliateSaleDto } from '../create';
+import { PartialType } from "@nestjs/swagger";
+import { CreateSocialAffiliateSaleDto } from "../create";
 
-export class UpdateSocialAffiliateSaleDto extends PartialType(CreateSocialAffiliateSaleDto) {}
+export class UpdateSocialAffiliateSaleDto extends PartialType(
+  CreateSocialAffiliateSaleDto,
+) {}

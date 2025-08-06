@@ -3,10 +3,9 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import { BaseSchedulableEnum } from "@app/module/base/types";
-
 
 @Entity("user_schedule")
 export class UserScheduleEntity {

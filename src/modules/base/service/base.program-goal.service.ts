@@ -14,12 +14,16 @@ export class BaseProgramGoalService {
     private readonly baseProgramGoalRepository: Repository<BaseProgramGoalEntity>,
   ) {}
 
-  async create(createDto: CreateBaseProgramGoalDto): Promise<BaseProgramGoalEntity> {
+  async create(
+    createDto: CreateBaseProgramGoalDto,
+  ): Promise<BaseProgramGoalEntity> {
     const newEntity = this.baseProgramGoalRepository.create(createDto);
     return this.baseProgramGoalRepository.save(newEntity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseProgramGoalEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseProgramGoalEntity>> {
     const [items, total] = await this.baseProgramGoalRepository.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
@@ -42,7 +46,10 @@ export class BaseProgramGoalService {
     return this.baseProgramGoalRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateDto: UpdateBaseProgramGoalDto): Promise<BaseProgramGoalEntity | null> {
+  async update(
+    id: number,
+    updateDto: UpdateBaseProgramGoalDto,
+  ): Promise<BaseProgramGoalEntity | null> {
     const result = await this.baseProgramGoalRepository.update(id, updateDto);
     if (result.affected === 0) return null;
     return this.findOne(id);

@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { BaseAppUpdateEntity } from '../entity';
-import { CreateBaseAppUpdateDto, UpdateBaseAppUpdateDto } from '../dto';
+import { BaseAppUpdateEntity } from "../entity";
+import { CreateBaseAppUpdateDto, UpdateBaseAppUpdateDto } from "../dto";
 
 @Injectable()
 export class BaseAppUpdateService {
@@ -14,16 +14,22 @@ export class BaseAppUpdateService {
     private readonly baseAppUpdateRepository: Repository<BaseAppUpdateEntity>,
   ) {}
 
-  async create(createBaseAppUpdateDto: CreateBaseAppUpdateDto): Promise<BaseAppUpdateEntity> {
-    const newUpdate = this.baseAppUpdateRepository.create(createBaseAppUpdateDto);
+  async create(
+    createBaseAppUpdateDto: CreateBaseAppUpdateDto,
+  ): Promise<BaseAppUpdateEntity> {
+    const newUpdate = this.baseAppUpdateRepository.create(
+      createBaseAppUpdateDto,
+    );
     return this.baseAppUpdateRepository.save(newUpdate);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
     const [items, total] = await this.baseAppUpdateRepository.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -33,23 +39,26 @@ export class BaseAppUpdateService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseAppUpdateEntity>> {
     const searchTerm = `%${query}%`;
-    
+
     const [items, total] = await this.baseAppUpdateRepository.findAndCount({
       where: [
         { version: Like(searchTerm) },
         { name: Like(searchTerm) },
-        { features: Like(searchTerm) }
+        { features: Like(searchTerm) },
       ],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -59,8 +68,8 @@ export class BaseAppUpdateService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -76,12 +85,15 @@ export class BaseAppUpdateService {
     id: number,
     updateBaseAppUpdateDto: UpdateBaseAppUpdateDto,
   ): Promise<BaseAppUpdateEntity | null> {
-    const result = await this.baseAppUpdateRepository.update(id, updateBaseAppUpdateDto);
-    
+    const result = await this.baseAppUpdateRepository.update(
+      id,
+      updateBaseAppUpdateDto,
+    );
+
     if (result.affected === 0) {
       return null;
     }
-    
+
     return this.findOne(id);
   }
 

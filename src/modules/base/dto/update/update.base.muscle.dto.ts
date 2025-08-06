@@ -3,28 +3,25 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { BaseBodyPartEnum } from "../../types";
 
-
 export class UpdateBaseMuscleDto {
-
   @ApiProperty({
     description: "Muscle's name",
     example: "Occipitofrontalis",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   name?: string;
 
-
   @ApiProperty({
-    description: "Muscle's unique code, meant to be used for app translation and other facilities",
+    description:
+      "Muscle's unique code, meant to be used for app translation and other facilities",
     example: "occipitofrontalis",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   code?: string;
-
 
   @ApiProperty({
     enum: BaseBodyPartEnum,
@@ -37,16 +34,15 @@ export class UpdateBaseMuscleDto {
   @IsEnum(BaseBodyPartEnum)
   bodyPart?: BaseBodyPartEnum;
 
-
   @ApiProperty({
     description: "Muscle illustration icon Url",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/muscle-occipitofrontalis-illustration.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/muscle-occipitofrontalis-illustration.png",
     required: false,
   })
   @IsOptional()
   @IsString()
   iconUrl?: string;
-
 
   @ApiProperty({
     description: "Muscle's display order",

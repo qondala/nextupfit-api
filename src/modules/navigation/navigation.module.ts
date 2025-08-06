@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
-import { ProgramModule } from '@app/module/program/program.module';
-import { GymModule } from '@app/module/gym/gym.module';
-import { UserModule } from '@app/module/user/user.module';
-import { PaymentModule } from '@app/module/payment/payment.module';
+import { Module } from "@nestjs/common";
+import { ProgramModule } from "@app/module/program/program.module";
+import { GymModule } from "@app/module/gym/gym.module";
+import { UserModule } from "@app/module/user/user.module";
+import { PaymentModule } from "@app/module/payment/payment.module";
 
 import {
   // User program access
@@ -22,7 +22,7 @@ import {
   NavigationFromProgramStepActivityController,
   NavigationFromProgramStepActivityWorkingsessionController,
   NavigationFromProgramStepActivityWorkingsessionWorkoutController,
-} from './controller';
+} from "./controller";
 
 import {
   // User program access
@@ -42,20 +42,19 @@ import {
   NavigationFromProgramStepActivityService,
   NavigationFromProgramStepActivityWorkingsessionService,
   NavigationFromProgramStepActivityWorkingsessionWorkoutService,
-} from './service';
+} from "./service";
 
 import {
   ActivityAccessRequirementsCheckerService,
   ProgramAccessRequirementsCheckerService,
-} from './service/access-requirements-checker';
+} from "./service/access-requirements-checker";
 
 import {
   BrowserPreviousFromStepService,
   BrowserPreviousFromStepActivityService,
   BrowserPreviousFromStepActivityWorkingsessionService,
   BrowserPreviousFromStepActivityWorkingsessionWorkoutService,
-} from './service/previous-browser';
-
+} from "./service/previous-browser";
 
 /**
  * This module provides a set of features that enable users to navigate forward and backward 
@@ -281,12 +280,7 @@ import {
  * 
  */
 @Module({
-  imports: [
-    ProgramModule,
-    GymModule,
-    UserModule,
-    PaymentModule,
-  ],
+  imports: [ProgramModule, GymModule, UserModule, PaymentModule],
   controllers: [
     UserGymAccessStatusController,
     UserProgramAccessStatusController,

@@ -1,32 +1,13 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  ValidateNested
-} from "class-validator";
-import {
-  Type
-} from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum, IsInt, IsNotEmpty, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
+import { SwaggerType } from "@app/common/types";
+import { DetailsBaseSociologyDto } from "@app/module/base/dto";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  DetailsBaseSociologyDto
-} from "@app/module/base/dto";
-
-import {
-  ProgramItemCompositeDto,
-  ProgramItemTypeEnum
-} from "../../types";
-
+import { ProgramItemCompositeDto, ProgramItemTypeEnum } from "../../types";
 
 export class DetailsProgramPerSociologyDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -49,7 +30,6 @@ export class DetailsProgramPerSociologyDto {
   @IsEnum(ProgramItemTypeEnum)
   itemType: ProgramItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -59,7 +39,6 @@ export class DetailsProgramPerSociologyDto {
   @IsNotEmpty()
   @IsInt()
   itemId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -71,7 +50,6 @@ export class DetailsProgramPerSociologyDto {
   @IsInt()
   baseSociologyId: number;
 
-
   @ApiProperty({
     type: () => DetailsBaseSociologyDto,
     description: "Sociology",
@@ -81,11 +59,10 @@ export class DetailsProgramPerSociologyDto {
   @ValidateNested()
   sociology: DetailsBaseSociologyDto;
 
-
   @ApiProperty({
     type: () => ProgramItemCompositeDto,
     title: "ProgramItemCompositeDto",
-    description: 'Program item of the gym has program',
+    description: "Program item of the gym has program",
     required: true,
   })
   @Type(() => ProgramItemCompositeDto)

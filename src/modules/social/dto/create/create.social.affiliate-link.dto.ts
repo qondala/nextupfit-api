@@ -1,9 +1,13 @@
-import { IsOptional, IsNumber, IsNotEmpty, IsDate, IsString } from "class-validator";
+import {
+  IsOptional,
+  IsNumber,
+  IsNotEmpty,
+  IsDate,
+  IsString,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateSocialAffiliateLinkDto {
-
-
   @ApiProperty({
     description: "Sample description of the affiliation program",
     example: "Sample generated link",
@@ -12,7 +16,6 @@ export class CreateSocialAffiliateLinkDto {
   @IsNotEmpty()
   @IsString()
   generatedLink: string;
-
 
   @ApiProperty({
     description: "Id of the affiliate program",
@@ -23,7 +26,6 @@ export class CreateSocialAffiliateLinkDto {
   @IsNumber()
   affiliateProgramIdId: number;
 
-
   @ApiProperty({
     description: "Date this affialiate link was created",
     example: Date(),
@@ -32,7 +34,6 @@ export class CreateSocialAffiliateLinkDto {
   @IsOptional()
   @IsDate()
   createdDate?: Date;
-
 
   @ApiProperty({
     description: "Owner user id of the affiliate program",

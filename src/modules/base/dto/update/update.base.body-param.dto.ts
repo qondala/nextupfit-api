@@ -2,7 +2,6 @@ import { IsInt, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateBaseBodyParamDto {
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -14,7 +13,6 @@ export class UpdateBaseBodyParamDto {
   @IsString()
   name?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Param description",
@@ -24,7 +22,6 @@ export class UpdateBaseBodyParamDto {
   @IsOptional()
   @IsString()
   description?: string;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -36,4 +33,3 @@ export class UpdateBaseBodyParamDto {
   @IsInt()
   unitId?: number;
 }
-

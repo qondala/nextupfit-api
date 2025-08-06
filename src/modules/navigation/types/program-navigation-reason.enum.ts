@@ -1,5 +1,4 @@
 export enum ProgramNavigationReasonEnum {
-
   /*
    * Cannot navigate reasons
    */
@@ -21,9 +20,6 @@ export enum ProgramNavigationReasonEnum {
   workingsessionNotYetStarted = "workingsessionNotYetStarted",
   workoutNotYetStarted = "workoutNotYetStarted",
 
-
- 
-
   // Gym level access reasons
   isNotFollowingGym = "isNotFollowingGym",
   isNotGymMember = "isNotGymMember",
@@ -36,7 +32,6 @@ export enum ProgramNavigationReasonEnum {
   hasNotPaidProgramSubscriptionTrial = "hasNotPaidProgramSubscriptionTrial",
   programSubscriptionPlanTrialEnded = "programSubscriptionPlanTrialEnded",
   isNotManagerFollower = "isNotManagerFollower",
-
 
   /*
    * Can navigate reasons

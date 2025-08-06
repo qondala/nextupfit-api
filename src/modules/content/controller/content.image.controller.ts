@@ -62,7 +62,9 @@ export class ContentImageController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentImageDto): Promise<DetailsContentImageDto> {
+  async create(
+    @Body() dto: CreateContentImageDto,
+  ): Promise<DetailsContentImageDto> {
     return await this.service.create(dto);
   }
 
@@ -128,7 +130,9 @@ export class ContentImageController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentImageDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentImageDto | null> {
     return await this.service.findOne(id);
   }
 

@@ -26,7 +26,6 @@ import { SwaggerType } from "@app/common/types";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
 
-
 import {
   CreateContentAccordionItemDto,
   UpdateContentAccordionItemDto,
@@ -40,7 +39,9 @@ import { ContentAccordionItemService } from "../../service";
 @Controller("content/accordion/items")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ContentAccordionItemController {
-  constructor(private readonly accordionItemService: ContentAccordionItemService) {}
+  constructor(
+    private readonly accordionItemService: ContentAccordionItemService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -65,7 +66,9 @@ export class ContentAccordionItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentAccordionItemDto): Promise<DetailsContentAccordionItemDto> {
+  async create(
+    @Body() dto: CreateContentAccordionItemDto,
+  ): Promise<DetailsContentAccordionItemDto> {
     return await this.accordionItemService.create(dto);
   }
 
@@ -100,7 +103,10 @@ export class ContentAccordionItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findAll(@Param("accordionId", ParseIntPipe) accordionId: number, @Query() query: PaginationOptionsDto): Promise<PaginatedDetailsContentAccordionItemDto> {
+  async findAll(
+    @Param("accordionId", ParseIntPipe) accordionId: number,
+    @Query() query: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentAccordionItemDto> {
     return await this.accordionItemService.findAll(accordionId, query);
   }
 
@@ -127,7 +133,9 @@ export class ContentAccordionItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentAccordionItemDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentAccordionItemDto> {
     return await this.accordionItemService.findOne(id);
   }
 

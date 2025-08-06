@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateGymDto, UpdateGymDto } from '../dto';
-import { GymEntity } from '../entity';
-import { GymSpecialityEnum } from '../types';
+import { CreateGymDto, UpdateGymDto } from "../dto";
+import { GymEntity } from "../entity";
+import { GymSpecialityEnum } from "../types";
 
 @Injectable()
 export class GymService {
@@ -21,10 +21,11 @@ export class GymService {
   }
 
   async findAll(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .orderBy('gym.createdAt', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .orderBy("gym.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -41,17 +42,18 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findBestRatedAndAttented(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -68,29 +70,29 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<GymEntity> {
-    return await this.gymRepository.findOne({ 
+    return await this.gymRepository.findOne({
       where: { id },
       relations: [
-        'owner',
-        'proprietor',
-        'managers',
-        'membershipPlans',
-        'specializedWorkouts',
-        'specializedNutritions',
-        'openDays',
-        'interests',
-      ]
+        "owner",
+        "proprietor",
+        "managers",
+        "membershipPlans",
+        "specializedWorkouts",
+        "specializedNutritions",
+        "openDays",
+        "interests",
+      ],
     });
   }
 
   async getFlatOne(id: number): Promise<GymEntity> {
-    return await this.gymRepository.findOne({ 
+    return await this.gymRepository.findOne({
       where: { id },
     });
   }
@@ -100,13 +102,17 @@ export class GymService {
     return this.getFlatOne(id);
   }
 
-  async search(query: string, paginationOptions: PaginationOptionsDto): Promise<PaginatedResponseDto<GymEntity>> {
+  async search(
+    query: string,
+    paginationOptions: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<GymEntity>> {
     const { page = 1, limit = 10 } = paginationOptions;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.name ILIKE :query', { query: `%${query}%` })
-      .orderBy('gym.createdAt', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.name ILIKE :query", { query: `%${query}%` })
+      .orderBy("gym.createdAt", "DESC");
 
     const [items, totalItems] = await queryBuilder
       .skip(skip)
@@ -129,12 +135,15 @@ export class GymService {
 
   async findBestRatedAndAttentedGymsSpecializedInWorkouts(
     specializedWorkouts: number[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedWorkouts.id IN (:...specializedWorkouts)', { specializedWorkouts })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedWorkouts.id IN (:...specializedWorkouts)", {
+        specializedWorkouts,
+      })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -151,19 +160,22 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findBestRatedAndAttentedGymsSpecializedInNutritions(
     specializedNutritions: number[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedNutritions.id IN (:...specializedNutritions)', { specializedNutritions })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedNutritions.id IN (:...specializedNutritions)", {
+        specializedNutritions,
+      })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -180,21 +192,26 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findBestRatedAndAttentedGymsSpecializedInNutritionsAndWorkouts(
     specializedNutritions: number[],
     specializedWorkouts: number[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedNutritions.id IN (:...specializedNutritions)', { specializedNutritions })
-      .andWhere('gym.specializedWorkouts.id IN (:...specializedWorkouts)', { specializedWorkouts })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedNutritions.id IN (:...specializedNutritions)", {
+        specializedNutritions,
+      })
+      .andWhere("gym.specializedWorkouts.id IN (:...specializedWorkouts)", {
+        specializedWorkouts,
+      })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -211,21 +228,26 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findBestRatedAndAttentedGymsSpecializedInNutritionsOrWorkouts(
     specializedNutritions: number[],
     specializedWorkouts: number[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedNutritions.id IN (:...specializedNutritions)', { specializedNutritions })
-      .orWhere('gym.specializedWorkouts.id IN (:...specializedWorkouts)', { specializedWorkouts })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedNutritions.id IN (:...specializedNutritions)", {
+        specializedNutritions,
+      })
+      .orWhere("gym.specializedWorkouts.id IN (:...specializedWorkouts)", {
+        specializedWorkouts,
+      })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -242,8 +264,8 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
@@ -251,14 +273,19 @@ export class GymService {
     specializedNutritions: number[],
     specializedWorkouts: number[],
     speciality: GymSpecialityEnum,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedNutritions.id IN (:...specializedNutritions)', { specializedNutritions })
-      .andWhere('gym.specializedWorkouts.id IN (:...specializedWorkouts)', { specializedWorkouts })
-      .andWhere('gym.speciality = :speciality', { speciality })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedNutritions.id IN (:...specializedNutritions)", {
+        specializedNutritions,
+      })
+      .andWhere("gym.specializedWorkouts.id IN (:...specializedWorkouts)", {
+        specializedWorkouts,
+      })
+      .andWhere("gym.speciality = :speciality", { speciality })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -275,8 +302,8 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
@@ -284,14 +311,19 @@ export class GymService {
     specializedNutritions: number[],
     specializedWorkouts: number[],
     speciality: GymSpecialityEnum,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.specializedNutritions.id IN (:...specializedNutritions)', { specializedNutritions })
-      .orWhere('gym.specializedWorkouts.id IN (:...specializedWorkouts)', { specializedWorkouts })
-      .orWhere('gym.speciality = :speciality', { speciality })
-      .orderBy('gym.ratingsAvg', 'DESC')
-      .orderBy('gym.followersCount', 'DESC');
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.specializedNutritions.id IN (:...specializedNutritions)", {
+        specializedNutritions,
+      })
+      .orWhere("gym.specializedWorkouts.id IN (:...specializedWorkouts)", {
+        specializedWorkouts,
+      })
+      .orWhere("gym.speciality = :speciality", { speciality })
+      .orderBy("gym.ratingsAvg", "DESC")
+      .orderBy("gym.followersCount", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -308,18 +340,19 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findRandomGymsInSpeciality(
     speciality: GymSpecialityEnum,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.speciality = :speciality', { speciality })
-      .orderBy('RANDOM()')
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.speciality = :speciality", { speciality })
+      .orderBy("RANDOM()")
       .skip((paginationOptions.page - 1) * paginationOptions.limit)
       .take(paginationOptions.limit);
 
@@ -334,18 +367,19 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findRandomGymsInSpecialities(
     specialities: GymSpecialityEnum[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymEntity>> {
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.speciality IN (:...specialities)', { specialities })
-      .orderBy('RANDOM()')
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.speciality IN (:...specialities)", { specialities })
+      .orderBy("RANDOM()")
       .skip((paginationOptions.page - 1) * paginationOptions.limit)
       .take(paginationOptions.limit);
 
@@ -360,15 +394,19 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
-  async findGymsOwnedByManager(managerId: number, paginationOptions: PaginationOptionsDto): Promise<PaginatedResponseDto<GymEntity>>{
-    const queryBuilder = this.gymRepository.createQueryBuilder('gym')
-      .where('gym.createdByManagerId = :managerId', { managerId })
-      .orWhere('gym.proprietorManagerId = :managerId', { managerId })
+  async findGymsOwnedByManager(
+    managerId: number,
+    paginationOptions: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<GymEntity>> {
+    const queryBuilder = this.gymRepository
+      .createQueryBuilder("gym")
+      .where("gym.createdByManagerId = :managerId", { managerId })
+      .orWhere("gym.proprietorManagerId = :managerId", { managerId })
       .skip((paginationOptions.page - 1) * paginationOptions.limit)
       .take(paginationOptions.limit);
 
@@ -383,8 +421,8 @@ export class GymService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 

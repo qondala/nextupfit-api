@@ -1,6 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 export class CreateContentImageDto {
   @ApiProperty({
@@ -50,7 +56,7 @@ export class CreateContentImageDto {
   @IsNotEmpty()
   imageUrl: string;
 
-  @ApiProperty({  
+  @ApiProperty({
     type: SwaggerType.INTEGER,
     example: 800,
     required: false,

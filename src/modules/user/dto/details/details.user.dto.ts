@@ -5,16 +5,13 @@ import { SwaggerType } from "@app/common/types";
 import { DetailsGymManagerDto } from "@app/module/gym/dto";
 import { Type } from "class-transformer";
 
-
 export class DetailsUserDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -23,14 +20,12 @@ export class DetailsUserDto {
   })
   email: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User first name",
     required: true,
   })
   firstName: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -39,7 +34,6 @@ export class DetailsUserDto {
   })
   lastName?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User phone number",
@@ -47,17 +41,14 @@ export class DetailsUserDto {
   })
   phoneNumber?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "User birth date",
     example: "2025-05-02",
     required: false,
   })
   birthDate?: Date;
-
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -66,14 +57,12 @@ export class DetailsUserDto {
   })
   profileImageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User cover image url",
     required: false,
   })
   coverImageUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
@@ -82,16 +71,14 @@ export class DetailsUserDto {
   })
   isEmailVerified: boolean;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "User last login",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
   })
   lastLogin?: Date;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -103,7 +90,6 @@ export class DetailsUserDto {
   @IsInt()
   managerAccountId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's privilege level",
@@ -114,7 +100,6 @@ export class DetailsUserDto {
   @IsInt()
   privilegeLevel?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's age",
@@ -123,7 +108,6 @@ export class DetailsUserDto {
   })
   @IsInt()
   age: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -134,20 +118,18 @@ export class DetailsUserDto {
   @IsInt()
   gender: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "User created at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",
   })
   createdAt?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "User updated at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",

@@ -14,11 +14,11 @@ import { SocialNotificationEntity } from "../entity";
 export class SocialNotificationService {
   constructor(
     @InjectRepository(SocialNotificationEntity)
-    private readonly notificationRepository: Repository<SocialNotificationEntity>
+    private readonly notificationRepository: Repository<SocialNotificationEntity>,
   ) {}
 
   async create(
-    createDto: CreateSocialNotificationDto
+    createDto: CreateSocialNotificationDto,
   ): Promise<SocialNotificationEntity> {
     const notification = this.notificationRepository.create({
       ...createDto,
@@ -28,7 +28,7 @@ export class SocialNotificationService {
   }
 
   async findAll(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialNotificationEntity>> {
     const queryBuilder = this.notificationRepository
       .createQueryBuilder("notification")
@@ -56,11 +56,12 @@ export class SocialNotificationService {
 
   async findByUserId(
     userId: number,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialNotificationEntity>> {
-    const queryBuilder = this.notificationRepository.createQueryBuilder('notification')
-      .where('notification.userId = :userId', { userId })
-      .orderBy('notification.createdAt', 'DESC');
+    const queryBuilder = this.notificationRepository
+      .createQueryBuilder("notification")
+      .where("notification.userId = :userId", { userId })
+      .orderBy("notification.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -77,18 +78,20 @@ export class SocialNotificationService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<SocialNotificationEntity> {
-    return (await this.notificationRepository.findOne({ where: { id } })) as SocialNotificationEntity;
+    return (await this.notificationRepository.findOne({
+      where: { id },
+    })) as SocialNotificationEntity;
   }
 
   async update(
     id: number,
-    updateDto: UpdateSocialNotificationDto
+    updateDto: UpdateSocialNotificationDto,
   ): Promise<SocialNotificationEntity> {
     await this.notificationRepository.update(id, {
       ...updateDto,

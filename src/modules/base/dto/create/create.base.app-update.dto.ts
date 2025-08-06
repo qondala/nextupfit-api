@@ -3,30 +3,26 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class CreateBaseAppUpdateDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Update's version",
     example: "1.0.0",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
   version: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Version's name",
     example: "Starter",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
   name: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -36,7 +32,6 @@ export class CreateBaseAppUpdateDto {
   @IsNotEmpty()
   @IsString()
   features: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,

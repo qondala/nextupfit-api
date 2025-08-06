@@ -1,6 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('social_affiliate_sale')
+@Entity("social_affiliate_sale")
 export class SocialAffiliateSaleEntity {
   @PrimaryGeneratedColumn()
   id: number;

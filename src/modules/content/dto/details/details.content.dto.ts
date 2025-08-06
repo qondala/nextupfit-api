@@ -6,7 +6,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
@@ -18,7 +18,7 @@ import {
   ContentContainerTypeEnum,
   ContentStatusEnum,
   ContentComposite,
-  ContentPrivacyEnum
+  ContentPrivacyEnum,
 } from "../../types";
 import { Type } from "class-transformer";
 
@@ -86,7 +86,6 @@ export class DetailsContentDto {
   @IsEnum(ContentStatusEnum)
   status: ContentStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Owner user id",
@@ -141,7 +140,7 @@ export class DetailsContentDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Content created date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -150,13 +149,12 @@ export class DetailsContentDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Content updated date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
   })
   updatedAt: Date;
-
 
   @ApiProperty({
     type: () => ContentComposite,

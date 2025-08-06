@@ -6,13 +6,12 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsProgramWorkoutNutrientBurnDto } from "../details";
 
 export class PaginatedDetailsProgramWorkoutNutrientBurnDto extends PaginatedResponseDto<DetailsProgramWorkoutNutrientBurnDto> {
-
   @ApiProperty({
     type: () => DetailsProgramWorkoutNutrientBurnDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of program workout nutrient burns',
-    required: true
+    description: "List of program workout nutrient burns",
+    required: true,
   })
   @IsDefined()
   @IsArray()

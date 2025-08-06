@@ -5,7 +5,6 @@ import { SwaggerType } from "@app/common/types";
 import { SocialNotificationTypeEnum } from ".";
 
 export class SocialNotificationPayload {
-
   @ApiProperty({
     enum: SocialNotificationTypeEnum,
     enumName: "SocialNotificationTypeEnum",

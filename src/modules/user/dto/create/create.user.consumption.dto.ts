@@ -9,7 +9,10 @@ import {
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { BaseConsumptionProgramEnum, BaseTimeFormatEnum } from "@app/module/base/types";
+import {
+  BaseConsumptionProgramEnum,
+  BaseTimeFormatEnum,
+} from "@app/module/base/types";
 
 export class CreateUserConsumptionDto {
   @ApiProperty({
@@ -115,6 +118,16 @@ export class CreateUserConsumptionDto {
   @IsNotEmpty()
   @IsInt()
   userId: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Program nutrition ID",
+    example: 456,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  programNutritionId?: number;
 
   @ApiProperty({
     enum: BaseTimeFormatEnum,

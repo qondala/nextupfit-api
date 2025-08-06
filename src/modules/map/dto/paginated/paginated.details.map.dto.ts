@@ -8,9 +8,9 @@ import { DetailsMapDto } from "../details";
 export class PaginatedDetailsMapDto extends PaginatedResponseDto<DetailsMapDto> {
   @ApiProperty({
     type: () => DetailsMapDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of map locations',
+    description: "List of map locations",
     required: true,
   })
   @IsDefined()

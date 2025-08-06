@@ -10,7 +10,7 @@ export class PaginatedDetailsUserCommitmentDto extends PaginatedResponseDto<Deta
     type: () => DetailsUserCommitmentDto,
     isArray: true,
     description: "List of user commitments",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

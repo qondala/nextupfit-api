@@ -8,14 +8,14 @@ import {
   Patch,
   Post,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -24,7 +24,7 @@ import {
   CreateBaseRecipeInstructionTagDto,
   UpdateBaseRecipeInstructionTagDto,
   DetailsBaseRecipeInstructionTagDto,
-  PaginatedDetailsBaseRecipeInstructionTagDto
+  PaginatedDetailsBaseRecipeInstructionTagDto,
 } from "../dto";
 import { BaseRecipeInstructionTagService } from "../service";
 
@@ -37,55 +37,61 @@ export class BaseRecipeInstructionTagController {
   @Post()
   @ApiOperation({
     summary: "Create recipe instruction tag",
-    operationId: "createBaseRecipeInstructionTag"
+    operationId: "createBaseRecipeInstructionTag",
   })
   @ApiCreatedResponse({
     description: "Recipe instruction tag created successfully.",
     type: DetailsBaseRecipeInstructionTagDto,
-    status: HttpStatus.CREATED
+    status: HttpStatus.CREATED,
   })
-  create(@Body() createDto: CreateBaseRecipeInstructionTagDto): Promise<DetailsBaseRecipeInstructionTagDto> {
+  create(
+    @Body() createDto: CreateBaseRecipeInstructionTagDto,
+  ): Promise<DetailsBaseRecipeInstructionTagDto> {
     return this.tagService.create(createDto);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all recipe instruction tags",
-    operationId: "findAllBaseRecipeInstructionTags"
+    operationId: "findAllBaseRecipeInstructionTags",
   })
   @ApiOkResponse({
     description: "List of recipe instruction tags.",
-    type: PaginatedDetailsBaseRecipeInstructionTagDto
+    type: PaginatedDetailsBaseRecipeInstructionTagDto,
   })
-  findAll(@Query() paginationOptions: PaginationOptionsDto): Promise<PaginatedDetailsBaseRecipeInstructionTagDto> {
+  findAll(
+    @Query() paginationOptions: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsBaseRecipeInstructionTagDto> {
     return this.tagService.findAll(paginationOptions);
   }
 
   @Get(":id")
   @ApiOperation({
     summary: "Get recipe instruction tag by id",
-    operationId: "findBaseRecipeInstructionTagById"
+    operationId: "findBaseRecipeInstructionTagById",
   })
   @ApiOkResponse({
     description: "Recipe instruction tag by id.",
-    type: DetailsBaseRecipeInstructionTagDto
+    type: DetailsBaseRecipeInstructionTagDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseRecipeInstructionTagDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseRecipeInstructionTagDto> {
     return this.tagService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update recipe instruction tag",
-    operationId: "updateBaseRecipeInstructionTag"
+    operationId: "updateBaseRecipeInstructionTag",
   })
   @ApiOkResponse({
     description: "Updated recipe instruction tag.",
-    type: DetailsBaseRecipeInstructionTagDto
+    type: DetailsBaseRecipeInstructionTagDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateDto: UpdateBaseRecipeInstructionTagDto
+    @Body() updateDto: UpdateBaseRecipeInstructionTagDto,
   ): Promise<DetailsBaseRecipeInstructionTagDto> {
     return this.tagService.update(id, updateDto);
   }
@@ -93,10 +99,10 @@ export class BaseRecipeInstructionTagController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete recipe instruction tag",
-    operationId: "removeBaseRecipeInstructionTag"
+    operationId: "removeBaseRecipeInstructionTag",
   })
   @ApiOkResponse({
-    description: "Recipe instruction tag deleted successfully."
+    description: "Recipe instruction tag deleted successfully.",
   })
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.tagService.remove(id);

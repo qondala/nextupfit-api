@@ -10,7 +10,7 @@ import { UserRecipeEntity } from "../entity";
 export class UserRecipeService {
   constructor(
     @InjectRepository(UserRecipeEntity)
-    private readonly recipeRepository: Repository<UserRecipeEntity>
+    private readonly recipeRepository: Repository<UserRecipeEntity>,
   ) {}
 
   async create(dto: CreateUserRecipeDto): Promise<UserRecipeEntity> {
@@ -20,14 +20,18 @@ export class UserRecipeService {
 
   async findAll(
     userId: number,
-    pagination: PaginationOptionsDto
+    pagination: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<UserRecipeEntity>> {
-    const qb = this.recipeRepository.createQueryBuilder("usr")
+    const qb = this.recipeRepository
+      .createQueryBuilder("usr")
       .where("usr.userId = :userId", { userId })
       .orderBy("usr.createdAt", "DESC");
 
     const skip = (pagination.page - 1) * pagination.limit;
-    const [items, totalItems] = await qb.skip(skip).take(pagination.limit).getManyAndCount();
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
 
     return {
       items,
@@ -36,8 +40,8 @@ export class UserRecipeService {
         itemCount: items.length,
         itemsPerPage: pagination.limit,
         totalPages: Math.ceil(totalItems / pagination.limit),
-        currentPage: pagination.page
-      }
+        currentPage: pagination.page,
+      },
     };
   }
 
@@ -45,7 +49,10 @@ export class UserRecipeService {
     return this.recipeRepository.findOneOrFail({ where: { id } });
   }
 
-  async update(id: number, dto: UpdateUserRecipeDto): Promise<UserRecipeEntity> {
+  async update(
+    id: number,
+    dto: UpdateUserRecipeDto,
+  ): Promise<UserRecipeEntity> {
     await this.recipeRepository.update(id, dto);
     return this.findOne(id);
   }

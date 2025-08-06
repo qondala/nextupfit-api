@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateGymManagerQualificationDto, UpdateGymManagerQualificationDto } from '../dto';
-import { GymManagerQualificationEntity } from '../entity';
+import {
+  CreateGymManagerQualificationDto,
+  UpdateGymManagerQualificationDto,
+} from "../dto";
+import { GymManagerQualificationEntity } from "../entity";
 
 @Injectable()
 export class GymManagerQualificationService {
@@ -14,21 +17,24 @@ export class GymManagerQualificationService {
     private readonly repository: Repository<GymManagerQualificationEntity>,
   ) {}
 
-  async create(createDto: CreateGymManagerQualificationDto): Promise<GymManagerQualificationEntity> {
+  async create(
+    createDto: CreateGymManagerQualificationDto,
+  ): Promise<GymManagerQualificationEntity> {
     const qualification = this.repository.create({
       ...createDto,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.repository.save(qualification);
   }
 
   async findByManager(
     managerId: number,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymManagerQualificationEntity>> {
-    const queryBuilder = this.repository.createQueryBuilder('qualification')
-      .where('qualification.managerId = :managerId', { managerId })
-      .orderBy('qualification.yearObtained', 'DESC');
+    const queryBuilder = this.repository
+      .createQueryBuilder("qualification")
+      .where("qualification.managerId = :managerId", { managerId })
+      .orderBy("qualification.yearObtained", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -45,19 +51,22 @@ export class GymManagerQualificationService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<GymManagerQualificationEntity> {
     return await this.repository.findOne({
       where: { id },
-      relations: ['manager']
+      relations: ["manager"],
     });
   }
 
-  async update(id: number, updateDto: UpdateGymManagerQualificationDto): Promise<GymManagerQualificationEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateGymManagerQualificationDto,
+  ): Promise<GymManagerQualificationEntity> {
     await this.repository.update(id, updateDto);
     return this.findOne(id);
   }

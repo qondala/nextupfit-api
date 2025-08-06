@@ -6,7 +6,7 @@ export class DetailsBaseBodyParamDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Identifier",
-    example: 1
+    example: 1,
   })
   @IsNumber()
   id: number;
@@ -14,7 +14,7 @@ export class DetailsBaseBodyParamDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Param name",
-    example: "Weight"
+    example: "Weight",
   })
   @IsNotEmpty()
   @IsString()
@@ -24,7 +24,7 @@ export class DetailsBaseBodyParamDto {
     type: SwaggerType.STRING,
     description: "Param description",
     example: "Person weight in kg",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -34,7 +34,7 @@ export class DetailsBaseBodyParamDto {
     type: SwaggerType.INTEGER,
     description: "Unit ID",
     example: 3,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()

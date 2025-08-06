@@ -1,17 +1,17 @@
-import { IsOptional, IsEnum, IsInt } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsEnum, IsInt } from "class-validator";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
-import { SwaggerType } from '@app/common/types';
+import { SwaggerType } from "@app/common/types";
 import {
   SocialActorEnum,
   SocialUpdateTypeEnum,
-  SocialUpdatePrivacyEnum
-} from '../../types';
+  SocialUpdatePrivacyEnum,
+} from "../../types";
 
 export class UpdateSocialUpdateDto {
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author user',
+    description: "The ID of the author user",
   })
   @IsOptional()
   @IsInt()
@@ -19,7 +19,7 @@ export class UpdateSocialUpdateDto {
 
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author manager',
+    description: "The ID of the author manager",
   })
   @IsOptional()
   @IsInt()
@@ -28,7 +28,7 @@ export class UpdateSocialUpdateDto {
   @ApiPropertyOptional({
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
-    description: 'The type of social actor',
+    description: "The type of social actor",
   })
   @IsOptional()
   @IsEnum(SocialActorEnum)
@@ -36,7 +36,7 @@ export class UpdateSocialUpdateDto {
 
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the social actor',
+    description: "The ID of the social actor",
   })
   @IsOptional()
   @IsInt()
@@ -45,7 +45,7 @@ export class UpdateSocialUpdateDto {
   @ApiPropertyOptional({
     enum: SocialUpdateTypeEnum,
     enumName: "SocialUpdateTypeEnum",
-    description: 'The type of social update',
+    description: "The type of social update",
   })
   @IsOptional()
   @IsEnum(SocialUpdateTypeEnum)
@@ -54,7 +54,7 @@ export class UpdateSocialUpdateDto {
   @ApiPropertyOptional({
     enum: SocialUpdatePrivacyEnum,
     enumName: "SocialUpdatePrivacyEnum",
-    description: 'The privacy setting for the social update',
+    description: "The privacy setting for the social update",
   })
   @IsOptional()
   @IsEnum(SocialUpdatePrivacyEnum)

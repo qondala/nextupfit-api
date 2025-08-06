@@ -1,65 +1,54 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  SwaggerType
-} from "@app/common/types";
+import { ApiProperty } from "@nestjs/swagger";
+import { SwaggerType } from "@app/common/types";
 
 import {
   ProgramAccessibilityEnum,
-  ProgramVisibilityEnum
+  ProgramVisibilityEnum,
 } from "@app/module/program/types";
 
-import {
-  UserManagerFollowerStatus,
-} from "../followership";
-import {
-  UserProgramSubscriptionPlanStatus
-} from "../user-subscription-plan-status";
+import { UserManagerFollowerStatus } from "../followership";
+import { UserProgramSubscriptionPlanStatus } from "../user-subscription-plan-status";
 
 export class UserProgramAccessStatus {
-
   @ApiProperty({
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
-    required: true
+    required: true,
   })
   accessibility: ProgramAccessibilityEnum;
 
   @ApiProperty({
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
-    required: true
+    required: true,
   })
   visibility: ProgramVisibilityEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   authorizedMembershipPlanIds?: number[];
 
-  
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   authorizedProgramSubscriptionPlanIds?: number[];
-
 
   @ApiProperty({
     type: () => UserProgramSubscriptionPlanStatus,
     isArray: true,
-    required: false
+    required: false,
   })
   programSubscriptionStatuses: UserProgramSubscriptionPlanStatus[];
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Tells if user has ever subscribed to program",
-    required: false
+    required: false,
   })
   everSubscribedToProgram?: boolean;
 

@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsDateString, IsInt, IsNotEmpty, IsOptional } from "class-validator";
+import {
+  IsBoolean,
+  IsDateString,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
@@ -26,7 +32,7 @@ export class CreateUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Started at",
     example: "2025-07-13T13:16:17.000Z",
     required: false,
@@ -37,7 +43,7 @@ export class CreateUserRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Finished at",
     example: "2025-07-13T13:16:17.000Z",
     required: false,

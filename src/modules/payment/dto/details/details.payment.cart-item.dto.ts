@@ -6,7 +6,6 @@ import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
 import { PaymentPayableItemEnum, PaymentStatusEnum } from "../../types";
 
-
 export class DetailsPaymentCartItemDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,

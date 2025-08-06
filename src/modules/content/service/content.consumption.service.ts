@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentConsumptionEntity } from "../entity";
-import { CreateContentConsumptionDto, UpdateContentConsumptionDto } from "../dto";
+import {
+  CreateContentConsumptionDto,
+  UpdateContentConsumptionDto,
+} from "../dto";
 
 @Injectable()
 export class ContentConsumptionService {
@@ -14,11 +17,16 @@ export class ContentConsumptionService {
     private readonly repository: Repository<ContentConsumptionEntity>,
   ) {}
 
-  async create(dto: CreateContentConsumptionDto): Promise<ContentConsumptionEntity> {
+  async create(
+    dto: CreateContentConsumptionDto,
+  ): Promise<ContentConsumptionEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentConsumptionEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentConsumptionEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -41,16 +49,27 @@ export class ContentConsumptionService {
   }
 
   async findOne(id: number): Promise<ContentConsumptionEntity> {
-    const entity = await this.repository.findOne({ where: { id }, relations: ["items"] });
+    const entity = await this.repository.findOne({
+      where: { id },
+      relations: ["items"],
+    });
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentConsumptionEntity> {
-    const entity = await this.repository.findOne({ where: { contentId }, relations: ["items"] });
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentConsumptionEntity> {
+    const entity = await this.repository.findOne({
+      where: { contentId },
+      relations: ["items"],
+    });
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentConsumptionDto): Promise<ContentConsumptionEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentConsumptionDto,
+  ): Promise<ContentConsumptionEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

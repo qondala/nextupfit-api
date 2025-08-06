@@ -1,19 +1,13 @@
-import {
-  IsOptional,
-  IsEnum,
-  IsDefined,
-  IsInt
-} from "class-validator";
+import { IsOptional, IsEnum, IsDefined, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   ProgramEvolutionEventTypeEnum,
-  ProgramItemTypeEnum
+  ProgramItemTypeEnum,
 } from "@app/module/program/types";
 import { SwaggerType } from "@app/common/types";
 import { SocialActorEnum } from "@app/module/social/types";
 
 export class CreateUserProgramEvolutionEventDto {
-
   @ApiProperty({
     enum: ProgramEvolutionEventTypeEnum,
     enumName: "ProgamEvolutionEventTypeEnum",
@@ -25,7 +19,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsEnum(ProgramEvolutionEventTypeEnum)
   event: ProgramEvolutionEventTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",
@@ -35,7 +28,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsDefined()
   @IsInt()
   userId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -47,7 +39,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsInt()
   gymId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Manager id",
@@ -57,7 +48,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsOptional()
   @IsInt()
   managerId?: number;
-
 
   @ApiProperty({
     enum: SocialActorEnum,
@@ -70,7 +60,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsEnum(SocialActorEnum)
   receiverType: SocialActorEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Concerned program",
@@ -80,7 +69,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsOptional()
   @IsInt()
   programItemId?: number;
-
 
   @ApiProperty({
     enum: ProgramItemTypeEnum,
@@ -92,7 +80,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsDefined()
   @IsEnum(ProgramItemTypeEnum)
   programItem: ProgramItemTypeEnum;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -134,7 +121,6 @@ export class CreateUserProgramEvolutionEventDto {
   @IsInt()
   totalProgressionPoints?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Quantity",
@@ -145,10 +131,10 @@ export class CreateUserProgramEvolutionEventDto {
   @IsInt()
   quantity?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Iteration: for programs that extends over multiple days or another time unit, this field represents the nth day the user attents to the program component.",
+    description:
+      "Iteration: for programs that extends over multiple days or another time unit, this field represents the nth day the user attents to the program component.",
     example: 1,
     required: false,
   })

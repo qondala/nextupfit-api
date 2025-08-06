@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDefined, IsNumber, IsString } from "class-validator";
 
-
 export class AuthTokenDto {
   @ApiProperty({
     description: "UUID received from Firebase",

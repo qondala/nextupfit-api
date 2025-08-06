@@ -1,13 +1,13 @@
-import { IsOptional, IsEnum, IsInt } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsEnum, IsInt } from "class-validator";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
-import { ProgramItemTypeEnum } from '@app/module/program/types';
-import { SwaggerType } from '@app/common/types';
+import { ProgramItemTypeEnum } from "@app/module/program/types";
+import { SwaggerType } from "@app/common/types";
 
 export class UpdateGymHasProgramDto {
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the gym',
+    description: "The ID of the gym",
   })
   @IsOptional()
   @IsInt()
@@ -16,7 +16,7 @@ export class UpdateGymHasProgramDto {
   @ApiPropertyOptional({
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
-    description: 'The type of program item',
+    description: "The type of program item",
   })
   @IsOptional()
   @IsEnum(ProgramItemTypeEnum)
@@ -24,7 +24,7 @@ export class UpdateGymHasProgramDto {
 
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the program item',
+    description: "The ID of the program item",
   })
   @IsOptional()
   @IsInt()
@@ -32,7 +32,7 @@ export class UpdateGymHasProgramDto {
 
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the owner manager',
+    description: "The ID of the owner manager",
   })
   @IsOptional()
   @IsInt()

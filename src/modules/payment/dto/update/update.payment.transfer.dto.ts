@@ -2,7 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsString, IsInt } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { PaymentStatusEnum, PaymentMethodEnum, PaymentScopeEnum } from "../../types";
+import {
+  PaymentStatusEnum,
+  PaymentMethodEnum,
+  PaymentScopeEnum,
+} from "../../types";
 
 export class UpdatePaymentTransferDto {
   @ApiProperty({

@@ -1,29 +1,24 @@
 import { Injectable } from "@nestjs/common";
 
-
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 import {
   ProgramAccessibilityEnum,
-  ProgramVisibilityEnum
+  ProgramVisibilityEnum,
 } from "@app/module/program/types";
 import {
   ProgramSubscriptionEntity,
-  ProgramSubscriptionPlanEntity
+  ProgramSubscriptionPlanEntity,
 } from "@app/module/program/entity";
-
 
 import { UserProgramEvolutionService } from "@app/module/user/service";
 import {
   ProgramSubscriptionPlanService,
-  ProgramSubscriptionService
+  ProgramSubscriptionService,
 } from "@app/module/program/service";
 import { PaymentService } from "@app/module/payment/service";
 
-
 import { UserProgramAccessStatus } from "../../dto";
 import { TrialPlanItemType } from "../../types";
-
-
 
 @Injectable()
 export class UserProgramAccessStatusService {
@@ -34,9 +29,10 @@ export class UserProgramAccessStatusService {
     private readonly paymentService: PaymentService,
   ) {}
 
-  async getUserProgramAccessStatus(userId: number, programId: number): Promise<UserProgramAccessStatus> {
-    
-
+  async getUserProgramAccessStatus(
+    userId: number,
+    programId: number,
+  ): Promise<UserProgramAccessStatus> {
     const userProgramAccessStatus: UserProgramAccessStatus = {
       everSubscribedToProgram: false,
       programSubscriptionStatuses: [],
@@ -47,24 +43,34 @@ export class UserProgramAccessStatusService {
       managerFollowerStatus: null,
     };
 
-
     // Get subscription plans of the program
-    const programSubscriptionPlans = await this.programSubscriptionPlanService.getAllSubscriptionPlansOfProgram(programId);
-
+    const programSubscriptionPlans =
+      await this.programSubscriptionPlanService.getAllSubscriptionPlansOfProgram(
+        programId,
+      );
 
     // Get user's subscriptions in the program
-    const userProgramSubscriptions = await this.programSubscriptionService.findByUserIdAndProgramId(userId, programId);
-    userProgramAccessStatus.everSubscribedToProgram = !!userProgramSubscriptions;
-
+    const userProgramSubscriptions =
+      await this.programSubscriptionService.findByUserIdAndProgramId(
+        userId,
+        programId,
+      );
+    userProgramAccessStatus.everSubscribedToProgram =
+      !!userProgramSubscriptions;
 
     // For each subscription plan, check if the user has paid it within the due date
     for (const programSubscriptionPlan of programSubscriptionPlans) {
-
       const userProgramSubscription = userProgramSubscriptions.find(
-        (subscription) => subscription.programSubscriptionPlanId === programSubscriptionPlan.id);
+        (subscription) =>
+          subscription.programSubscriptionPlanId === programSubscriptionPlan.id,
+      );
 
-      const hasPaidSusbscription = await this.hasUserPaidSubscriptionWithinDueDate(userProgramSubscription, programSubscriptionPlan);
-     
+      const hasPaidSusbscription =
+        await this.hasUserPaidSubscriptionWithinDueDate(
+          userProgramSubscription,
+          programSubscriptionPlan,
+        );
+
       userProgramAccessStatus.programSubscriptionStatuses.push({
         id: programSubscriptionPlan.id,
         programId: programId,
@@ -76,18 +82,24 @@ export class UserProgramAccessStatusService {
           trialType: TrialPlanItemType.program,
           planId: programSubscriptionPlan.id,
           numberTrialDaysOfPlan: programSubscriptionPlan.trialNumberDays || 0,
-          numberOfDaysLeft: this.numberOfDaysLeft(userProgramSubscription, programSubscriptionPlan),
-          numberTrialActivitiesOfPlan: programSubscriptionPlan.trialNumberProgramActivities || 0,
-          numberOfActivitiesLeft: await this.numberOfActivitiesLeft(userProgramSubscription, programSubscriptionPlan),
+          numberOfDaysLeft: this.numberOfDaysLeft(
+            userProgramSubscription,
+            programSubscriptionPlan,
+          ),
+          numberTrialActivitiesOfPlan:
+            programSubscriptionPlan.trialNumberProgramActivities || 0,
+          numberOfActivitiesLeft: await this.numberOfActivitiesLeft(
+            userProgramSubscription,
+            programSubscriptionPlan,
+          ),
         },
         userPlanExists: !!userProgramSubscription,
         createdAt: userProgramSubscription?.createdAt,
       });
     }
 
-    return userProgramAccessStatus;    
+    return userProgramAccessStatus;
   }
-
 
   private numberOfDaysLeft(
     userProgramSubscription: ProgramSubscriptionEntity | null,
@@ -98,30 +110,35 @@ export class UserProgramAccessStatusService {
     }
     const date = userProgramSubscription.startedDate;
     const today = new Date();
-    return programSubscriptionPlan.trialNumberDays - (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-  };
+    return (
+      programSubscriptionPlan.trialNumberDays -
+      (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    );
+  }
 
   private async numberOfActivitiesLeft(
     userProgramSubscription: ProgramSubscriptionEntity | null,
     programSubscriptionPlan: ProgramSubscriptionPlanEntity,
   ): Promise<number> {
     if (
-      !userProgramSubscription || 
-      !programSubscriptionPlan || 
+      !userProgramSubscription ||
+      !programSubscriptionPlan ||
       !programSubscriptionPlan.trialNumberProgramActivities
     ) {
       return 0;
     }
-    const doneActivitiesSinceUserSubscriptionStarted = 
+    const doneActivitiesSinceUserSubscriptionStarted =
       await this.userProgramEvolutionService.getNumberOfUserActivityEventsDoneSince(
         userProgramSubscription.subscriberUserId,
         userProgramSubscription.programId,
         programSubscriptionPlan.id,
-        userProgramSubscription.startedDate);
-    return programSubscriptionPlan.trialNumberProgramActivities - doneActivitiesSinceUserSubscriptionStarted;
-  };
-
-
+        userProgramSubscription.startedDate,
+      );
+    return (
+      programSubscriptionPlan.trialNumberProgramActivities -
+      doneActivitiesSinceUserSubscriptionStarted
+    );
+  }
 
   /**
    * Check if user has paid subscription within due date
@@ -135,27 +152,31 @@ export class UserProgramAccessStatusService {
     userProgramSubscription: ProgramSubscriptionEntity,
     programSubscriptionPlan: ProgramSubscriptionPlanEntity,
   ): Promise<boolean> {
-    
     const periodicity = programSubscriptionPlan.periodicity;
 
     // Looking for the last payment date
-    const lastPayment = await this.paymentService.getUserLastPaymentForProgramSubscriptionPlan(
-      userProgramSubscription.subscriberUserId,
-      programSubscriptionPlan.id,
-    );
+    const lastPayment =
+      await this.paymentService.getUserLastPaymentForProgramSubscriptionPlan(
+        userProgramSubscription.subscriberUserId,
+        programSubscriptionPlan.id,
+      );
 
-    
     // In case the subscription plan is lifetime, we just check if the user has made any payment
     // accounting for the subscription plan
-    if (lastPayment && periodicity == BaseSubscriptionPlanPeriodicityEnum.lifetime) {
+    if (
+      lastPayment &&
+      periodicity == BaseSubscriptionPlanPeriodicityEnum.lifetime
+    ) {
       return true;
     }
 
-    const date = (!lastPayment) ? userProgramSubscription.startedDate : lastPayment.createdAt;
+    const date = !lastPayment
+      ? userProgramSubscription.startedDate
+      : lastPayment.createdAt;
 
     // Calculate the due date
     let dueDate: Date;
-    switch(periodicity) {
+    switch (periodicity) {
       case BaseSubscriptionPlanPeriodicityEnum.weekly:
         dueDate = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         break;
@@ -169,12 +190,13 @@ export class UserProgramAccessStatusService {
         break;
     }
 
-    return await this.paymentService.countUserProgramSubscriptionPlanPaymentsWithinPeriod(
-      userProgramSubscription.subscriberUserId,
-      programSubscriptionPlan.id,
-      date,
-      dueDate,
-    ) > 0;
+    return (
+      (await this.paymentService.countUserProgramSubscriptionPlanPaymentsWithinPeriod(
+        userProgramSubscription.subscriberUserId,
+        programSubscriptionPlan.id,
+        date,
+        dueDate,
+      )) > 0
+    );
   }
-
 }

@@ -1,19 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-  IsEnum,
-} from "class-validator";
+import { IsOptional, IsEnum } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
 import { ProgramStepActivityStatusEnum } from "../../types";
 import { ProgramFindOrderWorkingsessionEnum } from ".";
 
-
 export class ProgramFindCriteriaWorkingsessionDto {
-
   @ApiProperty({
-    name: 'workingSessionId',
+    name: "workingSessionId",
     type: SwaggerType.INTEGER,
     description: "Workingsession's id",
     required: false,
@@ -21,9 +16,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   workingSessionId?: number;
 
-
   @ApiProperty({
-    name: 'baseWorkoutId',
+    name: "baseWorkoutId",
     type: SwaggerType.INTEGER,
     description: "Base workout's id",
     required: false,
@@ -31,9 +25,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   baseWorkoutId?: number;
 
-
   @ApiProperty({
-    name: 'search',
+    name: "search",
     type: SwaggerType.STRING,
     description: "Working session's title",
     example: "Simple Pillates workout",
@@ -42,9 +35,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   search?: string;
 
-
   @ApiProperty({
-    name: 'gymId',
+    name: "gymId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the Workingession",
     required: false,
@@ -52,9 +44,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   gymId?: number;
 
-
   @ApiProperty({
-    name: 'programId',
+    name: "programId",
     type: SwaggerType.INTEGER,
     description: "Id of the program",
     required: false,
@@ -63,7 +54,7 @@ export class ProgramFindCriteriaWorkingsessionDto {
   programId?: number;
 
   @ApiProperty({
-    name: 'programStepId',
+    name: "programStepId",
     type: SwaggerType.INTEGER,
     description: "Id of the program step",
     required: false,
@@ -71,9 +62,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   programStepId?: number;
 
-
   @ApiProperty({
-    name: 'programStepActivityId',
+    name: "programStepActivityId",
     type: SwaggerType.INTEGER,
     description: "Id of the program step acitivity",
     required: false,
@@ -81,18 +71,17 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   programStepActivityId?: number;
 
-
   @ApiProperty({
-    name: 'ownerUserId',
+    name: "ownerUserId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",
     required: false,
   })
   @IsOptional()
   ownerUserId?: number;
-  
+
   @ApiProperty({
-    name: 'ownerManagerId',
+    name: "ownerManagerId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",
     required: false,
@@ -100,9 +89,8 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   ownerManagerId?: number;
 
-
   @ApiProperty({
-    name: 'status',
+    name: "status",
     enum: ProgramStepActivityStatusEnum,
     enumName: "ProgramStepActivityStatusEnum",
     required: false,
@@ -110,60 +98,53 @@ export class ProgramFindCriteriaWorkingsessionDto {
   @IsOptional()
   status: ProgramStepActivityStatusEnum;
 
-
-
   @ApiProperty({
-    name: 'attendeesCount',
+    name: "attendeesCount",
     type: SwaggerType.INTEGER,
     description: "Workingsession attendees count",
-    required: false
+    required: false,
   })
   @IsOptional()
   attendeesCount?: number;
 
-
   @ApiProperty({
-    name: 'viewsCount',
+    name: "viewsCount",
     type: SwaggerType.INTEGER,
     description: "Views count",
-    required: false
+    required: false,
   })
   @IsOptional()
   viewsCount?: number;
 
-
   @ApiProperty({
-    name: 'ratingsAvg',
+    name: "ratingsAvg",
     type: SwaggerType.NUMBER,
     description: "Ratings average",
-    required: false
+    required: false,
   })
   @IsOptional()
   ratingsAvg?: number;
 
-
   @ApiProperty({
-    name: 'ratingsCount',
+    name: "ratingsCount",
     type: SwaggerType.INTEGER,
     description: "Number times Workingsession was rated",
-    required: false
+    required: false,
   })
   @IsOptional()
   ratingsCount?: number;
 
-
   @ApiProperty({
-    name: 'difficultyLevel',
+    name: "difficultyLevel",
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
-    required: false
+    required: false,
   })
   @IsOptional()
   difficultyLevel?: number;
 
-
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: ProgramFindOrderWorkingsessionEnum,
     enumName: "ProgramFindOrderWorkingsessionEnum",
     required: false,

@@ -11,7 +11,6 @@ import {
   PaginatedDetailsContentInformationDto,
 } from "../dto";
 
-
 @Injectable()
 export class ContentInformationService {
   constructor(
@@ -19,11 +18,16 @@ export class ContentInformationService {
     private readonly repository: Repository<ContentInformationEntity>,
   ) {}
 
-  async create(dto: CreateContentInformationDto): Promise<ContentInformationEntity> {
+  async create(
+    dto: CreateContentInformationDto,
+  ): Promise<ContentInformationEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedDetailsContentInformationDto> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentInformationDto> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -48,7 +52,9 @@ export class ContentInformationService {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentInformationEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentInformationEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 

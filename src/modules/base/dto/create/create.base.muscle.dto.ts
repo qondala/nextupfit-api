@@ -3,39 +3,35 @@ import {
   IsNotEmpty,
   IsInt,
   IsOptional,
-  IsString
+  IsString,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-
 
 import { SwaggerType } from "@app/common/types";
 
 import { BaseBodyPartEnum } from "../../types";
 
-
 export class CreateBaseMuscleDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Muscle's name",
     example: "Occipitofrontalis",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
   name: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: "Muscle's unique code, meant to be used for app translation and other facilities",
+    description:
+      "Muscle's unique code, meant to be used for app translation and other facilities",
     example: "occipitofrontalis",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   code?: string;
-
 
   @ApiProperty({
     enum: BaseBodyPartEnum,
@@ -48,17 +44,16 @@ export class CreateBaseMuscleDto {
   @IsEnum(BaseBodyPartEnum)
   bodyPart: BaseBodyPartEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Muscle illustration icon Url",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/muscle-occipitofrontalis-illustration.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/muscle-occipitofrontalis-illustration.png",
     required: true,
   })
   @IsNotEmpty()
   @IsString()
   iconUrl: string;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

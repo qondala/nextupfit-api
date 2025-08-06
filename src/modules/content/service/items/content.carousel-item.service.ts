@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentCarouselItemEntity } from "../../entity/items";
-import { CreateContentCarouselItemDto, UpdateContentCarouselItemDto } from "../../dto";
+import {
+  CreateContentCarouselItemDto,
+  UpdateContentCarouselItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentCarouselItemService {
@@ -14,12 +17,17 @@ export class ContentCarouselItemService {
     private readonly repository: Repository<ContentCarouselItemEntity>,
   ) {}
 
-  async create(dto: CreateContentCarouselItemDto): Promise<ContentCarouselItemEntity> {
+  async create(
+    dto: CreateContentCarouselItemDto,
+  ): Promise<ContentCarouselItemEntity> {
     const entity = this.repository.create(dto);
     return this.repository.save(entity);
   }
 
-  async findAll(carouselId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentCarouselItemEntity>> {
+  async findAll(
+    carouselId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentCarouselItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -46,7 +54,10 @@ export class ContentCarouselItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentCarouselItemDto): Promise<ContentCarouselItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentCarouselItemDto,
+  ): Promise<ContentCarouselItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

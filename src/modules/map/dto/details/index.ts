@@ -1,1 +1,1 @@
-export * from './details.map.dto';
+export * from "./details.map.dto";

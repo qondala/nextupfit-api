@@ -31,7 +31,7 @@ import { UserModule } from "@app/module/user/user.module";
         UserRole.nutritionist,
         UserRole.instructor,
         UserRole.owner,
-      ] 
+      ],
     },
   ],
   exports: [

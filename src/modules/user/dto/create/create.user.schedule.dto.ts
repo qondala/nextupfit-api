@@ -3,9 +3,7 @@ import { BaseSchedulableEnum } from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
 import { IsBoolean, IsDate, IsEnum, IsInt, IsNotEmpty } from "class-validator";
 
-
 export class CreateUserScheduleDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",

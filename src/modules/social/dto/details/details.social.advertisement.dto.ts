@@ -1,18 +1,13 @@
-import {
-  IsOptional,
-  IsString,
-  IsEnum,
-  IsInt
-} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-
-import { SwaggerType } from "@app/common/types";
-import { SocialAdvertisementActionEnum } from "../../types";
-import { DetailsContentDto } from "@app/module/content/dto";
+import { IsOptional, IsString, IsEnum, IsInt } from "class-validator";
 import { Type } from "class-transformer";
 
-export class DetailsSocialAdvertisementDto {
+import { SwaggerType } from "@app/common/types";
+import { DetailsContentDto } from "@app/module/content/dto";
 
+import { SocialAdvertisementActionEnum } from "../../types";
+
+export class DetailsSocialAdvertisementDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "ID of the program related to the advertisement",
@@ -52,7 +47,8 @@ export class DetailsSocialAdvertisementDto {
   @ApiProperty({
     enum: SocialAdvertisementActionEnum,
     enumName: "SocialAdvertisementActionEnum",
-    description: "Defines what happens when a user interacts with the advertisement",
+    description:
+      "Defines what happens when a user interacts with the advertisement",
     example: SocialAdvertisementActionEnum.openGymPage,
     required: true,
   })
@@ -61,7 +57,8 @@ export class DetailsSocialAdvertisementDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: "URL of the page to open when a user clicks on the advertisement",
+    description:
+      "URL of the page to open when a user clicks on the advertisement",
     example: "https://example.com",
     required: false,
   })
@@ -78,12 +75,11 @@ export class DetailsSocialAdvertisementDto {
   @IsInt()
   contentId: number;
 
-
   @ApiProperty({
     type: SwaggerType.DATE,
     description: "Date when the advertisement was created",
     example: "2022-01-01T00:00:00.000Z",
-    format: 'date-time',
+    format: "date-time",
     required: true,
   })
   createdAt: Date;
@@ -92,11 +88,10 @@ export class DetailsSocialAdvertisementDto {
     type: SwaggerType.DATE,
     description: "Date when the advertisement was last updated",
     example: "2022-01-01T00:00:00.000Z",
-    format: 'date-time',
+    format: "date-time",
     required: true,
   })
   updatedAt: Date;
-
 
   @ApiProperty({
     type: () => DetailsContentDto,

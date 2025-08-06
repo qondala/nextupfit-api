@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
@@ -7,7 +13,7 @@ export class CreateBaseRecipeDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     maxLength: 255,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -16,7 +22,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -24,7 +30,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -32,7 +38,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -40,7 +46,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -48,7 +54,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -56,7 +62,7 @@ export class CreateBaseRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -65,7 +71,7 @@ export class CreateBaseRecipeDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     required: false,
-    maxLength: 255
+    maxLength: 255,
   })
   @IsOptional()
   @IsString()
@@ -75,7 +81,7 @@ export class CreateBaseRecipeDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
-    default: 1
+    default: 1,
   })
   @IsOptional()
   @IsInt()
@@ -84,7 +90,7 @@ export class CreateBaseRecipeDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsInt()

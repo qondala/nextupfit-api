@@ -1,25 +1,11 @@
-import {
-  Injectable
-} from "@nestjs/common";
-import {
-  InjectRepository
-} from "@nestjs/typeorm";
-import {
-  Repository
-} from "typeorm";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import {
-  ContentTextareaEntity
-} from "../entity";
-import {
-  CreateContentTextareaDto,
-  UpdateContentTextareaDto
-} from "../dto";
+import { ContentTextareaEntity } from "../entity";
+import { CreateContentTextareaDto, UpdateContentTextareaDto } from "../dto";
 
 @Injectable()
 export class ContentTextareaService {
@@ -32,7 +18,10 @@ export class ContentTextareaService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentTextareaEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentTextareaEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -58,11 +47,16 @@ export class ContentTextareaService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentTextareaEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentTextareaEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 
-  async update(id: number, dto: UpdateContentTextareaDto): Promise<ContentTextareaEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentTextareaDto,
+  ): Promise<ContentTextareaEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

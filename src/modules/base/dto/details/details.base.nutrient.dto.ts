@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseNutrientGroupEnum } from "../../types";
@@ -9,7 +15,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.INTEGER,
     description: "Record ID",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -19,7 +25,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.STRING,
     description: "Nutrient name",
     example: "Carbohydrates",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -29,7 +35,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.STRING,
     description: "Description of the nutrient",
     example: "Carbohydrates provide energy.",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -39,7 +45,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.STRING,
     description: "Brief hint about the nutrient",
     example: "Measured to track sugar levels.",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -50,7 +56,7 @@ export class DetailsBaseNutrientDto {
     enumName: "BaseNutrientGroupEnum",
     description: "Nutrient group",
     example: BaseNutrientGroupEnum.carbohydrates,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsEnum(BaseNutrientGroupEnum)
@@ -60,7 +66,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.STRING,
     description: "Nutrient abbreviation",
     example: "Carbs",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -70,7 +76,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.INTEGER,
     description: "Base unit ID",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -80,7 +86,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.INTEGER,
     description: "Display order",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -90,7 +96,7 @@ export class DetailsBaseNutrientDto {
     type: SwaggerType.STRING,
     description: "Unique code/slug",
     example: "carbs",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -98,17 +104,17 @@ export class DetailsBaseNutrientDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record creation timestamp",
-    required: true
+    required: true,
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record last update timestamp",
-    required: true
+    required: true,
   })
   updatedAt: Date;
 }

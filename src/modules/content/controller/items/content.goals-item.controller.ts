@@ -64,7 +64,9 @@ export class ContentGoalsItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentGoalsItemDto): Promise<DetailsContentGoalsItemDto> {
+  async create(
+    @Body() dto: CreateContentGoalsItemDto,
+  ): Promise<DetailsContentGoalsItemDto> {
     return await this.goalsItemService.create(dto);
   }
 
@@ -130,7 +132,9 @@ export class ContentGoalsItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentGoalsItemDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentGoalsItemDto> {
     return await this.goalsItemService.findOne(id);
   }
 

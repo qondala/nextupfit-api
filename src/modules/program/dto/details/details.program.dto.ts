@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 
 import {
   IsNotEmpty,
@@ -14,40 +12,24 @@ import {
   IsInt,
 } from "class-validator";
 
-import {
-  Type
-} from "class-transformer";
+import { Type } from "class-transformer";
 
+import { SwaggerType } from "@app/common/types";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-
-import {
-  DetailsBaseSociologyDto
-} from "@app/module/base/dto";
-import {
-  DetailsGymDto,
-  DetailsGymManagerDto
-} from "@app/module/gym/dto";
-import {
-  DetailsSocialRatingsDto
-} from "@app/module/social/dto/details";
+import { DetailsBaseSociologyDto } from "@app/module/base/dto";
+import { DetailsGymDto, DetailsGymManagerDto } from "@app/module/gym/dto";
+import { DetailsSocialRatingsDto } from "@app/module/social/dto/details";
 
 import {
   ProgramAccessibilityEnum,
   ProgramStatusEnum,
   ProgramTypeEnum,
-  ProgramVisibilityEnum
+  ProgramVisibilityEnum,
 } from "../../types";
-import {
-  DetailsProgramStepDto,
-  DetailsProgramSubscriptionPlanDto
-} from ".";
-
+import { DetailsProgramStepDto } from "./details.program.step.dto";
+import { DetailsProgramSubscriptionPlanDto } from "./details.program.subscription-plan.dto";
 
 export class DetailsProgramDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -58,7 +40,6 @@ export class DetailsProgramDto {
   @IsNumber()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program name",
@@ -68,7 +49,6 @@ export class DetailsProgramDto {
   @IsNotEmpty()
   @IsString()
   name: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -88,7 +68,6 @@ export class DetailsProgramDto {
   @IsOptional()
   @IsInt()
   gymId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -110,7 +89,6 @@ export class DetailsProgramDto {
   @IsNumber()
   ownerManagerId: number;
 
-
   @ApiProperty({
     description: "Program type",
     enum: ProgramTypeEnum,
@@ -121,7 +99,6 @@ export class DetailsProgramDto {
   })
   @IsEnum(ProgramTypeEnum)
   type: ProgramTypeEnum;
-
 
   @ApiProperty({
     description: "Program status",
@@ -134,110 +111,112 @@ export class DetailsProgramDto {
   @IsEnum(ProgramStatusEnum)
   status: ProgramStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
   @IsString()
   iconUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
     required: false,
   })
   @IsString()
   coverUrl?: string;
 
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Program video URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/video/upload/v1697110655/program/videos/my-program-video.mp4",
+    required: false,
+  })
+  @IsString()
+  videoUrl?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Program attendees count",
     example: 5000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   attendeesCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   viewsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number times program was rated",
     example: 3000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration of the program",
     example: 2,
     required: false,
-    default: 2
+    default: 2,
   })
   @IsOptional()
   @IsNumber()
   duration?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
-    default: 16
+    default: 16,
   })
   @IsOptional()
   @IsNumber()
   durationUnitId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   difficultyLevel?: number;
-
 
   @ApiProperty({
     type: () => DetailsGymDto,
@@ -249,7 +228,6 @@ export class DetailsProgramDto {
   @ValidateNested()
   @Type(() => DetailsGymDto)
   gym?: DetailsGymDto;
-
 
   @ApiProperty({
     type: () => DetailsProgramStepDto,
@@ -263,7 +241,6 @@ export class DetailsProgramDto {
   @Type(() => DetailsProgramStepDto)
   steps?: DetailsProgramStepDto[];
 
-
   @ApiProperty({
     type: () => DetailsGymManagerDto,
     isArray: true,
@@ -275,7 +252,6 @@ export class DetailsProgramDto {
   @ValidateNested({ each: true })
   @Type(() => DetailsGymManagerDto)
   managers?: DetailsGymManagerDto[];
-
 
   @ApiProperty({
     type: () => DetailsBaseSociologyDto,
@@ -289,7 +265,6 @@ export class DetailsProgramDto {
   @Type(() => DetailsBaseSociologyDto)
   audience?: DetailsBaseSociologyDto[];
 
-
   @ApiProperty({
     type: () => DetailsProgramSubscriptionPlanDto,
     isArray: true,
@@ -302,7 +277,6 @@ export class DetailsProgramDto {
   @Type(() => DetailsProgramSubscriptionPlanDto)
   subscriptionPlans?: DetailsProgramSubscriptionPlanDto[];
 
-
   @ApiProperty({
     type: () => DetailsSocialRatingsDto,
     title: "DetailsSocialRatingsDto",
@@ -313,32 +287,31 @@ export class DetailsProgramDto {
   @Type(() => DetailsSocialRatingsDto)
   rating?: DetailsSocialRatingsDto;
 
-
   @ApiProperty({
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
-    required: true
+    required: true,
   })
   accessibility: ProgramAccessibilityEnum;
 
   @ApiProperty({
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
-    required: true
+    required: true,
   })
   visibility: ProgramVisibilityEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   authorizedMembershipPlanIds?: number[];
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   authorizedProgramSubscriptionPlanIds?: number[];
 }

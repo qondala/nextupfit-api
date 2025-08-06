@@ -1,27 +1,17 @@
-import {
-  IsNumber,
-  IsString,
-  IsEnum,
-  IsNotEmpty,
-  IsInt,
-  IsDate
-} from "class-validator";
+import { IsNumber, IsString, IsEnum, IsNotEmpty, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
-
+import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 
 export class CreateProgramSubscriptionPlanDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Program subscription plan",
-    example:"Starter",
+    example: "Starter",
     required: true,
   })
   @IsString()
   planName: string;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
@@ -32,7 +22,6 @@ export class CreateProgramSubscriptionPlanDto {
   @IsNumber()
   price: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Trial plan number days",
@@ -41,7 +30,6 @@ export class CreateProgramSubscriptionPlanDto {
   })
   @IsNumber()
   trialNumberDays?: number;
-
 
   @ApiProperty({
     enum: BaseSubscriptionPlanPeriodicityEnum,
@@ -53,26 +41,25 @@ export class CreateProgramSubscriptionPlanDto {
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
   periodicity: BaseSubscriptionPlanPeriodicityEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Subscription plan description",
-    example: "This plan allows you to start with the mimimum budget and upgrade later",
+    example:
+      "This plan allows you to start with the mimimum budget and upgrade later",
     required: false,
   })
   @IsString()
   description: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Number activities accessible by the user within the current trial plan",
+    description:
+      "Number activities accessible by the user within the current trial plan",
     example: 3,
     required: false,
   })
   @IsNumber()
   trialNumberProgramActivities?: number;
-
 
   @ApiProperty({
     description: "Program id",

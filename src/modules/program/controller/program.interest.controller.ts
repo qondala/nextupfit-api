@@ -9,6 +9,7 @@ import {
   Query,
   HttpStatus,
   ParseIntPipe,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -20,7 +21,8 @@ import {
 } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import { ProgramInterestService } from "../service/program.interest.service";
+import { ProgramInterestService } from "../service";
+
 import {
   CreateProgramInterestDto,
   UpdateProgramInterestDto,
@@ -28,11 +30,12 @@ import {
   PaginatedDetailsProgramInterestDto,
   ProgramFindCriteriaInterestDto,
   PaginatedDetailsProgramDto,
+  ProgramFindOrderInterestEnum,
 } from "../dto";
-import { InterestPaginationDto, PaginationOptionsDto } from "@app/common/dto";
+import { PaginationOptionsDto } from "@app/common/dto";
 
-@ApiTags("Program Interest")
-@Controller("program-interests")
+@ApiTags("Program module endpoints")
+@Controller("program/interest")
 export class ProgramInterestController {
   constructor(private readonly service: ProgramInterestService) {}
 
@@ -54,7 +57,9 @@ export class ProgramInterestController {
     status: HttpStatus.BAD_REQUEST,
     description: "Invalid input data",
   })
-  async create(@Body() createDto: CreateProgramInterestDto): Promise<DetailsProgramInterestDto> {
+  async create(
+    @Body() createDto: CreateProgramInterestDto,
+  ): Promise<DetailsProgramInterestDto> {
     return this.service.create(createDto);
   }
 
@@ -65,12 +70,12 @@ export class ProgramInterestController {
   })
   @ApiQuery({
     type: ProgramFindCriteriaInterestDto,
-    description: 'Program interests find criteria',
+    description: "Program interests find criteria",
     required: true,
   })
   @ApiQuery({
     type: PaginationOptionsDto,
-    description: 'Pagination options',
+    description: "Pagination options",
     required: true,
   })
   @ApiResponse({
@@ -97,20 +102,33 @@ export class ProgramInterestController {
     required: true,
   })
   @ApiQuery({
-    type: InterestPaginationDto,
-    description: 'Pagination options',
+    type: PaginationOptionsDto,
+    description: "Pagination options",
+    required: true,
+  })
+  @ApiQuery({
+    name: "order",
+    enum: ProgramFindOrderInterestEnum,
+    enumName: "ProgramFindOrderInterestEnum",
+    description: "Order by",
     required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "User program interests retrieved successfully",
+    description: "User interested programs retrieved successfully",
     type: PaginatedDetailsProgramDto,
   })
   async getUserInterests(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: InterestPaginationDto,
+    @Query() pagination: PaginationOptionsDto,
+    @Query("order", new ParseEnumPipe(ProgramFindOrderInterestEnum))
+    order: ProgramFindOrderInterestEnum,
   ): Promise<PaginatedDetailsProgramDto> {
-    return await this.service.getProgramsByUserInterests(userId, pagination);
+    return await this.service.getUserInterestedPrograms(
+      userId,
+      pagination,
+      order,
+    );
   }
 
   @Get(":id")
@@ -133,7 +151,9 @@ export class ProgramInterestController {
     status: HttpStatus.NOT_FOUND,
     description: "Program interest not found",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramInterestDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramInterestDto> {
     return this.service.findOne(id);
   }
 

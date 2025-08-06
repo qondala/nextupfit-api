@@ -1,16 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsEnum,
-  IsInt,
-} from "class-validator";
+import { IsNumber, IsOptional, IsString, IsEnum, IsInt } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-import { ProgramAccessibilityEnum, ProgramStatusEnum, ProgramTypeEnum, ProgramVisibilityEnum } from "../../types";
-
+import {
+  ProgramAccessibilityEnum,
+  ProgramStatusEnum,
+  ProgramTypeEnum,
+  ProgramVisibilityEnum,
+} from "../../types";
 
 export class UpdateProgramDto {
   @ApiProperty({
@@ -42,7 +40,6 @@ export class UpdateProgramDto {
   @IsNumber()
   gymId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
@@ -52,7 +49,7 @@ export class UpdateProgramDto {
   @IsOptional()
   @IsInt()
   ownerUserId?: number;
-  
+
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
@@ -73,7 +70,6 @@ export class UpdateProgramDto {
   @IsEnum(ProgramTypeEnum)
   type?: ProgramTypeEnum;
 
-
   @ApiProperty({
     enum: ProgramStatusEnum,
     enumName: "ProgramStatusEnum",
@@ -84,107 +80,111 @@ export class UpdateProgramDto {
   @IsEnum(ProgramStatusEnum)
   status?: ProgramStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
   @IsOptional()
   @IsString()
   iconUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/covers/my-program-cover.png",
     required: false,
   })
   @IsOptional()
   @IsString()
   coverUrl?: string;
 
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Program video URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/video/upload/v1697110655/program/videos/my-program-video.mp4",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Program attendees count",
     example: 5000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsInt()
   attendeesCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsInt()
   viewsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number times program was rated",
     example: 3000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsInt()
   ratingsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration of the program",
     example: 2,
     required: false,
-    default: 2
+    default: 2,
   })
   @IsOptional()
   @IsInt()
   duration?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
-    default: 16
+    default: 16,
   })
   @IsOptional()
   @IsInt()
   durationUnitId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsInt()
@@ -193,7 +193,7 @@ export class UpdateProgramDto {
   @ApiProperty({
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
-    required: false
+    required: false,
   })
   @IsOptional()
   accessibility?: ProgramAccessibilityEnum;
@@ -201,7 +201,7 @@ export class UpdateProgramDto {
   @ApiProperty({
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
-    required: false
+    required: false,
   })
   @IsOptional()
   visibility?: ProgramVisibilityEnum;
@@ -209,7 +209,7 @@ export class UpdateProgramDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   @IsOptional()
   authorizedMembershipPlanIds?: number[];
@@ -217,9 +217,8 @@ export class UpdateProgramDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    required: false
+    required: false,
   })
   @IsOptional()
   authorizedProgramSubscriptionPlanIds?: number[];
 }
-

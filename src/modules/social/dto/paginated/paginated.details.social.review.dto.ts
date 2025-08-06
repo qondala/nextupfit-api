@@ -5,15 +5,13 @@ import { Type } from "class-transformer";
 import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsSocialReviewDto } from "../details";
 
-
 export class PaginatedDetailsSocialReviewDto extends PaginatedResponseDto<DetailsSocialReviewDto> {
-
   @ApiProperty({
     type: () => DetailsSocialReviewDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of reviews',
-    required: true
+    description: "List of reviews",
+    required: true,
   })
   @IsDefined()
   @IsArray()

@@ -1,16 +1,10 @@
-import {
-  IsOptional,
-  IsString,
-  IsEnum,
-  IsInt
-} from "class-validator";
+import { IsOptional, IsString, IsEnum, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 import { SocialAdvertisementActionEnum } from "../../types";
 
 export class UpdateSocialAdvertisementDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "ID of the program related to the advertisement",
@@ -50,7 +44,8 @@ export class UpdateSocialAdvertisementDto {
   @ApiProperty({
     enum: SocialAdvertisementActionEnum,
     enumName: "SocialAdvertisementActionEnum",
-    description: "Defines what happens when a user interacts with the advertisement",
+    description:
+      "Defines what happens when a user interacts with the advertisement",
     example: SocialAdvertisementActionEnum.openGymPage,
     required: false,
   })
@@ -59,7 +54,8 @@ export class UpdateSocialAdvertisementDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: "URL of the page to open when a user clicks on the advertisement",
+    description:
+      "URL of the page to open when a user clicks on the advertisement",
     example: "https://example.com",
     required: false,
   })

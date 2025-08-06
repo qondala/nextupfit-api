@@ -90,7 +90,6 @@ export class PaymentController {
     return await this.paymentService.findAll({ page, limit }, userId);
   }
 
-
   @Get("gym/:gymId")
   @ApiOperation({
     summary: "Get payments received by gym paginated",
@@ -121,9 +120,11 @@ export class PaymentController {
     @Query("page", ParseIntPipe) page: number = 1,
     @Query("limit", ParseIntPipe) limit: number = 10,
   ): Promise<PaginatedDetailsPaymentDto> {
-    return this.paymentService.findAllPaymentsReceivedByGym(gymId, { page, limit });
+    return this.paymentService.findAllPaymentsReceivedByGym(gymId, {
+      page,
+      limit,
+    });
   }
-
 
   @Get("manager/:managerId")
   @ApiOperation({
@@ -155,7 +156,10 @@ export class PaymentController {
     @Query("page", ParseIntPipe) page: number = 1,
     @Query("limit", ParseIntPipe) limit: number = 10,
   ): Promise<PaginatedDetailsPaymentDto> {
-    return this.paymentService.findAllPaymentsReceivedByManager(managerId, { page, limit });
+    return this.paymentService.findAllPaymentsReceivedByManager(managerId, {
+      page,
+      limit,
+    });
   }
 
   @Get("user/userId/:userId/payment-cart-id/:paymentCartId")
@@ -194,9 +198,11 @@ export class PaymentController {
     @Query("page", ParseIntPipe) page: number = 1,
     @Query("limit", ParseIntPipe) limit: number = 10,
   ): Promise<PaginatedDetailsPaymentDto> {
-    return this.paymentService.userPaymentPerCartId(userId, paymentCartId, { page, limit });
+    return this.paymentService.userPaymentPerCartId(userId, paymentCartId, {
+      page,
+      limit,
+    });
   }
-
 
   @Get(":id")
   @ApiParam({
@@ -208,7 +214,9 @@ export class PaymentController {
     status: HttpStatus.OK,
     type: DetailsPaymentDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsPaymentDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsPaymentDto> {
     return await this.paymentService.findOne(id);
   }
 

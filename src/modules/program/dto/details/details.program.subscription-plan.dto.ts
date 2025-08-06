@@ -1,7 +1,4 @@
-
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsInt,
   IsString,
@@ -11,25 +8,15 @@ import {
   ValidateNested,
   IsNumber,
   IsOptional,
-  IsBoolean
+  IsBoolean,
 } from "class-validator";
-import {
-  Type
-} from "class-transformer";
+import { Type } from "class-transformer";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  BaseSubscriptionPlanPeriodicityEnum
-} from "@app/module/base/types";
-import {
-  DetailsContentDto
-} from "@app/module/content/dto";
-
+import { SwaggerType } from "@app/common/types";
+import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
+import { DetailsContentDto } from "@app/module/content/dto";
 
 export class DetailsProgramSubscriptionPlanDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -40,16 +27,14 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Program subscription plan",
-    example:"Starter",
+    example: "Starter",
     required: true,
   })
   @IsString()
   planName: string;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
@@ -60,7 +45,6 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsNumber()
   price: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Trial plan number days",
@@ -70,7 +54,6 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsOptional()
   @IsInt()
   trialNumberDays?: number;
-
 
   @ApiProperty({
     enum: BaseSubscriptionPlanPeriodicityEnum,
@@ -83,27 +66,26 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
   periodicity: BaseSubscriptionPlanPeriodicityEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Subscription plan description",
-    example: "This plan allows you to start with the mimimum budget and upgrade later",
+    example:
+      "This plan allows you to start with the mimimum budget and upgrade later",
     required: false,
   })
   @IsString()
   description: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Number activities accessible by the user within the current trial plan",
+    description:
+      "Number activities accessible by the user within the current trial plan",
     example: 3,
     required: false,
   })
   @IsOptional()
   @IsInt()
   trialNumberProgramActivities?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -114,7 +96,6 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsNotEmpty()
   @IsInt()
   programId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -135,7 +116,6 @@ export class DetailsProgramSubscriptionPlanDto {
   @IsOptional()
   @IsBoolean()
   active: boolean;
-
 
   @ApiProperty({
     type: () => DetailsContentDto,

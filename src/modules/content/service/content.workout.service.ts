@@ -18,7 +18,10 @@ export class ContentWorkoutService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentWorkoutEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentWorkoutEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,11 +47,16 @@ export class ContentWorkoutService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentWorkoutEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentWorkoutEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 
-  async update(id: number, dto: UpdateContentWorkoutDto): Promise<ContentWorkoutEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentWorkoutDto,
+  ): Promise<ContentWorkoutEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

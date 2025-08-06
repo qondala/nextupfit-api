@@ -8,7 +8,7 @@ import {
   Patch,
   Post,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -18,7 +18,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiQuery,
-  ApiTags
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -28,7 +28,7 @@ import {
   CreateUserRecipeDto,
   UpdateUserRecipeDto,
   DetailsUserRecipeDto,
-  PaginatedDetailsUserRecipeDto
+  PaginatedDetailsUserRecipeDto,
 } from "../dto";
 import { UserRecipeService } from "../service";
 
@@ -41,92 +41,97 @@ export class UserRecipeController {
   @Post()
   @ApiOperation({
     summary: "Create user recipe",
-    operationId: "createUserRecipe"
+    operationId: "createUserRecipe",
   })
   @ApiBody({
     required: true,
-    type: CreateUserRecipeDto
+    type: CreateUserRecipeDto,
   })
   @ApiCreatedResponse({
     description: "User recipe created successfully.",
     type: DetailsUserRecipeDto,
-    status: HttpStatus.CREATED
+    status: HttpStatus.CREATED,
   })
-  async create(@Body() dto: CreateUserRecipeDto): Promise<DetailsUserRecipeDto> {
+  async create(
+    @Body() dto: CreateUserRecipeDto,
+  ): Promise<DetailsUserRecipeDto> {
     return await this.userRecipeService.create(dto);
   }
 
   @Get("user/:userId")
   @ApiOperation({
     summary: "Get all user recipes",
-    operationId: "findAllUserRecipes"
+    operationId: "findAllUserRecipes",
   })
   @ApiParam({
     name: "userId",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User id",
-    example: 123
+    example: 123,
   })
   @ApiQuery({
     name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
     name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiOkResponse({
     description: "List of user recipes.",
-    type: PaginatedDetailsUserRecipeDto
+    type: PaginatedDetailsUserRecipeDto,
   })
   async findAll(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsUserRecipeDto> {
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserRecipeDto> {
     return await this.userRecipeService.findAll(userId, pagination);
   }
 
   @Get(":id")
   @ApiOperation({
     summary: "Get user recipe by id",
-    operationId: "findUserRecipeById"
+    operationId: "findUserRecipeById",
   })
   @ApiParam({
     name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiOkResponse({
     description: "User recipe by id.",
-    type: DetailsUserRecipeDto
+    type: DetailsUserRecipeDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserRecipeDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsUserRecipeDto> {
     return await this.userRecipeService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update user recipe",
-    operationId: "updateUserRecipe"
+    operationId: "updateUserRecipe",
   })
   @ApiParam({
     name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiBody({
     required: true,
-    type: UpdateUserRecipeDto
+    type: UpdateUserRecipeDto,
   })
   @ApiOkResponse({
     description: "Updated user recipe.",
-    type: DetailsUserRecipeDto
+    type: DetailsUserRecipeDto,
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateUserRecipeDto
+    @Body() dto: UpdateUserRecipeDto,
   ): Promise<DetailsUserRecipeDto> {
     return await this.userRecipeService.update(id, dto);
   }
@@ -134,16 +139,16 @@ export class UserRecipeController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete user recipe",
-    operationId: "removeUserRecipe"
+    operationId: "removeUserRecipe",
   })
   @ApiParam({
     name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiOkResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "User recipe deleted successfully."
+    description: "User recipe deleted successfully.",
   })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.userRecipeService.remove(id);

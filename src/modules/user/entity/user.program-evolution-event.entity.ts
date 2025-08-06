@@ -3,14 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import {
   ProgramEvolutionEventTypeEnum,
-  ProgramItemTypeEnum
+  ProgramItemCompositeDto,
+  ProgramItemTypeEnum,
 } from "@app/module/program/types";
 import { SocialActorEnum } from "@app/module/social/types";
-
 
 @Entity("user_program_evolution_event")
 export class UserProgramEvolutionEntity {
@@ -70,4 +70,7 @@ export class UserProgramEvolutionEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // Transcient
+  programItemComposite?: ProgramItemCompositeDto;
 }

@@ -1,17 +1,17 @@
-import { IsDefined, IsNumber, IsOptional, ValidateNested } from "class-validator";
+import { IsDefined, IsInt, IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
+import { SwaggerType } from "@app/common/types";
 
 import { GeoPointDto } from "@app/common/dto";
-  
-export class CreateMapDto {
 
+export class CreateMapDto {
   @ApiProperty({
     type: () => GeoPointDto,
     description: "Users/Gym location",
     example: {
-      type: 'Point',
-      coordinates: [-123.456, 123.456]
+      type: "Point",
+      coordinates: [-123.456, 123.456],
     },
     required: true,
   })
@@ -20,38 +20,36 @@ export class CreateMapDto {
   @Type(() => GeoPointDto)
   location: GeoPointDto;
 
-
   @ApiProperty({
-    type: 'number',
+    type: SwaggerType.INTEGER,
     description: "Gym id",
     example: 1234,
     required: false,
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   gymId?: number;
 
-
   @ApiProperty({
-    type: 'number',
-    description: "User id",
+    type: SwaggerType.INTEGER,
+    description: "Manager id",
     example: 23456,
     required: false,
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
-  userId?: number;
+  @IsInt()
+  managerId?: number;
 
   @ApiProperty({
-    type: 'number',
-    description: "For userProfile column, we used a smallint type instead of user_profile_type_enum, in order to reduce table size when data grow. userProfile = 0 (Gym), 1(Manager), 2(Attendee)",
-    example: 0,
+    type: SwaggerType.INTEGER,
+    description: "Manager id",
+    example: 23456,
     required: false,
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
-  userProfile?: number;
+  @IsInt()
+  userId?: number;
 }

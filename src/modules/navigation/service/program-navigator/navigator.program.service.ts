@@ -6,15 +6,11 @@ import { ProgramStepService } from "@app/module/program/service";
 import { ProgramNavigationReasonEnum } from "../../types";
 import { ProgramNavigationNode } from "../../dto";
 
-
 @Injectable()
 export class NavigatorProgramService {
-  constructor(
-    private readonly programStepService: ProgramStepService,
-  ) {}
+  constructor(private readonly programStepService: ProgramStepService) {}
 
   async next(current: ProgramNavigationNode): Promise<ProgramNavigationNode> {
-    
     const next = {
       programItemType: ProgramItemTypeEnum.step,
       programItemId: null,
@@ -30,7 +26,9 @@ export class NavigatorProgramService {
       return next;
     }
 
-    const programStep = await this.programStepService.findFirst(current.programItemId);
+    const programStep = await this.programStepService.findFirst(
+      current.programItemId,
+    );
 
     // If the program has no step
     if (!programStep) {
@@ -48,7 +46,9 @@ export class NavigatorProgramService {
     return next;
   }
 
-  async previous(current: ProgramNavigationNode): Promise<ProgramNavigationNode> {
+  async previous(
+    current: ProgramNavigationNode,
+  ): Promise<ProgramNavigationNode> {
     return current;
   }
 }

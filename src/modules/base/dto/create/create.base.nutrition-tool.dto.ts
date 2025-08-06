@@ -1,9 +1,4 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUrl
-} from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
@@ -13,7 +8,7 @@ export class CreateBaseNutritionToolDto {
     type: SwaggerType.STRING,
     description: "Tool name",
     example: "Blender",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -23,7 +18,7 @@ export class CreateBaseNutritionToolDto {
     type: SwaggerType.STRING,
     description: "Tool description",
     example: "A high-speed blender useful in nutrition plans",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -33,7 +28,7 @@ export class CreateBaseNutritionToolDto {
     type: SwaggerType.STRING,
     description: "Image URL of the tool",
     example: "https://cdn.example.com/blender.png",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsUrl()

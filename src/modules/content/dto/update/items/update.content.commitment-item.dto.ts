@@ -8,7 +8,7 @@ export class UpdateContentCommitmentItemDto {
     type: SwaggerType.INTEGER,
     description: "commitment id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -18,7 +18,7 @@ export class UpdateContentCommitmentItemDto {
     type: SwaggerType.INTEGER,
     description: "complete before",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -28,7 +28,7 @@ export class UpdateContentCommitmentItemDto {
     type: SwaggerType.INTEGER,
     description: "complete before time unit id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -38,7 +38,7 @@ export class UpdateContentCommitmentItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()

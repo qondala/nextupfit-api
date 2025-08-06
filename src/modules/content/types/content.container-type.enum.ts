@@ -9,5 +9,5 @@ export enum ContentContainerTypeEnum {
   coach = "coach",
   subscription = "subscription",
   advertisement = "advertisement",
-  socialUpdate = "socialUpdate"
+  socialUpdate = "socialUpdate",
 }

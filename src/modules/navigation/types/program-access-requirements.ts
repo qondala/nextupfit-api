@@ -6,7 +6,6 @@ import {
 } from "@app/module/program/types";
 
 export class ProgramAccessRequirements {
-
   status: ProgramStatusEnum | ProgramStepActivityStatusEnum;
 
   accessibility: ProgramAccessibilityEnum;

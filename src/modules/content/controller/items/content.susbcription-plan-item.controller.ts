@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiBody,
@@ -22,7 +34,6 @@ import {
 } from "../../dto";
 
 import { ContentSusbcriptionPlanItemService } from "../../service";
-
 
 @ApiTags("Content module endpoints")
 @ApiBearerAuth()
@@ -54,7 +65,9 @@ export class ContentSusbcriptionPlanItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentSusbcriptionPlanItemDto): Promise<DetailsContentSusbcriptionPlanItemDto> {
+  async create(
+    @Body() dto: CreateContentSusbcriptionPlanItemDto,
+  ): Promise<DetailsContentSusbcriptionPlanItemDto> {
     return await this.service.create(dto);
   }
 
@@ -83,7 +96,8 @@ export class ContentSusbcriptionPlanItemController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "List of content subscription plan items retrieved successfully",
+    description:
+      "List of content subscription plan items retrieved successfully",
     type: PaginatedDetailsContentSusbcriptionPlanItemDto,
   })
   @ApiResponse({
@@ -91,7 +105,8 @@ export class ContentSusbcriptionPlanItemController {
     description: "Unauthorized access",
   })
   async findAll(
-    @Param("contentSubscriptionPlanId", ParseIntPipe) contentSubscriptionPlanId: number,
+    @Param("contentSubscriptionPlanId", ParseIntPipe)
+    contentSubscriptionPlanId: number,
     @Query() query: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentSusbcriptionPlanItemDto> {
     return await this.service.findAll(contentSubscriptionPlanId, query);
@@ -120,7 +135,9 @@ export class ContentSusbcriptionPlanItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentSusbcriptionPlanItemDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentSusbcriptionPlanItemDto> {
     return await this.service.findOne(id);
   }
 

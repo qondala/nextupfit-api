@@ -1,16 +1,15 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-    OneToMany
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { BaseNutritionEntity } from ".";
 
 @Entity("base_nutrition_type")
 export class BaseNutritionTypeEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 

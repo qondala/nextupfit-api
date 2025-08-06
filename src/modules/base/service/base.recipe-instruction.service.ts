@@ -6,7 +6,7 @@ import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateBaseRecipeInstructionDto,
-  UpdateBaseRecipeInstructionDto
+  UpdateBaseRecipeInstructionDto,
 } from "../dto";
 import { BaseRecipeInstructionEntity } from "../entity";
 
@@ -14,18 +14,18 @@ import { BaseRecipeInstructionEntity } from "../entity";
 export class BaseRecipeInstructionService {
   constructor(
     @InjectRepository(BaseRecipeInstructionEntity)
-    private readonly instructionRepository: Repository<BaseRecipeInstructionEntity>
+    private readonly instructionRepository: Repository<BaseRecipeInstructionEntity>,
   ) {}
 
   async create(
-    createDto: CreateBaseRecipeInstructionDto
+    createDto: CreateBaseRecipeInstructionDto,
   ): Promise<BaseRecipeInstructionEntity> {
     const entity = this.instructionRepository.create(createDto);
     return this.instructionRepository.save(entity);
   }
 
   async findAll(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<BaseRecipeInstructionEntity>> {
     const qb = this.instructionRepository
       .createQueryBuilder("instruction")
@@ -46,8 +46,8 @@ export class BaseRecipeInstructionService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
@@ -57,7 +57,7 @@ export class BaseRecipeInstructionService {
 
   async update(
     id: number,
-    updateDto: UpdateBaseRecipeInstructionDto
+    updateDto: UpdateBaseRecipeInstructionDto,
   ): Promise<BaseRecipeInstructionEntity> {
     await this.instructionRepository.update(id, updateDto);
     return this.findOne(id);

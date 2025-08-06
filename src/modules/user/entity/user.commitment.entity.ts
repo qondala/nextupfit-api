@@ -46,6 +46,9 @@ export class UserCommitmentEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => UserCommitmentCompletedItemEntity, (item) => item.userCommitementId)
+  @OneToMany(
+    () => UserCommitmentCompletedItemEntity,
+    (item) => item.userCommitementId,
+  )
   completedItems: UserCommitmentCompletedItemEntity[];
 }

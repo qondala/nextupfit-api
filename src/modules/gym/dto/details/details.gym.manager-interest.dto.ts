@@ -38,7 +38,7 @@ export class DetailsGymManagerInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Creation date",
     required: true,
   })
@@ -46,7 +46,7 @@ export class DetailsGymManagerInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Update date",
     required: false,
   })

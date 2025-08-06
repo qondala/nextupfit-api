@@ -13,5 +13,5 @@ export enum BaseWorkoutDisciplineEnum {
   navigating = "navigating",
   weightlifting = "weightlifting",
   tennis = "tennis",
-  skiing = "skiing"
+  skiing = "skiing",
 }

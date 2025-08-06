@@ -6,7 +6,7 @@ import {
   JoinColumn,
   OneToMany,
   UpdateDateColumn,
-  OneToOne
+  OneToOne,
 } from "typeorm";
 
 import { GymManagerSpecialityEnum } from "../types";
@@ -14,7 +14,7 @@ import {
   GymManagerOverviewEntity,
   GymManagerQualificationEntity,
   GymManagerSpecializedInNutritionEntity,
-  GymManagerSpecializedInWorkoutEntity
+  GymManagerSpecializedInWorkoutEntity,
 } from "./";
 import { UserEntity } from "@app/module/user/entity";
 import { GymManagerInterestEntity } from "./gym.manager-interest.entity";
@@ -33,11 +33,10 @@ export class GymManagerEntity {
   @Column({ nullable: false })
   managerOverviewId: number;
 
-
   @Column({
     nullable: false,
     type: "enum",
-    enum: GymManagerSpecialityEnum
+    enum: GymManagerSpecialityEnum,
   })
   speciality: GymManagerSpecialityEnum;
 
@@ -74,26 +73,33 @@ export class GymManagerEntity {
   @Column({ nullable: true })
   level: number;
 
-
   @OneToOne(() => GymManagerOverviewEntity)
-  @JoinColumn({ name: 'managerOverviewId' })
+  @JoinColumn({ name: "managerOverviewId", referencedColumnName: "id" })
   overview: GymManagerOverviewEntity;
 
-
   @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'managerUserId' })
+  @JoinColumn({ name: "managerUserId", referencedColumnName: "id" })
   user: UserEntity;
 
-  @OneToMany(() => GymManagerQualificationEntity, qualification => qualification.manager)
+  @OneToMany(
+    () => GymManagerQualificationEntity,
+    (qualification) => qualification.manager,
+  )
   qualifications: GymManagerQualificationEntity[];
 
-  @OneToMany(() => GymManagerSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.manager)
+  @OneToMany(
+    () => GymManagerSpecializedInWorkoutEntity,
+    (specializedWorkout) => specializedWorkout.manager,
+  )
   specializedWorkouts: GymManagerSpecializedInWorkoutEntity[];
 
-  @OneToMany(() => GymManagerSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.manager)
+  @OneToMany(
+    () => GymManagerSpecializedInNutritionEntity,
+    (specializedNutrition) => specializedNutrition.manager,
+  )
   specializedNutritions: GymManagerSpecializedInNutritionEntity[];
 
-  @OneToMany(() => GymManagerInterestEntity, interest => interest.manager)
+  @OneToMany(() => GymManagerInterestEntity, (interest) => interest.manager)
   interests: GymManagerInterestEntity[];
 
   @CreateDateColumn()

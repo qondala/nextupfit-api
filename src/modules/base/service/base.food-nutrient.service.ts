@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { BaseFoodNutrientEntity } from '../entity';
-import { CreateBaseFoodNutrientDto, UpdateBaseFoodNutrientDto } from '../dto';
-
+import { BaseFoodNutrientEntity } from "../entity";
+import { CreateBaseFoodNutrientDto, UpdateBaseFoodNutrientDto } from "../dto";
 
 @Injectable()
 export class BaseFoodNutrientService {
@@ -15,16 +14,22 @@ export class BaseFoodNutrientService {
     private readonly baseFoodNutrientRepository: Repository<BaseFoodNutrientEntity>,
   ) {}
 
-  async create(createBaseFoodNutrientDto: CreateBaseFoodNutrientDto): Promise<BaseFoodNutrientEntity> {
-    const newFoodNutrient = this.baseFoodNutrientRepository.create(createBaseFoodNutrientDto);
+  async create(
+    createBaseFoodNutrientDto: CreateBaseFoodNutrientDto,
+  ): Promise<BaseFoodNutrientEntity> {
+    const newFoodNutrient = this.baseFoodNutrientRepository.create(
+      createBaseFoodNutrientDto,
+    );
     return this.baseFoodNutrientRepository.save(newFoodNutrient);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -34,21 +39,22 @@ export class BaseFoodNutrientService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const searchTerm = `%${query}%`;
-    
+
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
-      where: [
-        { code: Like(searchTerm) }
-      ],
+      where: [{ code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -58,17 +64,20 @@ export class BaseFoodNutrientService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async findByFoodId(foodId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
+  async findByFoodId(
+    foodId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
       where: { foodId },
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -78,17 +87,20 @@ export class BaseFoodNutrientService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async findByNutrientId(nutrientId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
+  async findByNutrientId(
+    nutrientId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
       where: { nutrientId },
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -98,17 +110,20 @@ export class BaseFoodNutrientService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async findByCreatedByUserId(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
+  async findByCreatedByUserId(
+    userId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
       where: { createdByUserId: userId },
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' }
+      order: { id: "DESC" },
     });
 
     return {
@@ -118,8 +133,8 @@ export class BaseFoodNutrientService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -135,12 +150,15 @@ export class BaseFoodNutrientService {
     id: number,
     updateBaseFoodNutrientDto: UpdateBaseFoodNutrientDto,
   ): Promise<BaseFoodNutrientEntity | null> {
-    const result = await this.baseFoodNutrientRepository.update(id, updateBaseFoodNutrientDto);
-    
+    const result = await this.baseFoodNutrientRepository.update(
+      id,
+      updateBaseFoodNutrientDto,
+    );
+
     if (result.affected === 0) {
       return null;
     }
-    
+
     return this.findOne(id);
   }
 

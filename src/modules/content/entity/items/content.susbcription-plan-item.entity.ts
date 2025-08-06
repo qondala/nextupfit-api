@@ -1,4 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 import { ContentSusbcriptionPlanEntity } from "..";
 
@@ -27,13 +33,12 @@ export class ContentSusbcriptionPlanItemEntity {
   @Column({ nullable: true })
   icon?: string;
 
-
   @Column({
     type: "enum",
     enum: ContentTextStyleEnum,
     array: true,
     default: [ContentTextStyleEnum.none],
-    nullable: true
+    nullable: true,
   })
   textStyles: ContentTextStyleEnum[];
 

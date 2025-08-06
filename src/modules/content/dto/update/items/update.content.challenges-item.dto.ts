@@ -8,7 +8,7 @@ export class UpdateContentChallengesItemDto {
     type: SwaggerType.INTEGER,
     description: "challenge id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -28,7 +28,7 @@ export class UpdateContentChallengesItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()

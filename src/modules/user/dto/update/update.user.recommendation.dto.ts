@@ -2,9 +2,7 @@ import { IsOptional, IsDate, IsInt } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateUserRecommendationDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Recommended coach user Id",
@@ -14,7 +12,6 @@ export class UpdateUserRecommendationDto {
   @IsOptional()
   @IsInt()
   recommendedManagerUserId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -26,7 +23,6 @@ export class UpdateUserRecommendationDto {
   @IsInt()
   recommenderUserId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Recommendee user id",
@@ -36,7 +32,6 @@ export class UpdateUserRecommendationDto {
   @IsOptional()
   @IsInt()
   recommendeeUserId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -49,4 +44,3 @@ export class UpdateUserRecommendationDto {
   @IsDate()
   recommendationDate?: Date;
 }
-

@@ -11,7 +11,6 @@ import {
 import { SwaggerType } from "@app/common/types";
 import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
-
 export class CreateContentSusbcriptionPlanDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,

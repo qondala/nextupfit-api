@@ -1,13 +1,7 @@
-import {
-  IsInt,
-  IsOptional,
-  IsString,
-  IsUrl,
-} from "class-validator";
+import { IsInt, IsOptional, IsString, IsUrl } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-
 
 export class UpdateGymManagerQualificationDto {
   @ApiProperty({
@@ -20,7 +14,6 @@ export class UpdateGymManagerQualificationDto {
   @IsInt()
   managerUserId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Qualification name",
@@ -30,7 +23,6 @@ export class UpdateGymManagerQualificationDto {
   @IsOptional()
   @IsString()
   qualificationName?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -42,7 +34,6 @@ export class UpdateGymManagerQualificationDto {
   @IsString()
   institutionName?: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Year of obtention",
@@ -53,15 +44,14 @@ export class UpdateGymManagerQualificationDto {
   @IsInt()
   yearObtained?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Image of any document or manager's certificate",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/manager/docs/certificate.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/manager/docs/certificate.png",
     required: false,
   })
   @IsOptional()
   @IsUrl()
   imageUrl?: string;
 }
-

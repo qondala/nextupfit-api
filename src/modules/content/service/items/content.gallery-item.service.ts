@@ -2,33 +2,34 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentGalleryItemEntity } from "../../entity";
 
 import {
   CreateContentGalleryItemDto,
   UpdateContentGalleryItemDto,
-  DetailsContentGalleryItemDto
+  DetailsContentGalleryItemDto,
 } from "../../dto";
 
 @Injectable()
 export class ContentGalleryItemService {
   constructor(
     @InjectRepository(ContentGalleryItemEntity)
-    private readonly repository: Repository<ContentGalleryItemEntity>
+    private readonly repository: Repository<ContentGalleryItemEntity>,
   ) {}
 
-  async create(createDto: CreateContentGalleryItemDto): Promise<ContentGalleryItemEntity> {
+  async create(
+    createDto: CreateContentGalleryItemDto,
+  ): Promise<ContentGalleryItemEntity> {
     const entity = this.repository.create(createDto);
     const savedEntity = await this.repository.save(entity);
     return savedEntity;
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentGalleryItemEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentGalleryItemEntity>> {
     const { page, limit } = options;
     const skip = (page - 1) * limit;
 
@@ -62,12 +63,15 @@ export class ContentGalleryItemService {
     return entity;
   }
 
-  async update(id: number, updateDto: UpdateContentGalleryItemDto): Promise<ContentGalleryItemEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateContentGalleryItemDto,
+  ): Promise<ContentGalleryItemEntity> {
     const entity = await this.findOne(id);
-    
+
     Object.assign(entity, updateDto);
     const updatedEntity = await this.repository.save(entity);
-    
+
     return updatedEntity;
   }
 
@@ -75,7 +79,10 @@ export class ContentGalleryItemService {
     await this.repository.delete(id);
   }
 
-  async findByContentGalleryId(contentGalleryId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentGalleryItemEntity>> {
+  async findByContentGalleryId(
+    contentGalleryId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentGalleryItemEntity>> {
     const { page, limit } = options;
     const skip = (page - 1) * limit;
 

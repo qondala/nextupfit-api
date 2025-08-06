@@ -4,6 +4,8 @@ export * from "./program.step-activity.entity";
 export * from "./program.subscription-plan.entity";
 export * from "./program.workout-nutrient-burn.entity";
 export * from "./program.step-activity-workingsession-workout.entity";
+export * from "./program.step-activity-workingsession-nutrition.entity";
+export * from "./program.step-activity-workingsession-practice.entity";
 export * from "./program.step-activity-workingsession.entity";
 export * from "./program.per-sociology.entity";
 export * from "./program.manager.entity";

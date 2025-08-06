@@ -56,7 +56,9 @@ export class GymSpecializedInNutritionController {
     description: "Gym specialized nutrition created successfully.",
     type: DetailsGymSpecializedInNutritionDto,
   })
-  async create(@Body() dto: CreateGymSpecializedInNutritionDto): Promise<DetailsGymSpecializedInNutritionDto> {
+  async create(
+    @Body() dto: CreateGymSpecializedInNutritionDto,
+  ): Promise<DetailsGymSpecializedInNutritionDto> {
     return this.service.create(dto);
   }
 
@@ -107,7 +109,9 @@ export class GymSpecializedInNutritionController {
     description: "Gym specialized nutrition found successfully.",
     type: DetailsGymSpecializedInNutritionDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsGymSpecializedInNutritionDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsGymSpecializedInNutritionDto> {
     return this.service.findOne(id);
   }
 
@@ -129,7 +133,10 @@ export class GymSpecializedInNutritionController {
     description: "Gym specialized nutrition updated successfully.",
     type: DetailsGymSpecializedInNutritionDto,
   })
-  async update(@Param("id", ParseIntPipe) id: number, @Body() dto: UpdateGymSpecializedInNutritionDto): Promise<DetailsGymSpecializedInNutritionDto> {
+  async update(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dto: UpdateGymSpecializedInNutritionDto,
+  ): Promise<DetailsGymSpecializedInNutritionDto> {
     return this.service.update(id, dto);
   }
 
@@ -154,13 +161,13 @@ export class GymSpecializedInNutritionController {
     await this.service.remove(id);
   }
 
-  @Get('nutritions')
+  @Get("nutritions")
   @ApiOperation({
-    summary: 'Find managers specialized in nutrition',
-    operationId: 'findManagersSpecializedInNutrition',
+    summary: "Find managers specialized in nutrition",
+    operationId: "findManagersSpecializedInNutrition",
   })
   @ApiQuery({
-    name: 'nutritionIds',
+    name: "nutritionIds",
     required: true,
     type: SwaggerType.INTEGER,
     isArray: true,
@@ -171,13 +178,17 @@ export class GymSpecializedInNutritionController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Found managers specialized in nutrition',
-    type: PaginatedDetailsGymSpecializedInNutritionDto
+    description: "Found managers specialized in nutrition",
+    type: PaginatedDetailsGymSpecializedInNutritionDto,
   })
   async findManagersSpecializedInNutritions(
-    @Query('nutritionIds', new ParseArrayPipe({ items: Number })) nutritionIds: number[],
+    @Query("nutritionIds", new ParseArrayPipe({ items: Number }))
+    nutritionIds: number[],
     @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsGymSpecializedInNutritionDto> {
-    return this.service.findManagersSpecializedInNutritions(nutritionIds, pagination);
+    return this.service.findManagersSpecializedInNutritions(
+      nutritionIds,
+      pagination,
+    );
   }
 }

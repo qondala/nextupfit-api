@@ -10,7 +10,7 @@ export class PaginatedDetailsBaseNutritionToolDto extends PaginatedResponseDto<D
     type: () => DetailsBaseNutritionToolDto,
     isArray: true,
     description: "List of nutrition tools",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

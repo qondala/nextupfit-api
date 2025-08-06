@@ -6,4 +6,3 @@ export enum ProgramFindSubscriptionPlanOrderByEnum {
   name = "name",
   price = "price",
 }
-  

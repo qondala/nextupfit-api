@@ -1,19 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
-import { SwaggerType } from '@app/common/types';
+import { SwaggerType } from "@app/common/types";
 import {
   SocialActorEnum,
   SocialUpdateTypeEnum,
-  SocialUpdatePrivacyEnum
-} from '../../types';
-import { SocialUpdatesFindOrderEnum } from './social.updates-find-order.enum';
+  SocialUpdatePrivacyEnum,
+} from "../../types";
+import { SocialUpdatesFindOrderEnum } from "./social.updates-find-order.enum";
 
 export class SocialUpdatesFindCriteriaDto {
-
   @ApiProperty({
     name: "authorUserId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author user',
+    description: "The ID of the author user",
     example: 1,
     required: false,
   })
@@ -22,7 +21,7 @@ export class SocialUpdatesFindCriteriaDto {
   @ApiProperty({
     name: "authorManagerId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author manager',
+    description: "The ID of the author manager",
     example: 1,
     required: false,
   })
@@ -32,7 +31,7 @@ export class SocialUpdatesFindCriteriaDto {
     name: "socialActorType",
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
-    description: 'The type of social actor',
+    description: "The type of social actor",
     example: SocialActorEnum.user,
     required: false,
   })
@@ -41,7 +40,7 @@ export class SocialUpdatesFindCriteriaDto {
   @ApiProperty({
     name: "socialActorId",
     type: SwaggerType.INTEGER,
-    description: 'The ID of the social actor',
+    description: "The ID of the social actor",
     example: 1,
     required: false,
   })
@@ -51,7 +50,7 @@ export class SocialUpdatesFindCriteriaDto {
     name: "socialUpdateType",
     enum: SocialUpdateTypeEnum,
     enumName: "SocialUpdateTypeEnum",
-    description: 'The type of social update',
+    description: "The type of social update",
     example: SocialUpdateTypeEnum.status,
     required: false,
   })
@@ -61,7 +60,7 @@ export class SocialUpdatesFindCriteriaDto {
     name: "privacy",
     enum: SocialUpdatePrivacyEnum,
     enumName: "SocialUpdatePrivacyEnum",
-    description: 'The privacy setting for the social update',
+    description: "The privacy setting for the social update",
     example: SocialUpdatePrivacyEnum.public,
     required: false,
   })
@@ -71,7 +70,7 @@ export class SocialUpdatesFindCriteriaDto {
     name: "orderBy",
     enum: SocialUpdatesFindOrderEnum,
     enumName: "SocialUpdatesFindOrderEnum",
-    description: 'The order by for the social updates',
+    description: "The order by for the social updates",
     required: false,
   })
   orderBy?: SocialUpdatesFindOrderEnum;

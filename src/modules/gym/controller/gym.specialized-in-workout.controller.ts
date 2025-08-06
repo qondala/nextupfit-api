@@ -10,8 +10,8 @@ import {
   UseGuards,
   HttpStatus,
   ParseIntPipe,
-  ParseArrayPipe
-} from '@nestjs/common';
+  ParseArrayPipe,
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -19,111 +19,119 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiParam,
-  ApiQuery
-} from '@nestjs/swagger';
+  ApiQuery,
+} from "@nestjs/swagger";
 
-import { SwaggerType } from '@app/common/types';
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginationOptionsDto } from '@app/common/dto';
+import { SwaggerType } from "@app/common/types";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
-import { 
-  CreateGymSpecializedInWorkoutDto, 
-  UpdateGymSpecializedInWorkoutDto, 
-  DetailsGymSpecializedInWorkoutDto, 
-  PaginatedDetailsGymSpecializedInWorkoutDto
-} from '../dto';
-import { GymSpecializedInWorkoutService } from '../service';
+import {
+  CreateGymSpecializedInWorkoutDto,
+  UpdateGymSpecializedInWorkoutDto,
+  DetailsGymSpecializedInWorkoutDto,
+  PaginatedDetailsGymSpecializedInWorkoutDto,
+} from "../dto";
+import { GymSpecializedInWorkoutService } from "../service";
 
-
-@ApiTags('Gym module endpoints')
+@ApiTags("Gym module endpoints")
 @ApiBearerAuth()
-@Controller('gym/specialized-workout')
+@Controller("gym/specialized-workout")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class GymSpecializedInWorkoutController {
-  constructor(private readonly gymSpecializedInWorkoutService: GymSpecializedInWorkoutService) {}
+  constructor(
+    private readonly gymSpecializedInWorkoutService: GymSpecializedInWorkoutService,
+  ) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new gym specialized workout',
-    description: 'Create a new gym specialized workout',
-    operationId: 'createGymSpecializedInWorkout',
+    summary: "Create a new gym specialized workout",
+    description: "Create a new gym specialized workout",
+    operationId: "createGymSpecializedInWorkout",
   })
   @ApiBody({
     required: true,
     type: CreateGymSpecializedInWorkoutDto,
   })
-  @ApiResponse({ 
-    status: HttpStatus.CREATED, 
-    description: 'Gym specialized workout created successfully.',
-    type: DetailsGymSpecializedInWorkoutDto
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "Gym specialized workout created successfully.",
+    type: DetailsGymSpecializedInWorkoutDto,
   })
-  async create( @Body() createDto: CreateGymSpecializedInWorkoutDto ): Promise<DetailsGymSpecializedInWorkoutDto> {
+  async create(
+    @Body() createDto: CreateGymSpecializedInWorkoutDto,
+  ): Promise<DetailsGymSpecializedInWorkoutDto> {
     return await this.gymSpecializedInWorkoutService.create(createDto);
   }
 
-  @Get('gym/:gymId')
+  @Get("gym/:gymId")
   @ApiOperation({
-    summary: 'Get all specialized workouts of a gym',
-    description: 'Get all specialized workouts of a gym',
-    operationId: 'getGymSpecializedInWorkouts',
+    summary: "Get all specialized workouts of a gym",
+    description: "Get all specialized workouts of a gym",
+    operationId: "getGymSpecializedInWorkouts",
   })
   @ApiParam({
-    name: 'gymId',
+    name: "gymId",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Paginated list of specialized workouts',
-    type: PaginatedDetailsGymSpecializedInWorkoutDto
+    description: "Paginated list of specialized workouts",
+    type: PaginatedDetailsGymSpecializedInWorkoutDto,
   })
   async findByGym(
-    @Param('gymId', ParseIntPipe) gymId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("gymId", ParseIntPipe) gymId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsGymSpecializedInWorkoutDto> {
-    return this.gymSpecializedInWorkoutService.findByGym(gymId, paginationOptions);
+    return this.gymSpecializedInWorkoutService.findByGym(
+      gymId,
+      paginationOptions,
+    );
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
-    summary: 'Get gym specialized workout by id',
-    description: 'Get gym specialized workout by id',
-    operationId: 'getGymSpecializedInWorkoutById',
+    summary: "Get gym specialized workout by id",
+    description: "Get gym specialized workout by id",
+    operationId: "getGymSpecializedInWorkoutById",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Gym specialized workout details',
-    type: DetailsGymSpecializedInWorkoutDto
+    description: "Gym specialized workout details",
+    type: DetailsGymSpecializedInWorkoutDto,
   })
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymSpecializedInWorkoutDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsGymSpecializedInWorkoutDto> {
     return await this.gymSpecializedInWorkoutService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update gym specialized workout',
-    description: 'Update gym specialized workout',
-    operationId: 'updateGymSpecializedInWorkout',
+    summary: "Update gym specialized workout",
+    description: "Update gym specialized workout",
+    operationId: "updateGymSpecializedInWorkout",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiBody({
     required: true,
@@ -131,65 +139,69 @@ export class GymSpecializedInWorkoutController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Updated gym specialized workout details',
-    type: DetailsGymSpecializedInWorkoutDto
+    description: "Updated gym specialized workout details",
+    type: DetailsGymSpecializedInWorkoutDto,
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateGymSpecializedInWorkoutDto
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateDto: UpdateGymSpecializedInWorkoutDto,
   ): Promise<DetailsGymSpecializedInWorkoutDto> {
     return await this.gymSpecializedInWorkoutService.update(id, updateDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete gym specialized workout',
-    description: 'Delete gym specialized workout',
-    operationId: 'deleteGymSpecializedInWorkout',
+    summary: "Delete gym specialized workout",
+    description: "Delete gym specialized workout",
+    operationId: "deleteGymSpecializedInWorkout",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Gym specialized workout deleted successfully',
+    description: "Gym specialized workout deleted successfully",
   })
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.gymSpecializedInWorkoutService.remove(id);
   }
 
-  @Get('workouts')
+  @Get("workouts")
   @ApiOperation({
-    summary: 'Find managers specialized in workout',
-    operationId: 'findManagersSpecializedInWorkout',
+    summary: "Find managers specialized in workout",
+    operationId: "findManagersSpecializedInWorkout",
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'workoutIds',
+    name: "workoutIds",
     required: true,
     type: SwaggerType.INTEGER,
     isArray: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Found managers specialized in workout',
-    type: PaginatedDetailsGymSpecializedInWorkoutDto
+    description: "Found managers specialized in workout",
+    type: PaginatedDetailsGymSpecializedInWorkoutDto,
   })
   async findManagersSpecializedInWorkouts(
     @Query() options: PaginationOptionsDto,
-    @Query('workoutIds', new ParseArrayPipe({ items: Number })) workoutIds: number[],
+    @Query("workoutIds", new ParseArrayPipe({ items: Number }))
+    workoutIds: number[],
   ): Promise<PaginatedDetailsGymSpecializedInWorkoutDto> {
-    return this.gymSpecializedInWorkoutService.findManagersSpecializedInWorkouts(workoutIds, options);
+    return this.gymSpecializedInWorkoutService.findManagersSpecializedInWorkouts(
+      workoutIds,
+      options,
+    );
   }
 }

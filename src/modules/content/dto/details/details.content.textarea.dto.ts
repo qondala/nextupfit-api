@@ -1,17 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-} from "class-validator";
+import { IsBoolean, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsContentTextareaDto {
   @ApiProperty({
-    type: SwaggerType.INTEGER, 
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
@@ -19,7 +13,6 @@ export class DetailsContentTextareaDto {
   @IsNotEmpty()
   @IsInt()
   id: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -31,7 +24,6 @@ export class DetailsContentTextareaDto {
   @IsInt()
   contentId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "title",
@@ -42,7 +34,6 @@ export class DetailsContentTextareaDto {
   @IsString()
   title: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "content",
@@ -52,7 +43,6 @@ export class DetailsContentTextareaDto {
   @IsNotEmpty()
   @IsString()
   content: string;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,

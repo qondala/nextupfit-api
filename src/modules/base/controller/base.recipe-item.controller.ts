@@ -8,14 +8,14 @@ import {
   Patch,
   Post,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -24,7 +24,7 @@ import {
   CreateBaseRecipeItemDto,
   UpdateBaseRecipeItemDto,
   DetailsBaseRecipeItemDto,
-  PaginatedDetailsBaseRecipeItemDto
+  PaginatedDetailsBaseRecipeItemDto,
 } from "../dto";
 import { BaseRecipeItemService } from "../service";
 
@@ -37,28 +37,30 @@ export class BaseRecipeItemController {
   @Post()
   @ApiOperation({
     summary: "Create recipe item",
-    operationId: "createBaseRecipeItem"
+    operationId: "createBaseRecipeItem",
   })
   @ApiCreatedResponse({
     description: "Recipe item created successfully.",
     type: DetailsBaseRecipeItemDto,
-    status: HttpStatus.CREATED
+    status: HttpStatus.CREATED,
   })
-  create(@Body() createDto: CreateBaseRecipeItemDto): Promise<DetailsBaseRecipeItemDto> {
+  create(
+    @Body() createDto: CreateBaseRecipeItemDto,
+  ): Promise<DetailsBaseRecipeItemDto> {
     return this.recipeItemService.create(createDto);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all recipe items",
-    operationId: "findAllBaseRecipeItems"
+    operationId: "findAllBaseRecipeItems",
   })
   @ApiOkResponse({
     description: "List of recipe items.",
-    type: PaginatedDetailsBaseRecipeItemDto
+    type: PaginatedDetailsBaseRecipeItemDto,
   })
   findAll(
-    @Query() paginationOptions: PaginationOptionsDto
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsBaseRecipeItemDto> {
     return this.recipeItemService.findAll(paginationOptions);
   }
@@ -66,28 +68,30 @@ export class BaseRecipeItemController {
   @Get(":id")
   @ApiOperation({
     summary: "Get recipe item by id",
-    operationId: "findBaseRecipeItemById"
+    operationId: "findBaseRecipeItemById",
   })
   @ApiOkResponse({
     description: "Recipe item by id.",
-    type: DetailsBaseRecipeItemDto
+    type: DetailsBaseRecipeItemDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseRecipeItemDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseRecipeItemDto> {
     return this.recipeItemService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update recipe item",
-    operationId: "updateBaseRecipeItem"
+    operationId: "updateBaseRecipeItem",
   })
   @ApiOkResponse({
     description: "Updated recipe item.",
-    type: DetailsBaseRecipeItemDto
+    type: DetailsBaseRecipeItemDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateDto: UpdateBaseRecipeItemDto
+    @Body() updateDto: UpdateBaseRecipeItemDto,
   ): Promise<DetailsBaseRecipeItemDto> {
     return this.recipeItemService.update(id, updateDto);
   }
@@ -95,10 +99,10 @@ export class BaseRecipeItemController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete recipe item",
-    operationId: "removeBaseRecipeItem"
+    operationId: "removeBaseRecipeItem",
   })
   @ApiOkResponse({
-    description: "Recipe item deleted successfully."
+    description: "Recipe item deleted successfully.",
   })
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.recipeItemService.remove(id);

@@ -1,18 +1,17 @@
 import {
-  IsBoolean, 
-  IsDate, 
-  IsNotEmpty, 
-  IsInt, 
-  IsOptional, 
-  IsString, 
-  IsUrl
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUrl,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-  
-export class CreateGymManagerRequestDto {
 
+export class CreateGymManagerRequestDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
@@ -22,7 +21,6 @@ export class CreateGymManagerRequestDto {
   @IsNotEmpty()
   @IsInt()
   gymId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -34,7 +32,6 @@ export class CreateGymManagerRequestDto {
   @IsInt()
   applicantUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Motivation letter",
@@ -44,7 +41,6 @@ export class CreateGymManagerRequestDto {
   @IsOptional()
   @IsString()
   letter?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -56,17 +52,16 @@ export class CreateGymManagerRequestDto {
   @IsUrl()
   portfolioUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Applicant's Document Url",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/gym/resume-applicant-00345.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/gym/resume-applicant-00345.png",
     required: false,
   })
   @IsOptional()
   @IsUrl()
   documentUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
@@ -78,7 +73,6 @@ export class CreateGymManagerRequestDto {
   @IsBoolean()
   favorite?: boolean;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether application is accepted",
@@ -88,7 +82,6 @@ export class CreateGymManagerRequestDto {
   @IsOptional()
   @IsBoolean()
   accepted?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
@@ -100,10 +93,9 @@ export class CreateGymManagerRequestDto {
   @IsDate()
   rejected?: boolean;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date application was accepted",
     example: Date(),
     required: false,
@@ -112,10 +104,9 @@ export class CreateGymManagerRequestDto {
   @IsDate()
   acceptedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date application was rejected",
     example: Date(),
     required: false,
@@ -123,7 +114,6 @@ export class CreateGymManagerRequestDto {
   @IsOptional()
   @IsDate()
   rejectedDate?: Date;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -135,7 +125,6 @@ export class CreateGymManagerRequestDto {
   @IsInt()
   acceptedByGymManagerUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Manager user id who rejected the application",
@@ -146,4 +135,3 @@ export class CreateGymManagerRequestDto {
   @IsInt()
   rejectedByGymManagerUserId: number;
 }
-

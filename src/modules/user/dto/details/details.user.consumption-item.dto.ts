@@ -47,6 +47,13 @@ export class DetailsUserConsumptionItemDto {
   itemId: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Program nutrition ID",
+    required: false,
+  })
+  programNutritionId?: number;
+
+  @ApiProperty({
     type: SwaggerType.STRING,
     format: "date-time",
     description: "Created at",

@@ -5,61 +5,51 @@ import {
   UseGuards,
   ParseIntPipe,
   HttpStatus,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
   ApiResponse,
   ApiParam,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
+import { SwaggerType } from "@app/common/types";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
-import { SwaggerType } from '@app/common/types';
-import {
-  JwtAuthGuard,
-  RolesGuard
-} from '@app/common/guards';
+import { UserProgramAccessStatus } from "../../dto";
+import { UserProgramAccessStatusService } from "../../service";
 
-
-import { UserProgramAccessStatus } from '../../dto';
-import { UserProgramAccessStatusService } from '../../service';
-
-
-
-@ApiTags('User module endpoints')
+@ApiTags("User module endpoints")
 @ApiBearerAuth()
-@Controller('user/subscription/status/program')
+@Controller("user/subscription/status/program")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class UserProgramAccessStatusController {
-
   constructor(private readonly service: UserProgramAccessStatusService) {}
 
-
-  @Get(':userId/:programId')
+  @Get(":userId/:programId")
   @ApiOperation({
-    operationId: 'getUserProgramAccessStatus',
-    summary: 'Get user program subscription status'
+    operationId: "getUserProgramAccessStatus",
+    summary: "Get user program subscription status",
   })
   @ApiParam({
-    name: 'userId',
+    name: "userId",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiParam({
-    name: 'programId',
+    name: "programId",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: UserProgramAccessStatus
+    type: UserProgramAccessStatus,
   })
   async getUserProgramAccessStatus(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Param('programId', ParseIntPipe) programId: number,
+    @Param("userId", ParseIntPipe) userId: number,
+    @Param("programId", ParseIntPipe) programId: number,
   ): Promise<UserProgramAccessStatus> {
     return this.service.getUserProgramAccessStatus(userId, programId);
   }
-
 }

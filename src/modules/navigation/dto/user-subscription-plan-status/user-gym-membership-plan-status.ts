@@ -12,15 +12,12 @@ import { Type } from "class-transformer";
 import { SwaggerType } from "@app/common/types";
 import { GymMembershipStatusEnum } from "@app/module/gym/types";
 
-
 import { UserPlanTrialStatus } from "..";
 
-
 export class UserGymMembershipPlanStatus {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym membership',
+    description: "ID of the gym membership",
     example: 1,
     required: true,
   })
@@ -28,10 +25,9 @@ export class UserGymMembershipPlanStatus {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym',
+    description: "ID of the gym",
     example: 1,
     required: true,
   })
@@ -39,10 +35,9 @@ export class UserGymMembershipPlanStatus {
   @IsInt()
   gymId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym membership member user',
+    description: "ID of the gym membership member user",
     example: 1,
     required: true,
   })
@@ -50,10 +45,9 @@ export class UserGymMembershipPlanStatus {
   @IsInt()
   memberUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'Gym membership plan id',
+    description: "Gym membership plan id",
     example: 1,
     required: true,
   })
@@ -61,18 +55,16 @@ export class UserGymMembershipPlanStatus {
   @IsInt()
   gymMembershipPlanId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Started date of the gym membership',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Started date of the gym membership",
+    example: "2022-01-01T00:00:00.000Z",
     required: false,
   })
   @IsOptional()
   @Type(() => Date)
   startedDate?: Date;
-
 
   @ApiProperty({
     enum: GymMembershipStatusEnum,
@@ -85,12 +77,11 @@ export class UserGymMembershipPlanStatus {
   @IsEnum(GymMembershipStatusEnum)
   membershipStatus: GymMembershipStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Created at of the gym membership',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Created at of the gym membership",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
   })
   @IsNotEmpty()
@@ -98,7 +89,7 @@ export class UserGymMembershipPlanStatus {
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    description: 'Paid status of the gym membership',
+    description: "Paid status of the gym membership",
     example: true,
     required: true,
   })
@@ -107,8 +98,8 @@ export class UserGymMembershipPlanStatus {
   paid: boolean;
 
   @ApiProperty({
-    type: () =>UserPlanTrialStatus,
-    description: 'Trial status of the gym membership',
+    type: () => UserPlanTrialStatus,
+    description: "Trial status of the gym membership",
     example: false,
     required: false,
   })
@@ -119,7 +110,7 @@ export class UserGymMembershipPlanStatus {
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    description: 'Tells if user has ever subscribed to the gym membership plan',
+    description: "Tells if user has ever subscribed to the gym membership plan",
     example: true,
     required: true,
   })

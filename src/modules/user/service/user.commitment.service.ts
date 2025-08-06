@@ -16,7 +16,7 @@ import { CreateUserCommitmentDto, UpdateUserCommitmentDto } from "../dto";
 export class UserCommitmentService {
   constructor(
     @InjectRepository(UserCommitmentEntity)
-    private readonly userCommitmentRepository: Repository<UserCommitmentEntity>
+    private readonly userCommitmentRepository: Repository<UserCommitmentEntity>,
   ) {}
 
   async create(dto: CreateUserCommitmentDto): Promise<UserCommitmentEntity> {
@@ -24,7 +24,9 @@ export class UserCommitmentService {
     return this.userCommitmentRepository.save(entity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserCommitmentEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserCommitmentEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -46,7 +48,10 @@ export class UserCommitmentService {
     };
   }
 
-  async getUserCommitments(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserCommitmentEntity>> {
+  async getUserCommitments(
+    userId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserCommitmentEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -54,7 +59,7 @@ export class UserCommitmentService {
       skip,
       take: limit,
       order: { createdAt: "DESC" },
-      where: { userId }
+      where: { userId },
     });
 
     return {
@@ -65,25 +70,29 @@ export class UserCommitmentService {
         itemsPerPage: limit,
         totalPages: Math.ceil(total / limit),
         currentPage: page,
-      }
+      },
     };
   }
 
-
   async findOne(id: number): Promise<UserCommitmentEntity> {
-    const entity = await this.userCommitmentRepository.findOne({ where: { id } });
+    const entity = await this.userCommitmentRepository.findOne({
+      where: { id },
+    });
     if (!entity) {
       throw new ErrorResponseException(
         ErrorResponseExceptionType.DATABASE,
         `User commitment with ID ${id} not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
     return entity;
   }
 
-  async update(id: number, dto: UpdateUserCommitmentDto): Promise<UserCommitmentEntity> {
+  async update(
+    id: number,
+    dto: UpdateUserCommitmentDto,
+  ): Promise<UserCommitmentEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.userCommitmentRepository.save(entity);

@@ -1,23 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-  IsEnum,
-} from "class-validator";
+import { IsOptional, IsEnum } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-import {
-    ProgramStatusEnum,
-    ProgramTypeEnum,
-} from "../../types";
+import { ProgramStatusEnum, ProgramTypeEnum } from "../../types";
 
 import { ProgramFindOrderByEnum } from ".";
 
-
 export class ProgramFindCriteriaDto {
-
   @ApiProperty({
-    name: 'name',
+    name: "name",
     type: SwaggerType.STRING,
     description: "Program name",
     example: "Daily workout",
@@ -27,7 +19,7 @@ export class ProgramFindCriteriaDto {
   name?: string;
 
   @ApiProperty({
-    name: 'gymId',
+    name: "gymId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the program",
     example: 4335,
@@ -36,9 +28,8 @@ export class ProgramFindCriteriaDto {
   @IsOptional()
   gymId?: number;
 
-
   @ApiProperty({
-    name: 'ownerUserId',
+    name: "ownerUserId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -46,9 +37,9 @@ export class ProgramFindCriteriaDto {
   })
   @IsOptional()
   ownerUserId?: number;
-  
+
   @ApiProperty({
-    name: 'ownerManagerId',
+    name: "ownerManagerId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -58,7 +49,7 @@ export class ProgramFindCriteriaDto {
   ownerManagerId?: number;
 
   @ApiProperty({
-    name: 'type',
+    name: "type",
     description: "Program type",
     enum: ProgramTypeEnum,
     enumName: "ProgramTypeEnum",
@@ -69,9 +60,8 @@ export class ProgramFindCriteriaDto {
   @IsEnum(ProgramTypeEnum)
   type?: ProgramTypeEnum;
 
-
   @ApiProperty({
-    name: 'status',
+    name: "status",
     description: "Program status",
     enum: ProgramStatusEnum,
     enumName: "ProgramStatusEnum",
@@ -82,44 +72,41 @@ export class ProgramFindCriteriaDto {
   @IsEnum(ProgramStatusEnum)
   status?: ProgramStatusEnum;
 
-
   @ApiProperty({
-    name: 'duration',
+    name: "duration",
     type: SwaggerType.INTEGER,
     description: "Duration of the program",
     example: 2,
     required: false,
-    default: 2
+    default: 2,
   })
   @IsOptional()
   duration?: number;
 
-
   @ApiProperty({
-    name: 'durationUnitId',
+    name: "durationUnitId",
     type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
-    default: 16
+    default: 16,
   })
   @IsOptional()
   durationUnitId?: number;
 
-
   @ApiProperty({
-    name: 'difficultyLevel',
+    name: "difficultyLevel",
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   difficultyLevel?: number;
 
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: ProgramFindOrderByEnum,
     enumName: "ProgramFindOrderByEnum",
     required: false,

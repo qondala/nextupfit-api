@@ -11,7 +11,7 @@ import { CreateBaseNutritionDto, UpdateBaseNutritionDto } from "../dto";
 export class BaseNutritionService {
   constructor(
     @InjectRepository(BaseNutritionEntity)
-    private readonly nutritionRepository: Repository<BaseNutritionEntity>
+    private readonly nutritionRepository: Repository<BaseNutritionEntity>,
   ) {}
 
   async create(dto: CreateBaseNutritionDto): Promise<BaseNutritionEntity> {
@@ -19,11 +19,13 @@ export class BaseNutritionService {
     return this.nutritionRepository.save(nutrition);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseNutritionEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseNutritionEntity>> {
     const [items, total] = await this.nutritionRepository.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: "DESC" }
+      order: { id: "DESC" },
     });
 
     return {
@@ -33,21 +35,21 @@ export class BaseNutritionService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseNutritionEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseNutritionEntity>> {
     const searchTerm = `%${query}%`;
     const [items, total] = await this.nutritionRepository.findAndCount({
-      where: [
-        { name: Like(searchTerm) },
-        { code: Like(searchTerm) }
-      ],
+      where: [{ name: Like(searchTerm) }, { code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: "DESC" }
+      order: { id: "DESC" },
     });
 
     return {
@@ -57,8 +59,8 @@ export class BaseNutritionService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -70,7 +72,10 @@ export class BaseNutritionService {
     return this.nutritionRepository.findOneBy({ code });
   }
 
-  async update(id: number, dto: UpdateBaseNutritionDto): Promise<BaseNutritionEntity | null> {
+  async update(
+    id: number,
+    dto: UpdateBaseNutritionDto,
+  ): Promise<BaseNutritionEntity | null> {
     const result = await this.nutritionRepository.update(id, dto);
     if (result.affected === 0) return null;
     return this.findOne(id);

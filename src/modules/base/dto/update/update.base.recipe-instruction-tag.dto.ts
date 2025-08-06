@@ -7,25 +7,25 @@ export class UpdateBaseRecipeInstructionTagDto {
   @ApiProperty({
     enumName: "BaseRecipeInstructionTagEnum",
     enum: BaseRecipeInstructionTagEnum,
-    required: false
+    required: false,
   })
   tagType?: BaseRecipeInstructionTagEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   tagId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   order?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   recipeInstructionId?: number;
 }

@@ -1,1 +1,1 @@
-export * from './paginated.details.map.dto';
+export * from "./paginated.details.map.dto";

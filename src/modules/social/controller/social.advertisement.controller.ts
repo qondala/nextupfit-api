@@ -9,8 +9,8 @@ import {
   Query,
   UseGuards,
   HttpStatus,
-  ParseIntPipe
-} from '@nestjs/common';
+  ParseIntPipe,
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -18,44 +18,44 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiQuery,
-  ApiParam
-} from '@nestjs/swagger';
+  ApiParam,
+} from "@nestjs/swagger";
 
-
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginationOptionsDto } from '@app/common/dto';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateSocialAdvertisementDto,
   UpdateSocialAdvertisementDto,
   PaginatedDetailsSocialAdvertisementDto,
-  DetailsSocialAdvertisementDto
-} from '../dto';
-import { SocialAdvertisementService } from '../service';
-import { SocialAdvertisementEntity } from '../entity';
-import { SwaggerType } from '@app/common/types';
+  DetailsSocialAdvertisementDto,
+} from "../dto";
+import { SocialAdvertisementService } from "../service";
+import { SocialAdvertisementEntity } from "../entity";
+import { SwaggerType } from "@app/common/types";
 
-
-@ApiTags('Social module endpoints')
+@ApiTags("Social module endpoints")
 @ApiBearerAuth()
-@Controller('social/advertisement')
+@Controller("social/advertisement")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialAdvertisementController {
-  constructor(private readonly advertisementService: SocialAdvertisementService) {}
+  constructor(
+    private readonly advertisementService: SocialAdvertisementService,
+  ) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create an advertisement',
-    operationId: 'createSocialAdvertisement'
+    summary: "Create an advertisement",
+    operationId: "createSocialAdvertisement",
   })
-  @ApiBody({ 
+  @ApiBody({
     type: CreateSocialAdvertisementDto,
     required: true,
-    description: 'Advertisement to create'
+    description: "Advertisement to create",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Advertisement created successfully.',
+    description: "Advertisement created successfully.",
     type: DetailsSocialAdvertisementDto,
   })
   async create(
@@ -66,139 +66,142 @@ export class SocialAdvertisementController {
 
   @Get()
   @ApiOperation({
-    summary: 'Get all advertisements',
-    operationId: 'findAllSocialAdvertisements'
+    summary: "Get all advertisements",
+    operationId: "findAllSocialAdvertisements",
   })
-  @ApiQuery({ 
-    name: 'page',
+  @ApiQuery({
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number'
+    description: "Page number",
   })
-  @ApiQuery({ 
-    name: 'limit',
+  @ApiQuery({
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page'
+    description: "Number of items per page",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Advertisements found successfully.',
+    description: "Advertisements found successfully.",
     type: PaginatedDetailsSocialAdvertisementDto,
   })
   async findAll(
-    @Query() paginationOptions: PaginationOptionsDto
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialAdvertisementDto> {
     return await this.advertisementService.findAll(paginationOptions);
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
-    summary: 'Get advertisement by id',
-    operationId: 'findSocialAdvertisementById'
+    summary: "Get advertisement by id",
+    operationId: "findSocialAdvertisementById",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Advertisement id'
+    description: "Advertisement id",
   })
   @ApiResponse({
     status: HttpStatus.OK,
     type: DetailsSocialAdvertisementDto,
-    description: 'Advertisement found successfully.'
+    description: "Advertisement found successfully.",
   })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param("id", ParseIntPipe) id: number) {
     return this.advertisementService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update advertisement',
-    operationId: 'updateSocialAdvertisement'
+    summary: "Update advertisement",
+    operationId: "updateSocialAdvertisement",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Advertisement id'
+    description: "Advertisement id",
   })
   @ApiBody({
     type: UpdateSocialAdvertisementDto,
     required: true,
-    description: 'Advertisement to update'
+    description: "Advertisement to update",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Advertisement updated successfully.',
+    description: "Advertisement updated successfully.",
     type: DetailsSocialAdvertisementDto,
   })
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateSocialAdvertisementDto
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateDto: UpdateSocialAdvertisementDto,
   ): Promise<DetailsSocialAdvertisementDto> {
     return this.advertisementService.update(id, updateDto);
   }
 
-  @Get('manager/:managerId')
+  @Get("manager/:managerId")
   @ApiOperation({
-    summary: 'Get advertisements by manager id',
-    operationId: 'findSocialAdvertisementsByManagerId'
+    summary: "Get advertisements by manager id",
+    operationId: "findSocialAdvertisementsByManagerId",
   })
   @ApiParam({
-    name: 'managerId',
+    name: "managerId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Manager id'
+    description: "Manager id",
   })
-  @ApiQuery({ 
-    name: 'page',
+  @ApiQuery({
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number'
+    description: "Page number",
   })
-  @ApiQuery({ 
-    name: 'limit',
+  @ApiQuery({
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page'
+    description: "Number of items per page",
   })
   @ApiResponse({
     status: HttpStatus.OK,
     type: PaginatedDetailsSocialAdvertisementDto,
-    description: 'Advertisements found successfully.'
+    description: "Advertisements found successfully.",
   })
   async findByManagerId(
-    @Param('managerId', ParseIntPipe) managerId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("managerId", ParseIntPipe) managerId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialAdvertisementDto> {
-    return this.advertisementService.findByManagerId(managerId, paginationOptions);
+    return this.advertisementService.findByManagerId(
+      managerId,
+      paginationOptions,
+    );
   }
 
-  @Get('random')
+  @Get("random")
   @ApiOperation({
-    summary: 'Get random advertisement',
-    operationId: 'findSocialAdvertisementRandom'
+    summary: "Get random advertisement",
+    operationId: "findSocialAdvertisementRandom",
   })
   @ApiResponse({
     status: HttpStatus.OK,
     type: DetailsSocialAdvertisementDto,
-    description: 'Advertisement found successfully.'
+    description: "Advertisement found successfully.",
   })
   async getRandom(): Promise<DetailsSocialAdvertisementDto> {
     return await this.advertisementService.getRandom();
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete advertisement',
-    operationId: 'deleteSocialAdvertisement'
+    summary: "Delete advertisement",
+    operationId: "deleteSocialAdvertisement",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Advertisement deleted successfully.'
+    description: "Advertisement deleted successfully.",
   })
-  async remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param("id", ParseIntPipe) id: number) {
     return await this.advertisementService.remove(id);
   }
 }

@@ -1,10 +1,5 @@
-
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsString,
-  IsEnum,
-  IsOptional,
-} from "class-validator";
+import { IsString, IsEnum, IsOptional } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
@@ -12,14 +7,12 @@ import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 
 import { ProgramFindSubscriptionPlanOrderByEnum } from ".";
 
-
 export class ProgramFindCriteriaSubscriptionPlanDto {
-
   @ApiProperty({
     name: "planName",
     type: SwaggerType.STRING,
     description: "Program subscription plan",
-    example:"Starter",
+    example: "Starter",
     required: false,
   })
   @IsOptional()
@@ -34,7 +27,6 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
   @IsOptional()
   priceHigherThan?: number;
 
-
   @ApiProperty({
     name: "priceLessThan",
     type: SwaggerType.NUMBER,
@@ -43,7 +35,6 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
   })
   @IsOptional()
   priceLessThan?: number;
-
 
   @ApiProperty({
     name: "periodicity",
@@ -56,17 +47,16 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
   periodicity?: BaseSubscriptionPlanPeriodicityEnum;
 
-
   @ApiProperty({
     name: "description",
     type: SwaggerType.STRING,
     description: "Subscription plan description",
-    example: "This plan allows you to start with the mimimum budget and upgrade later",
+    example:
+      "This plan allows you to start with the mimimum budget and upgrade later",
     required: false,
   })
   @IsString()
   description?: string;
-
 
   @ApiProperty({
     name: "programId",
@@ -77,7 +67,6 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
   })
   @IsOptional()
   programId?: number;
-
 
   @ApiProperty({
     name: "contentId",
@@ -108,5 +97,4 @@ export class ProgramFindCriteriaSubscriptionPlanDto {
   })
   @IsOptional()
   orderBy?: ProgramFindSubscriptionPlanOrderByEnum;
-
 }

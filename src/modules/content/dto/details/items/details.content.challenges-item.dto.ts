@@ -14,7 +14,6 @@ export class DetailsContentChallengesItemDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "id of the visual content",

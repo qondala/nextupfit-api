@@ -4,7 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsEnum,
-  IsBoolean
+  IsBoolean,
 } from "class-validator";
 import { Type } from "class-transformer";
 
@@ -14,12 +14,10 @@ import { GymManagerRoleEnum } from "../../types";
 import { DetailsGymDto, DetailsGymManagerDto } from ".";
 import { GymManagerStatusEnum } from "../../types/gym.manager-status.enum";
 
-
 export class DetailsGymHasManagerDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym manager',
+    description: "ID of the gym manager",
     example: 1,
     required: true,
   })
@@ -27,10 +25,9 @@ export class DetailsGymHasManagerDto {
   @IsNumber()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym',
+    description: "ID of the gym",
     example: 1,
     required: true,
   })
@@ -38,10 +35,9 @@ export class DetailsGymHasManagerDto {
   @IsNumber()
   gymId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym manager',
+    description: "ID of the gym manager",
     example: 1,
     required: true,
   })
@@ -49,9 +45,8 @@ export class DetailsGymHasManagerDto {
   @IsNumber()
   managerId: number;
 
-
   @ApiProperty({
-    description: 'Role of the gym manager',
+    description: "Role of the gym manager",
     enum: GymManagerRoleEnum,
     enumName: "GymManagerRoleEnum",
     title: "GymManagerRoleEnum",
@@ -62,9 +57,8 @@ export class DetailsGymHasManagerDto {
   @IsEnum(GymManagerRoleEnum)
   role: GymManagerRoleEnum;
 
-
   @ApiProperty({
-    description: 'Status of the gym manager',
+    description: "Status of the gym manager",
     enum: GymManagerStatusEnum,
     enumName: "GymManagerStatusEnum",
     example: GymManagerStatusEnum.active,
@@ -76,28 +70,26 @@ export class DetailsGymHasManagerDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: 'Last status update of the gym manager',
-    example: '2022-01-01T00:00:00.000Z',
+    description: "Last status update of the gym manager",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
-    format: 'date-time',
+    format: "date-time",
   })
   lastStatusUpdate: Date;
-
 
   @ApiProperty({
     type: () => DetailsGymDto,
     title: "DetailsGymDto",
-    description: 'Gym of the gym manager',
+    description: "Gym of the gym manager",
     required: true,
   })
   @Type(() => DetailsGymDto)
   gym: DetailsGymDto;
 
-
   @ApiProperty({
     type: () => DetailsGymManagerDto,
     title: "DetailsGymManagerDto",
-    description: 'Gym manager of the gym manager',
+    description: "Gym manager of the gym manager",
     required: true,
   })
   @Type(() => DetailsGymManagerDto)
@@ -105,23 +97,22 @@ export class DetailsGymHasManagerDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Created at of the gym manager',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Created at of the gym manager",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
-  }) 
+  })
   @IsNotEmpty()
   @Type(() => Date)
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Updated at of the gym manager',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Updated at of the gym manager",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
-  }) 
+  })
   @IsNotEmpty()
   @Type(() => Date)
   updatedAt: Date;

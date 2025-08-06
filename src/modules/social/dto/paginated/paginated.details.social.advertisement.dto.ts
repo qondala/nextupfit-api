@@ -6,13 +6,12 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsSocialAdvertisementDto } from "../details";
 
 export class PaginatedDetailsSocialAdvertisementDto extends PaginatedResponseDto<DetailsSocialAdvertisementDto> {
-
   @ApiProperty({
     type: () => DetailsSocialAdvertisementDto,
     name: "items",
     isArray: true,
     description: "List of social advertisements",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

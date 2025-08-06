@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNumber,
   IsOptional,
@@ -10,16 +8,13 @@ import {
   IsInt,
 } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
 import {
   ProgramAccessibilityEnum,
   ProgramStepStatusEnum,
-  ProgramVisibilityEnum
+  ProgramVisibilityEnum,
 } from "../../types";
-
 
 export class UpdateProgramStepDto {
   @ApiProperty({
@@ -52,7 +47,6 @@ export class UpdateProgramStepDto {
   @IsNumber()
   gymId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the program",
@@ -63,7 +57,6 @@ export class UpdateProgramStepDto {
   @IsNumber()
   programId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
@@ -73,7 +66,7 @@ export class UpdateProgramStepDto {
   @IsOptional()
   @IsInt()
   ownerUserId?: number;
-  
+
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program",
@@ -83,7 +76,6 @@ export class UpdateProgramStepDto {
   @IsOptional()
   @IsInt()
   ownerManagerId?: number;
-  
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -98,11 +90,35 @@ export class UpdateProgramStepDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
+  @IsOptional()
   @IsString()
   iconUrl?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Step image URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/my-step-image.jpg",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Step video URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/video/upload/v1697110655/program/steps/my-step-video.mp4",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  videoUrl?: string;
 
   @ApiProperty({
     enum: ProgramStepStatusEnum,
@@ -116,85 +132,78 @@ export class UpdateProgramStepDto {
   @IsEnum(ProgramStepStatusEnum)
   status?: ProgramStepStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Step attendees count",
     example: 5000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   attendeesCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   viewsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number times step was rated",
     example: 3000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration of the step",
     example: 2,
     required: false,
-    default: 2
+    default: 2,
   })
   @IsOptional()
   @IsNumber()
   duration?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Duration unit",
     example: 16,
     required: false,
-    default: 16
+    default: 16,
   })
   @IsOptional()
   @IsNumber()
   durationUnitId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
@@ -204,10 +213,9 @@ export class UpdateProgramStepDto {
     type: SwaggerType.INTEGER,
     description: "Position of the Step inside the Program",
     example: 0,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   position?: number;
 }
-

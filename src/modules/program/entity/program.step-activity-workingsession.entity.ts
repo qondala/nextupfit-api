@@ -1,7 +1,21 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
+
 import { ProgramStepActivityStatusEnum } from "../types";
-import { ProgramStepActivityEntity } from "./program.step-activity.entity";
-import { ProgramStepActivityWorkingsessionWorkoutEntity } from "./program.step-activity-workingsession-workout.entity";
+import {
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionWorkoutEntity,
+  ProgramStepActivityWorkingsessionNutritionEntity,
+  ProgramStepActivityWorkingsessionPracticeEntity,
+} from ".";
 
 @Entity("program_step_activity_workingsession")
 export class ProgramStepActivityWorkingsessionEntity {
@@ -36,7 +50,10 @@ export class ProgramStepActivityWorkingsessionEntity {
   imageUrl: string;
 
   @Column({ nullable: true })
-  coverUrl: string;
+  illustrationUrl: string;
+
+  @Column({ nullable: true })
+  videoUrl: string;
 
   @Column({
     enumName: "ProgramStepActivityStatusEnum",
@@ -75,13 +92,30 @@ export class ProgramStepActivityWorkingsessionEntity {
   @Column({ default: 0 })
   price: number;
 
-
-  @ManyToOne(() => ProgramStepActivityEntity, activity => activity.workingssessions)
-  @JoinColumn({ name: 'programStepActivityId' })
+  @ManyToOne(
+    () => ProgramStepActivityEntity,
+    (activity) => activity.workingssessions,
+  )
+  @JoinColumn({ name: "programStepActivityId", referencedColumnName: "id" })
   activity: ProgramStepActivityEntity;
 
-  @OneToMany(() => ProgramStepActivityWorkingsessionWorkoutEntity, workout => workout.workingsession)
-  workouts: ProgramStepActivityWorkingsessionWorkoutEntity[]; 
+  @OneToMany(
+    () => ProgramStepActivityWorkingsessionWorkoutEntity,
+    (workout) => workout.workingsession,
+  )
+  workouts: ProgramStepActivityWorkingsessionWorkoutEntity[];
+
+  @OneToMany(
+    () => ProgramStepActivityWorkingsessionNutritionEntity,
+    (nutrition) => nutrition.workingsession,
+  )
+  nutritions: ProgramStepActivityWorkingsessionNutritionEntity[];
+
+  @OneToMany(
+    () => ProgramStepActivityWorkingsessionPracticeEntity,
+    (practice) => practice.workingsession,
+  )
+  practices: ProgramStepActivityWorkingsessionPracticeEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

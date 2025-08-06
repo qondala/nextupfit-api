@@ -1,23 +1,18 @@
 import { NestFactory } from "@nestjs/core";
-import {
-  DocumentBuilder,
-  SwaggerModule,
-} from "@nestjs/swagger";
-import { readFileSync } from 'node:fs';
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { readFileSync } from "node:fs";
 
 import { AppDataSource } from "./database";
 import { AppModule } from "./app.module";
 
-
 async function bootstrap() {
-
   // Enable HTTPS protocol
   const httpsOptions = {
-    key: readFileSync('./certs/privkey.pem'),
-    cert: readFileSync('./certs/fullchain.pem'),
+    key: readFileSync("./certs/privkey.pem"),
+    cert: readFileSync("./certs/fullchain.pem"),
   };
 
-  const app = await NestFactory.create(AppModule, {httpsOptions});
+  const app = await NestFactory.create(AppModule, { httpsOptions });
 
   // Configuration de Swagger
   const config = new DocumentBuilder()

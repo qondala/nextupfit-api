@@ -13,7 +13,10 @@ import {
 import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
-import { SocialNotificationPayload, SocialNotificationTypeEnum } from "../../types";
+import {
+  SocialNotificationPayload,
+  SocialNotificationTypeEnum,
+} from "../../types";
 
 export class CreateSocialNotificationDto {
   @ApiProperty({

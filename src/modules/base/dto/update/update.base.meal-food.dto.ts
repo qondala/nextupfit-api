@@ -13,7 +13,6 @@ export class UpdateBaseMealFoodDto {
   @IsInt()
   mealId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Food Id. Example, 58 = Drip Coffee (Regular Coffee)",
@@ -24,10 +23,10 @@ export class UpdateBaseMealFoodDto {
   @IsInt()
   foodId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Quantity of food this food required to consitute this meal. Example, in order to have a Standard cup of coffee (meal), we need one cup ",
+    description:
+      "Quantity of food this food required to consitute this meal. Example, in order to have a Standard cup of coffee (meal), we need one cup ",
     example: 1,
     required: false,
   })
@@ -35,10 +34,10 @@ export class UpdateBaseMealFoodDto {
   @IsInt()
   foodQty?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Unit taken for the food quantity. Exemple, 13 = ml (see Units database)",
+    description:
+      "Unit taken for the food quantity. Exemple, 13 = ml (see Units database)",
     example: 13,
     required: false,
   })

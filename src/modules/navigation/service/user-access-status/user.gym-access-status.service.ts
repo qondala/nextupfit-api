@@ -18,7 +18,6 @@ import { PaymentService } from "@app/module/payment/service";
 import { TrialPlanItemType } from "../../types";
 import { UserGymAccessStatus } from "../../dto";
 
-
 @Injectable()
 export class UserGymAccessStatusService {
   constructor(
@@ -29,8 +28,10 @@ export class UserGymAccessStatusService {
     private readonly paymentService: PaymentService,
   ) {}
 
-  async getUserGymAccessStatus(userId: number, gymId: number): Promise<UserGymAccessStatus> {
-    
+  async getUserGymAccessStatus(
+    userId: number,
+    gymId: number,
+  ): Promise<UserGymAccessStatus> {
     const userGymAccessStatus: UserGymAccessStatus = {
       followerStatus: null,
       membershipStatuses: [],
@@ -39,27 +40,36 @@ export class UserGymAccessStatusService {
 
     // 1- FOLLOWER STATUS
     // User gym following status
-    const followerStatus = await this.gymManagerFollowerService.isFollowing(userId, gymId);
+    const followerStatus = await this.gymManagerFollowerService.isFollowing(
+      userId,
+      gymId,
+    );
     if (followerStatus) {
       userGymAccessStatus.followerStatus = { ...followerStatus, gymId: gymId };
     }
 
     // 2- MEMBERSHIP STATUS
     // Get user's memberships in the gym
-    const userGymMemberships = await this.gymMembershipService.getUserGymMemberships(userId, gymId);
+    const userGymMemberships =
+      await this.gymMembershipService.getUserGymMemberships(userId, gymId);
     userGymAccessStatus.isMember = userGymMemberships.length > 0;
 
     // Get membership plans of the gym
-    const gymMembershipPlans = await this.gymMembershipPlanService.getAllMembershipPlansOfGym(gymId);
+    const gymMembershipPlans =
+      await this.gymMembershipPlanService.getAllMembershipPlansOfGym(gymId);
 
     // For each membership plan, check if the user has paid it within the due date
     for (const gymMembershipPlan of gymMembershipPlans) {
-
       const userGymMembership = userGymMemberships.find(
-        (membership) => membership.gymMembershipPlanId === gymMembershipPlan.id);
+        (membership) => membership.gymMembershipPlanId === gymMembershipPlan.id,
+      );
 
-      const hasUserPaidMembershipWithinDueDate = await this.hasUserPaidMembershipWithinDueDate(userGymMembership, gymMembershipPlan);
-     
+      const hasUserPaidMembershipWithinDueDate =
+        await this.hasUserPaidMembershipWithinDueDate(
+          userGymMembership,
+          gymMembershipPlan,
+        );
+
       userGymAccessStatus.membershipStatuses.push({
         id: gymMembershipPlan.id,
         gymId: gymId,
@@ -72,18 +82,24 @@ export class UserGymAccessStatusService {
           trialType: TrialPlanItemType.gym,
           planId: gymMembershipPlan.id,
           numberTrialDaysOfPlan: gymMembershipPlan.trialNumberDays || 0,
-          numberOfDaysLeft: this.numberOfDaysLeft(userGymMembership, gymMembershipPlan),
-          numberTrialActivitiesOfPlan: gymMembershipPlan.trialNumberProgramActivities || 0,
-          numberOfActivitiesLeft: await this.numberOfActivitiesLeft(userGymMembership, gymMembershipPlan),
+          numberOfDaysLeft: this.numberOfDaysLeft(
+            userGymMembership,
+            gymMembershipPlan,
+          ),
+          numberTrialActivitiesOfPlan:
+            gymMembershipPlan.trialNumberProgramActivities || 0,
+          numberOfActivitiesLeft: await this.numberOfActivitiesLeft(
+            userGymMembership,
+            gymMembershipPlan,
+          ),
         },
         userPlanExists: !!userGymMembership,
         gymMembershipPlanId: gymMembershipPlan.id,
       });
     }
 
-    return userGymAccessStatus;    
+    return userGymAccessStatus;
   }
-
 
   private numberOfDaysLeft(
     userGymMembership: GymMembershipEntity | null,
@@ -94,30 +110,35 @@ export class UserGymAccessStatusService {
     }
     const date = userGymMembership.startedDate;
     const today = new Date();
-    return gymMembershipPlan.trialNumberDays - (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-  };
+    return (
+      gymMembershipPlan.trialNumberDays -
+      (today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    );
+  }
 
   private async numberOfActivitiesLeft(
     userGymMembership: GymMembershipEntity | null,
     gymMembershipPlan: GymMembershipPlanEntity,
   ): Promise<number> {
     if (
-      !userGymMembership || 
-      !gymMembershipPlan || 
+      !userGymMembership ||
+      !gymMembershipPlan ||
       !gymMembershipPlan.trialNumberProgramActivities
     ) {
       return 0;
     }
-    const doneActivitiesSinceUserMembershipStarted = 
+    const doneActivitiesSinceUserMembershipStarted =
       await this.userProgramEvolutionService.getNumberOfUserActivityEventsDoneSince(
         userGymMembership.memberUserId,
         userGymMembership.gymId,
         gymMembershipPlan.id,
-        userGymMembership.startedDate);
-    return gymMembershipPlan.trialNumberProgramActivities - doneActivitiesSinceUserMembershipStarted;
-  };
-
-
+        userGymMembership.startedDate,
+      );
+    return (
+      gymMembershipPlan.trialNumberProgramActivities -
+      doneActivitiesSinceUserMembershipStarted
+    );
+  }
 
   /**
    * Check if user has paid membership within due date
@@ -127,28 +148,36 @@ export class UserGymAccessStatusService {
    * @param gymMembershipPlan
    * @returns
    */
-  private async hasUserPaidMembershipWithinDueDate(userGymMembership: GymMembershipEntity, gymMembershipPlan: GymMembershipPlanEntity): Promise<boolean> {
-    
+  private async hasUserPaidMembershipWithinDueDate(
+    userGymMembership: GymMembershipEntity,
+    gymMembershipPlan: GymMembershipPlanEntity,
+  ): Promise<boolean> {
     const periodicity = gymMembershipPlan.periodicity;
 
     // Looking for the last payment date
-    const lastPayment = await this.paymentService.getUserLastPaymentForGymMembershipPlan(
-      userGymMembership.memberUserId,
-      gymMembershipPlan.id,
-      userGymMembership.gymId,
-    );
+    const lastPayment =
+      await this.paymentService.getUserLastPaymentForGymMembershipPlan(
+        userGymMembership.memberUserId,
+        gymMembershipPlan.id,
+        userGymMembership.gymId,
+      );
 
     // In case the membership plan is lifetime, we just check if the user has made any payment
     // accounting for the gym membership plan
-    if (lastPayment && periodicity == BaseSubscriptionPlanPeriodicityEnum.lifetime) {
+    if (
+      lastPayment &&
+      periodicity == BaseSubscriptionPlanPeriodicityEnum.lifetime
+    ) {
       return true;
     }
 
-    const date = (!lastPayment) ? userGymMembership.startedDate : lastPayment.createdAt;
+    const date = !lastPayment
+      ? userGymMembership.startedDate
+      : lastPayment.createdAt;
 
     // Calculate the due date
     let dueDate: Date;
-    switch(periodicity) {
+    switch (periodicity) {
       case BaseSubscriptionPlanPeriodicityEnum.weekly:
         dueDate = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
         break;
@@ -162,13 +191,14 @@ export class UserGymAccessStatusService {
         break;
     }
 
-    return await this.paymentService.countUserGymMembershipPlanPaymentsWithinPeriod(
-      userGymMembership.memberUserId,
-      gymMembershipPlan.id,
-      userGymMembership.gymId,
-      date,
-      dueDate,
-    ) > 0;
+    return (
+      (await this.paymentService.countUserGymMembershipPlanPaymentsWithinPeriod(
+        userGymMembership.memberUserId,
+        gymMembershipPlan.id,
+        userGymMembership.gymId,
+        date,
+        dueDate,
+      )) > 0
+    );
   }
-
 }

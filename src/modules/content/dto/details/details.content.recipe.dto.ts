@@ -7,19 +7,19 @@ export class DetailsContentRecipeDto {
     type: SwaggerType.INTEGER,
     example: 1,
     description: "record id",
-    required: true
+    required: true,
   })
   id: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   contentId: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   recipeId: number;
 
@@ -31,13 +31,13 @@ export class DetailsContentRecipeDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    required: false
+    required: false,
   })
   description?: string;
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    required: false
+    required: false,
   })
   displayTitle: boolean;
 }

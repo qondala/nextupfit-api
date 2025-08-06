@@ -6,58 +6,58 @@ import { BaseRecipeItemTypeEnum } from "../../types";
 export class DetailsBaseRecipeItemDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   id: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   recipeId: number;
 
   @ApiProperty({
     enumName: "BaseRecipeItemTypeEnum",
     enum: BaseRecipeItemTypeEnum,
-    required: true
+    required: true,
   })
   itemType: BaseRecipeItemTypeEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   itemId?: number;
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
-    required: false
+    required: false,
   })
   itemQuantity?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   itemQuantityUnitId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    required: false
+    required: false,
   })
   order?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    required: false
+    format: "date-time",
+    required: false,
   })
   createdAt?: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    required: false
+    format: "date-time",
+    required: false,
   })
   updatedAt?: Date;
 }

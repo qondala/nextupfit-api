@@ -39,7 +39,9 @@ import { BaseProgramGoalService } from "../service";
 @Controller("base/program-goal")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BaseProgramGoalController {
-  constructor(private readonly baseProgramGoalService: BaseProgramGoalService) {}
+  constructor(
+    private readonly baseProgramGoalService: BaseProgramGoalService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -70,13 +72,13 @@ export class BaseProgramGoalController {
     name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: "Page number"
+    description: "Page number",
   })
   @ApiQuery({
     name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: "Number of items per page"
+    description: "Number of items per page",
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -95,11 +97,11 @@ export class BaseProgramGoalController {
     operationId: "getBaseProgramGoalById",
     summary: "Get a specific program goal by ID",
   })
-  @ApiParam({ 
-    name: "id", 
-    required: true, 
+  @ApiParam({
+    name: "id",
+    required: true,
     type: SwaggerType.INTEGER,
-    description: "Program goal ID"
+    description: "Program goal ID",
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -108,11 +110,14 @@ export class BaseProgramGoalController {
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Program goal not found"
+    description: "Program goal not found",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseProgramGoalDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseProgramGoalDto> {
     const item = await this.baseProgramGoalService.findOne(id);
-    if (!item) throw new NotFoundException(`Program goal with ID ${id} not found`);
+    if (!item)
+      throw new NotFoundException(`Program goal with ID ${id} not found`);
     return item;
   }
 
@@ -121,11 +126,11 @@ export class BaseProgramGoalController {
     operationId: "updateBaseProgramGoal",
     summary: "Update a program goal by ID",
   })
-  @ApiParam({ 
-    name: "id", 
-    required: true, 
+  @ApiParam({
+    name: "id",
+    required: true,
     type: SwaggerType.INTEGER,
-    description: "Program goal ID"
+    description: "Program goal ID",
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -134,14 +139,15 @@ export class BaseProgramGoalController {
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Program goal not found"
+    description: "Program goal not found",
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
     @Body() updateDto: UpdateBaseProgramGoalDto,
   ): Promise<DetailsBaseProgramGoalDto> {
     const item = await this.baseProgramGoalService.update(id, updateDto);
-    if (!item) throw new NotFoundException(`Program goal with ID ${id} not found`);
+    if (!item)
+      throw new NotFoundException(`Program goal with ID ${id} not found`);
     return item;
   }
 
@@ -151,21 +157,22 @@ export class BaseProgramGoalController {
     summary: "Delete a program goal by ID",
   })
   @ApiParam({
-    name: "id", 
-    required: true, 
+    name: "id",
+    required: true,
     type: SwaggerType.INTEGER,
-    description: "Program goal ID"
+    description: "Program goal ID",
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "Program goal successfully deleted"
+    description: "Program goal successfully deleted",
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Program goal not found"
+    description: "Program goal not found",
   })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     const success = await this.baseProgramGoalService.remove(id);
-    if (!success) throw new NotFoundException(`Program goal with ID ${id} not found`);
+    if (!success)
+      throw new NotFoundException(`Program goal with ID ${id} not found`);
   }
 }

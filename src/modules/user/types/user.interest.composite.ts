@@ -9,9 +9,7 @@ import {
   DetailsBaseWorkoutDto,
 } from "@app/module/base/dto";
 
-
 export class UserInterestCompositeDto {
-
   @ApiProperty({
     type: () => DetailsBaseSociologyDto,
     title: "DetailsBaseSociologyDto",
@@ -23,7 +21,6 @@ export class UserInterestCompositeDto {
   @Type(() => DetailsBaseSociologyDto)
   sociology?: DetailsBaseSociologyDto;
 
-
   @ApiProperty({
     type: () => DetailsBaseNutritionDto,
     title: "DetailsBaseNutritionDto",
@@ -34,7 +31,6 @@ export class UserInterestCompositeDto {
   @ValidateNested()
   @Type(() => DetailsBaseNutritionDto)
   nutrition?: DetailsBaseNutritionDto;
-
 
   @ApiProperty({
     type: () => DetailsBaseWorkoutDto,
@@ -58,4 +54,3 @@ export class UserInterestCompositeDto {
   @Type(() => DetailsBaseProgramGoalDto)
   programGoal?: DetailsBaseProgramGoalDto;
 }
-

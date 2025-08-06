@@ -4,79 +4,71 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
-  IsString
+  IsString,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class CreateBaseSociologyDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Sociology's name",
     example: "seniors",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
   name: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Sociology's description",
     example: "This program is suitable for senior people",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   description?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Sociology's code",
     example: "soc-seniors",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   code?: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Base sociology group ID",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   baseSociologyGroupId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record created date",
     example: "2022-01-01T00:00:00.000Z",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDate()
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record updated date",
     example: "2022-01-01T00:00:00.000Z",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDate()
   updatedAt: Date;
 }
- 

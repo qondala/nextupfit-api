@@ -5,13 +5,12 @@ import { IsArray, IsDefined, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class PaginatedDetailsUserRecommendationDto extends PaginatedResponseDto<DetailsUserRecommendationDto> {
-
   @ApiProperty({
     type: () => DetailsUserRecommendationDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of users recommendations',
-    required: true
+    description: "List of users recommendations",
+    required: true,
   })
   @IsDefined()
   @IsArray()

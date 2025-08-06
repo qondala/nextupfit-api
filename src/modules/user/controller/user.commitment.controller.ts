@@ -54,7 +54,9 @@ export class UserCommitmentController {
     description: "User commitment created successfully",
     type: DetailsUserCommitmentDto,
   })
-  create(@Body() dto: CreateUserCommitmentDto): Promise<DetailsUserCommitmentDto> {
+  create(
+    @Body() dto: CreateUserCommitmentDto,
+  ): Promise<DetailsUserCommitmentDto> {
     return this.userCommitmentService.create(dto);
   }
 
@@ -82,34 +84,35 @@ export class UserCommitmentController {
     description: "List of user commitments.",
     type: PaginatedDetailsUserCommitmentDto,
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsUserCommitmentDto> {
+  findAll(
+    @Query() options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserCommitmentDto> {
     return this.userCommitmentService.findAll(options);
   }
 
   @Get("user/:userId")
   @ApiOperation({
     summary: "Get user commitments by user id",
-    operationId: "getUserCommitmentsByUserId"
+    operationId: "getUserCommitmentsByUserId",
   })
   @ApiParam({
     name: "userId",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User id",
-    example: 123
+    example: 123,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "List of user commitments by user id.",
-    type: PaginatedDetailsUserCommitmentDto
+    type: PaginatedDetailsUserCommitmentDto,
   })
   getUserCommitments(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() options: PaginationOptionsDto
+    @Query() options: PaginationOptionsDto,
   ): Promise<PaginatedDetailsUserCommitmentDto> {
     return this.userCommitmentService.getUserCommitments(userId, options);
   }
-
 
   @Get(":id")
   @ApiOperation({
@@ -128,7 +131,9 @@ export class UserCommitmentController {
     description: "User commitment by id.",
     type: DetailsUserCommitmentDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserCommitmentDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsUserCommitmentDto> {
     return this.userCommitmentService.findOne(id);
   }
 
@@ -155,7 +160,7 @@ export class UserCommitmentController {
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateUserCommitmentDto
+    @Body() dto: UpdateUserCommitmentDto,
   ): Promise<DetailsUserCommitmentDto> {
     return this.userCommitmentService.update(id, dto);
   }

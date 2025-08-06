@@ -63,7 +63,9 @@ export class ContentOrderedlistController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentOrderedlistDto): Promise<DetailsContentOrderedlistDto> {
+  async create(
+    @Body() dto: CreateContentOrderedlistDto,
+  ): Promise<DetailsContentOrderedlistDto> {
     return await this.service.create(dto);
   }
 
@@ -92,7 +94,8 @@ export class ContentOrderedlistController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Paginated list of content ordered lists retrieved successfully",
+    description:
+      "Paginated list of content ordered lists retrieved successfully",
     type: PaginatedDetailsContentOrderedlistDto,
   })
   @ApiResponse({
@@ -129,7 +132,9 @@ export class ContentOrderedlistController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentOrderedlistDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentOrderedlistDto | null> {
     return await this.service.findOne(id);
   }
 

@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentConsumptionItemEntity } from "../../entity/items";
-import { CreateContentConsumptionItemDto, UpdateContentConsumptionItemDto } from "../../dto";
+import {
+  CreateContentConsumptionItemDto,
+  UpdateContentConsumptionItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentConsumptionItemService {
@@ -14,11 +17,16 @@ export class ContentConsumptionItemService {
     private readonly repository: Repository<ContentConsumptionItemEntity>,
   ) {}
 
-  async create(dto: CreateContentConsumptionItemDto): Promise<ContentConsumptionItemEntity> {
+  async create(
+    dto: CreateContentConsumptionItemDto,
+  ): Promise<ContentConsumptionItemEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(consumptionId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentConsumptionItemEntity>> {
+  async findAll(
+    consumptionId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentConsumptionItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,7 +52,10 @@ export class ContentConsumptionItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentConsumptionItemDto): Promise<ContentConsumptionItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentConsumptionItemDto,
+  ): Promise<ContentConsumptionItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

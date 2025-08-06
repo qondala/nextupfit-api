@@ -8,7 +8,7 @@ import {
   PaymentPayableItemEnum,
   PaymentStatusEnum,
   PaymentMethodEnum,
-  PaymentScopeEnum
+  PaymentScopeEnum,
 } from "../../types";
 
 export class DetailsPaymentDto {

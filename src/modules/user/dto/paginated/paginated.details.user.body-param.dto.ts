@@ -5,13 +5,12 @@ import { IsArray, IsDefined, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class PaginatedDetailsUserBodyParamDto extends PaginatedResponseDto<DetailsUserBodyParamDto> {
-
   @ApiProperty({
     type: () => DetailsUserBodyParamDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of users body params',
-    required: true
+    description: "List of users body params",
+    required: true,
   })
   @IsDefined()
   @IsArray()

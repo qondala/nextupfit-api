@@ -1,33 +1,33 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 
-import { SwaggerType } from '@app/common/types';
+import { SwaggerType } from "@app/common/types";
 import {
   SocialActorEnum,
   SocialUpdateTypeEnum,
-  SocialUpdatePrivacyEnum
-} from '../../types';
-import { DetailsUserDto } from '@app/module/user/dto';
-import { DetailsGymManagerDto } from '@app/module/gym/dto';
+  SocialUpdatePrivacyEnum,
+} from "../../types";
+import { DetailsUserDto } from "@app/module/user/dto";
+import { DetailsGymManagerDto } from "@app/module/gym/dto";
 
 export class DetailsSocialUpdateDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The unique identifier of the social update record',
+    description: "The unique identifier of the social update record",
     example: 1,
   })
   id: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author user',
+    description: "The ID of the author user",
     example: 1,
   })
   authorUserId: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author manager',
+    description: "The ID of the author manager",
     example: 1,
     nullable: true,
     required: false,
@@ -37,14 +37,14 @@ export class DetailsSocialUpdateDto {
   @ApiProperty({
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
-    description: 'The type of social actor',
+    description: "The type of social actor",
     example: SocialActorEnum.user,
   })
   socialActorType: SocialActorEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the social actor',
+    description: "The ID of the social actor",
     example: 1,
   })
   socialActorId: number;
@@ -52,7 +52,7 @@ export class DetailsSocialUpdateDto {
   @ApiProperty({
     enum: SocialUpdateTypeEnum,
     enumName: "SocialUpdateTypeEnum",
-    description: 'The type of social update',
+    description: "The type of social update",
     example: SocialUpdateTypeEnum.status,
   })
   socialUpdateType: SocialUpdateTypeEnum;
@@ -60,24 +60,24 @@ export class DetailsSocialUpdateDto {
   @ApiProperty({
     enum: SocialUpdatePrivacyEnum,
     enumName: "SocialUpdatePrivacyEnum",
-    description: 'The privacy setting for the social update',
+    description: "The privacy setting for the social update",
     example: SocialUpdatePrivacyEnum.public,
   })
   privacy: SocialUpdatePrivacyEnum;
 
   @ApiProperty({
     type: SwaggerType.DATE,
-    format: 'date-time',
-    description: 'The creation timestamp',
-    example: '2023-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "The creation timestamp",
+    example: "2023-01-01T00:00:00.000Z",
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.DATE,
-    format: 'date-time',
-    description: 'The update timestamp',
-    example: '2023-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "The update timestamp",
+    example: "2023-01-01T00:00:00.000Z",
     nullable: true,
     required: false,
   })
@@ -86,7 +86,7 @@ export class DetailsSocialUpdateDto {
   @ApiProperty({
     type: () => DetailsUserDto,
     title: "DetailsUserDto",
-    description: 'Author user of the social update',
+    description: "Author user of the social update",
     required: true,
   })
   @Type(() => DetailsUserDto)
@@ -95,7 +95,7 @@ export class DetailsSocialUpdateDto {
   @ApiProperty({
     type: () => DetailsGymManagerDto,
     title: "DetailsGymManagerDto",
-    description: 'Author manager of the social update',
+    description: "Author manager of the social update",
     required: false,
   })
   @Type(() => DetailsGymManagerDto)

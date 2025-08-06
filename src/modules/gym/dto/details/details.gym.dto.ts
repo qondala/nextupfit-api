@@ -8,26 +8,22 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
-import {
-  GymSpecialityEnum,
-  GymVerifiedStatusEnum
-} from '../../types';
+import { GymSpecialityEnum, GymVerifiedStatusEnum } from "../../types";
 
 import {
   DetailsGymManagerDto,
   DetailsGymMembershipPlanDto,
   DetailsGymOpenDayDto,
   DetailsGymSpecializedInNutritionDto,
-  DetailsGymSpecializedInWorkoutDto
-} from './';
+  DetailsGymSpecializedInWorkoutDto,
+} from "./";
 
 export class DetailsGymDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -38,7 +34,6 @@ export class DetailsGymDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",
@@ -48,7 +43,6 @@ export class DetailsGymDto {
   @IsNotEmpty()
   @IsInt()
   createdByUserId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -70,7 +64,6 @@ export class DetailsGymDto {
   @IsOptional()
   proprietorManagerId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym name",
@@ -81,7 +74,6 @@ export class DetailsGymDto {
   @IsString()
   name: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym logo url",
@@ -90,7 +82,6 @@ export class DetailsGymDto {
   })
   logoUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym cover url",
@@ -98,7 +89,6 @@ export class DetailsGymDto {
     required: false,
   })
   coverUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -110,7 +100,6 @@ export class DetailsGymDto {
   @IsString()
   address: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym email",
@@ -121,7 +110,6 @@ export class DetailsGymDto {
   @IsString()
   email: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym facebook page url",
@@ -129,7 +117,6 @@ export class DetailsGymDto {
     required: false,
   })
   facebookPageUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -139,7 +126,6 @@ export class DetailsGymDto {
   })
   twitterPageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym linkedin page url",
@@ -147,7 +133,6 @@ export class DetailsGymDto {
     required: false,
   })
   linkedinPageUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -157,7 +142,6 @@ export class DetailsGymDto {
   })
   youtubePageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym tiktok page url",
@@ -165,7 +149,6 @@ export class DetailsGymDto {
     required: false,
   })
   tiktokPageUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -175,7 +158,6 @@ export class DetailsGymDto {
   })
   phoneLine1?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym moto",
@@ -184,7 +166,6 @@ export class DetailsGymDto {
   })
   moto?: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym followers count",
@@ -192,7 +173,6 @@ export class DetailsGymDto {
     required: false,
   })
   followersCount?: number;
-
 
   @ApiProperty({
     enum: GymSpecialityEnum,
@@ -206,7 +186,6 @@ export class DetailsGymDto {
   @IsEnum(GymSpecialityEnum)
   speciality: GymSpecialityEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Gym stripe account id",
@@ -214,7 +193,6 @@ export class DetailsGymDto {
     required: false,
   })
   stripeAccountId?: string;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -224,7 +202,6 @@ export class DetailsGymDto {
   })
   countryId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym state id",
@@ -232,7 +209,6 @@ export class DetailsGymDto {
     required: false,
   })
   stateId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -242,7 +218,6 @@ export class DetailsGymDto {
   })
   cityId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym members count",
@@ -250,7 +225,6 @@ export class DetailsGymDto {
     required: false,
   })
   membersCount?: number;
-
 
   @ApiProperty({
     enum: GymVerifiedStatusEnum,
@@ -262,8 +236,7 @@ export class DetailsGymDto {
   })
   @IsDefined()
   @IsEnum(GymVerifiedStatusEnum)
-  verifiedStatus: GymVerifiedStatusEnum
-
+  verifiedStatus: GymVerifiedStatusEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -273,7 +246,6 @@ export class DetailsGymDto {
   })
   viewsCount: number;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Gym ratings avg",
@@ -282,7 +254,6 @@ export class DetailsGymDto {
   })
   ratingsAvg: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym ratings count",
@@ -290,7 +261,6 @@ export class DetailsGymDto {
     required: false,
   })
   ratingsCount: number;
-
 
   @ApiProperty({
     type: () => DetailsGymManagerDto,
@@ -303,7 +273,6 @@ export class DetailsGymDto {
   @Type(() => DetailsGymManagerDto)
   owner: DetailsGymManagerDto;
 
-
   @ApiProperty({
     type: () => DetailsGymManagerDto,
     title: "DetailsGymManagerDto",
@@ -314,7 +283,6 @@ export class DetailsGymDto {
   @ValidateNested()
   @Type(() => DetailsGymManagerDto)
   proprietor: DetailsGymManagerDto;
-
 
   @ApiProperty({
     type: () => DetailsGymMembershipPlanDto,
@@ -328,7 +296,6 @@ export class DetailsGymDto {
   @Type(() => DetailsGymMembershipPlanDto)
   membershipPlans?: DetailsGymMembershipPlanDto[];
 
-
   @ApiProperty({
     type: () => DetailsGymSpecializedInWorkoutDto,
     isArray: true,
@@ -340,7 +307,6 @@ export class DetailsGymDto {
   @ValidateNested({ each: true })
   @Type(() => DetailsGymSpecializedInWorkoutDto)
   specializedWorkouts?: DetailsGymSpecializedInWorkoutDto[];
-
 
   @ApiProperty({
     type: () => DetailsGymSpecializedInNutritionDto,
@@ -354,7 +320,6 @@ export class DetailsGymDto {
   @Type(() => DetailsGymSpecializedInNutritionDto)
   specializedNutrition?: DetailsGymSpecializedInNutritionDto[];
 
-
   @ApiProperty({
     type: () => DetailsGymOpenDayDto,
     isArray: true,
@@ -367,20 +332,18 @@ export class DetailsGymDto {
   @Type(() => DetailsGymOpenDayDto)
   openDays?: DetailsGymOpenDayDto[];
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Gym created date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
   })
   createdAt?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Gym updated date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,

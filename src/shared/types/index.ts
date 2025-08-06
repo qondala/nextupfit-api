@@ -1,4 +1,4 @@
-import { Request, Response} from "express";
+import { Request, Response } from "express";
 import { DetailsUserDto } from "@app/module/user/dto";
 
 export interface AppRequest extends Request {
@@ -13,13 +13,12 @@ export interface PaginationResult<T> {
 }
 
 export enum SwaggerType {
-  INTEGER = 'integer',
-  NUMBER = 'number',
-  STRING = 'string',
-  BOOLEAN = 'boolean',
-  DATE = 'date',
-  DATETIME = 'datetime',
-  ARRAY = 'array',
-  OBJECT = 'object',
+  INTEGER = "integer",
+  NUMBER = "number",
+  STRING = "string",
+  BOOLEAN = "boolean",
+  DATE = "date",
+  DATETIME = "datetime",
+  ARRAY = "array",
+  OBJECT = "object",
 }
-  

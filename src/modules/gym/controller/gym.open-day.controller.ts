@@ -11,7 +11,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   ConflictException,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
@@ -21,150 +21,153 @@ import {
   ApiParam,
   ApiQuery,
   ApiConflictResponse,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginationOptionsDto } from '@app/common/dto';
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateGymOpenDayDto,
   UpdateGymOpenDayDto,
   DetailsGymOpenDayDto,
-  PaginatedDetailsGymOpenDayDto
-} from '../dto';
-import { GymOpenDayService } from '../service';
-import { SwaggerType } from '@app/common/types';
+  PaginatedDetailsGymOpenDayDto,
+} from "../dto";
+import { GymOpenDayService } from "../service";
+import { SwaggerType } from "@app/common/types";
 import {
   ErrorResponseException,
   ErrorResponseExceptionType,
-  SystemStatusCode
-} from '@app/common/exceptions';
+  SystemStatusCode,
+} from "@app/common/exceptions";
 
-
-@ApiTags('Gym module endpoints')
+@ApiTags("Gym module endpoints")
 @ApiBearerAuth()
-@Controller('gym/opening-day')
+@Controller("gym/opening-day")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class GymOpenDayController {
   constructor(private readonly gymOpenDayService: GymOpenDayService) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create a new gym open day',
-    operationId: 'createGymOpenDay'
+    summary: "Create a new gym open day",
+    operationId: "createGymOpenDay",
   })
   @ApiBody({
     required: true,
-    type: CreateGymOpenDayDto
+    type: CreateGymOpenDayDto,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Gym open day created successfully.',
-    type: DetailsGymOpenDayDto
+    description: "Gym open day created successfully.",
+    type: DetailsGymOpenDayDto,
   })
   @ApiConflictResponse({
-    description: 'Gym open day already exists',
-    type: ErrorResponseException
+    description: "Gym open day already exists",
+    type: ErrorResponseException,
   })
-  async create(@Body() createDto: CreateGymOpenDayDto): Promise<DetailsGymOpenDayDto> {
+  async create(
+    @Body() createDto: CreateGymOpenDayDto,
+  ): Promise<DetailsGymOpenDayDto> {
     try {
       return await this.gymOpenDayService.create(createDto);
     } catch (error) {
       if (error instanceof ConflictException) {
         throw new ErrorResponseException(
           ErrorResponseExceptionType.DATABASE,
-          'Gym open day already exists',
+          "Gym open day already exists",
           HttpStatus.CONFLICT,
-          SystemStatusCode.CONFLICT
+          SystemStatusCode.CONFLICT,
         );
       }
       throw error;
     }
   }
 
-  @Get('gym/:gymId')
+  @Get("gym/:gymId")
   @ApiOperation({
-    summary: 'Get all opening days of a gym',
-    operationId: 'getGymOpenDaysByGymId'
+    summary: "Get all opening days of a gym",
+    operationId: "getGymOpenDaysByGymId",
   })
   @ApiParam({
-    name: 'gymId',
+    name: "gymId",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Paginated list of gym open days',
-    type: PaginatedDetailsGymOpenDayDto
+    description: "Paginated list of gym open days",
+    type: PaginatedDetailsGymOpenDayDto,
   })
   async findByGym(
-    @Param('gymId') gymId: string,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("gymId") gymId: string,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsGymOpenDayDto> {
     return await this.gymOpenDayService.findByGym(+gymId, paginationOptions);
   }
 
-  @Get(':id')
+  @Get(":id")
   @ApiOperation({
-    summary: 'Get gym open day by id',
-    operationId: 'getGymOpenDayById'
+    summary: "Get gym open day by id",
+    operationId: "getGymOpenDayById",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Gym open day details',
-    type: DetailsGymOpenDayDto
+    description: "Gym open day details",
+    type: DetailsGymOpenDayDto,
   })
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<DetailsGymOpenDayDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsGymOpenDayDto> {
     return await this.gymOpenDayService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update gym opening day',
-    operationId: 'updateGymOpenDay'
+    summary: "Update gym opening day",
+    operationId: "updateGymOpenDay",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Gym open day updated successfully.',
-    type: DetailsGymOpenDayDto
+    description: "Gym open day updated successfully.",
+    type: DetailsGymOpenDayDto,
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateGymOpenDayDto
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateDto: UpdateGymOpenDayDto,
   ): Promise<DetailsGymOpenDayDto> {
     return await this.gymOpenDayService.update(id, updateDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete gym opening day',
-    operationId: 'deleteGymOpenDay'
+    summary: "Delete gym opening day",
+    operationId: "deleteGymOpenDay",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'Gym open day deleted successfully.'
+    description: "Gym open day deleted successfully.",
   })
-  async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.gymOpenDayService.remove(id);
   }
 }

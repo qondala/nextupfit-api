@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
@@ -64,7 +70,7 @@ export class DetailsContentSusbcriptionPlanDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: false,
   })
@@ -72,7 +78,7 @@ export class DetailsContentSusbcriptionPlanDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: false,
   })

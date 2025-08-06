@@ -11,7 +11,7 @@ export class PaginatedDetailsSocialRatingsDto extends PaginatedResponseDto<Detai
     name: "items",
     isArray: true,
     description: "List of ratings records",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

@@ -1,72 +1,78 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 import {
   FindOrderByEnum,
-  InterestPaginationDto,
   PaginatedResponseDto,
   PaginationOptionsDto,
 } from "@app/common/dto";
 
 import { UserInterestEntity } from "@app/module/user/entity";
-import { UserInterestService } from "@app/module/user/service";
 
-import {
-  GymManagerEntity,
-  GymManagerInterestEntity
-} from "../entity";
+import { GymManagerEntity, GymManagerInterestEntity } from "../entity";
 
 import {
   CreateGymManagerInterestDto,
   UpdateGymManagerInterestDto,
   GymFindCriteriaManagerInterestDto,
+  GymFindOrderManagerInterestEnum,
 } from "../dto";
-
 
 @Injectable()
 export class GymManagerInterestService {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(GymManagerInterestEntity)
     private readonly repository: Repository<GymManagerInterestEntity>,
-    private readonly userInterestsService: UserInterestService,
   ) {}
 
-  async create(body: CreateGymManagerInterestDto): Promise<GymManagerInterestEntity> {
+  async create(
+    body: CreateGymManagerInterestDto,
+  ): Promise<GymManagerInterestEntity> {
     const interest = this.repository.create(body);
     return await this.repository.save(interest);
   }
 
-  async findAll(criteria: GymFindCriteriaManagerInterestDto, pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<GymManagerInterestEntity>> {
-    
-    const queryBuilder = this.repository.createQueryBuilder("gymManagerInterest");
-    
+  async findAll(
+    criteria: GymFindCriteriaManagerInterestDto,
+    pagination?: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<GymManagerInterestEntity>> {
+    const queryBuilder =
+      this.repository.createQueryBuilder("gymManagerInterest");
+
     queryBuilder.where("gymManagerInterest.id != 0");
-    
+
     if (criteria.interestType) {
-      queryBuilder.andWhere("gymManagerInterest.interestType = :interestType", { interestType: criteria.interestType });
+      queryBuilder.andWhere("gymManagerInterest.interestType = :interestType", {
+        interestType: criteria.interestType,
+      });
     }
     if (criteria.interestId) {
-      queryBuilder.andWhere("gymManagerInterest.interestId = :interestId", { interestId: criteria.interestId });
+      queryBuilder.andWhere("gymManagerInterest.interestId = :interestId", {
+        interestId: criteria.interestId,
+      });
     }
     if (criteria.managerId) {
-      queryBuilder.andWhere("gymManagerInterest.managerId = :managerId", { managerId: criteria.managerId });
+      queryBuilder.andWhere("gymManagerInterest.managerId = :managerId", {
+        managerId: criteria.managerId,
+      });
     }
-    
+
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case FindOrderByEnum.random:
-          queryBuilder.addOrderBy('RANDOM()');
+          queryBuilder.addOrderBy("RANDOM()");
           break;
         case FindOrderByEnum.date:
-          queryBuilder.addOrderBy('gymManagerInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("gymManagerInterest.createdAt", "DESC");
           break;
         default:
-          queryBuilder.addOrderBy('gymManagerInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("gymManagerInterest.createdAt", "DESC");
           break;
       }
     }
-    
+
     const { page, limit } = pagination || { page: 1, limit: 10 };
 
     const skip = (page - 1) * limit;
@@ -84,8 +90,8 @@ export class GymManagerInterestService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
@@ -96,7 +102,10 @@ export class GymManagerInterestService {
     return interest;
   }
 
-  async update(id: number, body: UpdateGymManagerInterestDto): Promise<GymManagerInterestEntity> {
+  async update(
+    id: number,
+    body: UpdateGymManagerInterestDto,
+  ): Promise<GymManagerInterestEntity> {
     const interest = await this.repository.findOne({
       where: { id },
     });
@@ -110,46 +119,83 @@ export class GymManagerInterestService {
     return;
   }
 
-  async getUserInterests(userId: number, pagination: InterestPaginationDto): Promise<UserInterestEntity[]> {
-    const interests = await this.userInterestsService.findAll(userId, pagination.user);
-    return interests.items;
-  }
+  async getUserInteredtedManagers(
+    userId: number,
+    pagination: PaginationOptionsDto,
+    order: GymFindOrderManagerInterestEnum,
+  ): Promise<PaginatedResponseDto<GymManagerEntity>> {
+    const queryBuilder = this.dataSource
+      .getRepository(GymManagerEntity)
+      .createQueryBuilder("gymManager")
+      .leftJoinAndSelect("gymManager.gym", "gym")
+      .leftJoinAndSelect("gymManager.user", "user")
+      .innerJoin("gymManager.interests", "gymManagerInterest")
+      .innerJoin(
+        UserInterestEntity,
+        "userInterest",
+        "userInterest.interestType = gymManagerInterest.interestType AND userInterest.interestId = gymManagerInterest.interestId",
+      )
+      .where("userInterest.userId = :userId", { userId });
 
-  async getManagersByUserInterests(userId: number, pagination: InterestPaginationDto): Promise<PaginatedResponseDto<GymManagerEntity>> {
-    const userInterests = await this.getUserInterests(userId, pagination);
-
-    const managers: GymManagerEntity[] = [];
-    const managerIds: number[] = [];
-
-    // Loop through user interests
-    for (const userInterest of userInterests) {
-
-      // And find managers with that interest
-      const managersInterests = await this.findAll(
-        {
-          interestId: userInterest.interestId,
-          interestType: userInterest.interestType,
-        },
-        pagination.local
-      );
-
-      managersInterests.items.forEach(interest => {
-        if (!managerIds.includes(interest.manager.id)) {
-          managerIds.push(interest.manager.id);
-          managers.push(interest.manager);
-        }
-      });
+    switch (order) {
+      case GymFindOrderManagerInterestEnum.date:
+        queryBuilder.addOrderBy("gymManager.createdAt", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.name:
+        queryBuilder.addOrderBy("gymManager.name", "ASC");
+        break;
+      case GymFindOrderManagerInterestEnum.viewsCount:
+        queryBuilder.addOrderBy("gymManager.viewsCount", "ASC");
+        break;
+      case GymFindOrderManagerInterestEnum.ratingsAvg:
+        queryBuilder.addOrderBy("gymManager.ratingsAvg", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.followersCount:
+        queryBuilder.addOrderBy("gymManager.followersCount", "ASC");
+        break;
+      case GymFindOrderManagerInterestEnum.level:
+        queryBuilder.addOrderBy("gymManager.level", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.speciality:
+        queryBuilder.addOrderBy("gymManager.speciality", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.age:
+        queryBuilder.addOrderBy("gymManager.age", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.gender:
+        queryBuilder.addOrderBy("gymManager.gender", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.yearsOfExperience:
+        queryBuilder.addOrderBy("gymManager.yearsOfExperience", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.certified:
+        queryBuilder.addOrderBy("gymManager.certified", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.verified:
+        queryBuilder.addOrderBy("gymManager.verified", "DESC");
+        break;
+      case GymFindOrderManagerInterestEnum.random:
+        queryBuilder.addOrderBy("RANDOM()");
+        break;
     }
 
+    const skip = (pagination.page - 1) * pagination.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / pagination.limit);
+
     return {
-      items: managers,
+      items,
       meta: {
-        totalItems: managers.length,
-        itemCount: managers.length,
-        itemsPerPage: 99,
-        totalPages: 1,
-        currentPage: 1
-      }
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: pagination.limit,
+        totalPages,
+        currentPage: pagination.page,
+      },
     };
   }
 }

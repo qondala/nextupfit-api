@@ -4,47 +4,46 @@ import {
   Column,
   CreateDateColumn,
   ManyToOne,
-  JoinColumn
-} from 'typeorm';
+  JoinColumn,
+  OneToMany,
+} from "typeorm";
 
-import {
-  ProgramItemTypeEnum,
-  ProgramItemCompositeDto,
-} from '../types';
+import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
 
-import { GymEntity, GymManagerEntity } from '@app/module/gym/entity';
+import { ProgramStepActivityEntity, ProgramFreetoolInterestEntity } from "./";
 
-@Entity('program_freetool')
+@Entity("program_freetool")
 export class ProgramFreetoolEntity {
-  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
+  @PrimaryGeneratedColumn("increment", { type: "bigint" })
   id: number;
 
-  @Column({
-    type: 'enum',
-    enum: ProgramItemTypeEnum,
-  })
-  itemType: ProgramItemTypeEnum;
+  @Column({ type: "bigint" })
+  activityId: number;
 
-  @Column({ type: 'bigint' })
-  itemId: number;
-
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: "bigint", nullable: true })
   managerId: number;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: "bigint", nullable: true })
   gymId: number;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'managerId' })
+  @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 
-  // Transient field
-  item: ProgramItemCompositeDto;
+  @ManyToOne(() => ProgramStepActivityEntity)
+  @JoinColumn({ name: "activityId" })
+  activity: ProgramStepActivityEntity;
+
+  @OneToMany(
+    () => ProgramFreetoolInterestEntity,
+    (interest) => interest.freetool,
+  )
+  interests: ProgramFreetoolInterestEntity[];
 }

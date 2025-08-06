@@ -7,16 +7,22 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  ValueTransformer
+  ValueTransformer,
 } from "typeorm";
 
 import { GymEntity } from "@app/module/gym/entity";
 
-import { ProgramAccessibilityEnum, ProgramStatusEnum, ProgramTypeEnum, ProgramVisibilityEnum } from "../types";
-import { ProgramStepEntity, ProgramSubscriptionPlanEntity } from ".";
-
-import { ProgramInterestEntity } from ".";
-
+import {
+  ProgramAccessibilityEnum,
+  ProgramStatusEnum,
+  ProgramTypeEnum,
+  ProgramVisibilityEnum,
+} from "../types";
+import {
+  ProgramStepEntity,
+  ProgramSubscriptionPlanEntity,
+  ProgramInterestEntity,
+} from ".";
 
 // Transformer to convert between string[] and number[]
 const BigintArrayTransformer: ValueTransformer = {
@@ -44,56 +50,48 @@ export class ProgramEntity {
   @Column()
   ownerManagerId: number;
 
-
   @Column({
     enum: ProgramTypeEnum,
     enumName: "ProgramTypeEnum",
     default: ProgramTypeEnum.nutrition,
-    nullable: false
+    nullable: false,
   })
   type: ProgramTypeEnum;
-
 
   @Column({
     enum: ProgramStatusEnum,
     enumName: "ProgramStatusEnum",
     default: ProgramStatusEnum.unpublished,
-    nullable: false
+    nullable: false,
   })
   status: ProgramStatusEnum;
-
 
   @Column({ nullable: true })
   iconUrl: string;
 
-
   @Column({ nullable: true })
   coverUrl: string;
 
+  @Column({ nullable: true })
+  videoUrl: string;
 
   @Column({ default: 0 })
   attendeesCount: number;
 
-
   @Column({ default: 0 })
   viewsCount: number;
-
 
   @Column({ type: "float", default: 0 })
   ratingsAvg: number;
 
-
   @Column({ default: 0 })
   ratingsCount: number;
-
 
   @Column({ default: 2 })
   duration: number;
 
-
   @Column({ default: 16 })
   durationUnitId: number;
-
 
   @Column({ default: 0 })
   difficultyLevel: number;
@@ -105,7 +103,7 @@ export class ProgramEntity {
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
     default: ProgramAccessibilityEnum.public,
-    nullable: false
+    nullable: false,
   })
   accessibility: ProgramAccessibilityEnum;
 
@@ -113,7 +111,7 @@ export class ProgramEntity {
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
     default: ProgramVisibilityEnum.public,
-    nullable: false
+    nullable: false,
   })
   visibility: ProgramVisibilityEnum;
 
@@ -121,7 +119,7 @@ export class ProgramEntity {
     type: "bigint",
     array: true,
     nullable: true,
-    transformer: BigintArrayTransformer
+    transformer: BigintArrayTransformer,
   })
   authorizedMembershipPlanIds?: number[];
 
@@ -129,32 +127,26 @@ export class ProgramEntity {
     type: "bigint",
     array: true,
     nullable: true,
-    transformer: BigintArrayTransformer
+    transformer: BigintArrayTransformer,
   })
   authorizedProgramSubscriptionPlanIds?: number[];
 
-
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym?: GymEntity;
 
-
-  @OneToMany(() => ProgramStepEntity, step => step.program)
+  @OneToMany(() => ProgramStepEntity, (step) => step.program)
   steps: ProgramStepEntity[];
 
-
-  @OneToMany(() => ProgramSubscriptionPlanEntity, plan => plan.program)
+  @OneToMany(() => ProgramSubscriptionPlanEntity, (plan) => plan.program)
   subscriptionPlans: ProgramSubscriptionPlanEntity[];
-
 
   @CreateDateColumn()
   createdAt: Date;
 
-
   @UpdateDateColumn()
   updatedAt: Date;
 
-
-  @OneToMany(() => ProgramInterestEntity, interest => interest.program)
+  @OneToMany(() => ProgramInterestEntity, (interest) => interest.program)
   interests: ProgramInterestEntity[];
 }

@@ -1,4 +1,3 @@
-
 export enum ProgramFindOrderStepEnum {
   date = "date",
   random = "random",

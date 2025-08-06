@@ -1,10 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 
 import { GymManagerEntity } from "./";
 
 @Entity("gym_manager_qualification")
 export class GymManagerQualificationEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,7 +35,7 @@ export class GymManagerQualificationEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => GymManagerEntity, manager => manager.qualifications)
+  @ManyToOne(() => GymManagerEntity, (manager) => manager.qualifications)
   @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 }

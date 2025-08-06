@@ -2,9 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { BaseSchedulableEnum } from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateUserScheduleDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",

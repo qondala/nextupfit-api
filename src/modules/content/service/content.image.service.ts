@@ -22,7 +22,10 @@ export class ContentImageService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedDetailsContentImageDto> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentImageDto> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -47,7 +50,9 @@ export class ContentImageService {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentImageEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentImageEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 

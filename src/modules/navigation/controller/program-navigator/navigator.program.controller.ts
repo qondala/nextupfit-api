@@ -1,51 +1,36 @@
-import {
-  Controller,
-  Get,
-  UseGuards,
-  HttpStatus,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, HttpStatus, Query } from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
   ApiResponse,
   ApiQuery,
-} from '@nestjs/swagger';
+} from "@nestjs/swagger";
 
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
-import {
-  JwtAuthGuard,
-  RolesGuard
-} from '@app/common/guards';
+import { ProgramNavigationNode } from "../../dto";
+import { NavigatorProgramService } from "../../service";
 
-import { ProgramNavigationNode } from '../../dto';
-import { NavigatorProgramService } from '../../service';
-
-
-@ApiTags('Navigation module endpoints')
+@ApiTags("Navigation module endpoints")
 @ApiBearerAuth()
-@Controller('navigation/navigator/program')
+@Controller("navigation/navigator/program")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class NavigatorProgramController {
+  constructor(private readonly service: NavigatorProgramService) {}
 
-  constructor(
-    private readonly service: NavigatorProgramService,
-  ) {}
-
-
-  @Get('next')
+  @Get("next")
   @ApiOperation({
-    operationId: 'getProgramNextNavigationNode',
-    summary: 'Get program next navigation node'
+    operationId: "getProgramNextNavigationNode",
+    summary: "Get program next navigation node",
   })
   @ApiQuery({
     required: true,
-    type: ProgramNavigationNode
+    type: ProgramNavigationNode,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: ProgramNavigationNode
+    type: ProgramNavigationNode,
   })
   async next(
     @Query() current: ProgramNavigationNode,
@@ -53,24 +38,22 @@ export class NavigatorProgramController {
     return await this.service.next(current);
   }
 
-
-  @Get('previous')
+  @Get("previous")
   @ApiOperation({
-    operationId: 'getProgramPreviousNavigationNode',
-    summary: 'Get program previous navigation node'
+    operationId: "getProgramPreviousNavigationNode",
+    summary: "Get program previous navigation node",
   })
   @ApiQuery({
     required: true,
-    type: ProgramNavigationNode
+    type: ProgramNavigationNode,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: ProgramNavigationNode
+    type: ProgramNavigationNode,
   })
   async previous(
     @Query() current: ProgramNavigationNode,
   ): Promise<ProgramNavigationNode> {
     return await this.service.previous(current);
   }
-
 }

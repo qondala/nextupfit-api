@@ -1,17 +1,9 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  IsNotEmpty,
-  IsInt
-} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsInt } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
 export class DetailsProgramWorkoutNutrientBurnDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -22,61 +14,58 @@ export class DetailsProgramWorkoutNutrientBurnDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Workout id to be associated to nutrient burn",
     example: 13,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   baseWorkoutId: number;
-  
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Duration to be use when doing the ratio between the workout and nutrient burn",
+    description:
+      "Duration to be use when doing the ratio between the workout and nutrient burn",
     example: 20,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   duration: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Unity id to be use for the duration field; exple: 6 = mg/dL.",
     example: 6,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   durationUnitId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Nutrient's burned during this workout; exple: 1 = Carbohydrate.",
+    description:
+      "Nutrient's burned during this workout; exple: 1 = Carbohydrate.",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   nutrientId: number;
-  
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Number nutrients burned by the workout in the time frame of duration. Exple: 30 means that the workouts burns 30 mg/dL per duration time.",
+    description:
+      "Number nutrients burned by the workout in the time frame of duration. Exple: 30 means that the workouts burns 30 mg/dL per duration time.",
     example: 30,
     required: true,
   })
   @IsNotEmpty()
   @IsInt()
   burnsNutrientQty: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -88,7 +77,6 @@ export class DetailsProgramWorkoutNutrientBurnDto {
   @IsInt()
   gymId?: number;
 
-  
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the program",
@@ -98,7 +86,6 @@ export class DetailsProgramWorkoutNutrientBurnDto {
   @IsNotEmpty()
   @IsInt()
   programId?: number;
-  
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -109,8 +96,7 @@ export class DetailsProgramWorkoutNutrientBurnDto {
   @IsNotEmpty()
   @IsInt()
   programStepId?: number;
-  
-  
+
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the program step acitivity",
@@ -120,8 +106,7 @@ export class DetailsProgramWorkoutNutrientBurnDto {
   @IsNotEmpty()
   @IsInt()
   programStepActivityId?: number;
-  
-  
+
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",

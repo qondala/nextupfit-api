@@ -3,19 +3,16 @@ import { SwaggerType } from "@app/common/types";
 
 import {
   BaseSubscriptionPlanItemEnum,
-  BaseSubscriptionPlanStatusEnum
+  BaseSubscriptionPlanStatusEnum,
 } from "@app/module/base/types";
 
-
 export class DetailsUserSubscriptionPlanDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     enum: BaseSubscriptionPlanItemEnum,
@@ -26,7 +23,6 @@ export class DetailsUserSubscriptionPlanDto {
   })
   itemType: BaseSubscriptionPlanItemEnum;
 
-  
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Subscription plan item id",
@@ -34,7 +30,6 @@ export class DetailsUserSubscriptionPlanDto {
   })
   itemId: number;
 
-  
   @ApiProperty({
     enum: BaseSubscriptionPlanStatusEnum,
     enumName: "BaseSubscriptionPlanStatusEnum",
@@ -44,19 +39,17 @@ export class DetailsUserSubscriptionPlanDto {
   })
   status: BaseSubscriptionPlanStatusEnum;
 
-  
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Subscription plan created at",
     required: true,
   })
   createdAt: Date;
 
-  
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Subscription plan updated at",
     required: true,
   })

@@ -1,23 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+
+import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
 
 import {
-  GymEntity, 
-  GymManagerEntity 
-} from '@app/module/gym/entity';
+  ProgramEntity,
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramStepActivityWorkingsessionWorkoutEntity,
+  ProgramStepActivityWorkingsessionNutritionEntity,
+} from "@app/module/program/entity";
 
-import {
-  ProgramEntity, 
-  ProgramStepActivityEntity, 
-  ProgramStepActivityWorkingsessionEntity, 
-  ProgramStepActivityWorkingsessionWorkoutEntity 
-} from '@app/module/program/entity';
-
-import { CreateSocialRatingsDto, DetailsSocialRatingsDto } from '../dto';
-import { SocialRatingsEntity, SocialReviewEntity } from '../entity';
-import { SocialReviewItemTypeEnum } from '../types';
-
+import { CreateSocialRatingsDto, DetailsSocialRatingsDto } from "../dto";
+import { SocialRatingsEntity, SocialReviewEntity } from "../entity";
+import { SocialReviewItemTypeEnum } from "../types";
 
 @Injectable()
 export class SocialRatingsService {
@@ -32,7 +29,6 @@ export class SocialRatingsService {
     @InjectRepository(GymManagerEntity)
     private readonly gymManagerRepository: Repository<GymManagerEntity>,
 
-
     @InjectRepository(ProgramEntity)
     private readonly programRepository: Repository<ProgramEntity>,
 
@@ -43,20 +39,26 @@ export class SocialRatingsService {
     private readonly workingSessionRepository: Repository<ProgramStepActivityWorkingsessionEntity>,
 
     @InjectRepository(ProgramStepActivityWorkingsessionWorkoutEntity)
-    private readonly workoutRepository: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>
+    private readonly workoutRepository: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>,
+
+    @InjectRepository(ProgramStepActivityWorkingsessionNutritionEntity)
+    private readonly nutritionRepository: Repository<ProgramStepActivityWorkingsessionNutritionEntity>,
   ) {}
 
-  async create(createDto: CreateSocialRatingsDto): Promise<SocialRatingsEntity> {
+  async create(
+    createDto: CreateSocialRatingsDto,
+  ): Promise<SocialRatingsEntity> {
     const ratings = this.ratingsRepository.create({
       ...createDto,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.ratingsRepository.save(ratings);
   }
 
-
-  async getRatingsFromReviews(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<DetailsSocialRatingsDto> {
-    
+  async getRatingsFromReviews(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+  ): Promise<DetailsSocialRatingsDto> {
     const hasPreviousRatings = await this.hasAnyRatings(itemType, itemId);
 
     const ratings: DetailsSocialRatingsDto = {
@@ -73,125 +75,147 @@ export class SocialRatingsService {
     if (!hasPreviousRatings) {
       return ratings;
     }
-    
-    const result = await this.reviewRepository.createQueryBuilder('review')
-      .select('AVG(review.rating)', 'averageRating')
-      .addSelect('AVG(review.easeOfUse)', 'averageEaseOfUse')
-      .addSelect('AVG(review.effectiveness)', 'averageEffectiveness')
-      .addSelect('COUNT(review.id)', 'totalReviews')
-      .addSelect('MIN(review.rating)', 'minRating')
-      .addSelect('MAX(review.rating)', 'maxRating')
-      .where('review.itemId = :itemId', { itemId })
-      .andWhere('review.itemType = :itemType', { itemType })
+
+    const result = await this.reviewRepository
+      .createQueryBuilder("review")
+      .select("AVG(review.rating)", "averageRating")
+      .addSelect("AVG(review.easeOfUse)", "averageEaseOfUse")
+      .addSelect("AVG(review.effectiveness)", "averageEffectiveness")
+      .addSelect("COUNT(review.id)", "totalReviews")
+      .addSelect("MIN(review.rating)", "minRating")
+      .addSelect("MAX(review.rating)", "maxRating")
+      .where("review.itemId = :itemId", { itemId })
+      .andWhere("review.itemType = :itemType", { itemType })
       .getRawOne();
 
     ratings.averageRating = parseFloat(result.averageRating.toFixed(1));
     ratings.averageEaseOfUse = parseFloat(result.averageEaseOfUse.toFixed(1));
-    ratings.averageEffectiveness = parseFloat(result.averageEffectiveness.toFixed(1));
+    ratings.averageEffectiveness = parseFloat(
+      result.averageEffectiveness.toFixed(1),
+    );
     ratings.totalReviews = parseInt(result.totalReviews);
     ratings.minRating = parseFloat(result.minRating.toFixed(1));
     ratings.maxRating = parseFloat(result.maxRating.toFixed(1));
     ratings.itemId = itemId;
     ratings.itemType = itemType;
-    
+
     return ratings;
   }
 
-  async updateRatings(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<SocialRatingsEntity> {
+  async updateRatings(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+  ): Promise<SocialRatingsEntity> {
     const ratings = await this.getRatingsFromReviews(itemType, itemId);
 
     const wasAnyRated = await this.hasAnyRatings(itemType, itemId);
 
-    if ( wasAnyRated ) {
+    if (wasAnyRated) {
       await this.ratingsRepository.update(
         { itemType, itemId },
-        { ...ratings, updatedAt: new Date() }
+        { ...ratings, updatedAt: new Date() },
       );
     } else {
-      await this.create(ratings);  
+      await this.create(ratings);
     }
 
     await this.updateItemRepository(itemType, itemId, ratings);
 
     return await this.findOne(itemType, itemId);
   }
-  async hasAnyRatings(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<boolean> {
+  async hasAnyRatings(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+  ): Promise<boolean> {
     const result = await this.findOne(itemType, itemId);
     return result !== null;
   }
 
-  async findOne(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<SocialRatingsEntity> {
-    const record = await this.ratingsRepository.findOne({ where: { itemType, itemId } });
+  async findOne(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+  ): Promise<SocialRatingsEntity> {
+    const record = await this.ratingsRepository.findOne({
+      where: { itemType, itemId },
+    });
     return record;
   }
 
   async updateItemRepository(
-    itemType: SocialReviewItemTypeEnum, 
-    itemId: number, 
-    ratings: DetailsSocialRatingsDto
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+    ratings: DetailsSocialRatingsDto,
   ): Promise<void> {
-    switch(itemType) {
+    switch (itemType) {
       case SocialReviewItemTypeEnum.gym:
         await this.gymRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
 
       case SocialReviewItemTypeEnum.manager:
         await this.gymManagerRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
 
       case SocialReviewItemTypeEnum.program:
         await this.programRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
 
       case SocialReviewItemTypeEnum.activity:
         await this.activityRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
 
       case SocialReviewItemTypeEnum.workingsession:
         await this.workingSessionRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
 
       case SocialReviewItemTypeEnum.workout:
         await this.workoutRepository.update(
-          { id: itemId }, 
+          { id: itemId },
           {
-            ratingsAvg: ratings.averageRating, 
-            ratingsCount: ratings.totalReviews
-          }
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
+        );
+        break;
+
+      case SocialReviewItemTypeEnum.nutrition:
+        await this.nutritionRepository.update(
+          { id: itemId },
+          {
+            ratingsAvg: ratings.averageRating,
+            ratingsCount: ratings.totalReviews,
+          },
         );
         break;
     }
-    
   }
-
 }

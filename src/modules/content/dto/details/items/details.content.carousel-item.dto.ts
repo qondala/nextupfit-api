@@ -44,7 +44,6 @@ export class DetailsContentCarouselItemDto {
   @IsString()
   description: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "media url",

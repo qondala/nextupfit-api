@@ -1,7 +1,5 @@
 import { Module } from "@nestjs/common";
 
-
-
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
@@ -29,9 +27,10 @@ import {
   BaseRecipeInstructionEntity,
   BaseRecipeEntity,
   BaseCurrencyEntity,
-  BaseProgramGoalEntity
+  BaseProgramGoalEntity,
+  BaseIngredientEntity,
+  BaseIngredientNutrientEntity,
 } from "./entity";
-
 
 import {
   BaseAppUpdateService,
@@ -58,7 +57,9 @@ import {
   BaseRecipeInstructionService,
   BaseRecipeService,
   BaseCurrencyService,
-  BaseProgramGoalService
+  BaseProgramGoalService,
+  BaseIngredientService,
+  BaseIngredientNutrientService,
 } from "./service"; // Added BaseProgramGoalService
 
 import {
@@ -86,9 +87,10 @@ import {
   BaseRecipeInstructionController,
   BaseRecipeController,
   BaseCurrencyController,
-  BaseProgramGoalController
+  BaseProgramGoalController,
+  BaseIngredientController,
+  BaseIngredientNutrientController,
 } from "./controller"; // Added BaseProgramGoalController
-
 
 @Module({
   imports: [
@@ -117,8 +119,11 @@ import {
       BaseSociologyGroupEntity,
       BaseRecipeEntity,
       BaseCurrencyEntity,
-      BaseProgramGoalEntity
-    ])],
+      BaseProgramGoalEntity,
+      BaseIngredientEntity,
+      BaseIngredientNutrientEntity,
+    ]),
+  ],
   controllers: [
     BaseAppUpdateController,
     BaseBodyParamController,
@@ -144,7 +149,9 @@ import {
     BaseSociologyGroupController,
     BaseRecipeController,
     BaseCurrencyController,
-    BaseProgramGoalController
+    BaseProgramGoalController,
+    BaseIngredientController,
+    BaseIngredientNutrientController,
   ],
   providers: [
     BaseAppUpdateService,
@@ -171,7 +178,9 @@ import {
     BaseRecipeInstructionTagService,
     BaseRecipeInstructionService,
     BaseCurrencyService,
-    BaseProgramGoalService
+    BaseProgramGoalService,
+    BaseIngredientService,
+    BaseIngredientNutrientService,
   ],
   exports: [
     BaseAppUpdateService,
@@ -198,7 +207,9 @@ import {
     BaseRecipeInstructionTagService,
     BaseRecipeInstructionService,
     BaseCurrencyService,
-    BaseProgramGoalService
+    BaseProgramGoalService,
+    BaseIngredientService,
+    BaseIngredientNutrientService,
   ],
 })
 export class BaseModule {}

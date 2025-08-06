@@ -3,7 +3,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateGymManagerSpecializedInWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Manager id",
@@ -13,7 +12,6 @@ export class UpdateGymManagerSpecializedInWorkoutDto {
   @IsOptional()
   @IsInt()
   managerId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -25,4 +23,3 @@ export class UpdateGymManagerSpecializedInWorkoutDto {
   @IsInt()
   baseWorkoutId?: number;
 }
-

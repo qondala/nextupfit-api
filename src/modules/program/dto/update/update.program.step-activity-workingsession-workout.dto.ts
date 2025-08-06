@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsNumber,
@@ -11,17 +9,12 @@ import {
   IsInt,
 } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
-import {
-  ProgramStepActivityStatusEnum
-} from "../../types";
-
+import { ProgramStepActivityStatusEnum } from "../../types";
+import { BaseWorkoutTypeEnum } from "@app/module/base/types";
 
 export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Workingsession's id",
@@ -31,7 +24,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsNotEmpty()
   @IsNumber()
   workingSessionId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -43,7 +35,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsNumber()
   baseWorkoutId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Working session's title",
@@ -53,7 +44,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsOptional()
   @IsString()
   title?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -65,7 +55,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsString()
   description?: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the Workingession",
@@ -75,7 +64,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsOptional()
   @IsNumber()
   gymId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -97,7 +85,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsNumber()
   programStepId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the program step acitivity",
@@ -108,7 +95,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsNumber()
   programStepActivityId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",
@@ -118,7 +104,7 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsOptional()
   @IsNumber()
   ownerUserId?: number;
-  
+
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program workout",
@@ -131,7 +117,7 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date the program step activity was created",
     example: Date(),
     required: false,
@@ -140,39 +126,38 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsDate()
   createdDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout image URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
     required: false,
   })
   @IsOptional()
   @IsString()
   imageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout illustration URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
     required: false,
   })
   @IsOptional()
   @IsString()
   illustrationUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout illustration URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
     required: false,
   })
   @IsOptional()
   @IsString()
   videoUrl?: string;
-  
 
   @ApiProperty({
     enumName: "ProgramStepActivityStatusEnum",
@@ -185,7 +170,6 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsEnum(ProgramStepActivityStatusEnum)
   status?: ProgramStepActivityStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number points gained after passing this Workingsession",
@@ -196,68 +180,62 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsNumber()
   points?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Workingsession attendees count",
     example: 5000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   attendeesCount?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Views count",
     example: 1000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   viewsCount?: number;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Ratings average",
     example: 4.5,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number times Workingsession was rated",
     example: 3000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   ratingsCount?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   difficultyLevel?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Position of the Workout inside the Working session",
     example: 0,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
@@ -282,5 +260,15 @@ export class UpdateProgramStepActivityWorkingsessionWorkoutDto {
   @IsOptional()
   @IsInt()
   durationUnitId?: number;
-}
 
+  @ApiProperty({
+    enum: BaseWorkoutTypeEnum,
+    enumName: "BaseWorkoutTypeEnum",
+    description: "Type of workout",
+    example: BaseWorkoutTypeEnum.sport,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(BaseWorkoutTypeEnum)
+  workoutType?: BaseWorkoutTypeEnum;
+}

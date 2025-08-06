@@ -10,7 +10,7 @@ export class PaginatedDetailsContentAccordionItemDto extends PaginatedResponseDt
     type: () => DetailsContentAccordionItemDto,
     isArray: true,
     description: "Accordion items",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

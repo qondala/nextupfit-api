@@ -1,25 +1,24 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   PaymentEntity,
   PaymentTransferEntity,
   PaymentCartEntity,
   PaymentCartItemEntity,
-} from './entity';
+} from "./entity";
 import {
   PaymentController,
   PaymentTransferController,
   PaymentCartController,
-  PaymentCartItemController
-} from './controller';
+  PaymentCartItemController,
+} from "./controller";
 import {
   PaymentService,
   PaymentTransferService,
   PaymentCartService,
   PaymentCartItemService,
-} from './service';
-
+} from "./service";
 
 @Module({
   imports: [
@@ -50,8 +49,3 @@ import {
   ],
 })
 export class PaymentModule {}
-
-
-
-
-

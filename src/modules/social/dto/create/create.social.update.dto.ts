@@ -1,17 +1,17 @@
-import { IsNotEmpty, IsEnum, IsOptional, IsInt } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsEnum, IsOptional, IsInt } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-import { SwaggerType } from '@app/common/types';
+import { SwaggerType } from "@app/common/types";
 import {
   SocialActorEnum,
   SocialUpdateTypeEnum,
-  SocialUpdatePrivacyEnum
-} from '../../types';
+  SocialUpdatePrivacyEnum,
+} from "../../types";
 
 export class CreateSocialUpdateDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author user',
+    description: "The ID of the author user",
     example: 1,
   })
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class CreateSocialUpdateDto {
 
   @ApiPropertyOptional({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the author manager',
+    description: "The ID of the author manager",
     example: 1,
     nullable: true,
     required: false,
@@ -32,7 +32,7 @@ export class CreateSocialUpdateDto {
   @ApiProperty({
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
-    description: 'The type of social actor',
+    description: "The type of social actor",
     example: SocialActorEnum.user,
   })
   @IsNotEmpty()
@@ -41,7 +41,7 @@ export class CreateSocialUpdateDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'The ID of the social actor',
+    description: "The ID of the social actor",
     example: 1,
   })
   @IsNotEmpty()
@@ -51,7 +51,7 @@ export class CreateSocialUpdateDto {
   @ApiProperty({
     enum: SocialUpdateTypeEnum,
     enumName: "SocialUpdateTypeEnum",
-    description: 'The type of social update',
+    description: "The type of social update",
     example: SocialUpdateTypeEnum.status,
   })
   @IsNotEmpty()
@@ -61,7 +61,7 @@ export class CreateSocialUpdateDto {
   @ApiPropertyOptional({
     enum: SocialUpdatePrivacyEnum,
     enumName: "SocialUpdatePrivacyEnum",
-    description: 'The privacy setting for the social update',
+    description: "The privacy setting for the social update",
     example: SocialUpdatePrivacyEnum.public,
     default: SocialUpdatePrivacyEnum.public,
     required: false,

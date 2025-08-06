@@ -1,12 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+} from "class-validator";
 
 import { SocialReviewItemTypeEnum } from "../../types";
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsSocialRatingsDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "ID of the ratings record",
@@ -18,13 +22,13 @@ export class DetailsSocialRatingsDto {
   id?: number;
 
   @ApiProperty({
-     enum: SocialReviewItemTypeEnum,
-     description: "Item type rated",
-     required: true,
-     example: SocialReviewItemTypeEnum.gym,
-   })
-   @IsEnum(SocialReviewItemTypeEnum)
-   itemType: SocialReviewItemTypeEnum;
+    enum: SocialReviewItemTypeEnum,
+    description: "Item type rated",
+    required: true,
+    example: SocialReviewItemTypeEnum.gym,
+  })
+  @IsEnum(SocialReviewItemTypeEnum)
+  itemType: SocialReviewItemTypeEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

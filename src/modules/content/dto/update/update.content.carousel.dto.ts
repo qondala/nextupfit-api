@@ -53,7 +53,6 @@ export class UpdateContentCarouselDto {
   @IsBoolean()
   displayTitle?: boolean;
 
-  
   @ApiProperty({
     type: () => DetailsContentCarouselItemDto,
     title: "DetailsContentCarouselItemDto",

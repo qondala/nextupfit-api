@@ -9,28 +9,27 @@ import {
 import { ContentConsumptionEntity } from "..";
 import { BaseConsumptionItemTypeEnum } from "@app/module/base/types";
 
-
 @Entity("content_consumption_item")
 export class ContentConsumptionItemEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   consumptionId: number;
 
-  @Column({type: "enum", enum: BaseConsumptionItemTypeEnum})
+  @Column({ type: "enum", enum: BaseConsumptionItemTypeEnum })
   itemType: BaseConsumptionItemTypeEnum;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   itemId: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   quantity: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   quantityUnitId: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   position: number;
 
   @CreateDateColumn()

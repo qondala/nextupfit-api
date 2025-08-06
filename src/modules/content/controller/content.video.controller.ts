@@ -65,7 +65,9 @@ export class ContentVideoController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentVideoDto): Promise<DetailsContentVideoDto> {
+  async create(
+    @Body() dto: CreateContentVideoDto,
+  ): Promise<DetailsContentVideoDto> {
     return await this.service.create(dto);
   }
 
@@ -131,7 +133,9 @@ export class ContentVideoController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentVideoDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentVideoDto | null> {
     return await this.service.findOne(id);
   }
 

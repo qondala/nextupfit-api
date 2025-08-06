@@ -54,7 +54,9 @@ export class ContentPrerequisitesItemController {
     status: HttpStatus.CREATED,
     type: DetailsContentPrerequisitesItemDto,
   })
-  async create(@Body() dto: CreateContentPrerequisitesItemDto): Promise<DetailsContentPrerequisitesItemDto> {
+  async create(
+    @Body() dto: CreateContentPrerequisitesItemDto,
+  ): Promise<DetailsContentPrerequisitesItemDto> {
     return await this.service.create(dto);
   }
 
@@ -84,7 +86,8 @@ export class ContentPrerequisitesItemController {
     type: PaginatedDetailsContentPrerequisitesItemDto,
   })
   async findAll(
-    @Param("contentPrerequisitesId", ParseIntPipe) contentPrerequisitesId: number,
+    @Param("contentPrerequisitesId", ParseIntPipe)
+    contentPrerequisitesId: number,
     @Query() query: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentPrerequisitesItemDto> {
     return this.service.findAll(contentPrerequisitesId, query);
@@ -104,7 +107,9 @@ export class ContentPrerequisitesItemController {
     status: HttpStatus.OK,
     type: DetailsContentPrerequisitesItemDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentPrerequisitesItemDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentPrerequisitesItemDto | null> {
     return await this.service.findOne(id);
   }
 

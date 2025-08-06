@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 
 import {
   IsNotEmpty,
@@ -12,17 +10,13 @@ import {
   IsBoolean,
 } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
 import {
   ProgramAccessibilityEnum,
   ProgramStepActivityStatusEnum,
   ProgramVisibilityEnum,
 } from "../../types";
-
-
 
 export class CreateProgramStepActivityDto {
   @ApiProperty({
@@ -52,7 +46,6 @@ export class CreateProgramStepActivityDto {
   @IsNumber()
   gymId: number;
 
-
   @ApiProperty({
     description: "Id of the program",
     example: 80,
@@ -71,7 +64,6 @@ export class CreateProgramStepActivityDto {
   @IsNumber()
   programStepId: number;
 
-
   @ApiProperty({
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -80,7 +72,7 @@ export class CreateProgramStepActivityDto {
   @IsNotEmpty()
   @IsNumber()
   ownerUserId: number;
-  
+
   @ApiProperty({
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -101,12 +93,32 @@ export class CreateProgramStepActivityDto {
 
   @ApiProperty({
     description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
   @IsString()
   iconUrl?: string;
 
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Activity image URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/activities/my-activity-image.jpg",
+    required: false,
+  })
+  @IsString()
+  imageUrl?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Activity video URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/video/upload/v1697110655/program/activities/my-activity-video.mp4",
+    required: false,
+  })
+  @IsString()
+  videoUrl?: string;
 
   @ApiProperty({
     description: "Program step activity status",
@@ -117,7 +129,6 @@ export class CreateProgramStepActivityDto {
   @IsEnum(ProgramStepActivityStatusEnum)
   status: ProgramStepActivityStatusEnum;
 
-
   @ApiProperty({
     description: "Number points gained after passing this activity",
     example: 10,
@@ -127,78 +138,71 @@ export class CreateProgramStepActivityDto {
   @IsNumber()
   points: number;
 
-
   @ApiProperty({
     description: "Activity attendees count",
     example: 5000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   attendeesCount?: number;
 
-
   @ApiProperty({
     description: "Views count",
     example: 1000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   viewsCount?: number;
 
-
   @ApiProperty({
     description: "Ratings average",
     example: 4.5,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg?: number;
 
-
   @ApiProperty({
     description: "Number times activity was rated",
     example: 3000,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   ratingsCount?: number;
 
-
   @ApiProperty({
     description: "Duration of the step",
     example: 2,
     required: false,
-    default: 2
+    default: 2,
   })
   @IsOptional()
   @IsNumber()
   duration?: number;
 
-
   @ApiProperty({
     description: "Duration unit",
     example: 16,
     required: false,
-    default: 16
+    default: 16,
   })
   @IsOptional()
   @IsNumber()
   durationUnitId?: number;
 
-
   @ApiProperty({
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
@@ -207,19 +211,18 @@ export class CreateProgramStepActivityDto {
   @ApiProperty({
     description: "Position of the Activity inside the Program Step",
     example: 0,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   position: number;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Is the activity a free tool?",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
@@ -230,18 +233,18 @@ export class CreateProgramStepActivityDto {
     description: "Price of the activity",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   price?: number;
-  
+
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Is the activity a challenge?",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
@@ -250,28 +253,28 @@ export class CreateProgramStepActivityDto {
   @ApiProperty({
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
-    nullable: false
+    nullable: false,
   })
   accessibility: ProgramAccessibilityEnum;
 
   @ApiProperty({
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
-    nullable: false
+    nullable: false,
   })
   visibility: ProgramVisibilityEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    nullable: true
+    nullable: true,
   })
   authorizedMembershipPlanIds?: number[];
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     isArray: true,
-    nullable: true
+    nullable: true,
   })
   authorizedProgramSubscriptionPlanIds?: number[];
 }

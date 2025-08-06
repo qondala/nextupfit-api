@@ -1,9 +1,7 @@
 import { SwaggerType } from "@app/common/types";
 import { ApiProperty } from "@nestjs/swagger";
 
-
 export class UpdateSocialRatingsDto {
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Average rating of the item",

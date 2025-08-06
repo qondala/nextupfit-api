@@ -1,19 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-} from "class-validator";
-
+import { IsOptional } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { FindOrderByEnum } from "@app/common/dto";
 
 import { ProgramItemTypeEnum } from "../../types";
 
-
 export class ProgramFindCriteriaPerSociologyDto {
-
   @ApiProperty({
-    name: 'itemType',
+    name: "itemType",
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
     title: "ProgramItemTypeEnum",
@@ -24,20 +19,18 @@ export class ProgramFindCriteriaPerSociologyDto {
   @IsOptional()
   itemType?: ProgramItemTypeEnum;
 
-
   @ApiProperty({
-    name: 'itemId',
+    name: "itemId",
     type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: false,
   })
-  @IsOptional() 
+  @IsOptional()
   itemId?: number;
 
-
   @ApiProperty({
-    name: 'baseSociologyId',
+    name: "baseSociologyId",
     type: SwaggerType.INTEGER,
     description: "Id of the sociology",
     example: 3,
@@ -47,7 +40,7 @@ export class ProgramFindCriteriaPerSociologyDto {
   baseSociologyId?: number;
 
   @ApiProperty({
-    name: 'baseSociologyIds',
+    name: "baseSociologyIds",
     type: SwaggerType.INTEGER,
     isArray: true,
     description: "Id of the sociology",
@@ -58,10 +51,10 @@ export class ProgramFindCriteriaPerSociologyDto {
   baseSociologyIds?: number[];
 
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: FindOrderByEnum,
     enumName: "FindOrderByEnum",
-    description: 'The order by for the program managers',
+    description: "The order by for the program managers",
     required: false,
   })
   orderBy?: FindOrderByEnum;

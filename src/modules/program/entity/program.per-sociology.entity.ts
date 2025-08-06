@@ -4,34 +4,29 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 import { ProgramItemCompositeDto, ProgramItemTypeEnum } from "../types";
 import { BaseSociologyEntity } from "@app/module/base/entity";
 
-
 @Entity("program_per_sociology")
 export class ProgramPerSociologyEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: false })
   itemType: ProgramItemTypeEnum;
 
-
   @Column({ nullable: false })
   itemId: number;
-
 
   @Column({ nullable: false })
   baseSociologyId: number;
 
   @ManyToOne(() => BaseSociologyEntity)
-  @JoinColumn({ name: 'baseSociologyId' })
+  @JoinColumn({ name: "baseSociologyId" })
   sociology: BaseSociologyEntity;
-
 
   @CreateDateColumn()
   createdAt: Date;

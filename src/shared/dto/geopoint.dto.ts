@@ -1,21 +1,31 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsArray, ArrayMinSize, ArrayMaxSize, IsNumber } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  IsString,
+  IsArray,
+  ArrayMinSize,
+  ArrayMaxSize,
+  IsNumber,
+} from "class-validator";
+import { SwaggerType } from "@app/common/types";
 
 export class GeoPointDto {
   @ApiProperty({
-    type: String,
+    type: SwaggerType.STRING,
     description: "Constant value 'Point'",
     required: true,
-    example: 'Point'
+    example: "Point",
+    default: "Point",
   })
   @IsString()
-  type: 'Point';
+  type: "Point";
 
   @ApiProperty({
-    type: Number,
-    description: "Array of 2 numbers representing the coordinates of the point: (longitude, latitude)",
+    type: SwaggerType.NUMBER,
+    isArray: true,
+    description:
+      "Array of 2 numbers representing the coordinates of the point: (longitude, latitude)",
     required: true,
-    example: [-123.456, 123.456]
+    example: [-123.456, 123.456],
   })
   @IsArray()
   @ArrayMinSize(2)

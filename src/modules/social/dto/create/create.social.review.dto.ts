@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsEnum } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsNumber,
+  IsEnum,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SocialReviewItemTypeEnum } from "../../types";
@@ -13,7 +19,6 @@ export class CreateSocialReviewDto {
   @IsNumber()
   rating: number;
 
-
   @ApiProperty({
     description: "Users's comment",
     example: "I really enjoyed attending Pillates workout session",
@@ -23,7 +28,6 @@ export class CreateSocialReviewDto {
   @IsString()
   comment?: string;
 
- 
   @ApiProperty({
     description: "Item type to be rated",
     example: SocialReviewItemTypeEnum.workingsession,
@@ -51,7 +55,6 @@ export class CreateSocialReviewDto {
   @IsNumber()
   userId: number;
 
-
   @ApiProperty({
     description: "Assess the ease of use of the Item on a scale of 10",
     example: 9,
@@ -60,7 +63,6 @@ export class CreateSocialReviewDto {
   @IsOptional()
   @IsNumber()
   easeOfUse?: number;
-
 
   @ApiProperty({
     description: "Assess the effectiveness of the Item on a scale of 10",

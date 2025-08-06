@@ -1,23 +1,10 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  Type
-} from "class-transformer";
-import {
-  ValidateNested
-} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  UserInterestTypeEnum
-} from "@app/module/user/types";
-import {
-  DetailsProgramDto
-} from ".";
-
+import { SwaggerType } from "@app/common/types";
+import { UserInterestTypeEnum } from "@app/module/user/types";
+import { DetailsProgramDto } from "./details.program.dto";
 
 export class DetailsProgramInterestDto {
   @ApiProperty({
@@ -51,7 +38,7 @@ export class DetailsProgramInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Creation date",
     required: true,
   })
@@ -59,7 +46,7 @@ export class DetailsProgramInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Update date",
     required: false,
   })

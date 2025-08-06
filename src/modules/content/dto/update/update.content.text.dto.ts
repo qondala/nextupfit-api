@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateContentTextDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,

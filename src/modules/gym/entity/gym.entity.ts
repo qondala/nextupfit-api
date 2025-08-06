@@ -6,10 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
-  JoinColumn
-} from 'typeorm';
+  JoinColumn,
+} from "typeorm";
 
-import { GymSpecialityEnum, GymVerifiedStatusEnum } from '../types';
+import { GymSpecialityEnum, GymVerifiedStatusEnum } from "../types";
 
 import {
   GymInterestEntity,
@@ -17,14 +17,13 @@ import {
   GymMembershipPlanEntity,
   GymOpenDayEntity,
   GymSpecializedInNutritionEntity,
-  GymSpecializedInWorkoutEntity
-} from './';
+  GymSpecializedInWorkoutEntity,
+} from "./";
 
-@Entity('gym')
+@Entity("gym")
 export class GymEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @Column({ nullable: false })
   createdByUserId: number;
@@ -35,52 +34,40 @@ export class GymEntity {
   @Column({ nullable: false })
   proprietorManagerId: number;
 
-
   @Column({ nullable: false })
   name: string;
-
 
   @Column({ nullable: true })
   logoUrl?: string;
 
-
   @Column({ nullable: true })
   coverUrl?: string;
-
 
   @Column({ nullable: true })
   address: string;
 
-  
   @Column({ nullable: true })
   email: string;
-
 
   @Column({ nullable: true })
   facebookPageUrl?: string;
 
-
   @Column({ nullable: true })
   twitterPageUrl?: string;
 
-
   @Column({
-    nullable: true
+    nullable: true,
   })
   linkedinPageUrl?: string;
-
 
   @Column({ nullable: true })
   youtubePageUrl?: string;
 
-
   @Column({ nullable: true })
   tiktokPageUrl?: string;
 
-
   @Column({ nullable: true })
   phoneLine1?: string;
-
 
   @Column({ nullable: true })
   phoneLine2?: string;
@@ -94,10 +81,9 @@ export class GymEntity {
   @Column({
     type: "enum",
     enum: GymSpecialityEnum,
-    nullable: true
+    nullable: true,
   })
   speciality: GymSpecialityEnum;
-
 
   @Column({ nullable: true })
   stripeAccountId?: string;
@@ -117,9 +103,9 @@ export class GymEntity {
   @Column({
     type: "enum",
     enum: GymVerifiedStatusEnum,
-    nullable: true
+    nullable: true,
   })
-  verifiedStatus: GymVerifiedStatusEnum
+  verifiedStatus: GymVerifiedStatusEnum;
 
   @Column({ nullable: true })
   viewsCount: number;
@@ -131,26 +117,32 @@ export class GymEntity {
   ratingsCount: number;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'createdByManagerId' })
+  @JoinColumn({ name: "createdByManagerId" })
   owner: GymManagerEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'proprietorManagerId' })
-  proprietor: GymManagerEntity
+  @JoinColumn({ name: "proprietorManagerId" })
+  proprietor: GymManagerEntity;
 
-  @OneToMany(() => GymMembershipPlanEntity, plan => plan.gym)
+  @OneToMany(() => GymMembershipPlanEntity, (plan) => plan.gym)
   membershipPlans: GymMembershipPlanEntity[];
 
-  @OneToMany(() => GymSpecializedInWorkoutEntity, specializedWorkout => specializedWorkout.gym)
+  @OneToMany(
+    () => GymSpecializedInWorkoutEntity,
+    (specializedWorkout) => specializedWorkout.gym,
+  )
   specializedWorkouts: GymSpecializedInWorkoutEntity[];
 
-  @OneToMany(() => GymSpecializedInNutritionEntity, specializedNutrition => specializedNutrition.gym)
+  @OneToMany(
+    () => GymSpecializedInNutritionEntity,
+    (specializedNutrition) => specializedNutrition.gym,
+  )
   specializedNutritions: GymSpecializedInNutritionEntity[];
 
-  @OneToMany(() => GymOpenDayEntity, openDay => openDay.gym)
+  @OneToMany(() => GymOpenDayEntity, (openDay) => openDay.gym)
   openDays: GymOpenDayEntity[];
 
-  @OneToMany(() => GymInterestEntity, interest => interest.gym)
+  @OneToMany(() => GymInterestEntity, (interest) => interest.gym)
   interests: GymInterestEntity[];
 
   @CreateDateColumn()

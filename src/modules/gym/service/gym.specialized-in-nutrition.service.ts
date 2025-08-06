@@ -17,7 +17,9 @@ export class GymSpecializedInNutritionService {
     private readonly repository: Repository<GymSpecializedInNutritionEntity>,
   ) {}
 
-  async create(dto: CreateGymSpecializedInNutritionDto): Promise<GymSpecializedInNutritionEntity> {
+  async create(
+    dto: CreateGymSpecializedInNutritionDto,
+  ): Promise<GymSpecializedInNutritionEntity> {
     const record = this.repository.create({ ...dto, createdAt: new Date() });
     return this.repository.save(record);
   }
@@ -26,12 +28,16 @@ export class GymSpecializedInNutritionService {
     gymId: number,
     { page = 1, limit = 10 }: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymSpecializedInNutritionEntity>> {
-    const qb = this.repository.createQueryBuilder("nut")
+    const qb = this.repository
+      .createQueryBuilder("nut")
       .where("nut.gymId = :gymId", { gymId })
       .orderBy("nut.createdAt", "DESC");
 
     const skip = (page - 1) * limit;
-    const [items, totalItems] = await qb.skip(skip).take(limit).getManyAndCount();
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(limit)
+      .getManyAndCount();
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
@@ -54,8 +60,10 @@ export class GymSpecializedInNutritionService {
 
     const query = this.repository
       .createQueryBuilder("specializedNutrition")
-      .where("specializedNutrition.baseNutritionId IN (:...nutritionIds)", { nutritionIds })
-      .orderBy('RANDOM()')
+      .where("specializedNutrition.baseNutritionId IN (:...nutritionIds)", {
+        nutritionIds,
+      })
+      .orderBy("RANDOM()")
       .skip((page - 1) * limit)
       .take(limit);
 
@@ -77,7 +85,10 @@ export class GymSpecializedInNutritionService {
     return this.repository.findOne({ where: { id }, relations: ["nutrition"] });
   }
 
-  async update(id: number, dto: UpdateGymSpecializedInNutritionDto): Promise<GymSpecializedInNutritionEntity> {
+  async update(
+    id: number,
+    dto: UpdateGymSpecializedInNutritionDto,
+  ): Promise<GymSpecializedInNutritionEntity> {
     await this.repository.update(id, dto);
     return this.findOne(id);
   }

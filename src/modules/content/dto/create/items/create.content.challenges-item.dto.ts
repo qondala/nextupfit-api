@@ -4,12 +4,11 @@ import { IsNotEmpty, IsInt } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 export class CreateContentChallengesItemDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "id of the visual content",
     example: 1234,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -19,7 +18,7 @@ export class CreateContentChallengesItemDto {
     type: SwaggerType.INTEGER,
     description: "challenge id",
     example: 1234,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -29,7 +28,7 @@ export class CreateContentChallengesItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()

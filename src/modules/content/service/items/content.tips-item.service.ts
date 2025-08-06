@@ -18,7 +18,10 @@ export class ContentTipsItemService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(tipsId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentTipsItemEntity>> {
+  async findAll(
+    tipsId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentTipsItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -45,7 +48,10 @@ export class ContentTipsItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentTipsItemDto): Promise<ContentTipsItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentTipsItemDto,
+  ): Promise<ContentTipsItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

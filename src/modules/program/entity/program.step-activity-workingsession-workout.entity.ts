@@ -1,7 +1,17 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { ProgramStepActivityStatusEnum } from "../types";
-import { ProgramStepActivityWorkingsessionEntity } from "./program.step-activity-workingsession.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
+import { BaseWorkoutTypeEnum } from "@app/module/base/types";
+
+import { ProgramStepActivityStatusEnum } from "../types";
+import { ProgramStepActivityWorkingsessionEntity } from ".";
 
 @Entity("program_step_activity_workingsession_workout")
 export class ProgramStepActivityWorkingsessionWorkoutEntity {
@@ -75,8 +85,18 @@ export class ProgramStepActivityWorkingsessionWorkoutEntity {
   @Column({ default: 0 })
   position: number;
 
-  @ManyToOne(() => ProgramStepActivityWorkingsessionEntity, workingsession => workingsession.workouts)
-  @JoinColumn({ name: 'workingSessionId' })
+  @Column({
+    type: "enum",
+    enum: BaseWorkoutTypeEnum,
+    nullable: true,
+  })
+  workoutType?: BaseWorkoutTypeEnum;
+
+  @ManyToOne(
+    () => ProgramStepActivityWorkingsessionEntity,
+    (workingsession) => workingsession.workouts,
+  )
+  @JoinColumn({ name: "workingSessionId", referencedColumnName: "id" })
   workingsession: ProgramStepActivityWorkingsessionEntity;
 
   @CreateDateColumn()

@@ -6,18 +6,16 @@ import { PassportModule } from "@nestjs/passport";
 import {
   JwtRefreshTokenStrategy,
   JwtStrategy,
-  LocalStrategy
+  LocalStrategy,
 } from "@app/common/strategies";
 import { PublicGuard } from "@app/common/guards";
 import { SharedModule } from "@app/common/shared.module";
 
 import { UserModule } from "@app/module/user/user.module";
 
-
 import { FirebaseAuthService } from "./firebaseauth.service";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
-
 
 @Module({
   imports: [

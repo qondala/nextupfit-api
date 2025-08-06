@@ -62,7 +62,9 @@ export class ContentTextareaController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentTextareaDto): Promise<DetailsContentTextareaDto> {
+  async create(
+    @Body() dto: CreateContentTextareaDto,
+  ): Promise<DetailsContentTextareaDto> {
     return await this.service.create(dto);
   }
 
@@ -128,7 +130,9 @@ export class ContentTextareaController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentTextareaDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentTextareaDto> {
     return await this.service.findOne(id);
   }
 

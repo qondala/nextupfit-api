@@ -15,7 +15,6 @@ export class UpdateSocialReviewDto {
   @IsInt()
   rating?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Users's comment",
@@ -26,7 +25,6 @@ export class UpdateSocialReviewDto {
   @IsString()
   comment?: string;
 
- 
   @ApiProperty({
     enum: SocialReviewItemTypeEnum,
     enumName: "SocialReviewItemTypeEnum",
@@ -58,7 +56,6 @@ export class UpdateSocialReviewDto {
   @IsInt()
   userId?: number;
 
-
   @ApiProperty({
     description: "Assess the ease of use of the Item on a scale of 10",
     example: 9,
@@ -67,7 +64,6 @@ export class UpdateSocialReviewDto {
   @IsOptional()
   @IsInt()
   easeOfUse?: number;
-
 
   @ApiProperty({
     description: "Assess the effectiveness of the Item on a scale of 10",

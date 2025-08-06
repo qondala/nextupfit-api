@@ -1,5 +1,4 @@
 export enum ProgramNavigationAdviceEnum {
-
   // Cannot navigate reasons
   isNotFollowingGym = "isNotFollowingGym",
   isNotGymMember = "isNotGymMember",

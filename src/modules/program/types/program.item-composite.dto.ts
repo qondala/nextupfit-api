@@ -1,16 +1,17 @@
 import { IsDefined, ValidateNested } from "class-validator";
-import {
-    DetailsProgramDto,
-    DetailsProgramStepDto,
-    DetailsProgramStepActivityDto,
-    DetailsProgramStepActivityWorkingsessionDto,
-    DetailsProgramStepActivityWorkingsessionWorkoutDto,
-} from "../dto";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
 
-export class ProgramItemCompositeDto {
+import {
+  DetailsProgramDto,
+  DetailsProgramStepDto,
+  DetailsProgramStepActivityDto,
+  DetailsProgramStepActivityWorkingsessionDto,
+  DetailsProgramStepActivityWorkingsessionWorkoutDto,
+  DetailsProgramStepActivityWorkingsessionPracticeDto,
+} from "../dto";
 
+export class ProgramItemCompositeDto {
   @ApiProperty({
     type: () => DetailsProgramDto,
     title: "DetailsProgramDto",
@@ -55,7 +56,6 @@ export class ProgramItemCompositeDto {
   @Type(() => DetailsProgramStepActivityWorkingsessionDto)
   workingsession?: DetailsProgramStepActivityWorkingsessionDto;
 
-
   @ApiProperty({
     type: () => DetailsProgramStepActivityWorkingsessionWorkoutDto,
     title: "DetailsProgramStepActivityWorkingsessionWorkoutDto",
@@ -67,11 +67,23 @@ export class ProgramItemCompositeDto {
   @Type(() => DetailsProgramStepActivityWorkingsessionWorkoutDto)
   workout?: DetailsProgramStepActivityWorkingsessionWorkoutDto;
 
+  @ApiProperty({
+    type: () => DetailsProgramStepActivityWorkingsessionPracticeDto,
+    title: "DetailsProgramStepActivityWorkingsessionPracticeDto",
+    description: "Program step activity workingsession practice details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsProgramStepActivityWorkingsessionPracticeDto)
+  practice?: DetailsProgramStepActivityWorkingsessionPracticeDto;
+
   constructor() {
     this.program = null;
     this.step = null;
     this.activity = null;
     this.workingsession = null;
     this.workout = null;
+    this.practice = null;
   }
 }

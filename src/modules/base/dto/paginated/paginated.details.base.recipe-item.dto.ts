@@ -6,7 +6,11 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsBaseRecipeItemDto } from "../details";
 
 export class PaginatedDetailsBaseRecipeItemDto extends PaginatedResponseDto<DetailsBaseRecipeItemDto> {
-  @ApiProperty({ type: () => DetailsBaseRecipeItemDto, isArray: true, required: true })
+  @ApiProperty({
+    type: () => DetailsBaseRecipeItemDto,
+    isArray: true,
+    required: true,
+  })
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })

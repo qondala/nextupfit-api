@@ -16,7 +16,7 @@ import { CreateUserConsumptionDto, UpdateUserConsumptionDto } from "../dto";
 export class UserConsumptionService {
   constructor(
     @InjectRepository(UserConsumptionEntity)
-    private readonly userConsumptionRepository: Repository<UserConsumptionEntity>
+    private readonly userConsumptionRepository: Repository<UserConsumptionEntity>,
   ) {}
 
   async create(dto: CreateUserConsumptionDto): Promise<UserConsumptionEntity> {
@@ -24,7 +24,9 @@ export class UserConsumptionService {
     return this.userConsumptionRepository.save(entity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserConsumptionEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserConsumptionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -46,7 +48,10 @@ export class UserConsumptionService {
     };
   }
 
-  async getUserConsumptions(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserConsumptionEntity>> {
+  async getUserConsumptions(
+    userId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserConsumptionEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -54,7 +59,7 @@ export class UserConsumptionService {
       skip,
       take: limit,
       order: { createdAt: "DESC" },
-      where: { userId }
+      where: { userId },
     });
 
     return {
@@ -65,24 +70,29 @@ export class UserConsumptionService {
         itemsPerPage: limit,
         totalPages: Math.ceil(total / limit),
         currentPage: page,
-      }
+      },
     };
   }
 
   async findOne(id: number): Promise<UserConsumptionEntity> {
-    const entity = await this.userConsumptionRepository.findOne({ where: { id } });
+    const entity = await this.userConsumptionRepository.findOne({
+      where: { id },
+    });
     if (!entity) {
       throw new ErrorResponseException(
         ErrorResponseExceptionType.DATABASE,
         `User consumption with ID ${id} not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
     return entity;
   }
 
-  async update(id: number, dto: UpdateUserConsumptionDto): Promise<UserConsumptionEntity> {
+  async update(
+    id: number,
+    dto: UpdateUserConsumptionDto,
+  ): Promise<UserConsumptionEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.userConsumptionRepository.save(entity);
@@ -92,6 +102,4 @@ export class UserConsumptionService {
     const entity = await this.findOne(id);
     await this.userConsumptionRepository.remove(entity);
   }
-
-
 }

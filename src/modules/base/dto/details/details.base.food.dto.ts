@@ -1,16 +1,21 @@
-
-
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
+import { BaseFoodProcessTypeEnum } from "../../types";
 
 export class DetailsBaseFoodDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Record ID",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -19,7 +24,7 @@ export class DetailsBaseFoodDto {
   @ApiProperty({
     description: "Food name",
     example: "Drip Coffee",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -27,8 +32,9 @@ export class DetailsBaseFoodDto {
 
   @ApiProperty({
     description: "Food description",
-    example: "Regular coffee often served black or with milk, cream, and sugar.",
-    required: true
+    example:
+      "Regular coffee often served black or with milk, cream, and sugar.",
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -38,7 +44,7 @@ export class DetailsBaseFoodDto {
     description: "Food illustration icon Url",
     example:
       "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/base/drip-coffee.png",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -48,7 +54,7 @@ export class DetailsBaseFoodDto {
     type: SwaggerType.INTEGER,
     description: "User ID (Gym manager) that created the record",
     example: 1368464,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -58,35 +64,46 @@ export class DetailsBaseFoodDto {
     type: SwaggerType.INTEGER,
     description: "Food group ID. Example: 14 = Coffee drinks.",
     example: 14,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
   foodGroupId: number;
 
   @ApiProperty({
-    description: "Food unique code, meant to be used for app translation and other facilities.",
+    description:
+      "Food unique code, meant to be used for app translation and other facilities.",
     example: "drip-coffee",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   code?: string;
 
   @ApiProperty({
+    enum: BaseFoodProcessTypeEnum,
+    enumName: "BaseFoodProcessTypeEnum",
+    description: "Food processing type",
+    example: BaseFoodProcessTypeEnum.raw,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(BaseFoodProcessTypeEnum)
+  processType?: BaseFoodProcessTypeEnum;
+
+  @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record creation timestamp",
-    required: true
+    required: true,
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record last update timestamp",
-    required: true
+    required: true,
   })
   updatedAt: Date;
 }
-

@@ -1,19 +1,12 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ContentCarouselEntity } from "../content.carousel.entity";
-
-
 
 @Entity("content_carousel_item")
 export class ContentCarouselItemEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   carouselId: number;
 
   @Column()
@@ -25,7 +18,7 @@ export class ContentCarouselItemEntity {
   @Column()
   mediaUrl: string;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   position: number;
 
   @ManyToOne(() => ContentCarouselEntity, (carousel) => carousel.items)

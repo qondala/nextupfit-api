@@ -54,7 +54,9 @@ export class ContentTipsController {
     status: HttpStatus.CREATED,
     type: DetailsContentTipsDto,
   })
-  async create(@Body() dto: CreateContentTipsDto): Promise<DetailsContentTipsDto> {
+  async create(
+    @Body() dto: CreateContentTipsDto,
+  ): Promise<DetailsContentTipsDto> {
     return await this.service.create(dto);
   }
 
@@ -104,7 +106,9 @@ export class ContentTipsController {
     status: HttpStatus.OK,
     type: DetailsContentTipsDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentTipsDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentTipsDto | null> {
     return await this.service.findOne(id);
   }
 

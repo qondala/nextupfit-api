@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
@@ -16,7 +16,7 @@ export class DetailsBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Nutrition name",
     example: "Chicken Breast",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -26,7 +26,7 @@ export class DetailsBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Nutrition description",
     example: "Rich in protein",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -36,7 +36,7 @@ export class DetailsBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Unique code identifier",
     example: "CHK-BRST",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -46,12 +46,11 @@ export class DetailsBaseNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Nutrition type id",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsNumber()
   baseNutritionTypeId: number;
-
 
   @ApiProperty({
     type: () => DetailsBaseNutritionTypeDto,
@@ -62,18 +61,18 @@ export class DetailsBaseNutritionDto {
       description: "Macronutrient essential for muscle growth and repair",
       code: "PRO",
       createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z"
+      updatedAt: "2025-01-01T00:00:00.000Z",
     },
-    required: true
+    required: true,
   })
   nutritionType: DetailsBaseNutritionTypeDto;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record created date",
     example: "2025-01-01T00:00:00.000Z",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDate()
@@ -81,10 +80,10 @@ export class DetailsBaseNutritionDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record updated date",
     example: "2025-01-01T00:00:00.000Z",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsDate()

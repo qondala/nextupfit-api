@@ -56,4 +56,14 @@ export class CreateUserConsumptionItemDto {
   @IsInt()
   @IsNotEmpty()
   itemId: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Program nutrition ID",
+    example: 456,
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  programNutritionId?: number;
 }

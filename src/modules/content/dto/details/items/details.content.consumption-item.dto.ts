@@ -5,7 +5,6 @@ import { SwaggerType } from "@app/common/types";
 import { BaseConsumptionItemTypeEnum } from "@app/module/base/types";
 
 export class DetailsContentConsumptionItemDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -16,7 +15,6 @@ export class DetailsContentConsumptionItemDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "consumption id",
@@ -26,7 +24,6 @@ export class DetailsContentConsumptionItemDto {
   @IsNotEmpty()
   @IsInt()
   consumptionId: number;
-
 
   @ApiProperty({
     enum: BaseConsumptionItemTypeEnum,
@@ -39,7 +36,6 @@ export class DetailsContentConsumptionItemDto {
   @IsEnum(BaseConsumptionItemTypeEnum)
   itemType: BaseConsumptionItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "item id",
@@ -49,7 +45,6 @@ export class DetailsContentConsumptionItemDto {
   @IsNotEmpty()
   @IsInt()
   itemId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -61,7 +56,6 @@ export class DetailsContentConsumptionItemDto {
   @IsInt()
   quantity: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "quantity unit id",
@@ -71,7 +65,6 @@ export class DetailsContentConsumptionItemDto {
   @IsNotEmpty()
   @IsInt()
   quantityUnitId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -83,20 +76,18 @@ export class DetailsContentConsumptionItemDto {
   @IsInt()
   position: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "created at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
   })
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "updated at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,

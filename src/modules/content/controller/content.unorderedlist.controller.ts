@@ -54,7 +54,9 @@ export class ContentUnorderedlistController {
     status: HttpStatus.CREATED,
     type: DetailsContentUnorderedlistDto,
   })
-  async create(@Body() dto: CreateContentUnorderedlistDto): Promise<DetailsContentUnorderedlistDto> {
+  async create(
+    @Body() dto: CreateContentUnorderedlistDto,
+  ): Promise<DetailsContentUnorderedlistDto> {
     return await this.service.create(dto);
   }
 
@@ -104,7 +106,9 @@ export class ContentUnorderedlistController {
     status: HttpStatus.OK,
     type: DetailsContentUnorderedlistDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentUnorderedlistDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentUnorderedlistDto | null> {
     return await this.service.findOne(id);
   }
 

@@ -7,7 +7,7 @@ export class UpdateBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Nutrition name",
     example: "Chicken Breast",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -17,7 +17,7 @@ export class UpdateBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Nutrition description",
     example: "Rich in protein",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -27,7 +27,7 @@ export class UpdateBaseNutritionDto {
     type: SwaggerType.STRING,
     description: "Unique code identifier",
     example: "CHK-BRST",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -37,7 +37,7 @@ export class UpdateBaseNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Nutrition type id",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()

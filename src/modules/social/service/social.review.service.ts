@@ -1,30 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import {
-  CreateSocialReviewDto, 
-  UpdateSocialReviewDto, 
-  DetailsSocialRatingStatsDto 
-} from '../dto';
-import { SocialReviewEntity } from '../entity';
-import { SocialReviewItemTypeEnum } from '../types';
-
+  CreateSocialReviewDto,
+  UpdateSocialReviewDto,
+  DetailsSocialRatingStatsDto,
+} from "../dto";
+import { SocialReviewEntity } from "../entity";
+import { SocialReviewItemTypeEnum } from "../types";
 
 @Injectable()
 export class SocialReviewService {
   constructor(
     @InjectRepository(SocialReviewEntity)
-    private readonly reviewRepository: Repository<SocialReviewEntity>
+    private readonly reviewRepository: Repository<SocialReviewEntity>,
   ) {}
 
-  async create(createDto: CreateSocialReviewDto, userId: number): Promise<SocialReviewEntity> {
+  async create(
+    createDto: CreateSocialReviewDto,
+    userId: number,
+  ): Promise<SocialReviewEntity> {
     const review = this.reviewRepository.create({
       ...createDto,
       userId,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.reviewRepository.save(review);
   }
@@ -34,10 +36,11 @@ export class SocialReviewService {
     itemId: number,
     paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialReviewEntity>> {
-    const queryBuilder = this.reviewRepository.createQueryBuilder('review')
-      .where('review.itemType = :itemType', { itemType })
-      .andWhere('review.itemId = :itemId', { itemId })
-      .orderBy('review.createdAt', 'DESC');
+    const queryBuilder = this.reviewRepository
+      .createQueryBuilder("review")
+      .where("review.itemType = :itemType", { itemType })
+      .andWhere("review.itemId = :itemId", { itemId })
+      .orderBy("review.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -54,19 +57,24 @@ export class SocialReviewService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<SocialReviewEntity> {
-    return await this.reviewRepository.findOne({ where: { id } }) as SocialReviewEntity;
+    return (await this.reviewRepository.findOne({
+      where: { id },
+    })) as SocialReviewEntity;
   }
 
-  async update(id: number, updateDto: UpdateSocialReviewDto): Promise<SocialReviewEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateSocialReviewDto,
+  ): Promise<SocialReviewEntity> {
     await this.reviewRepository.update(id, {
       ...updateDto,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
     return this.findOne(id);
   }
@@ -75,15 +83,19 @@ export class SocialReviewService {
     await this.reviewRepository.delete(id);
   }
 
-  async getReviewRatingStats(itemType: SocialReviewItemTypeEnum, itemId: number): Promise<DetailsSocialRatingStatsDto> {
+  async getReviewRatingStats(
+    itemType: SocialReviewItemTypeEnum,
+    itemId: number,
+  ): Promise<DetailsSocialRatingStatsDto> {
     const result: number[] = [];
 
     for (let i = 1; i <= 5; i++) {
-      const count = await this.reviewRepository.createQueryBuilder('review')
-        .select('COUNT(review.id)', 'totalReviews')
-        .where('review.itemType = :itemType', { itemType })
-        .andWhere('review.itemId = :itemId', { itemId })
-        .andWhere('review.rating = :rating', { rating: i })
+      const count = await this.reviewRepository
+        .createQueryBuilder("review")
+        .select("COUNT(review.id)", "totalReviews")
+        .where("review.itemType = :itemType", { itemType })
+        .andWhere("review.itemId = :itemId", { itemId })
+        .andWhere("review.rating = :rating", { rating: i })
         .getRawOne();
       result[i] = parseInt(count.totalReviews);
     }
@@ -91,10 +103,9 @@ export class SocialReviewService {
     const stats: DetailsSocialRatingStatsDto = {
       totalReviews: result.reduce((a, b) => a + b, 0),
       averageRating: result.reduce((a, b) => a + b, 0) / result.length,
-      items: result
+      items: result,
     };
 
     return stats;
   }
-
 }

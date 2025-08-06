@@ -7,10 +7,7 @@ import {
   ManyToOne,
 } from "typeorm";
 
-import {
-  PaymentPayableItemEnum,
-  PaymentStatusEnum,
-} from "../types";
+import { PaymentPayableItemEnum, PaymentStatusEnum } from "../types";
 import { BaseSubscriptionPlanItemEnum } from "../../base/types";
 import { PaymentCartEntity } from ".";
 

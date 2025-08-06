@@ -39,7 +39,9 @@ import { SwaggerType } from "@app/common/types";
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller("gym/manager/specialized-nutrition")
 export class GymManagerSpecializedInNutritionController {
-  constructor(private readonly service: GymManagerSpecializedInNutritionService) {}
+  constructor(
+    private readonly service: GymManagerSpecializedInNutritionService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -48,12 +50,12 @@ export class GymManagerSpecializedInNutritionController {
   })
   @ApiBody({
     required: true,
-    type: CreateGymManagerSpecializedInNutritionDto
+    type: CreateGymManagerSpecializedInNutritionDto,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "Created manager specialized nutrition",
-    type: DetailsGymManagerSpecializedInNutritionDto
+    type: DetailsGymManagerSpecializedInNutritionDto,
   })
   async create(
     @Body() dto: CreateGymManagerSpecializedInNutritionDto,
@@ -67,9 +69,9 @@ export class GymManagerSpecializedInNutritionController {
     operationId: "listGymManagerSpecializedInNutritionByManagerId",
   })
   @ApiParam({
-    name: 'managerId',
+    name: "managerId",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiQuery({
     type: PaginationOptionsDto,
@@ -78,7 +80,7 @@ export class GymManagerSpecializedInNutritionController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Paginated list of manager nutrition specializations",
-    type: PaginatedDetailsGymManagerSpecializedInNutritionDto
+    type: PaginatedDetailsGymManagerSpecializedInNutritionDto,
   })
   async listByManager(
     @Param("managerId", ParseIntPipe) managerId: number,
@@ -93,16 +95,18 @@ export class GymManagerSpecializedInNutritionController {
     operationId: "getGymManagerSpecializedInNutrition",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Details of a manager nutrition specialization",
-    type: DetailsGymManagerSpecializedInNutritionDto
+    type: DetailsGymManagerSpecializedInNutritionDto,
   })
-  async get(@Param("id", ParseIntPipe) id: number): Promise<DetailsGymManagerSpecializedInNutritionDto> {
+  async get(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsGymManagerSpecializedInNutritionDto> {
     return await this.service.findOne(id);
   }
 
@@ -114,7 +118,7 @@ export class GymManagerSpecializedInNutritionController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Updated manager nutrition specialization details",
-    type: DetailsGymManagerSpecializedInNutritionDto
+    type: DetailsGymManagerSpecializedInNutritionDto,
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
@@ -129,17 +133,15 @@ export class GymManagerSpecializedInNutritionController {
     operationId: "deleteGymManagerSpecializedInNutrition",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
-    type: SwaggerType.INTEGER
+    type: SwaggerType.INTEGER,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "Deleted manager nutrition specialization"
+    description: "Deleted manager nutrition specialization",
   })
-  async remove(
-    @Param("id", ParseIntPipe) id: number,
-  ): Promise<void> {
+  async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.service.remove(id);
   }
 
@@ -153,20 +155,24 @@ export class GymManagerSpecializedInNutritionController {
     required: false,
   })
   @ApiQuery({
-    name: 'nutritionIds',
+    name: "nutritionIds",
     required: true,
     type: SwaggerType.INTEGER,
-    isArray: true
+    isArray: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Found managers specialized in nutrition",
-    type: PaginatedDetailsGymManagerSpecializedInNutritionDto
+    type: PaginatedDetailsGymManagerSpecializedInNutritionDto,
   })
   async findManagersSpecializedInNutritions(
-    @Query('nutritionIds', new ParseArrayPipe({ items: Number })) nutritionIds: number[],
+    @Query("nutritionIds", new ParseArrayPipe({ items: Number }))
+    nutritionIds: number[],
     @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsGymManagerSpecializedInNutritionDto> {
-    return this.service.findManagersSpecializedInNutritions(nutritionIds, pagination);
+    return this.service.findManagersSpecializedInNutritions(
+      nutritionIds,
+      pagination,
+    );
   }
 }

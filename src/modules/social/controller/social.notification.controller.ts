@@ -38,7 +38,9 @@ import { SocialNotificationService } from "../service";
 @Controller("social/notification")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialNotificationController {
-  constructor(private readonly notificationService: SocialNotificationService) {}
+  constructor(
+    private readonly notificationService: SocialNotificationService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -81,7 +83,7 @@ export class SocialNotificationController {
     description: "Notifications found successfully",
   })
   async findAll(
-    @Query() paginationOptions: PaginationOptionsDto
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialNotificationDto> {
     return await this.notificationService.findAll(paginationOptions);
   }
@@ -103,9 +105,12 @@ export class SocialNotificationController {
   })
   async findByUserId(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialNotificationDto> {
-    return await this.notificationService.findByUserId(userId, paginationOptions);
+    return await this.notificationService.findByUserId(
+      userId,
+      paginationOptions,
+    );
   }
 
   @Get(":id")
@@ -148,7 +153,7 @@ export class SocialNotificationController {
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateDto: UpdateSocialNotificationDto
+    @Body() updateDto: UpdateSocialNotificationDto,
   ) {
     return this.notificationService.update(id, updateDto);
   }

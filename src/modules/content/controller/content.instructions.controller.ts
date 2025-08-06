@@ -62,7 +62,9 @@ export class ContentInstructionsController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentInstructionsDto): Promise<DetailsContentInstructionsDto> {
+  async create(
+    @Body() dto: CreateContentInstructionsDto,
+  ): Promise<DetailsContentInstructionsDto> {
     return await this.service.create(dto);
   }
 
@@ -91,7 +93,8 @@ export class ContentInstructionsController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Paginated list of content instructions retrieved successfully",
+    description:
+      "Paginated list of content instructions retrieved successfully",
     type: PaginatedDetailsContentInstructionsDto,
   })
   @ApiResponse({
@@ -128,7 +131,9 @@ export class ContentInstructionsController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentInstructionsDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentInstructionsDto | null> {
     return await this.service.findOne(id);
   }
 

@@ -1,21 +1,15 @@
 import { Injectable } from "@nestjs/common";
 
-import {
-  ProgramItemTypeEnum,
-} from "@app/module/program/types";
+import { ProgramItemTypeEnum } from "@app/module/program/types";
 import {
   ProgramNavigationReasonEnum,
   ProgramNodeNavigationParams,
 } from "../../types";
-import {
-  UserProgramNavigation,
-} from "../../dto";
+import { UserProgramNavigation } from "../../dto";
 import {
   ProgramAccessRequirementsCheckerService,
-  NavigatorProgramStepActivityWorkingsessionWorkoutService
+  NavigatorProgramStepActivityWorkingsessionWorkoutService,
 } from "..";
-
-
 
 @Injectable()
 export class NavigationFromProgramStepActivityWorkingsessionWorkoutService {
@@ -26,39 +20,50 @@ export class NavigationFromProgramStepActivityWorkingsessionWorkoutService {
 
   /**
    * Handle navigation to a program step activity
-   * 
+   *
    * @param parameters
    * @returns
    */
   async navigate(
-    parameters: ProgramNodeNavigationParams
+    parameters: ProgramNodeNavigationParams,
   ): Promise<UserProgramNavigation> {
-
     // Calculate the current node
-    const programAccessRequirementsCheckResult = await this.programAccessRequirementsCheckerService.check(parameters.id, parameters.userId);
-    const userProgramNavigation: UserProgramNavigation = this.emptyNavigation(parameters.userId, parameters.id);
-    if(!programAccessRequirementsCheckResult.ok) {
+    const programAccessRequirementsCheckResult =
+      await this.programAccessRequirementsCheckerService.check(
+        parameters.id,
+        parameters.userId,
+      );
+    const userProgramNavigation: UserProgramNavigation = this.emptyNavigation(
+      parameters.userId,
+      parameters.id,
+    );
+    if (!programAccessRequirementsCheckResult.ok) {
       userProgramNavigation.currentNavigation.canNavigate = false;
-      userProgramNavigation.currentNavigation.reasonCannotNavigate = programAccessRequirementsCheckResult.reason;
+      userProgramNavigation.currentNavigation.reasonCannotNavigate =
+        programAccessRequirementsCheckResult.reason;
     }
 
     // Calculate the next node
     if (programAccessRequirementsCheckResult.ok) {
-      userProgramNavigation.nextNavigation = 
-        await this.navigatorProgramStepActivityWorkingsessionWorkoutService
-          .next(userProgramNavigation.currentNavigation);
+      userProgramNavigation.nextNavigation =
+        await this.navigatorProgramStepActivityWorkingsessionWorkoutService.next(
+          userProgramNavigation.currentNavigation,
+        );
     }
 
     // Calculate the previous node
-    userProgramNavigation.previousNavigation = 
-      await this.navigatorProgramStepActivityWorkingsessionWorkoutService
-        .previous(userProgramNavigation.currentNavigation);
+    userProgramNavigation.previousNavigation =
+      await this.navigatorProgramStepActivityWorkingsessionWorkoutService.previous(
+        userProgramNavigation.currentNavigation,
+      );
 
     return userProgramNavigation;
   }
 
-
-  private emptyNavigation(userId: number, programItemId: number): UserProgramNavigation {
+  private emptyNavigation(
+    userId: number,
+    programItemId: number,
+  ): UserProgramNavigation {
     return {
       // Current navigation
       currentNavigation: {
@@ -91,9 +96,9 @@ export class NavigationFromProgramStepActivityWorkingsessionWorkoutService {
         description: null,
         icon: null,
         canNavigate: false,
-        reasonCannotNavigate: ProgramNavigationReasonEnum.workingsessionNotYetStarted,
+        reasonCannotNavigate:
+          ProgramNavigationReasonEnum.workingsessionNotYetStarted,
       },
     };
   }
-
 }

@@ -1,25 +1,11 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  Type
-} from "class-transformer";
-import {
-  ValidateNested
-} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
-import {
-  UserInterestTypeEnum
-} from "@app/module/user/types";
-import {
-  DetailsProgramStepActivityDto
-} from ".";
-
-
+import { UserInterestTypeEnum } from "@app/module/user/types";
+import { DetailsProgramFreetoolDto } from "./details.program.freetool.dto";
 
 export class DetailsProgramFreetoolInterestDto {
   @ApiProperty({
@@ -53,7 +39,7 @@ export class DetailsProgramFreetoolInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Creation date",
     required: true,
   })
@@ -61,19 +47,18 @@ export class DetailsProgramFreetoolInterestDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Update date",
     required: false,
   })
   updatedAt: Date;
 
-
   @ApiProperty({
-    type: () => DetailsProgramStepActivityDto,
-    description: "Activity",
+    type: () => DetailsProgramFreetoolDto,
+    description: "Freetool",
     required: true,
   })
-  @Type(() => DetailsProgramStepActivityDto)
+  @Type(() => DetailsProgramFreetoolDto)
   @ValidateNested()
-  activity: DetailsProgramStepActivityDto;
+  freetool: DetailsProgramFreetoolDto;
 }

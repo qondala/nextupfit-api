@@ -4,7 +4,6 @@ import { IsEnum, IsOptional, IsNumber, IsInt } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 import { PaymentStatusEnum } from "../../types";
 
-
 export class UpdatePaymentCartDto {
   @ApiProperty({
     type: SwaggerType.NUMBER,

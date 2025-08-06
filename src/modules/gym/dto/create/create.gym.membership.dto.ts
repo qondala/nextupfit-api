@@ -3,8 +3,8 @@ import {
   IsOptional,
   IsBoolean,
   IsDate,
-  IsEnum, 
-  IsNotEmpty
+  IsEnum,
+  IsNotEmpty,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -12,7 +12,6 @@ import { SwaggerType } from "@app/common/types";
 import { GymMembershipStatusEnum } from "../../types";
 
 export class CreateGymMembershipDto {
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "UserId of the member",
@@ -23,10 +22,9 @@ export class CreateGymMembershipDto {
   @IsNumber()
   memberUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date user started being member",
     example: "2025-04-15",
     required: false,
@@ -34,7 +32,6 @@ export class CreateGymMembershipDto {
   @IsOptional()
   @IsDate()
   startedDate?: Date;
-
 
   @ApiProperty({
     enum: GymMembershipStatusEnum,
@@ -47,7 +44,6 @@ export class CreateGymMembershipDto {
   @IsEnum(GymMembershipStatusEnum)
   membershipStatus?: GymMembershipStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Gym id",
@@ -57,7 +53,6 @@ export class CreateGymMembershipDto {
   @IsNotEmpty()
   @IsNumber()
   gymId: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
@@ -71,7 +66,8 @@ export class CreateGymMembershipDto {
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    description: "Whether user is favorire member of the Gym (Like page top fan on Facebook)",
+    description:
+      "Whether user is favorire member of the Gym (Like page top fan on Facebook)",
     example: false,
     required: false,
   })

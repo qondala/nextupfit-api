@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 export class CreateContentWorkoutDto {
@@ -57,7 +63,7 @@ export class CreateContentWorkoutDto {
     type: SwaggerType.INTEGER,
     example: 456,
     description: "workout id",
-    required: true
+    required: true,
   })
   @IsInt()
   @IsNotEmpty()

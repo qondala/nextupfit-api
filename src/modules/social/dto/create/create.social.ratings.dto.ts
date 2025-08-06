@@ -3,9 +3,7 @@ import { IsEnum, IsNotEmpty, IsNumber } from "class-validator";
 
 import { SocialReviewItemTypeEnum } from "../../types";
 
-
 export class CreateSocialRatingsDto {
-
   @ApiProperty({
     description: "Item type to be rated",
     example: SocialReviewItemTypeEnum.workingsession,

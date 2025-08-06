@@ -2,16 +2,13 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 import { UserBookmarkAndFavoriteItemTypeEnum } from "../../types";
 
-
 export class DetailsUserBookmarkAndFavoriteDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     enum: UserBookmarkAndFavoriteItemTypeEnum,
@@ -22,14 +19,12 @@ export class DetailsUserBookmarkAndFavoriteDto {
   })
   bookmarkType: UserBookmarkAndFavoriteItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Is bookmark",
     required: true,
   })
   isBookMark: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
@@ -38,14 +33,12 @@ export class DetailsUserBookmarkAndFavoriteDto {
   })
   isFavorite: boolean;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Item id",
     required: true,
   })
   itemId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -54,10 +47,9 @@ export class DetailsUserBookmarkAndFavoriteDto {
   })
   userId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: true,
   })

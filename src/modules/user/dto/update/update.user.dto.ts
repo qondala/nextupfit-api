@@ -1,10 +1,19 @@
-import { IsNotEmpty, IsString, IsEmail, IsOptional, IsArray, IsDate, IsBoolean, IsEnum, IsInt } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsArray,
+  IsDate,
+  IsBoolean,
+  IsEnum,
+  IsInt,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { UserProfileTypeEnum } from "../../types";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateUserDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's email",
@@ -14,7 +23,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsEmail()
   email?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -26,7 +34,6 @@ export class UpdateUserDto {
   @IsString()
   firstName?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's last name",
@@ -36,7 +43,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   lastName?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -48,7 +54,6 @@ export class UpdateUserDto {
   @IsString()
   phoneNumber?: string;
 
-
   @ApiProperty({
     type: SwaggerType.DATE,
     description: "User's birthdate",
@@ -58,7 +63,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsDate()
   birthDate?: Date;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -70,7 +74,6 @@ export class UpdateUserDto {
   @IsString()
   password?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's profile image URL",
@@ -80,7 +83,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   profileImageUrl?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -92,13 +94,12 @@ export class UpdateUserDto {
   @IsString()
   coverImageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether user has confirmed successfully his email",
     example: true,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
@@ -115,7 +116,6 @@ export class UpdateUserDto {
   @IsDate()
   lastLogin?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's age",
@@ -125,7 +125,6 @@ export class UpdateUserDto {
   @IsOptional()
   @IsInt()
   age?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

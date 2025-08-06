@@ -1,4 +1,4 @@
 export enum SocialUpdateTypeEnum {
-  status = 'status',
-  blog = 'blog',
+  status = "status",
+  blog = "blog",
 }

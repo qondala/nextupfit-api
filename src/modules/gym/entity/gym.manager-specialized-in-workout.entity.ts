@@ -1,12 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 import { BaseWorkoutEntity } from "@app/module/base/entity";
 import { GymManagerEntity } from "./";
 
-
 @Entity("gym_manager_specialized_in_workout")
 export class GymManagerSpecializedInWorkoutEntity {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,7 +22,6 @@ export class GymManagerSpecializedInWorkoutEntity {
   @Column({ nullable: false })
   baseWorkoutId: number;
 
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -24,10 +29,10 @@ export class GymManagerSpecializedInWorkoutEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'managerId' })
+  @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => BaseWorkoutEntity)
-  @JoinColumn({ name: 'baseWorkoutId' })
+  @JoinColumn({ name: "baseWorkoutId" })
   baseWorkout: BaseWorkoutEntity;
 }

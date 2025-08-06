@@ -1,14 +1,10 @@
-import { GymManagerEntity } from "@app/module/gym/entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
-
 
 @Entity("user")
 export class UserEntity {

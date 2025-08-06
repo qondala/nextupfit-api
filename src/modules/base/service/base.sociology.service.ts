@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { BaseSociologyEntity } from '../entity';
-import { CreateBaseSociologyDto, UpdateBaseSociologyDto } from '../dto';
+import { BaseSociologyEntity } from "../entity";
+import { CreateBaseSociologyDto, UpdateBaseSociologyDto } from "../dto";
 
 @Injectable()
 export class BaseSociologyService {
@@ -14,7 +14,9 @@ export class BaseSociologyService {
     private readonly baseSociologyRepository: Repository<BaseSociologyEntity>,
   ) {}
 
-  async create(createDto: CreateBaseSociologyDto): Promise<BaseSociologyEntity> {
+  async create(
+    createDto: CreateBaseSociologyDto,
+  ): Promise<BaseSociologyEntity> {
     const entity = this.baseSociologyRepository.create(createDto);
     return this.baseSociologyRepository.save(entity);
   }
@@ -23,15 +25,17 @@ export class BaseSociologyService {
     options: PaginationOptionsDto,
     createdByUserId?: number,
   ): Promise<PaginatedResponseDto<BaseSociologyEntity>> {
-    const qb = this.baseSociologyRepository.createQueryBuilder('sociology');
+    const qb = this.baseSociologyRepository.createQueryBuilder("sociology");
 
     if (createdByUserId) {
-      qb.where('sociology.createdByUserId = :createdByUserId', { createdByUserId });
+      qb.where("sociology.createdByUserId = :createdByUserId", {
+        createdByUserId,
+      });
     }
 
     qb.skip((options.page - 1) * options.limit)
       .take(options.limit)
-      .orderBy('sociology.id', 'DESC');
+      .orderBy("sociology.id", "DESC");
 
     const [items, total] = await qb.getManyAndCount();
 
@@ -47,7 +51,10 @@ export class BaseSociologyService {
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseSociologyEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseSociologyEntity>> {
     const searchTerm = `%${query}%`;
 
     const [items, total] = await this.baseSociologyRepository.findAndCount({
@@ -58,7 +65,7 @@ export class BaseSociologyService {
       ],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' },
+      order: { id: "DESC" },
     });
 
     return {
@@ -81,7 +88,10 @@ export class BaseSociologyService {
     return this.baseSociologyRepository.findOneBy({ code });
   }
 
-  async update(id: number, updateDto: UpdateBaseSociologyDto): Promise<BaseSociologyEntity | null> {
+  async update(
+    id: number,
+    updateDto: UpdateBaseSociologyDto,
+  ): Promise<BaseSociologyEntity | null> {
     const result = await this.baseSociologyRepository.update(id, updateDto);
 
     if (result.affected === 0) {

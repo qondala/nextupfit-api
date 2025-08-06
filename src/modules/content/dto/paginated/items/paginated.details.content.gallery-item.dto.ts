@@ -11,7 +11,7 @@ export class PaginatedDetailsContentGalleryItemDto extends PaginatedResponseDto<
     type: () => DetailsContentGalleryItemDto,
     isArray: true,
     description: "Gallery items",
-    required: true
+    required: true,
   })
   @IsArray()
   @ValidateNested({ each: true })

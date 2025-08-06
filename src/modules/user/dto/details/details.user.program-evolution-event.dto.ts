@@ -1,22 +1,27 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   ProgramEvolutionEventTypeEnum,
-  ProgramItemTypeEnum
+  ProgramItemCompositeDto,
+  ProgramItemTypeEnum,
 } from "@app/module/program/types";
 import { SwaggerType } from "@app/common/types";
-import { IsEnum, IsInt, IsOptional } from "class-validator";
+import {
+  IsDefined,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  ValidateNested,
+} from "class-validator";
 import { SocialActorEnum } from "@app/module/social/types";
+import { Type } from "class-transformer";
 
 export class DetailsUserProgramEvolutionEventDto {
-
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     enum: ProgramEvolutionEventTypeEnum,
@@ -27,7 +32,6 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   event: ProgramEvolutionEventTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",
@@ -35,14 +39,12 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   userId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
     required: false,
   })
   gymId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -54,7 +56,6 @@ export class DetailsUserProgramEvolutionEventDto {
   @IsInt()
   managerId?: number;
 
-
   @ApiProperty({
     enum: SocialActorEnum,
     enumName: "SocialActorEnum",
@@ -65,7 +66,6 @@ export class DetailsUserProgramEvolutionEventDto {
   @IsOptional()
   @IsEnum(SocialActorEnum)
   receiverType: SocialActorEnum;
-    
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -73,7 +73,6 @@ export class DetailsUserProgramEvolutionEventDto {
     required: true,
   })
   programItemId: number;
-
 
   @ApiProperty({
     enum: ProgramItemTypeEnum,
@@ -84,14 +83,12 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   programItem: ProgramItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Progression points",
     required: true,
   })
   progressionPoints: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
@@ -100,14 +97,12 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   progressionPercentage: number;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Total progression percentage",
     required: true,
   })
   totalProgressionPercentage: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -123,7 +118,6 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   quantity: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Iteration",
@@ -131,22 +125,30 @@ export class DetailsUserProgramEvolutionEventDto {
   })
   iteration: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: true,
   })
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: true,
   })
   updatedAt: Date;
-}
 
+  @ApiProperty({
+    type: () => ProgramItemCompositeDto,
+    title: "ProgramItemCompositeDto",
+    description: "Program item composite",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => ProgramItemCompositeDto)
+  programItemComposite?: ProgramItemCompositeDto;
+}

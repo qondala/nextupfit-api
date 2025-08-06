@@ -17,11 +17,16 @@ export class ContentInstructionsService {
     private readonly repository: Repository<ContentInstructionsEntity>,
   ) {}
 
-  async create(dto: CreateContentInstructionsDto): Promise<ContentInstructionsEntity> {
+  async create(
+    dto: CreateContentInstructionsDto,
+  ): Promise<ContentInstructionsEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedDetailsContentInstructionsDto> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentInstructionsDto> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -46,7 +51,9 @@ export class ContentInstructionsService {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentInstructionsEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentInstructionsEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 

@@ -1,16 +1,10 @@
-import {
-  IsInt,
-  IsEnum,
-  IsNotEmpty
-} from "class-validator";
+import { IsInt, IsEnum, IsNotEmpty } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 import { GymManagerRoleEnum } from "../../types";
 
-
 export class CreateGymHasManagerDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
@@ -21,7 +15,6 @@ export class CreateGymHasManagerDto {
   @IsInt()
   gymId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym manager id",
@@ -31,7 +24,6 @@ export class CreateGymHasManagerDto {
   @IsNotEmpty()
   @IsInt()
   managerId: number;
-
 
   @ApiProperty({
     enum: GymManagerRoleEnum,

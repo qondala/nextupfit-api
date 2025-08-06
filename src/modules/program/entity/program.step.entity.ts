@@ -6,11 +6,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
+
 import { ProgramStepStatusEnum } from "../types";
 import { ProgramEntity, ProgramStepActivityEntity } from ".";
-
 
 @Entity("program_step")
 export class ProgramStepEntity {
@@ -37,6 +37,12 @@ export class ProgramStepEntity {
 
   @Column({ nullable: true })
   iconUrl: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
+
+  @Column({ nullable: true })
+  videoUrl: string;
 
   @Column({
     type: "enum",
@@ -75,10 +81,10 @@ export class ProgramStepEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => ProgramEntity, program => program.steps)
-  @JoinColumn({ name: 'programId' })
+  @ManyToOne(() => ProgramEntity, (program) => program.steps)
+  @JoinColumn({ name: "programId" })
   program: ProgramEntity;
 
-  @OneToMany(() => ProgramStepActivityEntity, activity => activity.step)
+  @OneToMany(() => ProgramStepActivityEntity, (activity) => activity.step)
   activities: ProgramStepActivityEntity[];
 }

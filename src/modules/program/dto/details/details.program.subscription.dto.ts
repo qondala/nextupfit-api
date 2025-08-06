@@ -1,6 +1,4 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsNumber,
@@ -9,12 +7,8 @@ import {
   IsDate,
 } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  BaseSubscriptionPlanStatusEnum
-} from "@app/module/base/types";
+import { SwaggerType } from "@app/common/types";
+import { BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
 
 export class DetailsProgramSubscriptionDto {
   @ApiProperty({

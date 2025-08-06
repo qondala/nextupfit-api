@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsEmail, IsOptional, IsInt } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsInt,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Optional } from "@nestjs/common";
 import { SwaggerType } from "@app/common/types";
@@ -72,7 +78,6 @@ export class RegisterDto {
   @IsString()
   profileImageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's age",
@@ -81,7 +86,6 @@ export class RegisterDto {
   })
   @IsInt()
   age: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

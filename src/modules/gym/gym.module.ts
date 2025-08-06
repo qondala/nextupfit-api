@@ -1,28 +1,25 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   BaseNutritionEntity,
   BaseProgramGoalEntity,
   BaseSociologyEntity,
-  BaseWorkoutEntity
-} from '@app/module/base/entity';
+  BaseWorkoutEntity,
+} from "@app/module/base/entity";
 
-import {
-  UserEntity,
-  UserInterestEntity
-} from '@app/module/user/entity';
+import { UserEntity, UserInterestEntity } from "@app/module/user/entity";
 
 import {
   ProgramEntity,
   ProgramStepActivityEntity,
   ProgramStepActivityWorkingsessionEntity,
   ProgramStepActivityWorkingsessionWorkoutEntity,
-  ProgramStepEntity
-} from '@app/module/program/entity';
+  ProgramStepEntity,
+} from "@app/module/program/entity";
 
-import { ProgramService } from '@app/module/program/service';
-import { UserInterestService } from '@app/module/user/service';
+import { ProgramService } from "@app/module/program/service";
+import { UserInterestService } from "@app/module/user/service";
 
 import {
   GymController,
@@ -42,7 +39,7 @@ import {
   GymHasManagerController,
   GymManagerInterestController,
   GymInterestController,
-} from './controller';
+} from "./controller";
 
 import {
   GymService,
@@ -62,7 +59,7 @@ import {
   GymHasManagerService,
   GymInterestService,
   GymManagerInterestService,
-} from './service';
+} from "./service";
 
 import {
   GymEntity,
@@ -81,9 +78,8 @@ import {
   GymManagerSpecializedInNutritionEntity,
   GymHasManagerEntity,
   GymInterestEntity,
-  GymManagerInterestEntity
-} from './entity';
-
+  GymManagerInterestEntity,
+} from "./entity";
 
 @Module({
   imports: [
@@ -117,7 +113,7 @@ import {
       BaseNutritionEntity,
       BaseProgramGoalEntity,
       BaseSociologyEntity,
-      BaseWorkoutEntity
+      BaseWorkoutEntity,
     ]),
   ],
   controllers: [

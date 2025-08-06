@@ -26,5 +26,5 @@ export enum ContentTypeEnum {
   equipment = "equipment",
   subscription_plan = "subscription_plan",
   recipe = "recipe",
-  gallery = "gallery"
+  gallery = "gallery",
 }

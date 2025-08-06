@@ -10,25 +10,36 @@ import {
 } from "@app/common/exceptions";
 
 import { UserConsumptionItemEntity } from "../entity";
-import { CreateUserConsumptionItemDto, UpdateUserConsumptionItemDto } from "../dto";
+import {
+  CreateUserConsumptionItemDto,
+  UpdateUserConsumptionItemDto,
+} from "../dto";
 
 @Injectable()
 export class UserConsumptionItemService {
   constructor(
     @InjectRepository(UserConsumptionItemEntity)
-    private readonly repository: Repository<UserConsumptionItemEntity>
+    private readonly repository: Repository<UserConsumptionItemEntity>,
   ) {}
 
-  async create(dto: CreateUserConsumptionItemDto): Promise<UserConsumptionItemEntity> {
+  async create(
+    dto: CreateUserConsumptionItemDto,
+  ): Promise<UserConsumptionItemEntity> {
     const entity = this.repository.create(dto);
     return this.repository.save(entity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserConsumptionItemEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserConsumptionItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    const [items, total] = await this.repository.findAndCount({ skip, take: limit, order: { createdAt: "DESC" } });
+    const [items, total] = await this.repository.findAndCount({
+      skip,
+      take: limit,
+      order: { createdAt: "DESC" },
+    });
 
     return {
       items,
@@ -49,13 +60,16 @@ export class UserConsumptionItemService {
         ErrorResponseExceptionType.DATABASE,
         `User consumption item with ID ${id} not found`,
         HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND
+        SystemStatusCode.NOT_FOUND,
       );
     }
     return entity;
   }
 
-  async update(id: number, dto: UpdateUserConsumptionItemDto): Promise<UserConsumptionItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateUserConsumptionItemDto,
+  ): Promise<UserConsumptionItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

@@ -1,34 +1,20 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsNotEmpty,
   IsEnum,
   IsInt,
   IsOptional,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
-import {
-  Type
-} from "class-transformer";
+import { Type } from "class-transformer";
 
-import {
-  SwaggerType
-} from "@app/common/types";
+import { SwaggerType } from "@app/common/types";
 
-import {
-  DetailsGymDto,
-  DetailsGymManagerDto
-} from "@app/module/gym/dto";
+import { DetailsGymDto, DetailsGymManagerDto } from "@app/module/gym/dto";
 
-import {
-  ProgramItemCompositeDto,
-  ProgramItemTypeEnum
-} from "../../types";
-
+import { ProgramItemCompositeDto, ProgramItemTypeEnum } from "../../types";
 
 export class DetailsProgramManagerDto {
-
   @ApiProperty({
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
@@ -41,7 +27,6 @@ export class DetailsProgramManagerDto {
   @IsEnum(ProgramItemTypeEnum)
   itemType: ProgramItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Item id",
@@ -51,7 +36,6 @@ export class DetailsProgramManagerDto {
   @IsNotEmpty()
   @IsInt()
   itemId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -104,7 +88,7 @@ export class DetailsProgramManagerDto {
   @ApiProperty({
     type: () => ProgramItemCompositeDto,
     title: "ProgramItemCompositeDto",
-    description: 'Program item of the gym has program',
+    description: "Program item of the gym has program",
     required: true,
   })
   @Type(() => ProgramItemCompositeDto)

@@ -56,7 +56,7 @@ export class DetailsBaseMealFoodDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record creation timestamp",
     required: true,
   })
@@ -64,7 +64,7 @@ export class DetailsBaseMealFoodDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Record last update timestamp",
     required: true,
   })

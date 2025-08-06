@@ -10,6 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -22,14 +23,8 @@ import {
 } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import {
-  JwtAuthGuard,
-  RolesGuard,
-} from "@app/common/guards";
-import {
-  InterestPaginationDto,
-  PaginationOptionsDto,
-} from "@app/common/dto";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateProgramFreetoolInterestDto,
@@ -37,15 +32,14 @@ import {
   DetailsProgramFreetoolInterestDto,
   PaginatedDetailsProgramFreetoolInterestDto,
   ProgramFindCriteriaFreetoolInterestDto,
-  PaginatedDetailsProgramStepActivityDto,
+  ProgramFindOrderFreetoolEnum,
+  PaginatedDetailsProgramFreetoolDto,
 } from "../dto";
-
 import { ProgramFreetoolInterestService } from "../service";
-
 
 @ApiTags("Program module endpoints")
 @ApiBearerAuth()
-@Controller("program/freetool-interests")
+@Controller("program/freetool/interest")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class ProgramFreetoolInterestController {
   constructor(private readonly service: ProgramFreetoolInterestService) {}
@@ -68,7 +62,9 @@ export class ProgramFreetoolInterestController {
     status: HttpStatus.BAD_REQUEST,
     description: "Invalid input data",
   })
-  async create(@Body() createDto: CreateProgramFreetoolInterestDto): Promise<DetailsProgramFreetoolInterestDto> {
+  async create(
+    @Body() createDto: CreateProgramFreetoolInterestDto,
+  ): Promise<DetailsProgramFreetoolInterestDto> {
     return this.service.create(createDto);
   }
 
@@ -79,12 +75,12 @@ export class ProgramFreetoolInterestController {
   })
   @ApiQuery({
     type: ProgramFindCriteriaFreetoolInterestDto,
-    description: 'Program freetool interests find criteria',
+    description: "Program freetool interests find criteria",
     required: true,
   })
   @ApiQuery({
     type: PaginationOptionsDto,
-    description: 'Pagination options',
+    description: "Pagination options",
     required: true,
   })
   @ApiResponse({
@@ -111,20 +107,33 @@ export class ProgramFreetoolInterestController {
     required: true,
   })
   @ApiQuery({
-    type: InterestPaginationDto,
-    description: 'Pagination options',
+    type: PaginationOptionsDto,
+    description: "Pagination options",
+    required: true,
+  })
+  @ApiQuery({
+    name: "order",
+    enum: ProgramFindOrderFreetoolEnum,
+    enumName: "ProgramFindOrderFreetoolEnum",
+    description: "Order by",
     required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "User program interests retrieved successfully",
-    type: PaginatedDetailsProgramStepActivityDto,
+    description: "User interested freetools retrieved successfully",
+    type: PaginatedDetailsProgramFreetoolDto,
   })
-  async getUserInterests(
+  async getUserInterestedFreetools(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: InterestPaginationDto,
-  ): Promise<PaginatedDetailsProgramStepActivityDto> {
-    return await this.service.getFreetoolsByUserInterests(userId, pagination);
+    @Query() pagination: PaginationOptionsDto,
+    @Query("order", new ParseEnumPipe(ProgramFindOrderFreetoolEnum))
+    order: ProgramFindOrderFreetoolEnum,
+  ): Promise<PaginatedDetailsProgramFreetoolDto> {
+    return await this.service.getFreetoolsByUserInterests(
+      userId,
+      pagination,
+      order,
+    );
   }
 
   @Get(":id")
@@ -147,7 +156,9 @@ export class ProgramFreetoolInterestController {
     status: HttpStatus.NOT_FOUND,
     description: "Program interest not found",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramFreetoolInterestDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramFreetoolInterestDto> {
     return this.service.findOne(id);
   }
 

@@ -5,9 +5,7 @@ import { SwaggerType } from "@app/common/types";
 import { ProgramStepStatusEnum } from "../../types";
 import { ProgramFindOrderStepEnum } from ".";
 
-
 export class ProgramFindCriteriaStepDto {
-
   @ApiProperty({
     name: "search",
     type: SwaggerType.STRING,
@@ -24,7 +22,6 @@ export class ProgramFindCriteriaStepDto {
   })
   gymId?: number;
 
-
   @ApiProperty({
     name: "programId",
     type: SwaggerType.INTEGER,
@@ -32,7 +29,6 @@ export class ProgramFindCriteriaStepDto {
     required: false,
   })
   programId?: number;
-
 
   @ApiProperty({
     name: "ownerUserId",
@@ -50,7 +46,6 @@ export class ProgramFindCriteriaStepDto {
   })
   ownerManagerId?: number;
 
-
   @ApiProperty({
     name: "status",
     enum: ProgramStepStatusEnum,
@@ -61,57 +56,51 @@ export class ProgramFindCriteriaStepDto {
   })
   status?: ProgramStepStatusEnum;
 
-
   @ApiProperty({
     name: "attendeesCount",
     type: SwaggerType.INTEGER,
     description: "Step attendees count",
     required: false,
-    default: 0
+    default: 0,
   })
   attendeesCount?: number;
-
 
   @ApiProperty({
     name: "viewsCount",
     type: SwaggerType.INTEGER,
     description: "Views count",
     required: false,
-    default: 0
+    default: 0,
   })
   viewsCount?: number;
-
 
   @ApiProperty({
     name: "ratingsAvg",
     type: SwaggerType.NUMBER,
     description: "Ratings average",
     required: false,
-    default: 0
+    default: 0,
   })
   ratingsAvg?: number;
-
 
   @ApiProperty({
     name: "ratingsCount",
     type: SwaggerType.INTEGER,
     description: "Number times step was rated",
     required: false,
-    default: 0
+    default: 0,
   })
   ratingsCount?: number;
-
 
   @ApiProperty({
     name: "duration",
     type: SwaggerType.INTEGER,
     description: "Duration of the step",
     required: false,
-    default: 2
+    default: 2,
   })
   duration?: number;
 
-  
   @ApiProperty({
     name: "difficultyLevel",
     type: SwaggerType.INTEGER,

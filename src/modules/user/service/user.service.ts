@@ -8,18 +8,18 @@ import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 import { UserEntity } from "../entity";
 import { CreateUserDto, UpdateUserDto } from "../dto";
 
-
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserEntity> {
-
     if (await this.userWithEmailExists(createUserDto.email)) {
-      throw new ConflictException(`User with email ${createUserDto.email} already exists`);
+      throw new ConflictException(
+        `User with email ${createUserDto.email} already exists`,
+      );
     }
 
     const hashedPassword = await argon2.hash(createUserDto.password);
@@ -34,7 +34,9 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
@@ -53,16 +55,13 @@ export class UserService {
         itemCount: users.length,
         itemsPerPage: limit,
         totalPages: Math.ceil(total / limit),
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
   async findOne(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new Error(`User with ID ${id} not found`);
-    }
     return user;
   }
 
@@ -75,7 +74,6 @@ export class UserService {
     return user != null;
   }
 
-
   async update(id: number, updateUserDto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.findOne(id);
     Object.assign(user, updateUserDto);
@@ -87,16 +85,22 @@ export class UserService {
     await this.userRepository.remove(user);
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
     const [users, total] = await this.userRepository
       .createQueryBuilder("user")
-      .where("user.email ILIKE :query OR user.firstName ILIKE :query OR user.lastName ILIKE :query", { query: `%${query}%` })
+      .where(
+        "user.email ILIKE :query OR user.firstName ILIKE :query OR user.lastName ILIKE :query",
+        { query: `%${query}%` },
+      )
       .skip(skip)
       .take(limit)
-      .orderBy('RANDOM()')
+      .orderBy("RANDOM()")
       .getManyAndCount();
 
     return {
@@ -106,15 +110,16 @@ export class UserService {
         itemCount: users.length,
         itemsPerPage: limit,
         totalPages: Math.ceil(total / limit),
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
-
-  async findUserWithManagerAccountId(managerAccountId: number): Promise<UserEntity> {
+  async findUserWithManagerAccountId(
+    managerAccountId: number,
+  ): Promise<UserEntity> {
     return await this.userRepository.findOne({
-      where: { managerAccountId }
+      where: { managerAccountId },
     });
   }
 }

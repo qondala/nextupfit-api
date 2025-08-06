@@ -8,14 +8,12 @@ import {
 } from "typeorm";
 import { ContentCommitmentItemEntity } from "./items";
 
-
-
 @Entity("content_commitment")
 export class ContentCommitmentEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: "bigint"})
+  @Column({ type: "bigint" })
   contentId: number;
 
   @Column()
@@ -27,10 +25,10 @@ export class ContentCommitmentEntity {
   @Column()
   displayTitle: boolean;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   completeWithin: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "integer" })
   completeWithinTimeUnitId: number;
 
   @CreateDateColumn()

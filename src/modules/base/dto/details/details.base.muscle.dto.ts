@@ -1,5 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseBodyPartEnum } from "../../types";
@@ -9,7 +16,7 @@ export class DetailsBaseMuscleDto {
     type: SwaggerType.INTEGER,
     example: 1,
     description: "Record identifier",
-    required: true
+    required: true,
   })
   @IsInt()
   id: number;
@@ -17,7 +24,7 @@ export class DetailsBaseMuscleDto {
   @ApiProperty({
     example: "Biceps",
     description: "Muscle name",
-    required: true
+    required: true,
   })
   @IsString()
   @IsNotEmpty()
@@ -28,7 +35,7 @@ export class DetailsBaseMuscleDto {
     enumName: "BaseBodyPartEnum",
     example: BaseBodyPartEnum.arms,
     description: "Body part group",
-    required: true
+    required: true,
   })
   @IsEnum(BaseBodyPartEnum)
   bodyPart: BaseBodyPartEnum;
@@ -36,7 +43,7 @@ export class DetailsBaseMuscleDto {
   @ApiProperty({
     example: "https://cdn.example.com/biceps.svg",
     description: "Icon URL",
-    required: true
+    required: true,
   })
   @IsUrl()
   iconUrl: string;
@@ -45,7 +52,7 @@ export class DetailsBaseMuscleDto {
     type: SwaggerType.INTEGER,
     example: 1,
     description: "Display order",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -54,7 +61,7 @@ export class DetailsBaseMuscleDto {
   @ApiProperty({
     example: "biceps",
     description: "Unique code",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -62,15 +69,15 @@ export class DetailsBaseMuscleDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: "Creation timestamp"
+    format: "date-time",
+    description: "Creation timestamp",
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: "Last update timestamp"
+    format: "date-time",
+    description: "Last update timestamp",
   })
   updatedAt: Date;
 }

@@ -6,7 +6,12 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsBaseCurrencyDto } from "../details";
 
 export class PaginatedDetailsBaseCurrencyDto extends PaginatedResponseDto<DetailsBaseCurrencyDto> {
-  @ApiProperty({ type: () => DetailsBaseCurrencyDto, isArray: true, description: "List of currencies", required: true })
+  @ApiProperty({
+    type: () => DetailsBaseCurrencyDto,
+    isArray: true,
+    description: "List of currencies",
+    required: true,
+  })
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })

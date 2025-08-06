@@ -18,6 +18,9 @@ export class ContentEquipmentEntity {
   @Column({ type: "boolean", nullable: true })
   displayTitle?: boolean;
 
-  @OneToMany(() => ContentEquipmentItemEntity, (item) => item.contentEquipmentId)
+  @OneToMany(
+    () => ContentEquipmentItemEntity,
+    (item) => item.contentEquipmentId,
+  )
   items: ContentEquipmentItemEntity[];
 }

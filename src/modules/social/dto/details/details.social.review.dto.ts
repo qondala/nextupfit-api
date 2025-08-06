@@ -1,17 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsEnum, 
-  IsInt, 
-  IsNotEmpty, 
-  IsOptional, 
-  IsString 
+  IsDate,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
 } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 
 import { SocialReviewItemTypeEnum } from "../../types";
 
 export class DetailsSocialReviewDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's rating on the item",
@@ -21,7 +21,6 @@ export class DetailsSocialReviewDto {
   @IsNotEmpty()
   @IsInt()
   rating: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -33,7 +32,6 @@ export class DetailsSocialReviewDto {
   @IsString()
   comment?: string;
 
- 
   @ApiProperty({
     enum: SocialReviewItemTypeEnum,
     enumName: "SocialReviewItemTypeEnum",
@@ -45,7 +43,6 @@ export class DetailsSocialReviewDto {
   @IsEnum(SocialReviewItemTypeEnum)
   itemType: SocialReviewItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id performing rating",
@@ -55,7 +52,6 @@ export class DetailsSocialReviewDto {
   @IsNotEmpty()
   @IsInt()
   userId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -67,7 +63,6 @@ export class DetailsSocialReviewDto {
   @IsInt()
   easeOfUse?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Assess the effectiveness of the Item on a scale of 10",
@@ -77,4 +72,15 @@ export class DetailsSocialReviewDto {
   @IsOptional()
   @IsInt()
   effectiveness?: number;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    description: "Review creation date",
+    example: "2025-08-08T20:57:49.000Z",
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsDate()
+  createdAt: Date;
 }

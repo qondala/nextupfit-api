@@ -1,18 +1,16 @@
 import {
-    IsInt,
-    IsOptional,
-    IsString,
-    IsEnum,
-    IsNotEmpty
+  IsInt,
+  IsOptional,
+  IsString,
+  IsEnum,
+  IsNotEmpty,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
 
-
 export class CreateGymMembershipPlanDto {
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Gym Id",
@@ -22,7 +20,6 @@ export class CreateGymMembershipPlanDto {
   @IsNotEmpty()
   @IsInt()
   gymId: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -34,7 +31,6 @@ export class CreateGymMembershipPlanDto {
   @IsString()
   planName: string;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Plan price",
@@ -45,7 +41,6 @@ export class CreateGymMembershipPlanDto {
   @IsInt()
   price: number;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Trial plan number days",
@@ -55,7 +50,6 @@ export class CreateGymMembershipPlanDto {
   @IsOptional()
   @IsInt()
   trialNumberDays?: number;
-
 
   @ApiProperty({
     enum: BaseSubscriptionPlanPeriodicityEnum,
@@ -68,21 +62,21 @@ export class CreateGymMembershipPlanDto {
   @IsEnum(BaseSubscriptionPlanPeriodicityEnum)
   periodity: BaseSubscriptionPlanPeriodicityEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Plan description",
-    example: "This plan allows you to start with the mimimum budget and upgrade later",
+    example:
+      "This plan allows you to start with the mimimum budget and upgrade later",
     required: false,
   })
   @IsNotEmpty()
   @IsString()
   description: string;
 
-
   @ApiProperty({
     type: SwaggerType.NUMBER,
-    description: "Number activities accessible by the user within the current trial plan",
+    description:
+      "Number activities accessible by the user within the current trial plan",
     example: 3,
     required: false,
   })

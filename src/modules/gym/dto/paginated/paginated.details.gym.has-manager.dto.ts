@@ -5,15 +5,13 @@ import { Type } from "class-transformer";
 import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsGymHasManagerDto } from "../details";
 
-
 export class PaginatedDetailsGymHasManagerDto extends PaginatedResponseDto<DetailsGymHasManagerDto> {
-
   @ApiProperty({
     type: () => DetailsGymHasManagerDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of gym has managers',
-    required: true
+    description: "List of gym has managers",
+    required: true,
   })
   @IsDefined()
   @IsArray()

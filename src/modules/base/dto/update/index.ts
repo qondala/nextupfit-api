@@ -23,3 +23,5 @@ export * from "./update.base.recipe-instruction.dto";
 export * from "./update.base.recipe.dto";
 export * from "./update.base.currency.dto";
 export * from "./update.base.program-goal.dto";
+export * from "./update.base.ingredient.dto";
+export * from "./update.base.ingredient-nutrient.dto";

@@ -10,7 +10,6 @@ import {
   UpdateContentSusbcriptionPlanItemDto,
 } from "../../dto";
 
-
 @Injectable()
 export class ContentSusbcriptionPlanItemService {
   constructor(
@@ -25,7 +24,10 @@ export class ContentSusbcriptionPlanItemService {
     return await this.repository.save(entity);
   }
 
-  async findAll(contentSubscriptionPlanId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentSusbcriptionPlanItemEntity>> {
+  async findAll(
+    contentSubscriptionPlanId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentSusbcriptionPlanItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       take: limit,

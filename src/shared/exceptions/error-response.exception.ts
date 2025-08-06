@@ -5,14 +5,13 @@ import { IsEnum, IsNumber, IsString } from "class-validator";
 import { SystemStatusCode } from ".";
 
 export enum ErrorResponseExceptionType {
-  HTTP = 'HTTP',
-  VALIDATION = 'VALIDATION',
-  DATABASE = 'DATABASE',
-  BUSINESS = 'BUSINESS',
+  HTTP = "HTTP",
+  VALIDATION = "VALIDATION",
+  DATABASE = "DATABASE",
+  BUSINESS = "BUSINESS",
 }
 
 export class ErrorResponseException extends Error {
-
   constructor(
     private readonly _type: ErrorResponseExceptionType,
     private readonly _message: string,
@@ -31,38 +30,35 @@ export class ErrorResponseException extends Error {
     enumName: "ErrorResponseExceptionType",
     description: "Error type",
     required: true,
-    example: ErrorResponseExceptionType.HTTP
+    example: ErrorResponseExceptionType.HTTP,
   })
   @IsEnum(ErrorResponseExceptionType)
   type: ErrorResponseExceptionType;
-
 
   @ApiProperty({
     type: String,
     description: "Error message",
     required: true,
-    example: "Error message"
+    example: "Error message",
   })
   @IsString()
   message: string;
-
 
   @ApiProperty({
     type: Number,
     description: "HTTP status code",
     required: true,
-    example: HttpStatus.NOT_FOUND
+    example: HttpStatus.NOT_FOUND,
   })
   @IsNumber()
   httpStatusCode: HttpStatus;
-
 
   @ApiProperty({
     enum: SystemStatusCode,
     enumName: "SystemStatusCode",
     description: "System status code",
     required: true,
-    example: SystemStatusCode.GENERIC
+    example: SystemStatusCode.GENERIC,
   })
   @IsEnum(SystemStatusCode)
   systemStatusCode: SystemStatusCode;

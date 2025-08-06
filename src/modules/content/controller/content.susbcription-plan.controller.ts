@@ -62,7 +62,9 @@ export class ContentSusbcriptionPlanController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentSusbcriptionPlanDto): Promise<DetailsContentSusbcriptionPlanDto> {
+  async create(
+    @Body() dto: CreateContentSusbcriptionPlanDto,
+  ): Promise<DetailsContentSusbcriptionPlanDto> {
     return await this.service.create(dto);
   }
 
@@ -91,7 +93,8 @@ export class ContentSusbcriptionPlanController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Paginated list of content subscription plans retrieved successfully",
+    description:
+      "Paginated list of content subscription plans retrieved successfully",
     type: PaginatedDetailsContentSusbcriptionPlanDto,
   })
   @ApiResponse({
@@ -128,7 +131,9 @@ export class ContentSusbcriptionPlanController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentSusbcriptionPlanDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentSusbcriptionPlanDto> {
     return await this.service.findOne(id);
   }
 

@@ -15,7 +15,9 @@ export class PaymentCartItemService {
     private readonly paymentCartItemRepository: Repository<PaymentCartItemEntity>,
   ) {}
 
-  async create(createDto: CreatePaymentCartItemDto): Promise<PaymentCartItemEntity> {
+  async create(
+    createDto: CreatePaymentCartItemDto,
+  ): Promise<PaymentCartItemEntity> {
     const paymentCartItem = this.paymentCartItemRepository.create({
       ...createDto,
       createdAt: new Date(),
@@ -33,7 +35,10 @@ export class PaymentCartItemService {
       .orderBy("paymentCartItem.createdAt", "DESC");
 
     const skip = (pagination.page - 1) * pagination.limit;
-    const [items, totalItems] = await qb.skip(skip).take(pagination.limit).getManyAndCount();
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
 
@@ -57,11 +62,16 @@ export class PaymentCartItemService {
     const qb = this.paymentCartItemRepository
       .createQueryBuilder("paymentCartItem")
       .where("paymentCartItem.userId = :userId", { userId })
-      .andWhere("paymentCartItem.paymentCartId = :paymentCartId", { paymentCartId })
+      .andWhere("paymentCartItem.paymentCartId = :paymentCartId", {
+        paymentCartId,
+      })
       .orderBy("paymentCartItem.createdAt", "DESC");
 
     const skip = (pagination.page - 1) * pagination.limit;
-    const [items, totalItems] = await qb.skip(skip).take(pagination.limit).getManyAndCount();
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
 
@@ -77,17 +87,23 @@ export class PaymentCartItemService {
     };
   }
 
-
   async findOne(id: number): Promise<PaymentCartItemEntity> {
     return await this.paymentCartItemRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, dto: UpdatePaymentCartItemDto, userId: number): Promise<PaymentCartItemEntity> {
+  async update(
+    id: number,
+    dto: UpdatePaymentCartItemDto,
+    userId: number,
+  ): Promise<PaymentCartItemEntity> {
     await this.paymentCartItemRepository.update({ id, userId }, dto);
     return this.findOne(id);
   }
 
-  async updatePayementCartItemStatus(id: number, status: PaymentStatusEnum): Promise<PaymentCartItemEntity> {
+  async updatePayementCartItemStatus(
+    id: number,
+    status: PaymentStatusEnum,
+  ): Promise<PaymentCartItemEntity> {
     await this.paymentCartItemRepository.update({ id }, { status });
     return this.findOne(id);
   }

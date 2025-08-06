@@ -8,7 +8,7 @@ export class CreateContentCarouselItemDto {
     type: SwaggerType.INTEGER,
     description: "carousel id",
     example: 1234,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()
@@ -18,7 +18,7 @@ export class CreateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "title",
     example: "title",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -28,7 +28,7 @@ export class CreateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "description",
     example: "description",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsString()
@@ -38,7 +38,7 @@ export class CreateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "media url",
     example: "https://example.com/image.jpg",
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsUrl()
@@ -48,7 +48,7 @@ export class CreateContentCarouselItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: true
+    required: true,
   })
   @IsNotEmpty()
   @IsInt()

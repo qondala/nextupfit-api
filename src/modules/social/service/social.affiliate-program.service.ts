@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateSocialAffiliateProgramDto, UpdateSocialAffiliateProgramDto } from '../dto';
-import { SocialAffiliateProgramEntity } from '../entity';
-
+import {
+  CreateSocialAffiliateProgramDto,
+  UpdateSocialAffiliateProgramDto,
+} from "../dto";
+import { SocialAffiliateProgramEntity } from "../entity";
 
 @Injectable()
 export class SocialAffiliateProgramService {
@@ -15,24 +17,28 @@ export class SocialAffiliateProgramService {
     private readonly affiliateProgramRepository: Repository<SocialAffiliateProgramEntity>,
   ) {}
 
-  async create(createDto: CreateSocialAffiliateProgramDto, userId: number): Promise<SocialAffiliateProgramEntity> {
+  async create(
+    createDto: CreateSocialAffiliateProgramDto,
+    userId: number,
+  ): Promise<SocialAffiliateProgramEntity> {
     const affiliateProgram = this.affiliateProgramRepository.create({
       ...createDto,
       userId,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.affiliateProgramRepository.save(affiliateProgram);
   }
 
   async findAll(
     paginationOptions: PaginationOptionsDto,
-    userId?: number
+    userId?: number,
   ): Promise<PaginatedResponseDto<SocialAffiliateProgramEntity>> {
-    const queryBuilder = this.affiliateProgramRepository.createQueryBuilder('affiliateProgram')
-      .orderBy('affiliateProgram.createdAt', 'DESC');
+    const queryBuilder = this.affiliateProgramRepository
+      .createQueryBuilder("affiliateProgram")
+      .orderBy("affiliateProgram.createdAt", "DESC");
 
     if (userId) {
-      queryBuilder.where('affiliateProgram.userId = :userId', { userId });
+      queryBuilder.where("affiliateProgram.userId = :userId", { userId });
     }
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
@@ -50,19 +56,24 @@ export class SocialAffiliateProgramService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<SocialAffiliateProgramEntity> {
-    return await this.affiliateProgramRepository.findOneOrFail({ where: { id } });
+    return await this.affiliateProgramRepository.findOneOrFail({
+      where: { id },
+    });
   }
 
-  async update(id: number, updateDto: UpdateSocialAffiliateProgramDto): Promise<SocialAffiliateProgramEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateSocialAffiliateProgramDto,
+  ): Promise<SocialAffiliateProgramEntity> {
     await this.affiliateProgramRepository.update(id, {
       ...updateDto,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
     return this.findOne(id);
   }

@@ -6,13 +6,12 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsGymDto } from "../details";
 
 export class PaginatedDetailsGymDto extends PaginatedResponseDto<DetailsGymDto> {
-
   @ApiProperty({
     type: () => DetailsGymDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of gyms',
-    required: true
+    description: "List of gyms",
+    required: true,
   })
   @IsDefined()
   @IsArray()

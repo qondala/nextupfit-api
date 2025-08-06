@@ -8,14 +8,14 @@ import {
   Patch,
   Post,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags
+  ApiTags,
 } from "@nestjs/swagger";
 
 import { PaginationOptionsDto } from "@app/common/dto";
@@ -23,7 +23,7 @@ import {
   CreateBaseRecipeDto,
   UpdateBaseRecipeDto,
   DetailsBaseRecipeDto,
-  PaginatedDetailsBaseRecipeDto
+  PaginatedDetailsBaseRecipeDto,
 } from "../dto";
 import { BaseRecipeService } from "../service";
 
@@ -35,22 +35,39 @@ export class BaseRecipeController {
 
   @Post()
   @ApiOperation({ summary: "Create recipe", operationId: "createBaseRecipe" })
-  @ApiCreatedResponse({ description: "Recipe created successfully.", type: DetailsBaseRecipeDto, status: HttpStatus.CREATED })
+  @ApiCreatedResponse({
+    description: "Recipe created successfully.",
+    type: DetailsBaseRecipeDto,
+    status: HttpStatus.CREATED,
+  })
   create(@Body() dto: CreateBaseRecipeDto): Promise<DetailsBaseRecipeDto> {
     return this.recipeService.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: "Get all recipes", operationId: "findAllBaseRecipes" })
-  @ApiOkResponse({ description: "List of recipes.", type: PaginatedDetailsBaseRecipeDto })
-  findAll(@Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsBaseRecipeDto> {
+  @ApiOperation({
+    summary: "Get all recipes",
+    operationId: "findAllBaseRecipes",
+  })
+  @ApiOkResponse({
+    description: "List of recipes.",
+    type: PaginatedDetailsBaseRecipeDto,
+  })
+  findAll(
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsBaseRecipeDto> {
     return this.recipeService.findAll(pagination);
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "Get recipe by id", operationId: "findBaseRecipeById" })
+  @ApiOperation({
+    summary: "Get recipe by id",
+    operationId: "findBaseRecipeById",
+  })
   @ApiOkResponse({ description: "Recipe by id.", type: DetailsBaseRecipeDto })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsBaseRecipeDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsBaseRecipeDto> {
     return this.recipeService.findOne(id);
   }
 
@@ -59,7 +76,7 @@ export class BaseRecipeController {
   @ApiOkResponse({ description: "Updated recipe.", type: DetailsBaseRecipeDto })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateBaseRecipeDto
+    @Body() dto: UpdateBaseRecipeDto,
   ): Promise<DetailsBaseRecipeDto> {
     return this.recipeService.update(id, dto);
   }

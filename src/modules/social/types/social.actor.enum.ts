@@ -1,5 +1,5 @@
 export enum SocialActorEnum {
-  user = 'user',
-  gym = 'gym',
-  manager = 'manager',
+  user = "user",
+  gym = "gym",
+  manager = "manager",
 }

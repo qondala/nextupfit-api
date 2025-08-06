@@ -7,9 +7,9 @@ import {
   JoinColumn,
 } from "typeorm";
 
-import { ProgramItemTypeEnum } from "../types";
 import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
-import { ProgramItemCompositeDto } from "../types";
+
+import { ProgramItemTypeEnum, ProgramItemCompositeDto } from "../types";
 
 @Entity("program_manager")
 export class ProgramManagerEntity {
@@ -18,7 +18,6 @@ export class ProgramManagerEntity {
 
   @Column({ nullable: false })
   itemType: ProgramItemTypeEnum;
-
 
   @Column({ nullable: false })
   itemId: number;
@@ -33,11 +32,11 @@ export class ProgramManagerEntity {
   gymId: number;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'managerId' })
+  @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
 
   @CreateDateColumn()

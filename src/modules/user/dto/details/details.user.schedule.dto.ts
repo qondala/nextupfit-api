@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { BaseSchedulableEnum } from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsUserScheduleDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -34,7 +33,7 @@ export class DetailsUserScheduleDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Expected datetime",
     required: true,
   })
@@ -56,7 +55,7 @@ export class DetailsUserScheduleDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",
@@ -65,7 +64,7 @@ export class DetailsUserScheduleDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: false,
     example: "2025-05-02T00:00:00.000Z",

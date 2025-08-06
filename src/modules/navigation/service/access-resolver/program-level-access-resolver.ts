@@ -11,7 +11,6 @@ import {
 
 import { UserProgramAccessStatus } from "../../dto";
 
-
 /**
  * Scan program access level requirements (visibility and accessibility)
  * And ensure user satisfies them
@@ -22,39 +21,34 @@ export class ProgramLevelAccessResolver {
     private readonly userProgramAccessStatus: UserProgramAccessStatus,
   ) {}
 
-
   resolve(): ProgramAccessDecision {
-    
     const access = {
       ok: true,
       reason: ProgramNavigationReasonEnum.programIsPublic,
-    }
+    };
 
     // 1- Check the program visibility
     const visibility = this.checkProgramVisibility();
-    if(!visibility.ok) {
+    if (!visibility.ok) {
       return visibility;
     }
 
     // 2- Check the program accessibility
     const accessibility = this.checkProgramAccesssibility();
-    if(!accessibility.ok) {
+    if (!accessibility.ok) {
       return accessibility;
     }
 
     return access;
   }
 
-
-
   private checkProgramAccesssibility(): ProgramAccessDecision {
-
     const access = {
       ok: true,
       reason: ProgramNavigationReasonEnum.programIsPublic,
-    }
-    
-    switch(this.programAccessRequirements.accessibility) {
+    };
+
+    switch (this.programAccessRequirements.accessibility) {
       case ProgramAccessibilityEnum.gymMembersOnly:
         // This accessibility should have already been checked in the gym level access checker
         break;
@@ -63,7 +57,7 @@ export class ProgramLevelAccessResolver {
         break;
       case ProgramAccessibilityEnum.programSubscribersOnly:
         const programSubscriptionStatus = this.checkProgramSubscriptionStatus();
-        if(!programSubscriptionStatus.ok) {
+        if (!programSubscriptionStatus.ok) {
           return programSubscriptionStatus;
         }
         access.reason = programSubscriptionStatus.reason;
@@ -74,13 +68,12 @@ export class ProgramLevelAccessResolver {
   }
 
   private checkProgramVisibility(): ProgramAccessDecision {
-
     const access = {
       ok: true,
       reason: ProgramNavigationReasonEnum.programIsPublic,
-    }
+    };
 
-    switch(this.programAccessRequirements.visibility) {
+    switch (this.programAccessRequirements.visibility) {
       case ProgramVisibilityEnum.gymFollowersOnly:
         // This visibility should have already been checked in the gym level access checker
         break;
@@ -89,52 +82,69 @@ export class ProgramLevelAccessResolver {
         break;
       case ProgramVisibilityEnum.managerFollowersOnly:
         const follower = this.userProgramAccessStatus.managerFollowerStatus;
-        if(!follower || !follower.accepted || follower.rejected || follower.stopped || follower.blocked) {
+        if (
+          !follower ||
+          !follower.accepted ||
+          follower.rejected ||
+          follower.stopped ||
+          follower.blocked
+        ) {
           return {
             ok: false,
             reason: ProgramNavigationReasonEnum.isNotManagerFollower,
-          }
+          };
         }
     }
 
     return access;
   }
 
-
   checkProgramSubscriptionStatus(): ProgramAccessDecision {
-    
     const access = {
       ok: true,
       reason: ProgramNavigationReasonEnum.hasPaidProgramSubscriptionPlan,
-    }
+    };
 
-
-    if(!this.userProgramAccessStatus.everSubscribedToProgram) { // User has no registered gym membership
+    if (!this.userProgramAccessStatus.everSubscribedToProgram) {
+      // User has no registered gym membership
       return {
         ok: false,
         reason: ProgramNavigationReasonEnum.isNotProgramSubscriber,
-      }
+      };
     }
     // When the program has no membeship plan restriction
     // it means that all program subscribers (regardless of their membership plan) can access the program
     // so we just check if user has paid any gym membership plan
     if (!this.programAccessRequirements.authorizedMembershipPlanIds?.length) {
       let hasPaidAnyProgramSubscriptionPlan = false;
-      for (const programSubscriptionStatus of this.userProgramAccessStatus.programSubscriptionStatuses) {
-        if(programSubscriptionStatus.userPlanExists && programSubscriptionStatus.paid) {
+      for (const programSubscriptionStatus of this.userProgramAccessStatus
+        .programSubscriptionStatuses) {
+        if (
+          programSubscriptionStatus.userPlanExists &&
+          programSubscriptionStatus.paid
+        ) {
           hasPaidAnyProgramSubscriptionPlan = true;
           break;
-        } else if(programSubscriptionStatus.userPlanExists && programSubscriptionStatus.trialStatus) { // Check trial status
+        } else if (
+          programSubscriptionStatus.userPlanExists &&
+          programSubscriptionStatus.trialStatus
+        ) {
+          // Check trial status
           const trialStatus = programSubscriptionStatus.trialStatus;
-          if(trialStatus.numberOfDaysLeft > 0 || trialStatus.numberOfActivitiesLeft > 0) {
+          if (
+            trialStatus.numberOfDaysLeft > 0 ||
+            trialStatus.numberOfActivitiesLeft > 0
+          ) {
             hasPaidAnyProgramSubscriptionPlan = true;
-            access.reason = ProgramNavigationReasonEnum.isOnProgramSubscriptionPlanTrial;
+            access.reason =
+              ProgramNavigationReasonEnum.isOnProgramSubscriptionPlanTrial;
             break;
           } else {
             return {
               ok: false,
-              reason: ProgramNavigationReasonEnum.programSubscriptionPlanTrialEnded,
-            }
+              reason:
+                ProgramNavigationReasonEnum.programSubscriptionPlanTrialEnded,
+            };
           }
         }
       }
@@ -143,7 +153,7 @@ export class ProgramLevelAccessResolver {
         return {
           ok: false,
           reason: ProgramNavigationReasonEnum.hasNotPaidProgramSubscriptionPlan,
-        }
+        };
       }
     }
 
@@ -153,29 +163,39 @@ export class ProgramLevelAccessResolver {
     if (this.programAccessRequirements.authorizedMembershipPlanIds?.length) {
       let hasPaidAnyProgramSubscriptionPlan = false;
 
-      for (const programSubscriptionStatus of this.userProgramAccessStatus.programSubscriptionStatuses) {
-        if(
-          programSubscriptionStatus.userPlanExists && 
-          this.programAccessRequirements.authorizedMembershipPlanIds.includes(programSubscriptionStatus.programSubscriptionPlanId) &&
+      for (const programSubscriptionStatus of this.userProgramAccessStatus
+        .programSubscriptionStatuses) {
+        if (
+          programSubscriptionStatus.userPlanExists &&
+          this.programAccessRequirements.authorizedMembershipPlanIds.includes(
+            programSubscriptionStatus.programSubscriptionPlanId,
+          ) &&
           programSubscriptionStatus.paid
         ) {
           hasPaidAnyProgramSubscriptionPlan = true;
           break;
-        } else if(
-          programSubscriptionStatus.userPlanExists && 
-          this.programAccessRequirements.authorizedMembershipPlanIds.includes(programSubscriptionStatus.programSubscriptionPlanId) &&
+        } else if (
+          programSubscriptionStatus.userPlanExists &&
+          this.programAccessRequirements.authorizedMembershipPlanIds.includes(
+            programSubscriptionStatus.programSubscriptionPlanId,
+          ) &&
           programSubscriptionStatus.trialStatus
         ) {
           const trialStatus = programSubscriptionStatus.trialStatus;
-          if(trialStatus.numberOfDaysLeft > 0 || trialStatus.numberOfActivitiesLeft > 0) {
+          if (
+            trialStatus.numberOfDaysLeft > 0 ||
+            trialStatus.numberOfActivitiesLeft > 0
+          ) {
             hasPaidAnyProgramSubscriptionPlan = true;
-            access.reason = ProgramNavigationReasonEnum.isOnProgramSubscriptionPlanTrial;
+            access.reason =
+              ProgramNavigationReasonEnum.isOnProgramSubscriptionPlanTrial;
             break;
           } else {
             return {
               ok: false,
-              reason: ProgramNavigationReasonEnum.programSubscriptionPlanTrialEnded,
-            }
+              reason:
+                ProgramNavigationReasonEnum.programSubscriptionPlanTrialEnded,
+            };
           }
         }
       }
@@ -184,11 +204,10 @@ export class ProgramLevelAccessResolver {
         return {
           ok: false,
           reason: ProgramNavigationReasonEnum.hasNotPaidProgramSubscriptionPlan,
-        }
+        };
       }
     }
 
     return access;
   }
-
 }

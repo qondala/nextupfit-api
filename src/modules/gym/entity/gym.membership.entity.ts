@@ -8,29 +8,19 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import {
-  UserEntity,
-} from "@app/module/user/entity";
+import { UserEntity } from "@app/module/user/entity";
 
-import {
-  GymMembershipStatusEnum,
-} from "../types";
+import { GymMembershipStatusEnum } from "../types";
 
-import {
-  GymEntity,
-  GymMembershipPlanEntity,
-} from "./";
+import { GymEntity, GymMembershipPlanEntity } from "./";
 
-
-@Entity('gym_membership')
+@Entity("gym_membership")
 export class GymMembershipEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-
   @Column({ nullable: true })
   gymId: number;
-
 
   @Column({ nullable: false })
   memberUserId: number;
@@ -40,7 +30,6 @@ export class GymMembershipEntity {
 
   @Column({ type: "timestamp", nullable: true, default: new Date() })
   startedDate?: Date;
-
 
   @Column({
     type: "enum",
@@ -56,15 +45,15 @@ export class GymMembershipEntity {
   lastStatusUpdate?: Date;
 
   @ManyToOne(() => GymMembershipPlanEntity)
-  @JoinColumn({ name: 'gymMembershipPlanId' })
+  @JoinColumn({ name: "gymMembershipPlanId" })
   membershipPlan: GymMembershipPlanEntity;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'memberUserId' })
+  @JoinColumn({ name: "memberUserId" })
   member: UserEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
 
   @CreateDateColumn()

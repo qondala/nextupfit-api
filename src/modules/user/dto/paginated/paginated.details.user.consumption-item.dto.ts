@@ -10,7 +10,7 @@ export class PaginatedDetailsUserConsumptionItemDto extends PaginatedResponseDto
     type: () => DetailsUserConsumptionItemDto,
     isArray: true,
     description: "List of user consumption items",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

@@ -35,12 +35,17 @@ export class UserInterestService {
     return await this.userInterestRepository.save(newEntity);
   }
 
-  async createMany(createDto: CreateUserInterestDto[]): Promise<UserInterestEntity[]> {
+  async createMany(
+    createDto: CreateUserInterestDto[],
+  ): Promise<UserInterestEntity[]> {
     const newEntities = this.userInterestRepository.create(createDto);
     return await this.userInterestRepository.save(newEntities);
   }
 
-  async findAll(userId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserInterestEntity>> {
+  async findAll(
+    userId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserInterestEntity>> {
     const [items, total] = await this.userInterestRepository.findAndCount({
       where: { userId },
       skip: (options.page - 1) * options.limit,
@@ -64,7 +69,10 @@ export class UserInterestService {
     return await this.userInterestRepository.findOneBy({ id });
   }
 
-  async getUserInterestComposite(interestId: number, interestType: UserInterestTypeEnum): Promise<UserInterestCompositeDto> {
+  async getUserInterestComposite(
+    interestId: number,
+    interestType: UserInterestTypeEnum,
+  ): Promise<UserInterestCompositeDto> {
     const interest: UserInterestCompositeDto = {
       nutrition: null,
       programGoal: null,
@@ -74,23 +82,34 @@ export class UserInterestService {
 
     switch (interestType) {
       case UserInterestTypeEnum.nutrition:
-        interest.nutrition = await this.nutritionRepository.findOneBy({ id: interestId });
+        interest.nutrition = await this.nutritionRepository.findOneBy({
+          id: interestId,
+        });
         break;
       case UserInterestTypeEnum.programGoal:
-        interest.programGoal = await this.programGoalRepository.findOneBy({ id: interestId });
+        interest.programGoal = await this.programGoalRepository.findOneBy({
+          id: interestId,
+        });
         break;
       case UserInterestTypeEnum.sociology:
-        interest.sociology = await this.sociologyRepository.findOneBy({ id: interestId });
+        interest.sociology = await this.sociologyRepository.findOneBy({
+          id: interestId,
+        });
         break;
       case UserInterestTypeEnum.workout:
-        interest.workout = await this.workoutRepository.findOneBy({ id: interestId });
+        interest.workout = await this.workoutRepository.findOneBy({
+          id: interestId,
+        });
         break;
     }
-    
+
     return interest;
   }
 
-  async update(id: number, updateDto: UpdateUserInterestDto): Promise<UserInterestEntity | null> {
+  async update(
+    id: number,
+    updateDto: UpdateUserInterestDto,
+  ): Promise<UserInterestEntity | null> {
     const result = await this.userInterestRepository.update(id, updateDto);
     if (result.affected === 0) return null;
     return await this.findOne(id);

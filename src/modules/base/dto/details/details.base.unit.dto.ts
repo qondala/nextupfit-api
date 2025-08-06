@@ -4,27 +4,26 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString
+  IsString,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
 import { BaseUnitContainanceEnum } from "../../types";
 
-
 export class DetailsBaseUnitDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'Identifier',
-    example: 1
+    description: "Identifier",
+    example: 1,
   })
   @IsNumber()
   id: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: 'Unit name',
-    example: 'Kilogram'
+    description: "Unit name",
+    example: "Kilogram",
   })
   @IsString()
   @IsNotEmpty()
@@ -32,8 +31,8 @@ export class DetailsBaseUnitDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: 'Abbreviation',
-    example: 'kg'
+    description: "Abbreviation",
+    example: "kg",
   })
   @IsString()
   @IsNotEmpty()
@@ -42,16 +41,16 @@ export class DetailsBaseUnitDto {
   @ApiProperty({
     enum: BaseUnitContainanceEnum,
     enumName: "BaseUnitContainanceEnum",
-    description: 'Containance category',
-    example: BaseUnitContainanceEnum.weight
+    description: "Containance category",
+    example: BaseUnitContainanceEnum.weight,
   })
   @IsEnum(BaseUnitContainanceEnum)
   containance: BaseUnitContainanceEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'Order',
-    required: false
+    description: "Order",
+    required: false,
   })
   @IsOptional()
   @IsNumber()
@@ -59,8 +58,8 @@ export class DetailsBaseUnitDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: 'Unique code',
-    required: false
+    description: "Unique code",
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -68,15 +67,15 @@ export class DetailsBaseUnitDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Creation timestamp'
+    format: "date-time",
+    description: "Creation timestamp",
   })
   createdAt: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Last update timestamp'
+    format: "date-time",
+    description: "Last update timestamp",
   })
   updatedAt: Date;
 }

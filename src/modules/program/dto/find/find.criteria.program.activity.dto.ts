@@ -1,19 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-  IsEnum,
-} from "class-validator";
+import { IsOptional, IsEnum } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
 import { ProgramStepActivityStatusEnum } from "../../types";
 import { ProgramFindOrderActivityEnum } from ".";
 
-
 export class ProgramFindCriteriaActivityDto {
-
   @ApiProperty({
-    name: 'search',
+    name: "search",
     type: SwaggerType.STRING,
     description: "Activity's title",
     example: "Simple Pillates workout",
@@ -22,9 +17,8 @@ export class ProgramFindCriteriaActivityDto {
   @IsOptional()
   search?: string;
 
-
   @ApiProperty({
-    name: 'gymId',
+    name: "gymId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the activity",
     required: false,
@@ -32,9 +26,8 @@ export class ProgramFindCriteriaActivityDto {
   @IsOptional()
   gymId?: number;
 
-
   @ApiProperty({
-    name: 'programId',
+    name: "programId",
     type: SwaggerType.INTEGER,
     description: "Id of the program",
     required: false,
@@ -43,7 +36,7 @@ export class ProgramFindCriteriaActivityDto {
   programId?: number;
 
   @ApiProperty({
-    name: 'programStepId',
+    name: "programStepId",
     type: SwaggerType.INTEGER,
     description: "Id of the program step",
     required: false,
@@ -51,19 +44,17 @@ export class ProgramFindCriteriaActivityDto {
   @IsOptional()
   programStepId?: number;
 
-
-
   @ApiProperty({
-    name: 'ownerUserId',
+    name: "ownerUserId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program activity",
     required: false,
   })
   @IsOptional()
   ownerUserId?: number;
-  
+
   @ApiProperty({
-    name: 'ownerManagerId',
+    name: "ownerManagerId",
     type: SwaggerType.INTEGER,
     description: "Id of the gym manager owning the program activity",
     required: false,
@@ -71,9 +62,8 @@ export class ProgramFindCriteriaActivityDto {
   @IsOptional()
   ownerManagerId?: number;
 
-
   @ApiProperty({
-    name: 'status',
+    name: "status",
     enum: ProgramStepActivityStatusEnum,
     enumName: "ProgramStepActivityStatusEnum",
     required: false,
@@ -81,95 +71,89 @@ export class ProgramFindCriteriaActivityDto {
   @IsOptional()
   status: ProgramStepActivityStatusEnum;
 
-
-
   @ApiProperty({
-    name: 'attendeesCount',
+    name: "attendeesCount",
     type: SwaggerType.INTEGER,
     description: "Activity attendees count",
-    required: false
+    required: false,
   })
   @IsOptional()
   attendeesCount?: number;
 
-
   @ApiProperty({
-    name: 'viewsCount',
+    name: "viewsCount",
     type: SwaggerType.INTEGER,
     description: "Views count",
-    required: false
+    required: false,
   })
   @IsOptional()
   viewsCount?: number;
 
-
   @ApiProperty({
-    name: 'ratingsAvg',
+    name: "ratingsAvg",
     type: SwaggerType.NUMBER,
     description: "Ratings average",
-    required: false
+    required: false,
   })
   @IsOptional()
   ratingsAvg?: number;
 
-
   @ApiProperty({
-    name: 'ratingsCount',
+    name: "ratingsCount",
     type: SwaggerType.INTEGER,
     description: "Number times Activity was rated",
-    required: false
+    required: false,
   })
   @IsOptional()
   ratingsCount?: number;
 
-
   @ApiProperty({
-    name: 'difficultyLevel',
+    name: "difficultyLevel",
     type: SwaggerType.INTEGER,
     description: "Difficulty level on a scale of 10",
-    required: false
+    required: false,
   })
   @IsOptional()
   difficultyLevel?: number;
 
   @ApiProperty({
-    name: 'priceHigherThan',
+    name: "priceHigherThan",
     type: SwaggerType.INTEGER,
     description: "Price higher than",
-    required: false
+    required: false,
   })
   @IsOptional()
   priceHigherThan?: number;
 
   @ApiProperty({
-    name: 'priceLowerThan',
+    name: "priceLowerThan",
     type: SwaggerType.INTEGER,
     description: "Price lower than",
-    required: false
+    required: false,
   })
   @IsOptional()
   priceLowerThan?: number;
 
   @ApiProperty({
-    name: 'isChallenge',
+    name: "isChallenge",
     type: SwaggerType.BOOLEAN,
     description: "Is challenge",
-    required: false
+    required: false,
   })
   @IsOptional()
   isChallenge?: boolean;
 
   @ApiProperty({
-    name: 'isFreeTool',
+    name: "isFreeTool",
     type: SwaggerType.BOOLEAN,
     description: "Is free tool",
-    required: false
+    required: false,
   })
   @IsOptional()
   isFreeTool?: boolean;
 
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: ProgramFindOrderActivityEnum,
     enumName: "ProgramFindOrderActivityEnum",
     required: false,

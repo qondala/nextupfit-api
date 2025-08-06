@@ -35,7 +35,9 @@ import { PaymentTransferService } from "../service";
 @Controller("payment/transfer")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class PaymentTransferController {
-  constructor(private readonly paymentTransferService: PaymentTransferService) {}
+  constructor(
+    private readonly paymentTransferService: PaymentTransferService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -86,7 +88,10 @@ export class PaymentTransferController {
     @Query("limit") limit = 10,
     @Query("userId", ParseIntPipe) userId: number,
   ): Promise<PaginatedDetailsPaymentTransferDto> {
-    return await this.paymentTransferService.findAll({ page: +page, limit: +limit }, userId);
+    return await this.paymentTransferService.findAll(
+      { page: +page, limit: +limit },
+      userId,
+    );
   }
 
   @Get(":id")
@@ -99,7 +104,9 @@ export class PaymentTransferController {
     status: HttpStatus.OK,
     type: DetailsPaymentTransferDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsPaymentTransferDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsPaymentTransferDto> {
     return await this.paymentTransferService.findOne(id);
   }
 

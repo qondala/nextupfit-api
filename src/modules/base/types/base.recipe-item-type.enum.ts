@@ -1,4 +1,4 @@
 export enum BaseRecipeItemTypeEnum {
   food = "food",
-  ingredient = "ingredient"
+  ingredient = "ingredient",
 }

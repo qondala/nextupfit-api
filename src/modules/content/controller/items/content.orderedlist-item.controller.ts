@@ -64,7 +64,9 @@ export class ContentOrderedlistItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentOrderedlistItemDto): Promise<DetailsContentOrderedlistItemDto> {
+  async create(
+    @Body() dto: CreateContentOrderedlistItemDto,
+  ): Promise<DetailsContentOrderedlistItemDto> {
     return await this.service.create(dto);
   }
 
@@ -130,7 +132,9 @@ export class ContentOrderedlistItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentOrderedlistItemDto | null> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentOrderedlistItemDto | null> {
     return await this.service.findOne(id);
   }
 

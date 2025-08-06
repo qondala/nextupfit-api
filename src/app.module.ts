@@ -20,10 +20,8 @@ import { MapModule } from "@app/module/map/map.module";
 import { ContentModule } from "@app/module/content/content.module";
 import { NavigationModule } from "@app/module/navigation/navigation.module";
 
-
 @Module({
   imports: [
-
     // Config module
     ConfigModule.forRoot({
       isGlobal: true,
@@ -44,7 +42,7 @@ import { NavigationModule } from "@app/module/navigation/navigation.module";
     SocialModule,
     PaymentModule,
     MapModule,
-    NavigationModule
+    NavigationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

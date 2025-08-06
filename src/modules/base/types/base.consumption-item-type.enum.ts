@@ -1,5 +1,5 @@
 export enum BaseConsumptionItemTypeEnum {
   food = "food",
-  meal = "meal" ,
-  drug = "drug"
+  meal = "meal",
+  drug = "drug",
 }

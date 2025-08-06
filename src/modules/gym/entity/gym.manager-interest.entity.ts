@@ -36,6 +36,6 @@ export class GymManagerInterestEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymManagerEntity, (manager) => manager.interests)
-  @JoinColumn({ name: 'managerId', referencedColumnName: 'id' })
+  @JoinColumn({ name: "managerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 }

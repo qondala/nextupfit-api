@@ -6,7 +6,7 @@ import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateBaseRecipeInstructionTagDto,
-  UpdateBaseRecipeInstructionTagDto
+  UpdateBaseRecipeInstructionTagDto,
 } from "../dto";
 import { BaseRecipeInstructionTagEntity } from "../entity";
 
@@ -14,18 +14,18 @@ import { BaseRecipeInstructionTagEntity } from "../entity";
 export class BaseRecipeInstructionTagService {
   constructor(
     @InjectRepository(BaseRecipeInstructionTagEntity)
-    private readonly tagRepository: Repository<BaseRecipeInstructionTagEntity>
+    private readonly tagRepository: Repository<BaseRecipeInstructionTagEntity>,
   ) {}
 
   async create(
-    createDto: CreateBaseRecipeInstructionTagDto
+    createDto: CreateBaseRecipeInstructionTagDto,
   ): Promise<BaseRecipeInstructionTagEntity> {
     const entity = this.tagRepository.create(createDto);
     return await this.tagRepository.save(entity);
   }
 
   async findAll(
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<BaseRecipeInstructionTagEntity>> {
     const qb = this.tagRepository
       .createQueryBuilder("tag")
@@ -46,8 +46,8 @@ export class BaseRecipeInstructionTagService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
@@ -57,7 +57,7 @@ export class BaseRecipeInstructionTagService {
 
   async update(
     id: number,
-    updateDto: UpdateBaseRecipeInstructionTagDto
+    updateDto: UpdateBaseRecipeInstructionTagDto,
   ): Promise<BaseRecipeInstructionTagEntity> {
     await this.tagRepository.update(id, updateDto);
     return this.findOne(id);

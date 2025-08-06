@@ -5,14 +5,12 @@ import { IsDefined, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class DetailsUserBodyParamDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -21,14 +19,12 @@ export class DetailsUserBodyParamDto {
   })
   userId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Body param id",
     required: true,
   })
   bodyParamId: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
@@ -37,24 +33,21 @@ export class DetailsUserBodyParamDto {
   })
   paramValue: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     required: true,
   })
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     required: true,
   })
   updatedAt: Date;
-
 
   @ApiProperty({
     type: () => DetailsBaseBodyParamDto,

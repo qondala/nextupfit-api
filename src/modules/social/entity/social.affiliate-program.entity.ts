@@ -1,6 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-@Entity('social_affiliate_program')
+@Entity("social_affiliate_program")
 export class SocialAffiliateProgramEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -31,7 +37,6 @@ export class SocialAffiliateProgramEntity {
 
   @Column({ nullable: true })
   programActivityWorkingsessionId?: number;
-
 
   @CreateDateColumn()
   createdAt: Date;

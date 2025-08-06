@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentEquipmentItemEntity } from "../../entity/items";
-import { CreateContentEquipmentItemDto, UpdateContentEquipmentItemDto } from "../../dto";
+import {
+  CreateContentEquipmentItemDto,
+  UpdateContentEquipmentItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentEquipmentItemService {
@@ -14,11 +17,16 @@ export class ContentEquipmentItemService {
     private readonly repository: Repository<ContentEquipmentItemEntity>,
   ) {}
 
-  async create(dto: CreateContentEquipmentItemDto): Promise<ContentEquipmentItemEntity> {
+  async create(
+    dto: CreateContentEquipmentItemDto,
+  ): Promise<ContentEquipmentItemEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentEquipmentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentEquipmentItemEntity>> {
+  async findAll(
+    contentEquipmentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentEquipmentItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -45,7 +53,10 @@ export class ContentEquipmentItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentEquipmentItemDto): Promise<ContentEquipmentItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentEquipmentItemDto,
+  ): Promise<ContentEquipmentItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

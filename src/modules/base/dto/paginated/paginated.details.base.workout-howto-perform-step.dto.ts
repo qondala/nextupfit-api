@@ -6,7 +6,11 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsBaseWorkoutHowtoPerformStepDto } from "../details";
 
 export class PaginatedDetailsBaseWorkoutHowtoPerformStepDto extends PaginatedResponseDto<DetailsBaseWorkoutHowtoPerformStepDto> {
-  @ApiProperty({ type: () => DetailsBaseWorkoutHowtoPerformStepDto, isArray: true, required: true })
+  @ApiProperty({
+    type: () => DetailsBaseWorkoutHowtoPerformStepDto,
+    isArray: true,
+    required: true,
+  })
   @IsDefined()
   @IsArray()
   @ValidateNested({ each: true })

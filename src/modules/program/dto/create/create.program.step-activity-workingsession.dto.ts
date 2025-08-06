@@ -9,7 +9,6 @@ import {
 } from "class-validator";
 import { ProgramStepActivityStatusEnum } from "../../types";
 
-
 export class CreateProgramStepActivityWorkingsessionDto {
   @ApiProperty({
     description: "Program step activity Working session name",
@@ -38,7 +37,6 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   gymId: number;
 
-
   @ApiProperty({
     description: "Id of the program",
     example: 80,
@@ -66,7 +64,6 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   programStepActivityId: number;
 
-
   @ApiProperty({
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -75,7 +72,7 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNotEmpty()
   @IsNumber()
   ownerUserId: number;
-  
+
   @ApiProperty({
     description: "Id of the gym manager owning the program",
     example: 4335,
@@ -94,22 +91,32 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsDate()
   createdDate?: Date;
 
-  
   @ApiProperty({
     description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
     required: false,
   })
   @IsString()
   imageUrl?: string;
 
   @ApiProperty({
-    description: "Step icon URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/icons/my-program-icon.png",
+    description: "Workingsession illustration URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/workingsessions/my-workingsession-illustration.jpg",
     required: false,
   })
   @IsString()
-  coverUrl?: string;
+  illustrationUrl?: string;
+
+  @ApiProperty({
+    description: "Workingsession video URL",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/video/upload/v1697110655/program/workingsessions/my-workingsession-video.mp4",
+    required: false,
+  })
+  @IsString()
+  videoUrl?: string;
 
   @ApiProperty({
     description: "Program step activity status",
@@ -120,7 +127,6 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsEnum(ProgramStepActivityStatusEnum)
   status: ProgramStepActivityStatusEnum;
 
-
   @ApiProperty({
     description: "Number points gained after passing this Workingsession",
     example: 10,
@@ -130,62 +136,57 @@ export class CreateProgramStepActivityWorkingsessionDto {
   @IsNumber()
   points: number;
 
-
   @ApiProperty({
     description: "Workingsession attendees count",
     example: 5000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   attendeesCount?: number;
 
-
   @ApiProperty({
     description: "Views count",
     example: 1000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   viewsCount: number;
 
-
   @ApiProperty({
     description: "Ratings average",
     example: 4.5,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   ratingsAvg: number;
 
-
   @ApiProperty({
     description: "Number times Workingsession was rated",
     example: 3000,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()
   ratingsCount: number;
 
-
   @ApiProperty({
     description: "Difficulty level on a scale of 10",
     example: 0,
     required: false,
-    default: 0
+    default: 0,
   })
   @IsOptional()
   @IsNumber()
   difficultyLevel?: number;
 
-
   @ApiProperty({
-    description: "Position of the Workingsession inside the Program Step Activity",
+    description:
+      "Position of the Workingsession inside the Program Step Activity",
     example: 0,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsNumber()

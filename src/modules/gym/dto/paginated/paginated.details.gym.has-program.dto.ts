@@ -1,18 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDefined, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsArray, IsDefined, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
-import { PaginatedResponseDto } from '@app/common/dto';
+import { PaginatedResponseDto } from "@app/common/dto";
 
-import { DetailsGymHasProgramDto } from '../details';
+import { DetailsGymHasProgramDto } from "../details";
 
 export class PaginatedDetailsGymHasProgramDto extends PaginatedResponseDto<DetailsGymHasProgramDto> {
   @ApiProperty({
     type: () => DetailsGymHasProgramDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of gym has programs',
-    required: true
+    description: "List of gym has programs",
+    required: true,
   })
   @IsDefined()
   @IsArray()

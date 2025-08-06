@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
 export class UserActivityAccessStatus {
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Is user following gym?",

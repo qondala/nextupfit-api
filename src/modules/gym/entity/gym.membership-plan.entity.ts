@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
-  ManyToOne
+  ManyToOne,
 } from "typeorm";
 
 import { BaseSubscriptionPlanPeriodicityEnum } from "@app/module/base/types";
@@ -20,51 +20,40 @@ export class GymMembershipPlanEntity {
   @Column({ nullable: false })
   gymId: number;
 
-
   @Column({ nullable: false })
   planName: string;
-
 
   @Column({ nullable: true })
   price: number;
 
-
   @Column({ nullable: true })
   trialNumberDays?: number;
 
-
   @Column({
     type: "enum",
-    enum: BaseSubscriptionPlanPeriodicityEnum
+    enum: BaseSubscriptionPlanPeriodicityEnum,
   })
   periodicity: BaseSubscriptionPlanPeriodicityEnum;
-
 
   @Column({ nullable: true })
   description: string;
 
-
   @Column({ nullable: true })
   trialNumberProgramActivities: number;
-
 
   @Column({ nullable: true })
   contentId: number;
 
-
   @ManyToOne(() => ContentEntity)
-  @JoinColumn({ name: 'contentId' })
+  @JoinColumn({ name: "contentId" })
   content: ContentEntity;
 
-
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
-
 
   @CreateDateColumn()
   createdAt: Date;
-
 
   @UpdateDateColumn()
   updatedAt: Date;

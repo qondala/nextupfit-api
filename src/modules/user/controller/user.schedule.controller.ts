@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Delete,
-  HttpStatus
+  HttpStatus,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -18,7 +18,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiQuery,
-  ApiBody
+  ApiBody,
 } from "@nestjs/swagger";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { UserScheduleService } from "../service";
@@ -27,7 +27,7 @@ import {
   CreateUserScheduleDto,
   DetailsUserScheduleDto,
   PaginatedDetailsUserScheduleDto,
-  UpdateUserScheduleDto
+  UpdateUserScheduleDto,
 } from "../dto";
 import { PaginationOptionsDto } from "@app/common/dto";
 import { SwaggerType } from "@app/common/types";
@@ -42,7 +42,7 @@ export class UserScheduleController {
   @Post()
   @ApiOperation({
     summary: "Create a new user schedule",
-    operationId: "createUserSchedule"
+    operationId: "createUserSchedule",
   })
   @ApiBody({
     type: CreateUserScheduleDto,
@@ -54,35 +54,37 @@ export class UserScheduleController {
     description: "Return the created user schedule.",
     type: DetailsUserScheduleDto,
   })
-  async create(@Body() createUserScheduleDto: CreateUserScheduleDto): Promise<DetailsUserScheduleDto> {
+  async create(
+    @Body() createUserScheduleDto: CreateUserScheduleDto,
+  ): Promise<DetailsUserScheduleDto> {
     return await this.userScheduleService.create(createUserScheduleDto);
   }
 
-  @Get('user/:userId')
+  @Get("user/:userId")
   @ApiOperation({
     summary: "Get all user schedules with pagination",
-    operationId: "findAllUserSchedules"
+    operationId: "findAllUserSchedules",
   })
   @ApiParam({
     name: "userId",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User id",
-    example: 123
+    example: 123,
   })
   @ApiQuery({
     name: "page",
     required: false,
     type: SwaggerType.INTEGER,
     description: "Page number",
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
     description: "Number of items per page",
-    example: 10
+    example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -91,42 +93,45 @@ export class UserScheduleController {
   })
   async findAll(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsUserScheduleDto> {
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserScheduleDto> {
     return await this.userScheduleService.findAll(userId, pagination);
   }
 
   @Get(":id")
   @ApiOperation({
     summary: "Get a user schedule by id",
-    operationId: "findOneUserSchedule"
+    operationId: "findOneUserSchedule",
   })
   @ApiParam({
     name: "id",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User schedule id",
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Return the user schedule.",
     type: DetailsUserScheduleDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserScheduleDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsUserScheduleDto> {
     return this.userScheduleService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update a user schedule",
-    operationId: "updateUserSchedule"
+    operationId: "updateUserSchedule",
   })
   @ApiParam({
     name: "id",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User schedule id",
-    example: 1
+    example: 1,
   })
   @ApiBody({
     type: UpdateUserScheduleDto,
@@ -140,7 +145,7 @@ export class UserScheduleController {
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateUserScheduleDto: UpdateUserScheduleDto
+    @Body() updateUserScheduleDto: UpdateUserScheduleDto,
   ): Promise<DetailsUserScheduleDto> {
     return this.userScheduleService.update(id, updateUserScheduleDto);
   }
@@ -148,14 +153,14 @@ export class UserScheduleController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete a user schedule",
-    operationId: "removeUserSchedule"
+    operationId: "removeUserSchedule",
   })
   @ApiParam({
     name: "id",
     required: true,
     type: SwaggerType.INTEGER,
     description: "User schedule id",
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,

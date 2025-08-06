@@ -18,6 +18,9 @@ export class ContentUnorderedlistEntity {
   @Column({ default: false })
   displayTitle: boolean;
 
-  @OneToMany(() => ContentUnorderedlistItemEntity, (item) => item.unorderedlistId)
+  @OneToMany(
+    () => ContentUnorderedlistItemEntity,
+    (item) => item.unorderedlistId,
+  )
   items: ContentUnorderedlistItemEntity[];
 }

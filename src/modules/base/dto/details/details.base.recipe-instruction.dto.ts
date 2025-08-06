@@ -18,9 +18,17 @@ export class DetailsBaseRecipeInstructionDto {
   @ApiProperty({ type: SwaggerType.INTEGER, required: false })
   order?: number;
 
-  @ApiProperty({ type: SwaggerType.STRING, format: 'date-time', required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: false,
+  })
   createdAt?: Date;
 
-  @ApiProperty({ type: SwaggerType.STRING, format: 'date-time', required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: false,
+  })
   updatedAt?: Date;
 }

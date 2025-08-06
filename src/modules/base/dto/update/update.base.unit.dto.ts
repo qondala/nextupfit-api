@@ -1,33 +1,36 @@
-import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { BaseUnitContainanceEnum } from "../../types";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateBaseUnitDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Unit's name",
     example: "Kilogram",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   name?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Unit's abbreviation",
     example: "kg",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   abbreviation?: string;
-
 
   @ApiProperty({
     enum: BaseUnitContainanceEnum,
@@ -39,7 +42,6 @@ export class UpdateBaseUnitDto {
   @IsOptional()
   @IsEnum(BaseUnitContainanceEnum)
   containance?: BaseUnitContainanceEnum;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

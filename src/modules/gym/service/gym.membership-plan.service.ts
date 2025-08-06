@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreateGymMembershipPlanDto, UpdateGymMembershipPlanDto } from '../dto';
-import { GymMembershipPlanEntity } from '../entity';
+import { CreateGymMembershipPlanDto, UpdateGymMembershipPlanDto } from "../dto";
+import { GymMembershipPlanEntity } from "../entity";
 
 @Injectable()
 export class GymMembershipPlanService {
@@ -14,21 +14,25 @@ export class GymMembershipPlanService {
     private readonly gymMembershipPlanRepository: Repository<GymMembershipPlanEntity>,
   ) {}
 
-  async create(createDto: CreateGymMembershipPlanDto, userId: number): Promise<GymMembershipPlanEntity> {
+  async create(
+    createDto: CreateGymMembershipPlanDto,
+    userId: number,
+  ): Promise<GymMembershipPlanEntity> {
     const plan = this.gymMembershipPlanRepository.create({
       ...createDto,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.gymMembershipPlanRepository.save(plan);
   }
 
   async findByGym(
     gymId: number,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymMembershipPlanEntity>> {
-    const queryBuilder = this.gymMembershipPlanRepository.createQueryBuilder('plan')
-      .where('plan.gymId = :gymId', { gymId })
-      .orderBy('plan.createdAt', 'DESC');
+    const queryBuilder = this.gymMembershipPlanRepository
+      .createQueryBuilder("plan")
+      .where("plan.gymId = :gymId", { gymId })
+      .orderBy("plan.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -45,23 +49,29 @@ export class GymMembershipPlanService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
-  async getAllMembershipPlansOfGym(gymId: number): Promise<GymMembershipPlanEntity[]> {
+  async getAllMembershipPlansOfGym(
+    gymId: number,
+  ): Promise<GymMembershipPlanEntity[]> {
     return await this.gymMembershipPlanRepository.find({ where: { gymId } });
   }
 
   async findOne(id: number): Promise<GymMembershipPlanEntity> {
     return await this.gymMembershipPlanRepository.findOne({
       where: { id },
-      relations: ['features']
+      relations: ["features"],
     });
   }
 
-  async update(id: number, updateDto: UpdateGymMembershipPlanDto, userId: number): Promise<GymMembershipPlanEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateGymMembershipPlanDto,
+    userId: number,
+  ): Promise<GymMembershipPlanEntity> {
     await this.gymMembershipPlanRepository.update(id, updateDto);
     return this.findOne(id);
   }

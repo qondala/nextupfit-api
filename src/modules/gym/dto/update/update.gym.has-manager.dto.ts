@@ -1,16 +1,10 @@
-import {
-  IsInt,
-  IsEnum,
-  IsOptional,
-} from "class-validator";
+import { IsInt, IsEnum, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import { GymManagerRoleEnum, GymManagerStatusEnum} from "../../types";
-
+import { GymManagerRoleEnum, GymManagerStatusEnum } from "../../types";
 
 export class UpdateGymHasManagerDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
@@ -21,7 +15,6 @@ export class UpdateGymHasManagerDto {
   @IsInt()
   gymId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym manager id",
@@ -31,7 +24,6 @@ export class UpdateGymHasManagerDto {
   @IsOptional()
   @IsInt()
   managerId?: number;
-
 
   @ApiProperty({
     enum: GymManagerRoleEnum,
@@ -46,7 +38,7 @@ export class UpdateGymHasManagerDto {
   role?: GymManagerRoleEnum;
 
   @ApiProperty({
-    description: 'Status of the gym manager',
+    description: "Status of the gym manager",
     enum: GymManagerStatusEnum,
     enumName: "GymManagerStatusEnum",
     title: "GymManagerStatusEnum",
@@ -59,10 +51,10 @@ export class UpdateGymHasManagerDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    description: 'Last status update of the gym manager',
-    example: '2022-01-01T00:00:00.000Z',
+    description: "Last status update of the gym manager",
+    example: "2022-01-01T00:00:00.000Z",
     required: false,
-    format: 'date-time',
+    format: "date-time",
   })
   @IsOptional()
   lastStatusUpdate?: Date;

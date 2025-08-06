@@ -8,7 +8,7 @@ export class UpdateGymManagerSpecializedInNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Manager id",
     example: 235,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -18,7 +18,7 @@ export class UpdateGymManagerSpecializedInNutritionDto {
     type: SwaggerType.INTEGER,
     description: "Nutrition id",
     example: 12,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()

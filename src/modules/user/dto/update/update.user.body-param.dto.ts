@@ -3,7 +3,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateUserBodyParamDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "user id from whom the parameter is measured",
@@ -14,7 +13,6 @@ export class UpdateUserBodyParamDto {
   @IsOptional()
   userId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Value of the parameter",
@@ -24,7 +22,6 @@ export class UpdateUserBodyParamDto {
   @IsInt()
   @IsOptional()
   bodyParamId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.NUMBER,

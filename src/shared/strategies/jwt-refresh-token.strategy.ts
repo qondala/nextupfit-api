@@ -24,7 +24,10 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: AppRequest, payload: any): Promise<DetailsUserDto | null> {
+  async validate(
+    req: AppRequest,
+    payload: any,
+  ): Promise<DetailsUserDto | null> {
     const refreshToken = req.body.refreshToken;
     const user = await this.userService.findOne(payload.userId);
 
@@ -35,4 +38,3 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     return user;
   }
 }
-

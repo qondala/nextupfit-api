@@ -7,20 +7,15 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  ValueTransformer
+  ValueTransformer,
 } from "typeorm";
 
 import {
   ProgramStepActivityStatusEnum,
   ProgramVisibilityEnum,
-  ProgramAccessibilityEnum
+  ProgramAccessibilityEnum,
 } from "../types";
-import {
-  ProgramStepEntity,
-  ProgramStepActivityWorkingsessionEntity,
-  ProgramFreetoolInterestEntity
-} from ".";
-
+import { ProgramStepEntity, ProgramStepActivityWorkingsessionEntity } from ".";
 
 // Transformer to convert between string[] and number[]
 const BigintArrayTransformer: ValueTransformer = {
@@ -56,6 +51,12 @@ export class ProgramStepActivityEntity {
 
   @Column({ nullable: true })
   iconUrl: string;
+
+  @Column({ nullable: true })
+  imageUrl: string;
+
+  @Column({ nullable: true })
+  videoUrl: string;
 
   @Column({
     type: "enum",
@@ -104,14 +105,14 @@ export class ProgramStepActivityEntity {
     enum: ProgramAccessibilityEnum,
     enumName: "ProgramAccessibilityEnum",
     default: ProgramAccessibilityEnum.public,
-    nullable: false
+    nullable: false,
   })
   accessibility: ProgramAccessibilityEnum;
 
   @Column({
     enum: ProgramVisibilityEnum,
     enumName: "ProgramVisibilityEnum",
-    nullable: false
+    nullable: false,
   })
   visibility: ProgramVisibilityEnum;
 
@@ -119,7 +120,7 @@ export class ProgramStepActivityEntity {
     type: "bigint",
     array: true,
     nullable: true,
-    transformer: BigintArrayTransformer
+    transformer: BigintArrayTransformer,
   })
   authorizedMembershipPlanIds?: number[];
 
@@ -127,15 +128,18 @@ export class ProgramStepActivityEntity {
     type: "bigint",
     array: true,
     nullable: true,
-    transformer: BigintArrayTransformer
+    transformer: BigintArrayTransformer,
   })
   authorizedProgramSubscriptionPlanIds?: number[];
 
-  @ManyToOne(() => ProgramStepEntity, step => step.activities)
-  @JoinColumn({ name: 'programStepId' })
+  @ManyToOne(() => ProgramStepEntity, (step) => step.activities)
+  @JoinColumn({ name: "programStepId" })
   step: ProgramStepEntity;
 
-  @OneToMany(() => ProgramStepActivityWorkingsessionEntity, workingssession => workingssession.activity)
+  @OneToMany(
+    () => ProgramStepActivityWorkingsessionEntity,
+    (workingssession) => workingssession.activity,
+  )
   workingssessions: ProgramStepActivityWorkingsessionEntity[];
 
   @CreateDateColumn()
@@ -143,7 +147,4 @@ export class ProgramStepActivityEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @OneToMany(() => ProgramFreetoolInterestEntity, interest => interest.activity)
-  interests: ProgramFreetoolInterestEntity[];
 }

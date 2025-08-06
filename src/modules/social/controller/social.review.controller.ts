@@ -10,64 +10,56 @@ import {
   UseGuards,
   HttpStatus,
   ParseIntPipe,
-  ParseEnumPipe
-} from '@nestjs/common';
+  ParseEnumPipe,
+} from "@nestjs/common";
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
   ApiQuery,
-  ApiParam
-} from '@nestjs/swagger';
+  ApiParam,
+} from "@nestjs/swagger";
 
-import { User } from '@app/common/decorators';
-import { JwtAuthGuard, RolesGuard } from '@app/common/guards';
-import { PaginationOptionsDto } from '@app/common/dto';
+import { User } from "@app/common/decorators";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
+import { SwaggerType } from "@app/common/types";
 
-import { SwaggerType } from '@app/common/types';
-
-import { SocialReviewItemTypeEnum } from '../types';
+import { SocialReviewItemTypeEnum } from "../types";
 
 import {
   CreateSocialReviewDto,
   PaginatedDetailsSocialReviewDto,
   UpdateSocialReviewDto,
   DetailsSocialRatingStatsDto,
-  DetailsSocialReviewDto
-} from '../dto';
+  DetailsSocialReviewDto,
+} from "../dto";
 
-import {
-  SocialRatingsService,
-  SocialReviewService
-} from '../service';
+import { SocialRatingsService, SocialReviewService } from "../service";
 
-
-@ApiTags('Social module endpoints')
+@ApiTags("Social module endpoints")
 @ApiBearerAuth()
-@Controller('social/review')
+@Controller("social/review")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class SocialReviewController {
   constructor(
     private readonly reviewService: SocialReviewService,
-    private readonly ratingsService: SocialRatingsService
+    private readonly ratingsService: SocialRatingsService,
   ) {}
 
   @Post()
   @ApiOperation({
-    summary: 'Create a review',
-    operationId: 'createReview'
+    summary: "Create a review",
+    operationId: "createReview",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Review created successfully.',
+    description: "Review created successfully.",
     type: DetailsSocialReviewDto,
   })
-  create(
-    @Body() createDto: CreateSocialReviewDto,
-    @User('id') userId: number
-  ) {
+  create(@Body() createDto: CreateSocialReviewDto, @User("id") userId: number) {
     const review = this.reviewService.create(createDto, userId);
 
     // After creating review, update ratings
@@ -76,324 +68,325 @@ export class SocialReviewController {
     return review;
   }
 
-  @Get('gym/:gymId')
+  @Get("gym/:gymId")
   @ApiOperation({
-    summary: 'Get gym reviews',
-    operationId: 'getGymReviews'
+    summary: "Get gym reviews",
+    operationId: "getGymReviews",
   })
   @ApiParam({
-    name: 'gymId',
+    name: "gymId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Gym ID',
+    description: "Gym ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   async getGymReviews(
-    @Param('gymId', ParseIntPipe) gymId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("gymId", ParseIntPipe) gymId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.gym,
       gymId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-  @Get('program/:programId')
+  @Get("program/:programId")
   @ApiOperation({
-    summary: 'Get program reviews',
-    operationId: 'getProgramReviews'
+    summary: "Get program reviews",
+    operationId: "getProgramReviews",
   })
   @ApiParam({
-    name: 'programId',
+    name: "programId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Program ID',
+    description: "Program ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   async getProgramReviews(
-    @Param('programId', ParseIntPipe) programId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("programId", ParseIntPipe) programId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.program,
       programId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-  @Get('activity/:activityId')
+  @Get("activity/:activityId")
   @ApiOperation({
-    summary: 'Get activity reviews',
-    operationId: 'getActivityReviews'
+    summary: "Get activity reviews",
+    operationId: "getActivityReviews",
   })
   @ApiParam({
-    name: 'activityId',
+    name: "activityId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Activity ID',
+    description: "Activity ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   getActivityReviews(
-    @Param('activityId', ParseIntPipe) activityId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("activityId", ParseIntPipe) activityId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.activity,
       activityId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-
-  @Get('working-session/:workingSessionId')
+  @Get("working-session/:workingSessionId")
   @ApiOperation({
-    summary: 'Get working session reviews',
-    operationId: 'getWorkingSessionReviews'
+    summary: "Get working session reviews",
+    operationId: "getWorkingSessionReviews",
   })
   @ApiParam({
-    name: 'workingSessionId',
+    name: "workingSessionId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Working session ID',
+    description: "Working session ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   getWorkingSessionReviews(
-    @Param('workingSessionId', ParseIntPipe) workingSessionId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("workingSessionId", ParseIntPipe) workingSessionId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.workingsession,
       workingSessionId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-  @Get('workout/:workoutId')
+  @Get("workout/:workoutId")
   @ApiOperation({
-    summary: 'Get workout reviews',
-    operationId: 'getWorkoutReviews'
+    summary: "Get workout reviews",
+    operationId: "getWorkoutReviews",
   })
   @ApiParam({
-    name: 'workoutId',
+    name: "workoutId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Workout ID',
+    description: "Workout ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   getWorkoutReviews(
-    @Param('workoutId', ParseIntPipe) workoutId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("workoutId", ParseIntPipe) workoutId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.workout,
       workoutId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-  @Get('manager/:managerId')
+  @Get("manager/:managerId")
   @ApiOperation({
-    summary: 'Get manager reviews',
-    operationId: 'getManagerReviews'
+    summary: "Get manager reviews",
+    operationId: "getManagerReviews",
   })
   @ApiParam({
-    name: 'managerId',
+    name: "managerId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Manager ID',
+    description: "Manager ID",
     example: 1,
   })
   @ApiQuery({
-    name: 'page',
+    name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Page number',
+    description: "Page number",
     example: 1,
   })
   @ApiQuery({
-    name: 'limit',
+    name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    description: 'Number of items per page',
+    description: "Number of items per page",
     example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all reviews.',
+    description: "Return all reviews.",
     type: PaginatedDetailsSocialReviewDto,
   })
   getManagerReviews(
-    @Param('managerId', ParseIntPipe) managerId: number,
-    @Query() paginationOptions: PaginationOptionsDto
+    @Param("managerId", ParseIntPipe) managerId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedDetailsSocialReviewDto> {
     return this.reviewService.getReviewsByItemTypeAndItemId(
       SocialReviewItemTypeEnum.manager,
       managerId,
-      paginationOptions
+      paginationOptions,
     );
   }
 
-  @Get('rating-stats/itemType/:itemType/itemId/:itemId')
+  @Get("rating-stats/itemType/:itemType/itemId/:itemId")
   @ApiOperation({
-    summary: 'Get review rating stats',
-    operationId: 'getReviewRatingStats'
+    summary: "Get review rating stats",
+    operationId: "getReviewRatingStats",
   })
   @ApiParam({
-    name: 'itemType',
+    name: "itemType",
     required: true,
-    description: 'Item type',
+    description: "Item type",
     enum: SocialReviewItemTypeEnum,
-    enumName: 'SocialReviewItemTypeEnum',
+    enumName: "SocialReviewItemTypeEnum",
     example: SocialReviewItemTypeEnum.gym,
   })
   @ApiParam({
-    name: 'itemId',
+    name: "itemId",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Item ID',
+    description: "Item ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return review rating stats.',
+    description: "Return review rating stats.",
     type: DetailsSocialRatingStatsDto,
   })
   getReviewRatingStats(
-    @Param('itemType', new ParseEnumPipe(SocialReviewItemTypeEnum)) itemType: SocialReviewItemTypeEnum,
-    @Param('itemId', ParseIntPipe) itemId: number): Promise<DetailsSocialRatingStatsDto> {
+    @Param("itemType", new ParseEnumPipe(SocialReviewItemTypeEnum))
+    itemType: SocialReviewItemTypeEnum,
+    @Param("itemId", ParseIntPipe) itemId: number,
+  ): Promise<DetailsSocialRatingStatsDto> {
     return this.reviewService.getReviewRatingStats(itemType, itemId);
   }
-  
-  @Patch(':id')
+
+  @Patch(":id")
   @ApiOperation({
-    summary: 'Update review',
-    operationId: 'updateReview'
+    summary: "Update review",
+    operationId: "updateReview",
   })
   @ApiParam({
-    name: 'id',
+    name: "id",
     required: true,
     type: SwaggerType.INTEGER,
-    description: 'Review ID',
+    description: "Review ID",
     example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Review updated successfully.',
+    description: "Review updated successfully.",
     type: DetailsSocialReviewDto,
   })
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateDto: UpdateSocialReviewDto
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateDto: UpdateSocialReviewDto,
   ) {
     return this.reviewService.update(id, updateDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @ApiOperation({
-    summary: 'Delete review',
-    operationId: 'deleteReview'
+    summary: "Delete review",
+    operationId: "deleteReview",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Review deleted successfully.',
+    description: "Review deleted successfully.",
   })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param("id", ParseIntPipe) id: number) {
     return this.reviewService.remove(id);
   }
 }

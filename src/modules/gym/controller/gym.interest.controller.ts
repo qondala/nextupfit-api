@@ -10,6 +10,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseGuards,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -22,14 +23,8 @@ import {
 } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import {
-  JwtAuthGuard,
-  RolesGuard,
-} from "@app/common/guards";
-import {
-  InterestPaginationDto,
-  PaginationOptionsDto,
-} from "@app/common/dto";
+import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
+import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   CreateGymInterestDto,
@@ -38,8 +33,8 @@ import {
   PaginatedDetailsGymInterestDto,
   GymFindCriteriaInterestDto,
   PaginatedDetailsGymDto,
+  GymFindOrderFreetoolEnum,
 } from "../dto";
-
 import { GymInterestService } from "../service";
 
 @ApiTags("Gym module endpoints")
@@ -67,7 +62,9 @@ export class GymInterestController {
     status: HttpStatus.BAD_REQUEST,
     description: "Invalid input data",
   })
-  async create(@Body() createDto: CreateGymInterestDto): Promise<DetailsGymInterestDto> {
+  async create(
+    @Body() createDto: CreateGymInterestDto,
+  ): Promise<DetailsGymInterestDto> {
     return this.service.create(createDto);
   }
 
@@ -78,12 +75,12 @@ export class GymInterestController {
   })
   @ApiQuery({
     type: GymFindCriteriaInterestDto,
-    description: 'Gym interests find criteria',
+    description: "Gym interests find criteria",
     required: true,
   })
   @ApiQuery({
     type: PaginationOptionsDto,
-    description: 'Pagination options',
+    description: "Pagination options",
     required: true,
   })
   @ApiResponse({
@@ -110,20 +107,29 @@ export class GymInterestController {
     required: true,
   })
   @ApiQuery({
-    type: InterestPaginationDto,
-    description: 'Pagination options',
+    type: PaginationOptionsDto,
+    description: "Pagination options",
+    required: true,
+  })
+  @ApiQuery({
+    name: "order",
+    enum: GymFindOrderFreetoolEnum,
+    enumName: "GymFindOrderFreetoolEnum",
+    description: "Order by",
     required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "User gym interests retrieved successfully",
+    description: "User interested gyms retrieved successfully",
     type: PaginatedDetailsGymDto,
   })
-  async getUserInterests(
+  async getUserInterestedGyms(
     @Param("userId", ParseIntPipe) userId: number,
-    @Query() pagination: InterestPaginationDto,
+    @Query() pagination: PaginationOptionsDto,
+    @Query("order", new ParseEnumPipe(GymFindOrderFreetoolEnum))
+    order: GymFindOrderFreetoolEnum,
   ): Promise<PaginatedDetailsGymDto> {
-    return await this.service.getGymsByUserInterests(userId, pagination);
+    return await this.service.getUserInterestedGyms(userId, pagination, order);
   }
 
   @Get(":id")
@@ -142,7 +148,9 @@ export class GymInterestController {
     description: "Gym interest retrieved successfully",
     type: DetailsGymInterestDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsGymInterestDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsGymInterestDto> {
     return this.service.findOne(id);
   }
 

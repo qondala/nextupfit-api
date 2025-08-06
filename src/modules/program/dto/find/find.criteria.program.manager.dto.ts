@@ -6,11 +6,9 @@ import { FindOrderByEnum } from "@app/common/dto";
 
 import { ProgramItemTypeEnum } from "../../types";
 
-
 export class ProgramFindCriteriaManagerDto {
-
   @ApiProperty({
-    name: 'itemType',
+    name: "itemType",
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
     title: "ProgramItemTypeEnum",
@@ -21,9 +19,8 @@ export class ProgramFindCriteriaManagerDto {
   @IsOptional()
   itemType?: ProgramItemTypeEnum;
 
-
   @ApiProperty({
-    name: 'itemId',
+    name: "itemId",
     type: SwaggerType.INTEGER,
     description: "Item id",
     example: 43354534,
@@ -33,9 +30,8 @@ export class ProgramFindCriteriaManagerDto {
   @IsInt()
   itemId?: number;
 
-
   @ApiProperty({
-    name: 'managerUserId',
+    name: "managerUserId",
     type: SwaggerType.INTEGER,
     description: "ID of the gym manager",
     example: 4335,
@@ -46,7 +42,7 @@ export class ProgramFindCriteriaManagerDto {
   managerUserId?: number;
 
   @ApiProperty({
-    name: 'managerId',
+    name: "managerId",
     type: SwaggerType.INTEGER,
     description: "ID of the gym manager",
     example: 4335,
@@ -57,7 +53,7 @@ export class ProgramFindCriteriaManagerDto {
   managerId?: number;
 
   @ApiProperty({
-    name: 'gymId',
+    name: "gymId",
     type: SwaggerType.INTEGER,
     description: "ID of the gym",
     example: 4335,
@@ -68,10 +64,10 @@ export class ProgramFindCriteriaManagerDto {
   gymId?: number;
 
   @ApiProperty({
-    name: 'orderBy',
+    name: "orderBy",
     enum: FindOrderByEnum,
     enumName: "FindOrderByEnum",
-    description: 'The order by for the program managers',
+    description: "The order by for the program managers",
     required: false,
   })
   orderBy?: FindOrderByEnum;

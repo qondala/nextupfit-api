@@ -53,7 +53,9 @@ export class ContentCarouselController {
     status: HttpStatus.CREATED,
     type: DetailsContentCarouselDto,
   })
-  async create(@Body() dto: CreateContentCarouselDto): Promise<DetailsContentCarouselDto> {
+  async create(
+    @Body() dto: CreateContentCarouselDto,
+  ): Promise<DetailsContentCarouselDto> {
     return await this.service.create(dto);
   }
 
@@ -102,7 +104,9 @@ export class ContentCarouselController {
     status: HttpStatus.OK,
     type: DetailsContentCarouselDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentCarouselDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentCarouselDto> {
     return this.service.findOne(id);
   }
 

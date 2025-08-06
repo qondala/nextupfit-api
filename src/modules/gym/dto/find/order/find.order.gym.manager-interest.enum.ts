@@ -1,0 +1,16 @@
+export enum GymFindOrderManagerInterestEnum {
+  date = "date",
+  random = "random",
+  name = "name",
+  viewsCount = "viewsCount",
+  followersCount = "followersCount",
+  ratingsAvg = "ratingsAvg",
+  ratingsCount = "ratingsCount",
+  speciality = "speciality",
+  age = "age",
+  gender = "gender",
+  yearsOfExperience = "yearsOfExperience",
+  certified = "certified",
+  verified = "verified",
+  level = "level",
+}

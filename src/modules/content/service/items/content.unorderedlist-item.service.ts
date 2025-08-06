@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentUnorderedlistItemEntity } from "../../entity/items";
-import { CreateContentUnorderedlistItemDto, UpdateContentUnorderedlistItemDto } from "../../dto";
+import {
+  CreateContentUnorderedlistItemDto,
+  UpdateContentUnorderedlistItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentUnorderedlistItemService {
@@ -14,11 +17,16 @@ export class ContentUnorderedlistItemService {
     private readonly repository: Repository<ContentUnorderedlistItemEntity>,
   ) {}
 
-  async create(dto: CreateContentUnorderedlistItemDto): Promise<ContentUnorderedlistItemEntity> {
+  async create(
+    dto: CreateContentUnorderedlistItemDto,
+  ): Promise<ContentUnorderedlistItemEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(unorderedlistId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentUnorderedlistItemEntity>> {
+  async findAll(
+    unorderedlistId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentUnorderedlistItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -45,7 +53,10 @@ export class ContentUnorderedlistItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentUnorderedlistItemDto): Promise<ContentUnorderedlistItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentUnorderedlistItemDto,
+  ): Promise<ContentUnorderedlistItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

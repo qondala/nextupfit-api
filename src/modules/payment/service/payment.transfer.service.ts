@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { CreatePaymentTransferDto, UpdatePaymentTransferDto } from '../dto';
-import { PaymentTransferEntity } from '../entity';
-
+import { CreatePaymentTransferDto, UpdatePaymentTransferDto } from "../dto";
+import { PaymentTransferEntity } from "../entity";
 
 @Injectable()
 export class PaymentTransferService {
@@ -15,22 +14,29 @@ export class PaymentTransferService {
     private readonly paymentTransferRepository: Repository<PaymentTransferEntity>,
   ) {}
 
-  async create(createDto: CreatePaymentTransferDto, userId: number): Promise<PaymentTransferEntity> {
+  async create(
+    createDto: CreatePaymentTransferDto,
+    userId: number,
+  ): Promise<PaymentTransferEntity> {
     const paymentTransfer = this.paymentTransferRepository.create({
       ...createDto,
       senderUserId: userId,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     return await this.paymentTransferRepository.save(paymentTransfer);
   }
 
   async findAll(
     paginationOptions: PaginationOptionsDto,
-    userId: number
+    userId: number,
   ): Promise<PaginatedResponseDto<PaymentTransferEntity>> {
-    const queryBuilder = this.paymentTransferRepository.createQueryBuilder('paymentTransfer')
-      .where('paymentTransfer.senderUserId = :userId OR paymentTransfer.receiverUserId = :userId', { userId })
-      .orderBy('paymentTransfer.createdAt', 'DESC');
+    const queryBuilder = this.paymentTransferRepository
+      .createQueryBuilder("paymentTransfer")
+      .where(
+        "paymentTransfer.senderUserId = :userId OR paymentTransfer.receiverUserId = :userId",
+        { userId },
+      )
+      .orderBy("paymentTransfer.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -47,8 +53,8 @@ export class PaymentTransferService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
@@ -56,10 +62,14 @@ export class PaymentTransferService {
     return await this.paymentTransferRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, updateDto: UpdatePaymentTransferDto, userId: number): Promise<PaymentTransferEntity> {
+  async update(
+    id: number,
+    updateDto: UpdatePaymentTransferDto,
+    userId: number,
+  ): Promise<PaymentTransferEntity> {
     await this.paymentTransferRepository.update(
       { id, senderUserId: userId },
-      updateDto
+      updateDto,
     );
     return this.findOne(id);
   }

@@ -5,61 +5,61 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
-} from 'typeorm';
+  JoinColumn,
+} from "typeorm";
 
 import {
   SocialActorEnum,
   SocialUpdateTypeEnum,
-  SocialUpdatePrivacyEnum
-} from '../types';
-import { UserEntity } from '@app/module/user/entity';
-import { GymManagerEntity } from '@app/module/gym/entity';
+  SocialUpdatePrivacyEnum,
+} from "../types";
+import { UserEntity } from "@app/module/user/entity";
+import { GymManagerEntity } from "@app/module/gym/entity";
 
-@Entity('social_update')
+@Entity("social_update")
 export class SocialUpdateEntity {
-  @PrimaryGeneratedColumn('increment', { type: 'bigint' })
+  @PrimaryGeneratedColumn("increment", { type: "bigint" })
   id: number;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: "bigint" })
   authorUserId: number;
 
-  @Column({ type: 'bigint', nullable: true })
+  @Column({ type: "bigint", nullable: true })
   authorManagerId: number;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: SocialActorEnum,
   })
   socialActorType: SocialActorEnum;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: "bigint" })
   socialActorId: number;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: SocialUpdateTypeEnum,
   })
   socialUpdateType: SocialUpdateTypeEnum;
 
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: SocialUpdatePrivacyEnum,
     default: SocialUpdatePrivacyEnum.public,
   })
   privacy: SocialUpdatePrivacyEnum;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  @UpdateDateColumn({ type: "timestamp", nullable: true })
   updateAt: Date;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'authorUserId' })
+  @JoinColumn({ name: "authorUserId" })
   authorUser: UserEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'authorManagerId' })
+  @JoinColumn({ name: "authorManagerId" })
   authorManager: GymManagerEntity;
 }

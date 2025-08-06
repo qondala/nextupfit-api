@@ -9,7 +9,7 @@ import {
   Query,
   HttpStatus,
   ParseIntPipe,
-  UseGuards
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -18,10 +18,10 @@ import {
   ApiQuery,
   ApiBody,
   ApiResponse,
-  ApiBearerAuth
+  ApiBearerAuth,
 } from "@nestjs/swagger";
 
-import { SwaggerType } from "@app/common/types"
+import { SwaggerType } from "@app/common/types";
 import { PaginationOptionsDto } from "@app/common/dto";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 
@@ -29,7 +29,7 @@ import {
   CreateContentGalleryDto,
   UpdateContentGalleryDto,
   DetailsContentGalleryDto,
-  PaginatedDetailsContentGalleryDto
+  PaginatedDetailsContentGalleryDto,
 } from "../dto";
 
 import { ContentGalleryService } from "../service";
@@ -44,108 +44,114 @@ export class ContentGalleryController {
   @Post()
   @ApiOperation({
     summary: "Create a new content gallery",
-    operationId: "createContentGallery"
+    operationId: "createContentGallery",
   })
   @ApiBody({
     type: CreateContentGalleryDto,
-    description: "Content gallery creation data"
+    description: "Content gallery creation data",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "Content gallery created successfully",
-    type: DetailsContentGalleryDto
+    type: DetailsContentGalleryDto,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: "Invalid input data"
+    description: "Invalid input data",
   })
-  create(@Body() createContentGalleryDto: CreateContentGalleryDto): Promise<DetailsContentGalleryDto> {
+  create(
+    @Body() createContentGalleryDto: CreateContentGalleryDto,
+  ): Promise<DetailsContentGalleryDto> {
     return this.contentGalleryService.create(createContentGalleryDto);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all content galleries with pagination",
-    operationId: "getAllContentGalleries"
+    operationId: "getAllContentGalleries",
   })
   @ApiQuery({
     name: "page",
     type: SwaggerType.INTEGER,
     description: "Page number",
     required: false,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: "limit",
     type: SwaggerType.INTEGER,
     description: "Items per page",
     required: false,
-    example: 10
+    example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Content galleries retrieved successfully",
-    type: PaginatedDetailsContentGalleryDto
+    type: PaginatedDetailsContentGalleryDto,
   })
-  findAll(@Query() query: PaginationOptionsDto): Promise<PaginatedDetailsContentGalleryDto> {
+  findAll(
+    @Query() query: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentGalleryDto> {
     return this.contentGalleryService.findAll(query);
   }
 
   @Get(":id")
   @ApiOperation({
     summary: "Get a content gallery by ID",
-    operationId: "getContentGalleryById"
+    operationId: "getContentGalleryById",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
     description: "Content gallery ID",
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Content gallery retrieved successfully",
-    type: DetailsContentGalleryDto
+    type: DetailsContentGalleryDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Content gallery not found"
+    description: "Content gallery not found",
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentGalleryDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentGalleryDto> {
     return this.contentGalleryService.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update a content gallery",
-    operationId: "updateContentGallery"
+    operationId: "updateContentGallery",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
     description: "Content gallery ID",
-    example: 1
+    example: 1,
   })
   @ApiBody({
     type: UpdateContentGalleryDto,
-    description: "Content gallery update data"
+    description: "Content gallery update data",
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Content gallery updated successfully",
-    type: DetailsContentGalleryDto
+    type: DetailsContentGalleryDto,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Content gallery not found"
+    description: "Content gallery not found",
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: "Invalid input data"
+    description: "Invalid input data",
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() updateContentGalleryDto: UpdateContentGalleryDto
+    @Body() updateContentGalleryDto: UpdateContentGalleryDto,
   ): Promise<DetailsContentGalleryDto> {
     return this.contentGalleryService.update(id, updateContentGalleryDto);
   }
@@ -153,21 +159,21 @@ export class ContentGalleryController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete a content gallery",
-    operationId: "deleteContentGallery"
+    operationId: "deleteContentGallery",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
     description: "Content gallery ID",
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "Content gallery deleted successfully"
+    description: "Content gallery deleted successfully",
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: "Content gallery not found"
+    description: "Content gallery not found",
   })
   remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.contentGalleryService.remove(id);
@@ -176,36 +182,36 @@ export class ContentGalleryController {
   @Get("content/:contentId")
   @ApiOperation({
     summary: "Get content galleries by content ID",
-    operationId: "getContentGalleriesByContentId"
+    operationId: "getContentGalleriesByContentId",
   })
   @ApiParam({
     name: "contentId",
     type: SwaggerType.INTEGER,
     description: "Content ID",
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: "page",
     type: SwaggerType.INTEGER,
     description: "Page number",
     required: false,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: "limit",
     type: SwaggerType.INTEGER,
     description: "Items per page",
     required: false,
-    example: 10
+    example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Content galleries retrieved successfully",
-    type: PaginatedDetailsContentGalleryDto
+    type: PaginatedDetailsContentGalleryDto,
   })
   findByContentId(
     @Param("contentId", ParseIntPipe) contentId: number,
-    @Query() query: PaginationOptionsDto
+    @Query() query: PaginationOptionsDto,
   ): Promise<PaginatedDetailsContentGalleryDto> {
     return this.contentGalleryService.findByContentId(contentId, query);
   }

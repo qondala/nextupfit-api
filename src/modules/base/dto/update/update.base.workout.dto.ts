@@ -4,41 +4,34 @@ import {
   IsEnum,
   IsOptional,
   IsNumber,
-  IsString
+  IsString,
 } from "class-validator";
-
 
 import { SwaggerType } from "@app/common/types";
 
-import {
-  BaseExerciseTargetEnum,
-  BaseWorkoutDisciplineEnum
-} from "../../types";
-
+import { BaseExerciseTargetEnum, BaseWorkoutDisciplineEnum } from "../../types";
 
 export class UpdateBaseWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout's name",
     example: "Pillated",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
   name?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout's brief description",
-    example: "Pilates is a low-impact exercise method developed by Joseph Pilates in the early 20th century. It emphasizes Core strength, Posture and Flexibility",
-    required: false
+    example:
+      "Pilates is a low-impact exercise method developed by Joseph Pilates in the early 20th century. It emphasizes Core strength, Posture and Flexibility",
+    required: false,
   })
   @IsOptional()
   @IsString()
   description?: string;
-
 
   @ApiProperty({
     enum: BaseExerciseTargetEnum,
@@ -53,7 +46,6 @@ export class UpdateBaseWorkoutDto {
   @IsEnum(BaseExerciseTargetEnum, { each: true })
   targets?: BaseExerciseTargetEnum[];
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "UserId (Gym manager) who created the workout record.",
@@ -63,7 +55,6 @@ export class UpdateBaseWorkoutDto {
   @IsOptional()
   @IsNumber()
   createdByUserId?: number;
-
 
   @ApiProperty({
     enum: BaseWorkoutDisciplineEnum,
@@ -76,7 +67,6 @@ export class UpdateBaseWorkoutDto {
   @IsEnum(BaseWorkoutDisciplineEnum)
   discipline?: BaseWorkoutDisciplineEnum;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Apple API code of the workout",
@@ -86,7 +76,6 @@ export class UpdateBaseWorkoutDto {
   @IsOptional()
   @IsString()
   appleCode?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -98,7 +87,6 @@ export class UpdateBaseWorkoutDto {
   @IsString()
   fitbitCode?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Withings API code of the workout",
@@ -109,33 +97,33 @@ export class UpdateBaseWorkoutDto {
   @IsString()
   withingsCode?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout image URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-workout-001.png",
     required: false,
   })
   @IsOptional()
   @IsString()
   imageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout illustration URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-illustration-001.gif",
     required: false,
   })
   @IsOptional()
   @IsString()
   illustrationUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Workout video URL",
-    example: "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
+    example:
+      "https://res.cloudinary.com/ds9ufzny1/image/upload/v1697110655/program/steps/activities/workouts/my-video-001.mp4",
     required: false,
   })
   @IsOptional()

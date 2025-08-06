@@ -11,7 +11,6 @@ export class CreateSocialAffiliateSaleDto {
   @IsNumber()
   saleAmount: number;
 
-
   @ApiProperty({
     description: "Commission earned",
     example: 30,
@@ -20,7 +19,6 @@ export class CreateSocialAffiliateSaleDto {
   @IsNotEmpty()
   @IsNumber()
   commissionEarned: number;
-
 
   @ApiProperty({
     description: "Affiliate link id",

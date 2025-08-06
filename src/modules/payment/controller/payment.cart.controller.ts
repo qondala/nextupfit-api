@@ -91,10 +91,12 @@ export class PaymentCartController {
     @Query("limit", ParseIntPipe) limit = 10,
     @Query("userId", ParseIntPipe) userId: number,
   ): Promise<PaginatedDetailsPaymentCartDto> {
-    return this.paymentCartService.findAllUserPaymentCarts(userId, { page, limit });
+    return this.paymentCartService.findAllUserPaymentCarts(userId, {
+      page,
+      limit,
+    });
   }
 
-  
   @Get(":id")
   @ApiParam({
     name: "id",
@@ -105,7 +107,9 @@ export class PaymentCartController {
     status: HttpStatus.OK,
     type: DetailsPaymentCartDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsPaymentCartDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsPaymentCartDto> {
     return this.paymentCartService.findOne(id);
   }
 
@@ -145,9 +149,13 @@ export class PaymentCartController {
   })
   async updatePayementCartStatus(
     @Param("paymentCartId", ParseIntPipe) paymentCartId: number,
-    @Param("status", new ParseEnumPipe(PaymentStatusEnum)) status: PaymentStatusEnum,
+    @Param("status", new ParseEnumPipe(PaymentStatusEnum))
+    status: PaymentStatusEnum,
   ): Promise<DetailsPaymentCartDto> {
-    return this.paymentCartService.updatePayementCartStatus(paymentCartId, status);
+    return this.paymentCartService.updatePayementCartStatus(
+      paymentCartId,
+      status,
+    );
   }
 
   @Delete(":id")

@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 
 import { UserInterestTypeEnum } from "@app/module/user/types";
-import { ProgramStepActivityEntity } from ".";
+import { ProgramFreetoolEntity } from ".";
 
 @Entity({ name: "program_freetool_interest" })
 export class ProgramFreetoolInterestEntity {
@@ -35,7 +35,7 @@ export class ProgramFreetoolInterestEntity {
   @UpdateDateColumn({ name: "updatedAt" })
   updatedAt: Date;
 
-  @ManyToOne(() => ProgramStepActivityEntity, (activity) => activity.interests)
-  @JoinColumn({ name: 'freetoolId', referencedColumnName: 'id' })
-  activity: ProgramStepActivityEntity;
+  @ManyToOne(() => ProgramFreetoolEntity, (tool) => tool.interests)
+  @JoinColumn({ name: "freetoolId", referencedColumnName: "id" })
+  freetool: ProgramFreetoolEntity;
 }

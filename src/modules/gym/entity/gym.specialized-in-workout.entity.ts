@@ -8,23 +8,19 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import {
-  BaseWorkoutEntity,
-} from "@app/module/base/entity";
+import { BaseWorkoutEntity } from "@app/module/base/entity";
 
-import {
-  GymEntity,
-} from "./gym.entity";
+import { GymEntity } from "./gym.entity";
 
 @Entity("gym_specialized_in_workout")
 export class GymSpecializedInWorkoutEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'gymId' })
+  @Column({ name: "gymId" })
   gymId: number;
 
-  @Column({ name: 'workoutId' })
+  @Column({ name: "workoutId" })
   workoutId: number;
 
   @CreateDateColumn()
@@ -34,10 +30,10 @@ export class GymSpecializedInWorkoutEntity {
   updatedAt: Date;
 
   @ManyToOne(() => BaseWorkoutEntity)
-  @JoinColumn({ name: 'workoutId' })
+  @JoinColumn({ name: "workoutId" })
   workout: BaseWorkoutEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
-  gym: GymEntity
+  @JoinColumn({ name: "gymId" })
+  gym: GymEntity;
 }

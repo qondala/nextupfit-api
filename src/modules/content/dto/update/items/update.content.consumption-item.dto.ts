@@ -9,7 +9,7 @@ export class UpdateContentConsumptionItemDto {
     type: SwaggerType.INTEGER,
     description: "consumption id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -20,7 +20,7 @@ export class UpdateContentConsumptionItemDto {
     enumName: "BaseConsumptionItemTypeEnum",
     description: "item type",
     example: BaseConsumptionItemTypeEnum.food,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsEnum(BaseConsumptionItemTypeEnum)
@@ -30,7 +30,7 @@ export class UpdateContentConsumptionItemDto {
     type: SwaggerType.INTEGER,
     description: "item id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -40,7 +40,7 @@ export class UpdateContentConsumptionItemDto {
     type: SwaggerType.INTEGER,
     description: "quantity",
     example: 2,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -50,7 +50,7 @@ export class UpdateContentConsumptionItemDto {
     type: SwaggerType.INTEGER,
     description: "quantity unit id",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -60,7 +60,7 @@ export class UpdateContentConsumptionItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()

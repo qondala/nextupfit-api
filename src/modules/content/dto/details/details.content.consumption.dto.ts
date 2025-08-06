@@ -15,8 +15,6 @@ import { SwaggerType } from "@app/common/types";
 import { BaseConsumptionProgramEnum } from "@app/module/base/types";
 import { DetailsContentConsumptionItemDto } from "./items";
 
-
-
 export class DetailsContentConsumptionDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -28,7 +26,6 @@ export class DetailsContentConsumptionDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "content id",
@@ -38,7 +35,6 @@ export class DetailsContentConsumptionDto {
   @IsNotEmpty()
   @IsInt()
   contentId: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -60,7 +56,6 @@ export class DetailsContentConsumptionDto {
   @IsString()
   description?: string;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "display title",
@@ -70,7 +65,6 @@ export class DetailsContentConsumptionDto {
   @IsOptional()
   @IsBoolean()
   displayTitle?: boolean;
-
 
   @ApiProperty({
     enum: BaseConsumptionProgramEnum,
@@ -82,7 +76,6 @@ export class DetailsContentConsumptionDto {
   @IsNotEmpty()
   @IsEnum(BaseConsumptionProgramEnum)
   typeConsumption: BaseConsumptionProgramEnum;
-
 
   @ApiProperty({
     type: () => DetailsContentConsumptionItemDto,

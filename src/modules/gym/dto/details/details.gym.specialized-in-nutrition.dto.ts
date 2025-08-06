@@ -10,39 +10,39 @@ export class DetailsGymSpecializedInNutritionDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
-    required: true
+    required: true,
   })
   id: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
-    required: true
+    required: true,
   })
   gymId: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Nutrition id",
-    required: true
+    required: true,
   })
   nutritionId: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     example: "2025-05-02T00:00:00.000Z",
-    required: false
+    required: false,
   })
   createdAt?: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     example: "2025-05-02T00:00:00.000Z",
-    required: false
+    required: false,
   })
   updatedAt?: Date;
 
@@ -50,7 +50,7 @@ export class DetailsGymSpecializedInNutritionDto {
     type: () => DetailsBaseNutritionDto,
     title: "DetailsBaseNutritionDto",
     description: "Base nutrition details",
-    required: true
+    required: true,
   })
   @IsDefined()
   @ValidateNested()
@@ -61,7 +61,7 @@ export class DetailsGymSpecializedInNutritionDto {
     type: () => DetailsGymDto,
     title: "DetailsGymDto",
     description: "Gym details",
-    required: false
+    required: false,
   })
   @IsOptional()
   @ValidateNested()

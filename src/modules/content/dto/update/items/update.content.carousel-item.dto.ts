@@ -8,7 +8,7 @@ export class UpdateContentCarouselItemDto {
     type: SwaggerType.INTEGER,
     description: "carousel id",
     example: 1234,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()
@@ -18,7 +18,7 @@ export class UpdateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "title",
     example: "title",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -28,7 +28,7 @@ export class UpdateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "description",
     example: "description",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -38,7 +38,7 @@ export class UpdateContentCarouselItemDto {
     type: SwaggerType.STRING,
     description: "image url",
     example: "https://example.com/image.jpg",
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsString()
@@ -48,7 +48,7 @@ export class UpdateContentCarouselItemDto {
     type: SwaggerType.INTEGER,
     description: "position",
     example: 1,
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsInt()

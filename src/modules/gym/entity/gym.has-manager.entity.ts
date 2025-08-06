@@ -5,14 +5,11 @@ import {
   CreateDateColumn,
   JoinColumn,
   UpdateDateColumn,
-  ManyToOne
+  ManyToOne,
 } from "typeorm";
 
 import { GymManagerRoleEnum, GymManagerSpecialityEnum } from "../types";
-import {
-    GymEntity,
-    GymManagerEntity,
-} from "./";
+import { GymEntity, GymManagerEntity } from "./";
 import { GymManagerStatusEnum } from "../types/gym.manager-status.enum";
 
 @Entity("gym_has_manager")
@@ -30,16 +27,15 @@ export class GymHasManagerEntity {
     nullable: false,
     type: "enum",
     enum: GymManagerRoleEnum,
-    default: GymManagerRoleEnum.manager
+    default: GymManagerRoleEnum.manager,
   })
   role: GymManagerRoleEnum;
-
 
   @Column({
     nullable: false,
     type: "enum",
     enum: GymManagerStatusEnum,
-    default: GymManagerStatusEnum.active
+    default: GymManagerStatusEnum.active,
   })
   status: GymManagerStatusEnum;
 
@@ -47,11 +43,11 @@ export class GymHasManagerEntity {
   lastStatusUpdate: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: 'gymId' })
+  @JoinColumn({ name: "gymId" })
   gym: GymEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'managerId' })
+  @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 
   @CreateDateColumn()

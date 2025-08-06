@@ -1,19 +1,8 @@
-import {
-  ApiProperty
-} from "@nestjs/swagger";
-import {
-  IsNumber,
-  IsOptional,
-  IsEnum,
-  IsDateString,
-} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNumber, IsOptional, IsEnum, IsDateString } from "class-validator";
 
-import {
-  SwaggerType
-} from "@app/common/types";
-import {
-  BaseSubscriptionPlanStatusEnum
-} from "@app/module/base/types";
+import { SwaggerType } from "@app/common/types";
+import { BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
 
 export class UpdateProgramSubscriptionDto {
   @ApiProperty({

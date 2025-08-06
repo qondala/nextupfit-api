@@ -1,22 +1,16 @@
 import { Injectable } from "@nestjs/common";
 
-import {
-  ProgramItemTypeEnum,
-} from "@app/module/program/types";
+import { ProgramItemTypeEnum } from "@app/module/program/types";
 
 import {
   ProgramNavigationReasonEnum,
   ProgramNodeNavigationParams,
 } from "../../types";
-import {
-  UserProgramNavigation,
-} from "../../dto";
+import { UserProgramNavigation } from "../../dto";
 import {
   ProgramAccessRequirementsCheckerService,
-  NavigatorProgramService
+  NavigatorProgramService,
 } from "..";
-
-
 
 @Injectable()
 export class NavigationFromProgramService {
@@ -27,35 +21,50 @@ export class NavigationFromProgramService {
 
   /**
    * Handle navigation to a program
-   * 
+   *
    * @param parameters
    * @returns
    */
   async navigate(
-    parameters: ProgramNodeNavigationParams
+    parameters: ProgramNodeNavigationParams,
   ): Promise<UserProgramNavigation> {
-
     // Calculate the current node
-    const programAccessRequirementsCheckResult = await this.programAccessRequirementsCheckerService.check(parameters.id, parameters.userId);
-    const userProgramNavigation: UserProgramNavigation = this.emptyNavigation(parameters.userId, parameters.id);
-    if(!programAccessRequirementsCheckResult.ok) {
+    const programAccessRequirementsCheckResult =
+      await this.programAccessRequirementsCheckerService.check(
+        parameters.id,
+        parameters.userId,
+      );
+    const userProgramNavigation: UserProgramNavigation = this.emptyNavigation(
+      parameters.userId,
+      parameters.id,
+    );
+    if (!programAccessRequirementsCheckResult.ok) {
       userProgramNavigation.currentNavigation.canNavigate = false;
-      userProgramNavigation.currentNavigation.reasonCannotNavigate = programAccessRequirementsCheckResult.reason;
+      userProgramNavigation.currentNavigation.reasonCannotNavigate =
+        programAccessRequirementsCheckResult.reason;
     }
 
     // Calculate the next node
     if (programAccessRequirementsCheckResult.ok) {
-      userProgramNavigation.nextNavigation = await this.navigatorProgramService.next(userProgramNavigation.currentNavigation);
+      userProgramNavigation.nextNavigation =
+        await this.navigatorProgramService.next(
+          userProgramNavigation.currentNavigation,
+        );
     }
 
     // Calculate the previous node
-    userProgramNavigation.previousNavigation = await this.navigatorProgramService.previous(userProgramNavigation.currentNavigation);
+    userProgramNavigation.previousNavigation =
+      await this.navigatorProgramService.previous(
+        userProgramNavigation.currentNavigation,
+      );
 
     return userProgramNavigation;
   }
 
-
-  private emptyNavigation(userId: number, programItemId: number): UserProgramNavigation {
+  private emptyNavigation(
+    userId: number,
+    programItemId: number,
+  ): UserProgramNavigation {
     return {
       // Current navigation
       currentNavigation: {
@@ -92,5 +101,4 @@ export class NavigationFromProgramService {
       },
     };
   }
-
 }

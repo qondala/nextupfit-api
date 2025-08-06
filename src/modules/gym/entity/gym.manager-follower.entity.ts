@@ -4,12 +4,12 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
+} from "typeorm";
 
-import { UserEntity } from '@app/module/user/entity';
-import { GymManagerEntity } from '.';
+import { UserEntity } from "@app/module/user/entity";
+import { GymManagerEntity } from ".";
 
-@Entity('gym_manager_follower')
+@Entity("gym_manager_follower")
 export class GymManagerFollowerEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,70 +23,63 @@ export class GymManagerFollowerEntity {
   @Column({ nullable: false })
   followerUserId: number;
 
-
   @Column({
     type: "timestamp",
-    nullable: true
+    nullable: true,
   })
   acceptedDate?: Date;
 
-
   @Column({
     type: "timestamp",
-    nullable: true
+    nullable: true,
   })
   stoppedDate?: Date;
 
-
   @Column({
     type: "timestamp",
-    nullable: true
+    nullable: true,
   })
   blockedDate?: Date;
 
-
   @Column({
     type: "timestamp",
-    nullable: true
+    nullable: true,
   })
   rejectedDate?: Date;
 
-
   @Column({
     type: "boolean",
     nullable: true,
-    default: false
+    default: false,
   })
   accepted?: boolean;
 
-
   @Column({
     type: "boolean",
     nullable: true,
-    default: false
+    default: false,
   })
   blocked?: boolean;
 
-
   @Column({
     type: "boolean",
     nullable: true,
-    default: false
+    default: false,
   })
   stopped?: boolean;
 
   @Column({
     type: "boolean",
     nullable: true,
-    default: false
+    default: false,
   })
   rejected?: boolean;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: 'managerId' })
+  @JoinColumn({ name: "managerId" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'followerUserId' })
+  @JoinColumn({ name: "followerUserId" })
   follower: UserEntity;
 }

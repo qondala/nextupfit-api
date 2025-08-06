@@ -19,14 +19,11 @@ import {
   ResetPasswordDto,
   IdTokenDto,
   AuthTokenDto,
-  AccessTokenDto
+  AccessTokenDto,
 } from "./dto";
-
 
 import { FirebaseAuthService } from "./firebaseauth.service";
 import { DetailsUserDto } from "../user/dto";
-
-
 
 @Injectable()
 export class AuthService {
@@ -38,7 +35,6 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<UserEntity> {
-
     if (await this.userService.userWithEmailExists(registerDto.email)) {
       throw new ConflictException("Email already exists");
     }
@@ -66,17 +62,22 @@ export class AuthService {
 
   async signUpWithIdToken(idTokenDto: IdTokenDto): Promise<AuthTokenDto> {
     console.log("Signin up with id token :", idTokenDto);
-    const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
+    const decoded = await this.firebaseAuthService.verifyToken(
+      idTokenDto.idToken,
+    );
 
-    console.log("Decoded id token:", {...decoded});
-    console.log("Frontend id token:", {...idTokenDto});
+    console.log("Decoded id token:", { ...decoded });
+    console.log("Frontend id token:", { ...idTokenDto });
 
-    const userExists = await this.userService.userWithEmailExists(decoded.email);
+    const userExists = await this.userService.userWithEmailExists(
+      decoded.email,
+    );
 
     if (!userExists) {
       await this.userService.create({
         email: decoded.email ?? idTokenDto.userData.email,
-        profileImageUrl: decoded.picture ?? idTokenDto.userData.profileImageUrl ?? "",
+        profileImageUrl:
+          decoded.picture ?? idTokenDto.userData.profileImageUrl ?? "",
         firstName: idTokenDto.userData.firstName ?? decoded.displayName ?? "",
         lastName: idTokenDto.userData.lastName ?? "",
         password: decoded.uid,
@@ -88,11 +89,11 @@ export class AuthService {
     return await this.signInWithIdToken(idTokenDto);
   }
 
-  async signInWithIdToken(
-    idTokenDto: IdTokenDto,
-  ): Promise<AuthTokenDto> {
+  async signInWithIdToken(idTokenDto: IdTokenDto): Promise<AuthTokenDto> {
     console.log("Login with token data : ", idTokenDto);
-    const decoded = await this.firebaseAuthService.verifyToken(idTokenDto.idToken);
+    const decoded = await this.firebaseAuthService.verifyToken(
+      idTokenDto.idToken,
+    );
 
     const user = await this.userService.findByEmail(decoded.email);
 
@@ -135,9 +136,7 @@ export class AuthService {
     }
   }
 
-  async login(
-    loginDto: LoginDto,
-  ): Promise<AuthTokenDto> {
+  async login(loginDto: LoginDto): Promise<AuthTokenDto> {
     const user = await this.userService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException("Invalid credentials");
@@ -224,7 +223,10 @@ export class AuthService {
     }
   }
 
-  async validateUser(email: string, pass: string): Promise<DetailsUserDto | null> {
+  async validateUser(
+    email: string,
+    pass: string,
+  ): Promise<DetailsUserDto | null> {
     const user = await this.userService.findByEmail(email);
 
     if (user && (await argon2.verify(user.passwordHash, pass))) {
@@ -233,5 +235,4 @@ export class AuthService {
 
     return null;
   }
-
 }

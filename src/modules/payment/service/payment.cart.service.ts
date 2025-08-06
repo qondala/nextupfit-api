@@ -33,7 +33,10 @@ export class PaymentCartService {
       .orderBy("paymentCart.createdAt", "DESC");
 
     const skip = (pagination.page - 1) * pagination.limit;
-    const [items, totalItems] = await qb.skip(skip).take(pagination.limit).getManyAndCount();
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
 
@@ -49,18 +52,23 @@ export class PaymentCartService {
     };
   }
 
-
-
   async findOne(id: number): Promise<PaymentCartEntity> {
     return await this.paymentCartRepository.findOne({ where: { id } });
   }
 
-  async update(id: number, dto: UpdatePaymentCartDto, userId: number): Promise<PaymentCartEntity> {
+  async update(
+    id: number,
+    dto: UpdatePaymentCartDto,
+    userId: number,
+  ): Promise<PaymentCartEntity> {
     await this.paymentCartRepository.update({ id, userId }, dto);
     return this.findOne(id);
   }
 
-  async updatePayementCartStatus(id: number, status: PaymentStatusEnum): Promise<PaymentCartEntity> {
+  async updatePayementCartStatus(
+    id: number,
+    status: PaymentStatusEnum,
+  ): Promise<PaymentCartEntity> {
     await this.paymentCartRepository.update({ id }, { status });
     return this.findOne(id);
   }

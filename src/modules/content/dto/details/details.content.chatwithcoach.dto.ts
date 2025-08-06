@@ -29,7 +29,6 @@ export class DetailsContentChatWithCoachDto {
   @IsInt()
   contentId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "title",
@@ -39,7 +38,6 @@ export class DetailsContentChatWithCoachDto {
   @IsOptional()
   @IsString()
   title?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -51,7 +49,6 @@ export class DetailsContentChatWithCoachDto {
   @IsString()
   description?: string;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "display title",
@@ -60,7 +57,6 @@ export class DetailsContentChatWithCoachDto {
   })
   @IsBoolean()
   displayTitle: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

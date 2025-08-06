@@ -4,5 +4,6 @@ export enum ProgramItemTypeEnum {
   activity = "activity",
   workingsession = "workingsession",
   workout = "workout",
-  recipe = "recipe",
+  nutrition = "nutrition",
+  practice = "practice",
 }

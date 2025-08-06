@@ -1,11 +1,12 @@
 import { IsEnum, IsInt, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { BaseSubscriptionPlanItemEnum, BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
+import {
+  BaseSubscriptionPlanItemEnum,
+  BaseSubscriptionPlanStatusEnum,
+} from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateUserSubscriptionPlanDto {
-
   @ApiProperty({
     enum: BaseSubscriptionPlanItemEnum,
     enumName: "BaseSubscriptionPlanItemEnum",
@@ -18,7 +19,6 @@ export class UpdateUserSubscriptionPlanDto {
   @IsEnum(BaseSubscriptionPlanItemEnum)
   itemType?: BaseSubscriptionPlanItemEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Item id",
@@ -28,7 +28,6 @@ export class UpdateUserSubscriptionPlanDto {
   @IsOptional()
   @IsInt()
   itemId?: number;
-
 
   @ApiProperty({
     enum: BaseSubscriptionPlanStatusEnum,
@@ -42,7 +41,6 @@ export class UpdateUserSubscriptionPlanDto {
   @IsEnum(BaseSubscriptionPlanStatusEnum)
   status?: BaseSubscriptionPlanStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",
@@ -53,4 +51,3 @@ export class UpdateUserSubscriptionPlanDto {
   @IsInt()
   userId?: number;
 }
-

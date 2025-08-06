@@ -5,7 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import { UserEntity } from "./user.entity";
 import { BaseBodyParamEntity } from "@app/module/base/entity";
@@ -25,11 +25,11 @@ export class UserBodyParamEntity {
   paramValue: number;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: "userId" })
   user: UserEntity;
 
   @ManyToOne(() => BaseBodyParamEntity)
-  @JoinColumn({ name: 'bodyParamId' })
+  @JoinColumn({ name: "bodyParamId" })
   bodyParam: BaseBodyParamEntity;
 
   @CreateDateColumn()

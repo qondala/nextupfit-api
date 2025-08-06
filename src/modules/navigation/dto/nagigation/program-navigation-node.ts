@@ -6,10 +6,7 @@ import { ProgramItemTypeEnum } from "@app/module/program/types";
 
 import { ProgramNavigationReasonEnum } from "../../types";
 
-
 export class ProgramNavigationNode {
-
-
   @ApiProperty({
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
@@ -20,21 +17,19 @@ export class ProgramNavigationNode {
   @IsEnum(ProgramItemTypeEnum)
   programItemType?: ProgramItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Program item id",
-    required: false
+    required: false,
   })
   programItemId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User id",
-    required: true
+    required: true,
   })
   userId: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,

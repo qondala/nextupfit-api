@@ -18,7 +18,10 @@ export class ContentVideoService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentVideoEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentVideoEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,11 +47,16 @@ export class ContentVideoService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentVideoEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentVideoEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 
-  async update(id: number, dto: UpdateContentVideoDto): Promise<ContentVideoEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentVideoDto,
+  ): Promise<ContentVideoEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

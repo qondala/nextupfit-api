@@ -64,7 +64,9 @@ export class ContentCarouselItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async create(@Body() dto: CreateContentCarouselItemDto): Promise<DetailsContentCarouselItemDto> {
+  async create(
+    @Body() dto: CreateContentCarouselItemDto,
+  ): Promise<DetailsContentCarouselItemDto> {
     return await this.service.create(dto);
   }
 
@@ -99,7 +101,10 @@ export class ContentCarouselItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findAll(@Param("carouselId", ParseIntPipe) carouselId: number, @Query() query: PaginationOptionsDto): Promise<PaginatedDetailsContentCarouselItemDto> {
+  async findAll(
+    @Param("carouselId", ParseIntPipe) carouselId: number,
+    @Query() query: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsContentCarouselItemDto> {
     return await this.service.findAll(carouselId, query);
   }
 
@@ -126,7 +131,9 @@ export class ContentCarouselItemController {
     status: HttpStatus.UNAUTHORIZED,
     description: "Unauthorized access",
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentCarouselItemDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentCarouselItemDto> {
     return await this.service.findOne(id);
   }
 

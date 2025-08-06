@@ -1,5 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsString, IsOptional, IsBoolean, IsEnum } from "class-validator";
+import {
+  IsInt,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsEnum,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { ContentLayoutEnum } from "../../types";

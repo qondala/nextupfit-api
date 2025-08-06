@@ -1,19 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto,
-} from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { GymSpecializedInWorkoutEntity } from '../entity';
+import { GymSpecializedInWorkoutEntity } from "../entity";
 
 import {
   CreateGymSpecializedInWorkoutDto,
   UpdateGymSpecializedInWorkoutDto,
-} from '../dto';
-
+} from "../dto";
 
 @Injectable()
 export class GymSpecializedInWorkoutService {
@@ -22,21 +18,26 @@ export class GymSpecializedInWorkoutService {
     private readonly gymSpecializedInWorkoutRepository: Repository<GymSpecializedInWorkoutEntity>,
   ) {}
 
-  async create(createDto: CreateGymSpecializedInWorkoutDto): Promise<GymSpecializedInWorkoutEntity> {
+  async create(
+    createDto: CreateGymSpecializedInWorkoutDto,
+  ): Promise<GymSpecializedInWorkoutEntity> {
     const specializedWorkout = this.gymSpecializedInWorkoutRepository.create({
       ...createDto,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
-    return await this.gymSpecializedInWorkoutRepository.save(specializedWorkout);
+    return await this.gymSpecializedInWorkoutRepository.save(
+      specializedWorkout,
+    );
   }
 
   async findByGym(
     gymId: number,
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymSpecializedInWorkoutEntity>> {
-    const queryBuilder = this.gymSpecializedInWorkoutRepository.createQueryBuilder('workout')
-      .where('workout.gymId = :gymId', { gymId })
-      .orderBy('workout.createdAt', 'DESC');
+    const queryBuilder = this.gymSpecializedInWorkoutRepository
+      .createQueryBuilder("workout")
+      .where("workout.gymId = :gymId", { gymId })
+      .orderBy("workout.createdAt", "DESC");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -53,19 +54,22 @@ export class GymSpecializedInWorkoutService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 
   async findOne(id: number): Promise<GymSpecializedInWorkoutEntity> {
     return await this.gymSpecializedInWorkoutRepository.findOne({
       where: { id },
-      relations: ['workout']
+      relations: ["workout"],
     });
   }
 
-  async update(id: number, updateDto: UpdateGymSpecializedInWorkoutDto): Promise<GymSpecializedInWorkoutEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateGymSpecializedInWorkoutDto,
+  ): Promise<GymSpecializedInWorkoutEntity> {
     await this.gymSpecializedInWorkoutRepository.update(id, updateDto);
     return this.findOne(id);
   }
@@ -76,11 +80,12 @@ export class GymSpecializedInWorkoutService {
 
   async findManagersSpecializedInWorkouts(
     workoutIds: number[],
-    paginationOptions: PaginationOptionsDto
+    paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<GymSpecializedInWorkoutEntity>> {
-    const queryBuilder = this.gymSpecializedInWorkoutRepository.createQueryBuilder('workout')
-      .where('workout.workoutId IN (:...workoutIds)', { workoutIds })
-      .orderBy('RANDOM()');
+    const queryBuilder = this.gymSpecializedInWorkoutRepository
+      .createQueryBuilder("workout")
+      .where("workout.workoutId IN (:...workoutIds)", { workoutIds })
+      .orderBy("RANDOM()");
 
     const skip = (paginationOptions.page - 1) * paginationOptions.limit;
     const [items, totalItems] = await queryBuilder
@@ -97,8 +102,8 @@ export class GymSpecializedInWorkoutService {
         itemCount: items.length,
         itemsPerPage: paginationOptions.limit,
         totalPages,
-        currentPage: paginationOptions.page
-      }
+        currentPage: paginationOptions.page,
+      },
     };
   }
 }

@@ -38,7 +38,9 @@ import { PaymentStatusEnum } from "../types";
 @Controller("payment/cart-item")
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class PaymentCartItemController {
-  constructor(private readonly paymentCartItemService: PaymentCartItemService) {}
+  constructor(
+    private readonly paymentCartItemService: PaymentCartItemService,
+  ) {}
 
   @Post()
   @ApiOperation({
@@ -51,12 +53,12 @@ export class PaymentCartItemController {
     type: DetailsPaymentCartItemDto,
   })
   async create(
-    @Body() dto: CreatePaymentCartItemDto
+    @Body() dto: CreatePaymentCartItemDto,
   ): Promise<DetailsPaymentCartItemDto> {
     return this.paymentCartItemService.create(dto);
   }
 
-  @Get('user/:userId')
+  @Get("user/:userId")
   @ApiOperation({
     summary: "Get user payment cart items paginated",
     operationId: "getUserPaymentCartItemsPaginated",
@@ -86,11 +88,14 @@ export class PaymentCartItemController {
     @Query("page", ParseIntPipe) page = 1,
     @Query("limit", ParseIntPipe) limit = 10,
   ): Promise<PaginatedDetailsPaymentCartItemDto> {
-    return this.paymentCartItemService.findAllUserPaymentCartItems(userId, { page, limit });
+    return this.paymentCartItemService.findAllUserPaymentCartItems(userId, {
+      page,
+      limit,
+    });
   }
 
   // findAllUserPaymentCartItemsByCartId
-  @Get('user/:userId/cart/:cartId')
+  @Get("user/:userId/cart/:cartId")
   @ApiOperation({
     summary: "Get user payment cart items paginated",
     operationId: "getUserPaymentCartItemsPaginated",
@@ -126,9 +131,12 @@ export class PaymentCartItemController {
     @Query("page", ParseIntPipe) page = 1,
     @Query("limit", ParseIntPipe) limit = 10,
   ): Promise<PaginatedDetailsPaymentCartItemDto> {
-    return this.paymentCartItemService.findAllUserPaymentCartItemsByCartId(userId, cartId, { page, limit });
+    return this.paymentCartItemService.findAllUserPaymentCartItemsByCartId(
+      userId,
+      cartId,
+      { page, limit },
+    );
   }
-
 
   @Get(":id")
   @ApiParam({
@@ -140,7 +148,9 @@ export class PaymentCartItemController {
     status: HttpStatus.OK,
     type: DetailsPaymentCartItemDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsPaymentCartItemDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsPaymentCartItemDto> {
     return this.paymentCartItemService.findOne(id);
   }
 
@@ -180,11 +190,14 @@ export class PaymentCartItemController {
   })
   async updatePayementCartItemStatus(
     @Param("paymentCartItemId", ParseIntPipe) paymentCartItemId: number,
-    @Param("status", new ParseEnumPipe(PaymentStatusEnum)) status: PaymentStatusEnum,
+    @Param("status", new ParseEnumPipe(PaymentStatusEnum))
+    status: PaymentStatusEnum,
   ): Promise<DetailsPaymentCartItemDto> {
-    return this.paymentCartItemService.updatePayementCartItemStatus(paymentCartItemId, status);
+    return this.paymentCartItemService.updatePayementCartItemStatus(
+      paymentCartItemId,
+      status,
+    );
   }
-
 
   @Delete(":id")
   @ApiParam({

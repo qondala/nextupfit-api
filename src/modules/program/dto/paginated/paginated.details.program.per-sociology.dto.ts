@@ -6,13 +6,12 @@ import { PaginatedResponseDto } from "@app/common/dto";
 import { DetailsProgramPerSociologyDto } from "../details";
 
 export class PaginatedDetailsProgramPerSociologyDto extends PaginatedResponseDto<DetailsProgramPerSociologyDto> {
-
   @ApiProperty({
     type: () => DetailsProgramPerSociologyDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of program per sociology',
-    required: true
+    description: "List of program per sociology",
+    required: true,
   })
   @IsDefined()
   @IsArray()

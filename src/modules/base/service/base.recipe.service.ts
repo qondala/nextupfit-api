@@ -10,7 +10,7 @@ import { BaseRecipeEntity } from "../entity";
 export class BaseRecipeService {
   constructor(
     @InjectRepository(BaseRecipeEntity)
-    private readonly recipeRepository: Repository<BaseRecipeEntity>
+    private readonly recipeRepository: Repository<BaseRecipeEntity>,
   ) {}
 
   async create(createDto: CreateBaseRecipeDto): Promise<BaseRecipeEntity> {
@@ -19,7 +19,7 @@ export class BaseRecipeService {
   }
 
   async findAll(
-    pagination: PaginationOptionsDto
+    pagination: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<BaseRecipeEntity>> {
     const qb = this.recipeRepository
       .createQueryBuilder("recipe")
@@ -40,8 +40,8 @@ export class BaseRecipeService {
         itemCount: items.length,
         itemsPerPage: pagination.limit,
         totalPages,
-        currentPage: pagination.page
-      }
+        currentPage: pagination.page,
+      },
     };
   }
 
@@ -49,7 +49,10 @@ export class BaseRecipeService {
     return this.recipeRepository.findOneOrFail({ where: { id } });
   }
 
-  async update(id: number, updateDto: UpdateBaseRecipeDto): Promise<BaseRecipeEntity> {
+  async update(
+    id: number,
+    updateDto: UpdateBaseRecipeDto,
+  ): Promise<BaseRecipeEntity> {
     await this.recipeRepository.update(id, updateDto);
     return this.findOne(id);
   }

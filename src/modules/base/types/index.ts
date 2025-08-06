@@ -17,4 +17,6 @@ export * from "./base.consumption-item-type.enum";
 export * from "./base.recipe-instruction-tag.enum";
 export * from "./base.recipe-item-type.enum";
 export * from "./base.currency-symbol-position.enum";
-
+export * from "./base.workout-type.enum";
+export * from "./base.ingredient-type.enum";
+export * from "./base.food-process-type.enum";

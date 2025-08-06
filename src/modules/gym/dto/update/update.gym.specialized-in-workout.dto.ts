@@ -4,7 +4,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateGymSpecializedInWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
@@ -14,7 +13,6 @@ export class UpdateGymSpecializedInWorkoutDto {
   @IsNotEmpty()
   @IsInt()
   gymId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

@@ -14,7 +14,6 @@ import { Type } from "class-transformer";
 import { DetailsContentCommitmentItemDto } from "./items";
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsContentCommitmentDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -36,7 +35,6 @@ export class DetailsContentCommitmentDto {
   @IsInt()
   contentId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "title",
@@ -46,7 +44,6 @@ export class DetailsContentCommitmentDto {
   @IsOptional()
   @IsString()
   title?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -90,7 +87,7 @@ export class DetailsContentCommitmentDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "created at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -99,13 +96,12 @@ export class DetailsContentCommitmentDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "updated at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
   })
   updatedAt: Date;
-
 
   @ApiProperty({
     type: () => DetailsContentCommitmentItemDto,

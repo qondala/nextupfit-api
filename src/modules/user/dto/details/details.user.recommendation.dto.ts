@@ -1,16 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsUserRecommendationDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
     required: true,
   })
   id: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -19,14 +16,12 @@ export class DetailsUserRecommendationDto {
   })
   recommendedManagerUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Recommender user id",
     required: true,
   })
   recommenderUserId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -35,19 +30,17 @@ export class DetailsUserRecommendationDto {
   })
   recommendeeUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Recommendation created at",
     required: true,
   })
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Recommendation updated at",
     required: true,
   })

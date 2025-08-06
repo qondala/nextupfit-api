@@ -11,25 +11,31 @@ import {
   UseGuards,
   HttpStatus,
 } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from "@nestjs/swagger";
 
+import { SwaggerType } from "@app/common/types";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
 
 import {
   ProgramManagerService,
   ProgramStepActivityService,
-  ProgramPerSociologyService
+  ProgramPerSociologyService,
 } from "../service";
 import {
   CreateProgramStepActivityDto,
   UpdateProgramStepActivityDto,
   PaginatedDetailsProgramStepActivityDto,
   DetailsProgramStepActivityDto,
-  ProgramFindCriteriaActivityDto
+  ProgramFindCriteriaActivityDto,
 } from "../dto";
 import { ProgramItemTypeEnum } from "../types";
-import { SwaggerType } from "@app/common/types";
 import { ProgramStepActivityEntity } from "../entity";
 
 @ApiTags("Program module endpoints")
@@ -46,14 +52,16 @@ export class ProgramStepActivityController {
   @Post()
   @ApiOperation({
     summary: "Create a new program step activity",
-    operationId: "createProgramStepActivity"
+    operationId: "createProgramStepActivity",
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: "The program step activity has been successfully created.",
     type: DetailsProgramStepActivityDto,
   })
-  async create(@Body() createProgramStepActivityDto: CreateProgramStepActivityDto): Promise<DetailsProgramStepActivityDto> {
+  async create(
+    @Body() createProgramStepActivityDto: CreateProgramStepActivityDto,
+  ): Promise<DetailsProgramStepActivityDto> {
     const record = await this.service.create(createProgramStepActivityDto);
 
     return {
@@ -66,7 +74,7 @@ export class ProgramStepActivityController {
   @Get()
   @ApiOperation({
     summary: "Get all program step activities with pagination",
-    operationId: "findAllProgramStepActivities"
+    operationId: "findAllProgramStepActivities",
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -75,24 +83,26 @@ export class ProgramStepActivityController {
   })
   async findAll(
     @Query() criteria: ProgramFindCriteriaActivityDto,
-    @Query() pagination: PaginationOptionsDto): Promise<PaginatedDetailsProgramStepActivityDto> {
+    @Query() pagination: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsProgramStepActivityDto> {
     const result = await this.service.findAll(criteria, pagination);
 
-    const details = await Promise.all(result.items.map(
-      async (activity) => await this.extractActivityDetails(activity)
-    ));
+    const details = await Promise.all(
+      result.items.map(
+        async (activity) => await this.extractActivityDetails(activity),
+      ),
+    );
 
     return {
       meta: result.meta,
-      items: details
+      items: details,
     };
   }
-
 
   @Get(":id")
   @ApiOperation({
     summary: "Get a program step activity by id",
-    operationId: "findOneProgramStepActivity"
+    operationId: "findOneProgramStepActivity",
   })
   @ApiParam({
     name: "id",
@@ -105,7 +115,9 @@ export class ProgramStepActivityController {
     description: "Return the program step activity.",
     type: DetailsProgramStepActivityDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsProgramStepActivityDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramStepActivityDto> {
     const result = await this.service.findOne(id);
 
     const details = await this.extractActivityDetails(result);
@@ -116,7 +128,7 @@ export class ProgramStepActivityController {
   @Patch(":id")
   @ApiOperation({
     summary: "Update a program step activity",
-    operationId: "updateProgramStepActivity"
+    operationId: "updateProgramStepActivity",
   })
   @ApiParam({
     name: "id",
@@ -131,7 +143,7 @@ export class ProgramStepActivityController {
   })
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() body: UpdateProgramStepActivityDto
+    @Body() body: UpdateProgramStepActivityDto,
   ): Promise<DetailsProgramStepActivityDto> {
     const result = await this.service.update(id, body);
 
@@ -143,7 +155,7 @@ export class ProgramStepActivityController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete a program step activity",
-    operationId: "deleteProgramStepActivity"
+    operationId: "deleteProgramStepActivity",
   })
   @ApiParam({
     name: "id",
@@ -164,19 +176,27 @@ export class ProgramStepActivityController {
    * @param activity - The activity entity to extract details from.
    * @returns A Promise that resolves to a DetailsProgramStepActivityDto object containing the activity details.
    */
-  private async extractActivityDetails(activity: ProgramStepActivityEntity): Promise<DetailsProgramStepActivityDto> {
+  private async extractActivityDetails(
+    activity: ProgramStepActivityEntity,
+  ): Promise<DetailsProgramStepActivityDto> {
     const programCriteria = {
       itemId: activity.id,
       itemType: ProgramItemTypeEnum.activity,
     };
 
-    const managersFound = await this.programManagerService.findAll(programCriteria);
-    const audienceFound = await this.programPerSociologyService.findAll(programCriteria);
+    const managersFound =
+      await this.programManagerService.findAll(programCriteria);
+    const audienceFound =
+      await this.programPerSociologyService.findAll(programCriteria);
 
     return {
       ...activity,
-      managers: managersFound.items.map((programManager) => programManager.manager), 
-      audience: audienceFound.items.map((programPerSociology) => programPerSociology.sociology),
+      managers: managersFound.items.map(
+        (programManager) => programManager.manager,
+      ),
+      audience: audienceFound.items.map(
+        (programPerSociology) => programPerSociology.sociology,
+      ),
     };
   }
 }

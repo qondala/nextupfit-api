@@ -11,19 +11,23 @@ import { CreateBaseNutritionTypeDto, UpdateBaseNutritionTypeDto } from "../dto";
 export class BaseNutritionTypeService {
   constructor(
     @InjectRepository(BaseNutritionTypeEntity)
-    private readonly nutritionTypeRepository: Repository<BaseNutritionTypeEntity>
+    private readonly nutritionTypeRepository: Repository<BaseNutritionTypeEntity>,
   ) {}
 
-  async create(createDto: CreateBaseNutritionTypeDto): Promise<BaseNutritionTypeEntity> {
+  async create(
+    createDto: CreateBaseNutritionTypeDto,
+  ): Promise<BaseNutritionTypeEntity> {
     const type = this.nutritionTypeRepository.create(createDto);
     return this.nutritionTypeRepository.save(type);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseNutritionTypeEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseNutritionTypeEntity>> {
     const [items, total] = await this.nutritionTypeRepository.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: "DESC" }
+      order: { id: "DESC" },
     });
 
     return {
@@ -33,21 +37,21 @@ export class BaseNutritionTypeService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseNutritionTypeEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseNutritionTypeEntity>> {
     const searchTerm = `%${query}%`;
     const [items, total] = await this.nutritionTypeRepository.findAndCount({
-      where: [
-        { name: Like(searchTerm) },
-        { code: Like(searchTerm) }
-      ],
+      where: [{ name: Like(searchTerm) }, { code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: "DESC" }
+      order: { id: "DESC" },
     });
 
     return {
@@ -57,8 +61,8 @@ export class BaseNutritionTypeService {
         itemCount: items.length,
         itemsPerPage: options.limit,
         totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page
-      }
+        currentPage: options.page,
+      },
     };
   }
 
@@ -70,7 +74,10 @@ export class BaseNutritionTypeService {
     return this.nutritionTypeRepository.findOneBy({ code });
   }
 
-  async update(id: number, updateDto: UpdateBaseNutritionTypeDto): Promise<BaseNutritionTypeEntity | null> {
+  async update(
+    id: number,
+    updateDto: UpdateBaseNutritionTypeDto,
+  ): Promise<BaseNutritionTypeEntity | null> {
     const result = await this.nutritionTypeRepository.update(id, updateDto);
     if (result.affected === 0) {
       return null;

@@ -3,16 +3,15 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
-import { BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
 
+import { BaseSubscriptionPlanStatusEnum } from "@app/module/base/types";
 
 @Entity("program_subscription")
 export class ProgramSubscriptionEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @Column()
   programId: number;

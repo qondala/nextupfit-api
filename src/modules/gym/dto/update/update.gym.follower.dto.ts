@@ -1,16 +1,9 @@
-import {
-  IsInt,
-  IsBoolean, 
-  IsDate,
-  IsOptional
-} from "class-validator";
+import { IsInt, IsBoolean, IsDate, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class UpdateGymFollowerDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym id",
@@ -20,7 +13,6 @@ export class UpdateGymFollowerDto {
   @IsOptional()
   @IsInt()
   gymId?: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -32,10 +24,9 @@ export class UpdateGymFollowerDto {
   @IsInt()
   followerUserId?: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date the follower joined",
     example: Date(),
     required: false,
@@ -44,10 +35,9 @@ export class UpdateGymFollowerDto {
   @IsDate()
   acceptedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date the follower stopped following",
     example: Date(),
     required: false,
@@ -56,10 +46,9 @@ export class UpdateGymFollowerDto {
   @IsDate()
   stoppedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date the gym blocked follower",
     example: Date(),
     required: false,
@@ -68,40 +57,36 @@ export class UpdateGymFollowerDto {
   @IsDate()
   blockedDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the follow request was accepted (By the gym)",
     example: true,
     required: false,
-    default: true
+    default: true,
   })
   @IsOptional()
   @IsBoolean()
   accepted?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the follower has been blocked",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
   blocked?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether the follower stopped following the gym",
     example: false,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
   stopped?: boolean;
 }
-

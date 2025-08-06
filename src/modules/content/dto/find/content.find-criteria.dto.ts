@@ -1,8 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-  IsInt,
-} from "class-validator";
+import { IsOptional, IsInt } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 
@@ -16,9 +13,7 @@ import {
 
 import { ContentFindOrderEnum } from ".";
 
-
 export class ContentFindCriteriaDto {
-
   @ApiProperty({
     name: "contentType",
     enum: ContentTypeEnum,
@@ -52,7 +47,6 @@ export class ContentFindCriteriaDto {
   @IsOptional()
   containerType?: ContentContainerTypeEnum;
 
-
   @ApiProperty({
     name: "status",
     enum: ContentStatusEnum,
@@ -63,7 +57,6 @@ export class ContentFindCriteriaDto {
   })
   @IsOptional()
   status?: ContentStatusEnum;
-
 
   @ApiProperty({
     name: "ownerUserId",

@@ -8,12 +8,20 @@ export class UpdateContentInstructionsDto {
   @IsInt()
   contentId?: number;
 
-  @ApiProperty({ type: SwaggerType.STRING, example: "Instruction title", required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    example: "Instruction title",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   title?: string;
 
-  @ApiProperty({ type: SwaggerType.STRING, example: "Description", required: false })
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    example: "Description",
+    required: false,
+  })
   @IsOptional()
   @IsString()
   description?: string;

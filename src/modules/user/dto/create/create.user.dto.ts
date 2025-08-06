@@ -1,5 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, IsEmail, IsOptional, IsArray, IsDate, IsBoolean, IsEnum, IsInt } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsArray,
+  IsDate,
+  IsBoolean,
+  IsEnum,
+  IsInt,
+} from "class-validator";
 
 import { UserProfileTypeEnum } from "../../types";
 import { SwaggerType } from "@app/common/types";
@@ -15,7 +25,6 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's first name",
@@ -25,7 +34,6 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   firstName: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -37,7 +45,6 @@ export class CreateUserDto {
   @IsString()
   lastName: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Numero de telephone",
@@ -46,7 +53,6 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   phoneNumber?: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -59,7 +65,6 @@ export class CreateUserDto {
   @IsDate()
   birthDate?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's password",
@@ -69,7 +74,6 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -81,7 +85,6 @@ export class CreateUserDto {
   @IsString()
   profileImageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "User's cover image URL",
@@ -92,18 +95,16 @@ export class CreateUserDto {
   @IsString()
   coverImageUrl?: string;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
     description: "Whether user has confirmed successfully his email",
     example: true,
     required: false,
-    default: false
+    default: false,
   })
   @IsOptional()
   @IsBoolean()
   isEmailVerified?: boolean;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -116,7 +117,6 @@ export class CreateUserDto {
   @IsDate()
   lastLogin?: Date;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "User's age",
@@ -125,7 +125,6 @@ export class CreateUserDto {
   })
   @IsInt()
   age: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

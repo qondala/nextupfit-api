@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsNumber, IsEnum } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsEnum } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-import { ProgramItemTypeEnum } from '@app/module/program/types';
+import { ProgramItemTypeEnum } from "@app/module/program/types";
 
 export class CreateGymHasProgramDto {
   @ApiProperty({
-    description: 'The ID of the gym',
+    description: "The ID of the gym",
     example: 1,
   })
   @IsNotEmpty()
@@ -13,7 +13,7 @@ export class CreateGymHasProgramDto {
   gymId: number;
 
   @ApiProperty({
-    description: 'The type of program item',
+    description: "The type of program item",
     enum: ProgramItemTypeEnum,
     example: ProgramItemTypeEnum.program,
   })
@@ -22,7 +22,7 @@ export class CreateGymHasProgramDto {
   itemType: ProgramItemTypeEnum;
 
   @ApiProperty({
-    description: 'The ID of the program item',
+    description: "The ID of the program item",
     example: 1,
   })
   @IsNotEmpty()
@@ -30,7 +30,7 @@ export class CreateGymHasProgramDto {
   itemId: number;
 
   @ApiProperty({
-    description: 'The ID of the owner manager',
+    description: "The ID of the owner manager",
     example: 1,
   })
   @IsNotEmpty()

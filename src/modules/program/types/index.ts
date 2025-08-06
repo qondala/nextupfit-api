@@ -9,4 +9,3 @@ export * from "./program.status.enum";
 export * from "./program.item-composite.dto";
 export * from "./program.accessibility.enum";
 export * from "./program.visibility.enum";
-

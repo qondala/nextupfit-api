@@ -9,18 +9,16 @@ import {
 } from "class-validator";
 import { Type } from "class-transformer";
 
-import { DetailsUserDto } from '@app/module/user/dto';
+import { DetailsUserDto } from "@app/module/user/dto";
 import { SwaggerType } from "@app/common/types";
 
-import { DetailsGymDto, DetailsGymMembershipPlanDto} from '.';
-import { GymMembershipStatusEnum } from '../../types';
-
+import { DetailsGymDto, DetailsGymMembershipPlanDto } from ".";
+import { GymMembershipStatusEnum } from "../../types";
 
 export class DetailsGymMembershipDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym membership',
+    description: "ID of the gym membership",
     example: 1,
     required: true,
   })
@@ -28,10 +26,9 @@ export class DetailsGymMembershipDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym',
+    description: "ID of the gym",
     example: 1,
     required: true,
   })
@@ -39,10 +36,9 @@ export class DetailsGymMembershipDto {
   @IsInt()
   gymId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: 'ID of the gym membership member user',
+    description: "ID of the gym membership member user",
     example: 1,
     required: true,
   })
@@ -50,18 +46,16 @@ export class DetailsGymMembershipDto {
   @IsInt()
   memberUserId: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Started date of the gym membership',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Started date of the gym membership",
+    example: "2022-01-01T00:00:00.000Z",
     required: false,
   })
   @IsOptional()
   @Type(() => Date)
   startedDate?: Date;
-
 
   @ApiProperty({
     enum: GymMembershipStatusEnum,
@@ -74,10 +68,9 @@ export class DetailsGymMembershipDto {
   @IsEnum(GymMembershipStatusEnum)
   membershipStatus: GymMembershipStatusEnum;
 
-
   @ApiProperty({
     type: SwaggerType.BOOLEAN,
-    description: 'Favorite status of the gym membership',
+    description: "Favorite status of the gym membership",
     example: false,
     required: false,
   })
@@ -85,10 +78,9 @@ export class DetailsGymMembershipDto {
   @IsBoolean()
   isFavorite?: boolean;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Date the user's membership to the gym has been updated",
     example: Date(),
     required: false,
@@ -96,54 +88,49 @@ export class DetailsGymMembershipDto {
   @IsOptional()
   lastStatusUpdate?: Date;
 
-
   @ApiProperty({
     type: () => DetailsGymMembershipPlanDto,
     title: "DetailsGymMembershipPlanDto",
-    description: 'Membership plan of the gym membership',
+    description: "Membership plan of the gym membership",
     required: true,
   })
   @Type(() => DetailsGymMembershipPlanDto)
   membershipPlan: DetailsGymMembershipPlanDto;
 
-
   @ApiProperty({
     type: () => DetailsUserDto,
     title: "DetailsUserDto",
-    description: 'Member of the gym membership',
+    description: "Member of the gym membership",
     required: true,
   })
   @Type(() => DetailsUserDto)
   member: DetailsUserDto;
 
-
   @ApiProperty({
     type: () => DetailsGymDto,
     title: "DetailsGymDto",
-    description: 'Gym of the gym membership',
+    description: "Gym of the gym membership",
     required: true,
   })
   @Type(() => DetailsGymDto)
   gym: DetailsGymDto;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Created at of the gym membership',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Created at of the gym membership",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
   })
   @IsNotEmpty()
   @Type(() => Date)
   createdAt: Date;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
-    description: 'Updated at of the gym membership',
-    example: '2022-01-01T00:00:00.000Z',
+    format: "date-time",
+    description: "Updated at of the gym membership",
+    example: "2022-01-01T00:00:00.000Z",
     required: true,
   })
   @IsNotEmpty()

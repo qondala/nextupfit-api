@@ -4,7 +4,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
-  IsOptional
+  IsOptional,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
@@ -14,7 +14,7 @@ export class CreateBaseRecipeItemDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     example: 1,
-    description: "Recipe id"
+    description: "Recipe id",
   })
   @IsNotEmpty()
   @IsInt()
@@ -22,9 +22,9 @@ export class CreateBaseRecipeItemDto {
 
   @ApiProperty({
     enum: BaseRecipeItemTypeEnum,
-    enumName: "BaseRecipeItemTypeEnum", 
+    enumName: "BaseRecipeItemTypeEnum",
     example: BaseRecipeItemTypeEnum.food,
-    description: "Item type"
+    description: "Item type",
   })
   @IsNotEmpty()
   @IsEnum(BaseRecipeItemTypeEnum)
@@ -34,7 +34,7 @@ export class CreateBaseRecipeItemDto {
     type: SwaggerType.INTEGER,
     required: false,
     example: 3,
-    description: "Item id (food or ingredient)"
+    description: "Item id (food or ingredient)",
   })
   @IsOptional()
   @IsInt()
@@ -44,7 +44,7 @@ export class CreateBaseRecipeItemDto {
     type: SwaggerType.NUMBER,
     required: false,
     example: 2,
-    description: "Item quantity"
+    description: "Item quantity",
   })
   @IsOptional()
   @IsNumber()
@@ -54,7 +54,7 @@ export class CreateBaseRecipeItemDto {
     type: SwaggerType.INTEGER,
     required: false,
     example: 5,
-    description: "Quantity unit id"
+    description: "Quantity unit id",
   })
   @IsOptional()
   @IsInt()
@@ -64,7 +64,7 @@ export class CreateBaseRecipeItemDto {
     type: SwaggerType.INTEGER,
     required: false,
     example: 0,
-    description: "Order of item inside recipe"
+    description: "Order of item inside recipe",
   })
   @IsOptional()
   @IsInt()

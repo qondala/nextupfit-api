@@ -3,9 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
 import { TrialPlanItemType } from "../../types";
 
-
 export class UserPlanTrialStatus {
-
   @ApiProperty({
     enum: TrialPlanItemType,
     enumName: "TrialPlanItemType",
@@ -22,7 +20,6 @@ export class UserPlanTrialStatus {
   })
   planId: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number of trial days of plan",
@@ -36,7 +33,6 @@ export class UserPlanTrialStatus {
     required: true,
   })
   numberOfDaysLeft: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

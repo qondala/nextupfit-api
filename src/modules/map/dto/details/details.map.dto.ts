@@ -1,39 +1,39 @@
 import {
   IsDate,
   IsDefined,
+  IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-
+import { SwaggerType } from "@app/common/types";
 
 import { DetailsUserDto } from "@app/module/user/dto";
 import { DetailsGymDto } from "@app/module/gym/dto";
 import { GeoPointDto } from "@app/common/dto";
 
-export class DetailsMapDto {
+import { DetailsGymManagerDto } from "@app/module/gym/dto";
 
+export class DetailsMapDto {
   @ApiProperty({
-    type: 'number',
+    type: SwaggerType.INTEGER,
     description: "record id",
     example: 1234,
     required: true,
   })
   @IsNotEmpty()
-  @IsNumber()
+  @IsInt()
   id: number;
-
 
   @ApiProperty({
     type: () => GeoPointDto,
     title: "GeoPointDto",
     description: "Users/Gym location",
     example: {
-      type: 'Point',
-      coordinates: [-123.456, 123.456]
+      type: "Point",
+      coordinates: [-123.456, 123.456],
     },
     required: true,
   })
@@ -42,33 +42,42 @@ export class DetailsMapDto {
   @Type(() => GeoPointDto)
   location: GeoPointDto;
 
-
   @ApiProperty({
-    type: 'number',
+    type: SwaggerType.INTEGER,
     description: "Gym id",
     example: 1234,
     required: false,
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   gymId?: number;
 
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Manager id",
+    example: 1234,
+    required: false,
+    default: 0,
+  })
+  @IsOptional()
+  @IsInt()
+  managerId?: number;
 
   @ApiProperty({
-    type: 'number',
+    type: SwaggerType.INTEGER,
     description: "User id",
     example: 23456,
     required: false,
     default: 0,
   })
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   userId?: number;
 
-
   @ApiProperty({
-    type: Date,
+    type: SwaggerType.STRING,
+    format: "date-time",
     description: "Record Date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -78,6 +87,16 @@ export class DetailsMapDto {
   @IsDate()
   createdAt?: Date;
 
+  @ApiProperty({
+    type: () => DetailsGymDto,
+    title: "DetailsGymDto",
+    description: "Gym details",
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DetailsGymDto)
+  gym?: DetailsGymDto;
 
   @ApiProperty({
     type: () => DetailsUserDto,
@@ -90,15 +109,14 @@ export class DetailsMapDto {
   @Type(() => DetailsUserDto)
   user?: DetailsUserDto;
 
-
   @ApiProperty({
-    type: () => DetailsGymDto,
-    title: "DetailsGymDto",
-    description: "Gym details",
+    type: () => DetailsGymManagerDto,
+    title: "DetailsGymManagerDto",
+    description: "Gym manager details",
     required: false,
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => DetailsGymDto)
-  gym?: DetailsGymDto;
+  @Type(() => DetailsGymManagerDto)
+  manager?: DetailsGymManagerDto;
 }

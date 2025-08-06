@@ -1,6 +1,11 @@
 import { BaseConsumptionItemTypeEnum } from "@app/module/base/types";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("user_consumption_item")
 export class UserConsumptionItemEntity {
@@ -21,6 +26,9 @@ export class UserConsumptionItemEntity {
 
   @Column()
   position: number;
+
+  @Column({ type: "bigint", nullable: true })
+  programNutritionId?: number;
 
   @CreateDateColumn()
   createdAt: Date;

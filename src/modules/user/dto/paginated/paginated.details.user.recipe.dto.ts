@@ -8,10 +8,10 @@ import { DetailsUserRecipeDto } from "../details";
 export class PaginatedDetailsUserRecipeDto extends PaginatedResponseDto<DetailsUserRecipeDto> {
   @ApiProperty({
     type: () => DetailsUserRecipeDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of users recipes',
-    required: true
+    description: "List of users recipes",
+    required: true,
   })
   @IsDefined()
   @IsArray()

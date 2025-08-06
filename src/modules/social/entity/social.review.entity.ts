@@ -1,8 +1,14 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
-import { SocialReviewItemTypeEnum } from '../types';
+import { SocialReviewItemTypeEnum } from "../types";
 
-@Entity('social_review')
+@Entity("social_review")
 export class SocialReviewEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -14,8 +20,8 @@ export class SocialReviewEntity {
   comment?: string;
 
   @Column({
-    type: 'enum',
-    enum: SocialReviewItemTypeEnum
+    type: "enum",
+    enum: SocialReviewItemTypeEnum,
   })
   itemType: SocialReviewItemTypeEnum;
 

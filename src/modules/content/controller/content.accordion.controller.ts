@@ -53,7 +53,9 @@ export class ContentAccordionController {
     status: HttpStatus.CREATED,
     type: DetailsContentAccordionDto,
   })
-  async create(@Body() dto: CreateContentAccordionDto): Promise<DetailsContentAccordionDto> {
+  async create(
+    @Body() dto: CreateContentAccordionDto,
+  ): Promise<DetailsContentAccordionDto> {
     return await this.service.create(dto);
   }
 
@@ -102,7 +104,9 @@ export class ContentAccordionController {
     status: HttpStatus.OK,
     type: DetailsContentAccordionDto,
   })
-  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsContentAccordionDto> {
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsContentAccordionDto> {
     return await this.service.findOne(id);
   }
 

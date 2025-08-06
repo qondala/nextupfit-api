@@ -18,7 +18,10 @@ export class ContentTipsService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentTipsEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentTipsEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -41,15 +44,26 @@ export class ContentTipsService {
   }
 
   async findOne(id: number): Promise<ContentTipsEntity> {
-    const entity = await this.repository.findOne({ where: { id }, relations: ["items"] });
+    const entity = await this.repository.findOne({
+      where: { id },
+      relations: ["items"],
+    });
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentTipsEntity | null> {
-    return this.repository.findOne({ where: { contentId }, relations: ["items"] });
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentTipsEntity | null> {
+    return this.repository.findOne({
+      where: { contentId },
+      relations: ["items"],
+    });
   }
 
-  async update(id: number, dto: UpdateContentTipsDto): Promise<ContentTipsEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentTipsDto,
+  ): Promise<ContentTipsEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

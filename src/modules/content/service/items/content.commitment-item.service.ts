@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentCommitmentItemEntity } from "../../entity/items";
-import { CreateContentCommitmentItemDto, UpdateContentCommitmentItemDto } from "../../dto";
+import {
+  CreateContentCommitmentItemDto,
+  UpdateContentCommitmentItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentCommitmentItemService {
@@ -14,11 +17,16 @@ export class ContentCommitmentItemService {
     private readonly repository: Repository<ContentCommitmentItemEntity>,
   ) {}
 
-  async create(dto: CreateContentCommitmentItemDto): Promise<ContentCommitmentItemEntity> {
+  async create(
+    dto: CreateContentCommitmentItemDto,
+  ): Promise<ContentCommitmentItemEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(commitmentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentCommitmentItemEntity>> {
+  async findAll(
+    commitmentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentCommitmentItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,7 +52,10 @@ export class ContentCommitmentItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentCommitmentItemDto): Promise<ContentCommitmentItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentCommitmentItemDto,
+  ): Promise<ContentCommitmentItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

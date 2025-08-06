@@ -9,6 +9,14 @@ import {
 } from "@app/module/base/entity";
 
 import {
+  ProgramEntity,
+  ProgramStepEntity,
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramStepActivityWorkingsessionPracticeEntity,
+} from "@app/module/program/entity";
+
+import {
   UserEntity,
   UserBodyParamEntity,
   UserProgramEvolutionEntity,
@@ -22,7 +30,6 @@ import {
   UserCommitmentCompletedItemEntity,
 } from "./entity";
 
-
 import {
   UserController,
   UserBodyParamController,
@@ -34,9 +41,8 @@ import {
   UserConsumptionItemController,
   UserConsumptionController,
   UserScheduleController,
-  UserCommitmentCompletedItemController
+  UserCommitmentCompletedItemController,
 } from "./controller";
-
 
 import {
   UserService,
@@ -72,6 +78,13 @@ import {
       BaseProgramGoalEntity,
       BaseSociologyEntity,
       BaseWorkoutEntity,
+
+      // Program entities for user program evolution events
+      ProgramEntity,
+      ProgramStepEntity,
+      ProgramStepActivityEntity,
+      ProgramStepActivityWorkingsessionEntity,
+      ProgramStepActivityWorkingsessionPracticeEntity,
     ]),
   ],
   controllers: [
@@ -85,7 +98,7 @@ import {
     UserConsumptionItemController,
     UserConsumptionController,
     UserScheduleController,
-    UserCommitmentCompletedItemController
+    UserCommitmentCompletedItemController,
   ],
   providers: [
     UserService,
@@ -99,7 +112,7 @@ import {
     UserConsumptionService,
     UserScheduleService,
     UserCommitmentCompletedItemService,
-   ],
+  ],
   exports: [
     UserService,
     UserBodyParamService,
@@ -112,6 +125,6 @@ import {
     UserConsumptionService,
     UserScheduleService,
     UserCommitmentCompletedItemService,
-   ],
+  ],
 })
 export class UserModule {}

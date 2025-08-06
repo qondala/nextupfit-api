@@ -1,25 +1,10 @@
-import {
-  Injectable
-} from "@nestjs/common";
-import {
-  InjectRepository
-} from "@nestjs/typeorm";
-import {
-  Repository
-} from "typeorm";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
-import {
-  ContentTextEntity
-} from "../entity";
-import {
-  CreateContentTextDto,
-  UpdateContentTextDto
-} from "../dto";
-
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+import { ContentTextEntity } from "../entity";
+import { CreateContentTextDto, UpdateContentTextDto } from "../dto";
 
 @Injectable()
 export class ContentTextService {
@@ -32,7 +17,10 @@ export class ContentTextService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentTextEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentTextEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -58,11 +46,16 @@ export class ContentTextService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentTextEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentTextEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 
-  async update(id: number, dto: UpdateContentTextDto): Promise<ContentTextEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentTextDto,
+  ): Promise<ContentTextEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

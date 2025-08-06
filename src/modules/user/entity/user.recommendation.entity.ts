@@ -3,9 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
-
 
 @Entity("user_recommendation")
 export class UserRecommendationEntity {

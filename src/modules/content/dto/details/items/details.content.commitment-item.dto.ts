@@ -54,10 +54,9 @@ export class DetailsContentCommitmentItemDto {
   @IsInt()
   position: number;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Content created date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -66,7 +65,7 @@ export class DetailsContentCommitmentItemDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Content updated date",
     example: "2025-05-02T00:00:00.000Z",
     required: false,

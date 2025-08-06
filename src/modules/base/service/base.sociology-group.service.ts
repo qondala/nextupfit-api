@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Like, Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from '@app/common/dto';
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
-import { BaseSociologyGroupEntity } from '../entity';
-import { CreateBaseSociologyGroupDto, UpdateBaseSociologyGroupDto } from '../dto';
+import { BaseSociologyGroupEntity } from "../entity";
+import {
+  CreateBaseSociologyGroupDto,
+  UpdateBaseSociologyGroupDto,
+} from "../dto";
 
 @Injectable()
 export class BaseSociologyGroupService {
@@ -14,17 +17,21 @@ export class BaseSociologyGroupService {
     private readonly repository: Repository<BaseSociologyGroupEntity>,
   ) {}
 
-  async create(dto: CreateBaseSociologyGroupDto): Promise<BaseSociologyGroupEntity> {
+  async create(
+    dto: CreateBaseSociologyGroupDto,
+  ): Promise<BaseSociologyGroupEntity> {
     const entity = this.repository.create(dto);
     return this.repository.save(entity);
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseSociologyGroupEntity>> {
-    const qb = this.repository.createQueryBuilder('group');
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseSociologyGroupEntity>> {
+    const qb = this.repository.createQueryBuilder("group");
 
     qb.skip((options.page - 1) * options.limit)
       .take(options.limit)
-      .orderBy('group.id', 'DESC');
+      .orderBy("group.id", "DESC");
 
     const [items, total] = await qb.getManyAndCount();
 
@@ -40,7 +47,10 @@ export class BaseSociologyGroupService {
     };
   }
 
-  async search(query: string, options: PaginationOptionsDto): Promise<PaginatedResponseDto<BaseSociologyGroupEntity>> {
+  async search(
+    query: string,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseSociologyGroupEntity>> {
     const searchTerm = `%${query}%`;
 
     const [items, total] = await this.repository.findAndCount({
@@ -51,7 +61,7 @@ export class BaseSociologyGroupService {
       ],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
-      order: { id: 'DESC' },
+      order: { id: "DESC" },
     });
 
     return {
@@ -70,7 +80,10 @@ export class BaseSociologyGroupService {
     return this.repository.findOneBy({ id });
   }
 
-  async update(id: number, dto: UpdateBaseSociologyGroupDto): Promise<BaseSociologyGroupEntity | null> {
+  async update(
+    id: number,
+    dto: UpdateBaseSociologyGroupDto,
+  ): Promise<BaseSociologyGroupEntity | null> {
     const result = await this.repository.update(id, dto);
     if (result.affected === 0) return null;
     return this.findOne(id);

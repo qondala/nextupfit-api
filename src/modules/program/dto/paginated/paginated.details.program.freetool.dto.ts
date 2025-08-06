@@ -1,18 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDefined, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsArray, IsDefined, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
-import { PaginatedResponseDto } from '@app/common/dto';
+import { PaginatedResponseDto } from "@app/common/dto";
 
-import { DetailsProgramFreetoolDto } from '../details';
+import { DetailsProgramFreetoolDto } from "../details";
 
 export class PaginatedDetailsProgramFreetoolDto extends PaginatedResponseDto<DetailsProgramFreetoolDto> {
   @ApiProperty({
     type: () => DetailsProgramFreetoolDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of program freetools',
-    required: true
+    description: "List of program freetools",
+    required: true,
   })
   @IsDefined()
   @IsArray()

@@ -9,7 +9,6 @@ import {
 
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsContentTextDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -21,7 +20,6 @@ export class DetailsContentTextDto {
   @IsInt()
   id: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "content id",
@@ -31,7 +29,6 @@ export class DetailsContentTextDto {
   @IsNotEmpty()
   @IsInt()
   contentId: number;
-
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -43,7 +40,6 @@ export class DetailsContentTextDto {
   @IsString()
   title: string;
 
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "content",
@@ -53,7 +49,6 @@ export class DetailsContentTextDto {
   @IsNotEmpty()
   @IsString()
   content: string;
-
 
   @ApiProperty({
     type: SwaggerType.BOOLEAN,

@@ -10,7 +10,7 @@ export class PaginatedDetailsContentCarouselItemDto extends PaginatedResponseDto
     type: () => DetailsContentCarouselItemDto,
     isArray: true,
     description: "Carousel items",
-    required: true
+    required: true,
   })
   @IsDefined()
   @IsArray()

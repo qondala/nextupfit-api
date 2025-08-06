@@ -31,7 +31,6 @@ export class ProgramFindCriteriaFreetoolInterestDto {
   @IsOptional()
   freetoolId: number;
 
-
   @ApiProperty({
     description: "Order by",
     enum: FindOrderByEnum,

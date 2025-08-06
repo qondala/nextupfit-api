@@ -5,16 +5,12 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 
-
 import { UserEntity } from "@app/module/user/entity";
 import { AppDataSource } from "../../database/data-source";
 
-
 @Injectable()
 export class RolesGuard implements CanActivate {
- 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 

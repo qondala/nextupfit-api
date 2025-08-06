@@ -5,13 +5,12 @@ import { IsArray, IsDefined, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 export class PaginatedDetailsUserProgramEvolutionEventDto extends PaginatedResponseDto<DetailsUserProgramEvolutionEventDto> {
-
   @ApiProperty({
     type: () => DetailsUserProgramEvolutionEventDto,
-    name: 'items',
+    name: "items",
     isArray: true,
-    description: 'List of users program evolution events',
-    required: true
+    description: "List of users program evolution events",
+    required: true,
   })
   @IsDefined()
   @IsArray()
@@ -19,4 +18,3 @@ export class PaginatedDetailsUserProgramEvolutionEventDto extends PaginatedRespo
   @Type(() => DetailsUserProgramEvolutionEventDto)
   items: DetailsUserProgramEvolutionEventDto[];
 }
-

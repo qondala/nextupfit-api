@@ -1,17 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsOptional,
-  IsDate,
-  IsBoolean,
-  ValidateNested,
-} from "class-validator";
+import { IsOptional, IsDate, IsBoolean, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
 import { SocialNotificationPayload } from "../../types";
 
 export class UpdateSocialNotificationDto {
-
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Scheduled date",

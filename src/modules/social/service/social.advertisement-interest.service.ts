@@ -1,67 +1,82 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 import {
   FindOrderByEnum,
-  InterestPaginationDto,
   PaginatedResponseDto,
   PaginationOptionsDto,
 } from "@app/common/dto";
 
-import { UserInterestService } from "@app/module/user/service";
+import { UserInterestEntity } from "@app/module/user/entity";
 
-import { SocialAdvertisementEntity, SocialAdvertisementInterestEntity } from "../entity";
+import {
+  SocialAdvertisementEntity,
+  SocialAdvertisementInterestEntity,
+} from "../entity";
 import {
   CreateSocialAdvertisementInterestDto,
   UpdateSocialAdvertisementInterestDto,
   SocialFindCriteriaAdvertisementInterestDto,
 } from "../dto";
-import { UserInterestEntity } from "@app/module/user/entity";
 
 @Injectable()
 export class SocialAdvertisementInterestService {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(SocialAdvertisementInterestEntity)
     private readonly repository: Repository<SocialAdvertisementInterestEntity>,
-    private readonly userInterestsService: UserInterestService,
   ) {}
 
-  async create(body: CreateSocialAdvertisementInterestDto): Promise<SocialAdvertisementInterestEntity> {
+  async create(
+    body: CreateSocialAdvertisementInterestDto,
+  ): Promise<SocialAdvertisementInterestEntity> {
     const interest = this.repository.create(body);
     return await this.repository.save(interest);
   }
 
-  async findAll(criteria: SocialFindCriteriaAdvertisementInterestDto, pagination?: PaginationOptionsDto): Promise<PaginatedResponseDto<SocialAdvertisementInterestEntity>> {
-    
-    const queryBuilder = this.repository.createQueryBuilder("advertisementInterest");
-    
+  async findAll(
+    criteria: SocialFindCriteriaAdvertisementInterestDto,
+    pagination?: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<SocialAdvertisementInterestEntity>> {
+    const queryBuilder = this.repository.createQueryBuilder(
+      "advertisementInterest",
+    );
+
     queryBuilder.where("advertisementInterest.id != 0");
-    
+
     if (criteria.interestType) {
-      queryBuilder.andWhere("advertisementInterest.interestType = :interestType", { interestType: criteria.interestType });
+      queryBuilder.andWhere(
+        "advertisementInterest.interestType = :interestType",
+        { interestType: criteria.interestType },
+      );
     }
     if (criteria.interestId) {
-      queryBuilder.andWhere("advertisementInterest.interestId = :interestId", { interestId: criteria.interestId });
+      queryBuilder.andWhere("advertisementInterest.interestId = :interestId", {
+        interestId: criteria.interestId,
+      });
     }
     if (criteria.advertisementId) {
-      queryBuilder.andWhere("advertisementInterest.advertisementId = :advertisementId", { advertisementId: criteria.advertisementId });
+      queryBuilder.andWhere(
+        "advertisementInterest.advertisementId = :advertisementId",
+        { advertisementId: criteria.advertisementId },
+      );
     }
-    
+
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case FindOrderByEnum.random:
-          queryBuilder.addOrderBy('RANDOM()');
+          queryBuilder.addOrderBy("RANDOM()");
           break;
         case FindOrderByEnum.date:
-          queryBuilder.addOrderBy('advertisementInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("advertisementInterest.createdAt", "DESC");
           break;
         default:
-          queryBuilder.addOrderBy('advertisementInterest.createdAt', 'DESC');
+          queryBuilder.addOrderBy("advertisementInterest.createdAt", "DESC");
           break;
       }
     }
-    
+
     const { page, limit } = pagination || { page: 1, limit: 10 };
 
     const skip = (page - 1) * limit;
@@ -79,8 +94,8 @@ export class SocialAdvertisementInterestService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
@@ -91,7 +106,10 @@ export class SocialAdvertisementInterestService {
     return interest;
   }
 
-  async update(id: number, body: UpdateSocialAdvertisementInterestDto): Promise<SocialAdvertisementInterestEntity> {
+  async update(
+    id: number,
+    body: UpdateSocialAdvertisementInterestDto,
+  ): Promise<SocialAdvertisementInterestEntity> {
     const interest = await this.repository.findOne({
       where: { id },
     });
@@ -105,46 +123,42 @@ export class SocialAdvertisementInterestService {
     return;
   }
 
-  async getUserInterests(userId: number, pagination: InterestPaginationDto): Promise<UserInterestEntity[]> {
-    const interests = await this.userInterestsService.findAll(userId, pagination.user);
-    return interests.items;
-  }
+  async findUserInterestedAdvertisements(
+    userId: number,
+    pagination: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<SocialAdvertisementEntity>> {
+    const queryBuilder = this.dataSource
+      .getRepository(SocialAdvertisementEntity)
+      .createQueryBuilder("advertisement")
+      .leftJoinAndSelect("advertisement.content", "content")
+      .innerJoin("advertisement.interests", "advertisementInterest")
+      .innerJoin(
+        UserInterestEntity,
+        "userInterest",
+        "userInterest.interestType = advertisementInterest.interestType AND userInterest.interestId = advertisementInterest.interestId",
+      )
+      .where("userInterest.userId = :userId", { userId });
 
-  async getAdvertisementsByUserInterests(userId: number, pagination: InterestPaginationDto): Promise<PaginatedResponseDto<SocialAdvertisementEntity>> {
-    const userInterests = await this.getUserInterests(userId, pagination);
+    queryBuilder.addOrderBy("advertisement.createdAt", "DESC");
+    queryBuilder.addOrderBy("RANDOM()");
 
-    const advertisements: SocialAdvertisementEntity[] = [];
-    const advertisementIds: number[] = [];
+    const skip = (pagination.page - 1) * pagination.limit;
+    const [items, totalItems] = await queryBuilder
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
 
-    // Loop through user interests
-    for (const userInterest of userInterests) {
-
-      // And find advertisements with that interest
-      const advertisementsInterests = await this.findAll(
-        {
-          interestId: userInterest.interestId,
-          interestType: userInterest.interestType,
-        },
-        pagination.local
-      );
-
-      advertisementsInterests.items.forEach(interest => {
-        if (!advertisementIds.includes(interest.advertisement.id)) {
-          advertisementIds.push(interest.advertisement.id);
-          advertisements.push(interest.advertisement);
-        }
-      });
-    }
+    const totalPages = Math.ceil(totalItems / pagination.limit);
 
     return {
-      items: advertisements,
+      items,
       meta: {
-        totalItems: advertisements.length,
-        itemCount: advertisements.length,
-        itemsPerPage: 99,
-        totalPages: 1,
-        currentPage: 1
-      }
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: pagination.limit,
+        totalPages,
+        currentPage: pagination.page,
+      },
     };
   }
 }

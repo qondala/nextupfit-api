@@ -2,13 +2,11 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsDefined, IsInt, IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 
-import { DetailsGymDto } from './';
-import { DetailsBaseWorkoutDto } from '@app/module/base/dto';
+import { DetailsGymDto } from "./";
+import { DetailsBaseWorkoutDto } from "@app/module/base/dto";
 import { SwaggerType } from "@app/common/types";
 
-
 export class DetailsGymSpecializedInWorkoutDto {
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -35,7 +33,7 @@ export class DetailsGymSpecializedInWorkoutDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Created at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -46,7 +44,7 @@ export class DetailsGymSpecializedInWorkoutDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Updated at",
     example: "2025-05-02T00:00:00.000Z",
     required: false,
@@ -66,7 +64,6 @@ export class DetailsGymSpecializedInWorkoutDto {
   @Type(() => DetailsBaseWorkoutDto)
   workout: DetailsBaseWorkoutDto;
 
-
   @ApiProperty({
     type: () => DetailsGymDto,
     title: "DetailsGymDto",
@@ -76,5 +73,5 @@ export class DetailsGymSpecializedInWorkoutDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => DetailsGymDto)
-  gym?: DetailsGymDto
+  gym?: DetailsGymDto;
 }

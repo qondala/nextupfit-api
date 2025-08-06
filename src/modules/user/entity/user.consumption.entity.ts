@@ -1,17 +1,15 @@
-
 import {
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 
 import { BaseConsumptionProgramEnum } from "@app/module/base/types";
 import { BaseTimeFormatEnum } from "@app/module/base/types";
 import { UserConsumptionItemEntity } from ".";
-
 
 @Entity("user_consumption")
 export class UserConsumptionEntity {
@@ -39,7 +37,7 @@ export class UserConsumptionEntity {
   @Column()
   minuteEnd: number;
 
-  @Column({type: "enum", enum: BaseTimeFormatEnum})
+  @Column({ type: "enum", enum: BaseTimeFormatEnum })
   timeFormat: BaseTimeFormatEnum;
 
   @CreateDateColumn()
@@ -47,15 +45,18 @@ export class UserConsumptionEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
-  
-  @Column({type: "enum", enum: BaseConsumptionProgramEnum})
+
+  @Column({ type: "enum", enum: BaseConsumptionProgramEnum })
   typeConsumption: BaseConsumptionProgramEnum;
-  
-  @Column({type: "integer"})
+
+  @Column({ type: "bigint" })
   contentConsumptionId: number;
 
-  @Column({type: "integer"})
+  @Column({ type: "bigint" })
   userId: number;
+
+  @Column({ type: "bigint", nullable: true })
+  programNutritionId?: number;
 
   @OneToMany(() => UserConsumptionItemEntity, (item) => item.userConsumptionId)
   items: UserConsumptionItemEntity[];

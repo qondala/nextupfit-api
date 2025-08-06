@@ -5,10 +5,7 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentFaqItemEntity } from "../../entity/items";
-import {
-  CreateContentFaqItemDto,
-  UpdateContentFaqItemDto,
-} from "../../dto";
+import { CreateContentFaqItemDto, UpdateContentFaqItemDto } from "../../dto";
 
 @Injectable()
 export class ContentFaqItemService {
@@ -22,7 +19,10 @@ export class ContentFaqItemService {
     return this.repository.save(entity);
   }
 
-  async findAll(contentFaqId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentFaqItemEntity>> {
+  async findAll(
+    contentFaqId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentFaqItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -49,7 +49,10 @@ export class ContentFaqItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentFaqItemDto): Promise<ContentFaqItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentFaqItemDto,
+  ): Promise<ContentFaqItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

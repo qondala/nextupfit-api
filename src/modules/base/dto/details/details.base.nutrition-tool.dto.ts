@@ -7,44 +7,44 @@ export class DetailsBaseNutritionToolDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "ID of the nutrition tool",
-    required: true
+    required: true,
   })
   id: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Name of the nutrition tool",
-    required: true
+    required: true,
   })
   name: string;
 
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Description of the nutrition tool",
-    required: false
+    required: false,
   })
   description?: string;
 
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Image URL of the nutrition tool",
-    required: false
+    required: false,
   })
   imageUrl?: string;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Creation date of the nutrition tool",
-    required: false
+    required: false,
   })
   createdAt?: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    format: 'date-time',
+    format: "date-time",
     description: "Update date of the nutrition tool",
-    required: false
+    required: false,
   })
   updatedAt?: Date;
 }

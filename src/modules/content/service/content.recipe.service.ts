@@ -2,17 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
-import {
-  ContentRecipeEntity
-} from "../entity";
-import {
-  CreateContentRecipeDto,
-  UpdateContentRecipeDto,
-} from "../dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+import { ContentRecipeEntity } from "../entity";
+import { CreateContentRecipeDto, UpdateContentRecipeDto } from "../dto";
 
 @Injectable()
 export class ContentRecipeService {
@@ -53,7 +45,9 @@ export class ContentRecipeService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentRecipeEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentRecipeEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 

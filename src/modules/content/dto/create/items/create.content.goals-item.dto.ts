@@ -43,7 +43,6 @@ export class CreateContentGoalsItemDto {
   @IsOptional()
   position?: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "base goal id",

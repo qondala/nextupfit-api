@@ -1,16 +1,10 @@
-import {
-  IsInt,
-  IsOptional,
-  IsNotEmpty,
-  IsEnum
-} from "class-validator";
+import { IsInt, IsOptional, IsNotEmpty, IsEnum } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 import { BaseWeekDaysEnum } from "@app/module/base/types";
 import { SwaggerType } from "@app/common/types";
-  
-export class CreateGymOpenDayDto {
 
+export class CreateGymOpenDayDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Gym Id",
@@ -20,7 +14,6 @@ export class CreateGymOpenDayDto {
   @IsNotEmpty()
   @IsInt()
   gymId: number;
-
 
   @ApiProperty({
     enum: BaseWeekDaysEnum,
@@ -33,7 +26,6 @@ export class CreateGymOpenDayDto {
   @IsEnum(BaseWeekDaysEnum)
   day: BaseWeekDaysEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Opening hour",
@@ -43,7 +35,6 @@ export class CreateGymOpenDayDto {
   @IsNotEmpty()
   @IsInt()
   hourFrom: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -65,7 +56,6 @@ export class CreateGymOpenDayDto {
   @IsInt()
   hourTo: number;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Closing hour minute",
@@ -76,4 +66,3 @@ export class CreateGymOpenDayDto {
   @IsInt()
   minuteTo: number;
 }
-  

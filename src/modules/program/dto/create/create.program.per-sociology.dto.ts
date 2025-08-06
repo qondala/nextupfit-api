@@ -1,14 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import {
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-} from "class-validator";
+import { IsEnum, IsInt, IsNotEmpty } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 import { ProgramItemTypeEnum } from "../../types";
 
 export class CreateProgramPerSociologyDto {
-
   @ApiProperty({
     enum: ProgramItemTypeEnum,
     enumName: "ProgramItemTypeEnum",
@@ -21,7 +16,6 @@ export class CreateProgramPerSociologyDto {
   @IsEnum(ProgramItemTypeEnum)
   itemType: ProgramItemTypeEnum;
 
-
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "record id",
@@ -31,7 +25,6 @@ export class CreateProgramPerSociologyDto {
   @IsNotEmpty()
   @IsInt()
   itemId: number;
-
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

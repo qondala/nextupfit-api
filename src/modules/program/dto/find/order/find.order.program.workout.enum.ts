@@ -1,4 +1,3 @@
-
 export enum ProgramFindOrderWorkoutEnum {
   date = "date",
   random = "random",

@@ -14,20 +14,28 @@ import {
 export class UserCommitmentCompletedItemService {
   constructor(
     @InjectRepository(UserCommitmentCompletedItemEntity)
-    private readonly repo: Repository<UserCommitmentCompletedItemEntity>
+    private readonly repo: Repository<UserCommitmentCompletedItemEntity>,
   ) {}
 
-  async create(dto: CreateUserCommitmentCompletedItemDto): Promise<UserCommitmentCompletedItemEntity> {
+  async create(
+    dto: CreateUserCommitmentCompletedItemDto,
+  ): Promise<UserCommitmentCompletedItemEntity> {
     const entity = this.repo.create(dto);
     const saved = await this.repo.save(entity);
     return saved;
   }
 
-  async findAll(options: PaginationOptionsDto): Promise<PaginatedResponseDto<UserCommitmentCompletedItemEntity>> {
+  async findAll(
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<UserCommitmentCompletedItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const skip = (page - 1) * limit;
 
-    const [items, total] = await this.repo.findAndCount({ skip, take: limit, order: { createdAt: "DESC" } });
+    const [items, total] = await this.repo.findAndCount({
+      skip,
+      take: limit,
+      order: { createdAt: "DESC" },
+    });
 
     return {
       items,
@@ -46,7 +54,10 @@ export class UserCommitmentCompletedItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateUserCommitmentCompletedItemDto): Promise<UserCommitmentCompletedItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateUserCommitmentCompletedItemDto,
+  ): Promise<UserCommitmentCompletedItemEntity> {
     const entity = await this.findOne(id);
     await this.repo.update(id, dto);
     return entity;

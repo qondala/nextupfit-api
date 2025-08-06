@@ -13,7 +13,7 @@ export class DetailsContentWarningDto {
     type: SwaggerType.INTEGER,
     example: 1,
     description: "record id",
-    required: true
+    required: true,
   })
   @IsInt()
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class DetailsContentWarningDto {
     type: SwaggerType.INTEGER,
     example: 123,
     description: "content id",
-    required: true
+    required: true,
   })
   @IsInt()
   @IsNotEmpty()

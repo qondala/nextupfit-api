@@ -5,7 +5,10 @@ import { Repository } from "typeorm";
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { ContentPrerequisitesItemEntity } from "../../entity/items";
-import { CreateContentPrerequisitesItemDto, UpdateContentPrerequisitesItemDto } from "../../dto";
+import {
+  CreateContentPrerequisitesItemDto,
+  UpdateContentPrerequisitesItemDto,
+} from "../../dto";
 
 @Injectable()
 export class ContentPrerequisitesItemService {
@@ -14,11 +17,16 @@ export class ContentPrerequisitesItemService {
     private readonly repository: Repository<ContentPrerequisitesItemEntity>,
   ) {}
 
-  async create(dto: CreateContentPrerequisitesItemDto): Promise<ContentPrerequisitesItemEntity> {
+  async create(
+    dto: CreateContentPrerequisitesItemDto,
+  ): Promise<ContentPrerequisitesItemEntity> {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(prerequisitesId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentPrerequisitesItemEntity>> {
+  async findAll(
+    prerequisitesId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentPrerequisitesItemEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -45,7 +53,10 @@ export class ContentPrerequisitesItemService {
     return entity;
   }
 
-  async update(id: number, dto: UpdateContentPrerequisitesItemDto): Promise<ContentPrerequisitesItemEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentPrerequisitesItemDto,
+  ): Promise<ContentPrerequisitesItemEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

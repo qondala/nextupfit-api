@@ -18,7 +18,10 @@ export class ContentWarningService {
     return this.repository.save(this.repository.create(dto));
   }
 
-  async findAll(contentId: number, options: PaginationOptionsDto): Promise<PaginatedResponseDto<ContentWarningEntity>> {
+  async findAll(
+    contentId: number,
+    options: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<ContentWarningEntity>> {
     const { page = 1, limit = 10 } = options;
     const [items, totalItems] = await this.repository.findAndCount({
       skip: (page - 1) * limit,
@@ -44,11 +47,16 @@ export class ContentWarningService {
     return entity;
   }
 
-  async findOneWithContentId(contentId: number): Promise<ContentWarningEntity | null> {
+  async findOneWithContentId(
+    contentId: number,
+  ): Promise<ContentWarningEntity | null> {
     return this.repository.findOne({ where: { contentId } });
   }
 
-  async update(id: number, dto: UpdateContentWarningDto): Promise<ContentWarningEntity> {
+  async update(
+    id: number,
+    dto: UpdateContentWarningDto,
+  ): Promise<ContentWarningEntity> {
     const entity = await this.findOne(id);
     Object.assign(entity, dto);
     return this.repository.save(entity);

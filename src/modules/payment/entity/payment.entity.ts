@@ -80,7 +80,6 @@ export class PaymentEntity {
   @Column({ type: "bigint", nullable: true })
   gymMembershipPlanId?: number;
 
-
   @Column({ type: "bigint", nullable: true })
   paymentCartId?: number;
 

@@ -43,86 +43,92 @@ export class UserConsumptionItemController {
   @Post()
   @ApiOperation({
     summary: "Create a user consumption item",
-    operationId: "createUserConsumptionItem"
+    operationId: "createUserConsumptionItem",
   })
   @ApiBody({
     type: CreateUserConsumptionItemDto,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
     type: DetailsUserConsumptionItemDto,
-    description: "Created successfully"
+    description: "Created successfully",
   })
-  create(@Body() dto: CreateUserConsumptionItemDto): Promise<DetailsUserConsumptionItemDto> {
+  create(
+    @Body() dto: CreateUserConsumptionItemDto,
+  ): Promise<DetailsUserConsumptionItemDto> {
     return this.service.create(dto);
   }
 
   @Get()
   @ApiOperation({
     summary: "Get all user consumption items",
-    operationId: "findAllUserConsumptionItems"
+    operationId: "findAllUserConsumptionItems",
   })
   @ApiQuery({
     name: "page",
     required: false,
     type: SwaggerType.INTEGER,
-    example: 1
+    example: 1,
   })
   @ApiQuery({
     name: "limit",
     required: false,
     type: SwaggerType.INTEGER,
-    example: 10
+    example: 10,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: PaginatedDetailsUserConsumptionItemDto
+    type: PaginatedDetailsUserConsumptionItemDto,
   })
-  findAll(@Query() options: PaginationOptionsDto): Promise<PaginatedDetailsUserConsumptionItemDto> {
+  findAll(
+    @Query() options: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsUserConsumptionItemDto> {
     return this.service.findAll(options);
   }
 
   @Get(":id")
   @ApiOperation({
     summary: "Get consumption item by id",
-    operationId: "findUserConsumptionItemById"
+    operationId: "findUserConsumptionItemById",
   })
   @ApiParam({
     name: "id",
     required: true,
     type: SwaggerType.INTEGER,
-    example: 1
+    example: 1,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: DetailsUserConsumptionItemDto
+    type: DetailsUserConsumptionItemDto,
   })
-  findOne(@Param("id", ParseIntPipe) id: number): Promise<DetailsUserConsumptionItemDto> {
+  findOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsUserConsumptionItemDto> {
     return this.service.findOne(id);
   }
 
   @Patch(":id")
   @ApiOperation({
     summary: "Update consumption item",
-    operationId: "updateUserConsumptionItem"
+    operationId: "updateUserConsumptionItem",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   @ApiBody({
     type: UpdateUserConsumptionItemDto,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: DetailsUserConsumptionItemDto
+    type: DetailsUserConsumptionItemDto,
   })
   update(
     @Param("id", ParseIntPipe) id: number,
-    @Body() dto: UpdateUserConsumptionItemDto
+    @Body() dto: UpdateUserConsumptionItemDto,
   ): Promise<DetailsUserConsumptionItemDto> {
     return this.service.update(id, dto);
   }
@@ -130,20 +136,18 @@ export class UserConsumptionItemController {
   @Delete(":id")
   @ApiOperation({
     summary: "Delete consumption item",
-    operationId: "removeUserConsumptionItem"
+    operationId: "removeUserConsumptionItem",
   })
   @ApiParam({
     name: "id",
     type: SwaggerType.INTEGER,
-    required: true
+    required: true,
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: "Deleted successfully"
+    description: "Deleted successfully",
   })
-  remove(
-    @Param("id", ParseIntPipe) id: number
-  ): Promise<void> {
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.service.remove(id);
   }
 }

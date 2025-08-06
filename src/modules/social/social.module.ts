@@ -1,32 +1,26 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   BaseNutritionEntity,
   BaseProgramGoalEntity,
   BaseSociologyEntity,
-  BaseWorkoutEntity
-} from '@app/module/base/entity';
+  BaseWorkoutEntity,
+} from "@app/module/base/entity";
+
+import { UserEntity, UserInterestEntity } from "@app/module/user/entity";
+
+import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
 
 import {
-  UserEntity,
-  UserInterestEntity
-} from '@app/module/user/entity';
+  ProgramEntity,
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
+  ProgramStepActivityWorkingsessionWorkoutEntity,
+  ProgramStepActivityWorkingsessionNutritionEntity,
+} from "@app/module/program/entity";
 
-import {
-  GymEntity, 
-  GymManagerEntity,
-} from '@app/module/gym/entity';
-
-import {
-  ProgramEntity, 
-  ProgramStepActivityEntity, 
-  ProgramStepActivityWorkingsessionEntity, 
-  ProgramStepActivityWorkingsessionWorkoutEntity
-} from '@app/module/program/entity';
-
-import { UserInterestService } 
-from '@app/module/user/service';
+import { UserInterestService } from "@app/module/user/service";
 
 import {
   SocialAdvertisementEntity,
@@ -40,8 +34,8 @@ import {
   SocialNotificationEntity,
   SocialReviewEntity,
   SocialRatingsEntity,
-  SocialAdvertisementInterestEntity
-} from './entity';
+  SocialAdvertisementInterestEntity,
+} from "./entity";
 import {
   SocialAdvertisementController,
   SocialAffiliateLinkController,
@@ -54,8 +48,8 @@ import {
   SocialReviewController,
   SocialChatMessageTextController,
   SocialRatingsController,
-  SocialAdvertisementInterestController
-} from './controller';
+  SocialAdvertisementInterestController,
+} from "./controller";
 import {
   SocialAdvertisementService,
   SocialAffiliateLinkService,
@@ -68,9 +62,8 @@ import {
   SocialNotificationService,
   SocialReviewService,
   SocialRatingsService,
-  SocialAdvertisementInterestService
-} from './service';
-
+  SocialAdvertisementInterestService,
+} from "./service";
 
 @Module({
   imports: [
@@ -87,7 +80,7 @@ import {
       SocialReviewEntity,
       SocialRatingsEntity,
       SocialAdvertisementInterestEntity,
-    
+
       // Importing base entities
       BaseNutritionEntity,
       BaseProgramGoalEntity,
@@ -97,7 +90,7 @@ import {
       // Importing user entities
       UserEntity,
       UserInterestEntity,
-      
+
       // Importing gym entities
       GymEntity,
       GymManagerEntity,
@@ -107,7 +100,8 @@ import {
       ProgramStepActivityEntity,
       ProgramStepActivityWorkingsessionEntity,
       ProgramStepActivityWorkingsessionWorkoutEntity,
-    ])
+      ProgramStepActivityWorkingsessionNutritionEntity,
+    ]),
   ],
   controllers: [
     SocialAdvertisementController,
@@ -121,7 +115,7 @@ import {
     SocialNotificationController,
     SocialReviewController,
     SocialRatingsController,
-    SocialAdvertisementInterestController
+    SocialAdvertisementInterestController,
   ],
   providers: [
     SocialAdvertisementService,
@@ -136,7 +130,7 @@ import {
     SocialReviewService,
     SocialRatingsService,
     SocialAdvertisementInterestService,
-    UserInterestService
+    UserInterestService,
   ],
   exports: [
     SocialAdvertisementService,
@@ -151,7 +145,7 @@ import {
     SocialReviewService,
     SocialRatingsService,
     SocialAdvertisementInterestService,
-    UserInterestService
-  ]
+    UserInterestService,
+  ],
 })
 export class SocialModule {}

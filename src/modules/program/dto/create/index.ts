@@ -1,6 +1,8 @@
 export * from "./create.program.dto";
 export * from "./create.program.per-sociology.dto";
 export * from "./create.program.step-activity-workingsession-workout.dto";
+export * from "./create.program.step-activity-workingsession-nutrition.dto";
+export * from "./create.program.step-activity-workingsession-practice.dto";
 export * from "./create.program.step-activity-workingsession.dto";
 export * from "./create.program.step-activity.dto";
 export * from "./create.program.step.dto";
@@ -11,4 +13,3 @@ export * from "./create.program.freetool.dto";
 export * from "./create.program.interest.dto";
 export * from "./create.program.freetool-interest.dto";
 export * from "./create.program.subscription.dto";
-

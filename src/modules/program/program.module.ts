@@ -1,30 +1,18 @@
-import {
-  Module,
-} from "@nestjs/common";
-import {
-  TypeOrmModule,
-} from "@nestjs/typeorm";
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 import {
   BaseNutritionEntity,
   BaseProgramGoalEntity,
   BaseSociologyEntity,
-  BaseWorkoutEntity
-} from '@app/module/base/entity';
+  BaseWorkoutEntity,
+} from "@app/module/base/entity";
 
-import {
-  UserEntity,
-  UserInterestEntity
-} from "@app/module/user/entity";
+import { UserEntity, UserInterestEntity } from "@app/module/user/entity";
 
-import {
-  GymManagerEntity
-} from "@app/module/gym/entity";
+import { GymManagerEntity } from "@app/module/gym/entity";
 
-import {
-  UserInterestService
-} from "@app/module/user/service";
-
+import { UserInterestService } from "@app/module/user/service";
 
 import {
   ProgramEntity,
@@ -32,6 +20,8 @@ import {
   ProgramStepActivityEntity,
   ProgramStepActivityWorkingsessionEntity,
   ProgramStepActivityWorkingsessionWorkoutEntity,
+  ProgramStepActivityWorkingsessionNutritionEntity,
+  ProgramStepActivityWorkingsessionPracticeEntity,
   ProgramStepEntity,
   ProgramSubscriptionPlanEntity,
   ProgramWorkoutNutrientBurnEntity,
@@ -43,19 +33,21 @@ import {
 } from "./entity";
 
 import {
-  ProgramController, 
-  ProgramFreetoolController, 
-  ProgramFreetoolInterestController, 
-  ProgramInterestController, 
-  ProgramManagerController, 
-  ProgramPerSociologyController, 
+  ProgramController,
+  ProgramFreetoolController,
+  ProgramFreetoolInterestController,
+  ProgramInterestController,
+  ProgramManagerController,
+  ProgramPerSociologyController,
   ProgramStepActivityController,
   ProgramStepActivityWorkingsessionController,
   ProgramStepActivityWorkingsessionWorkoutController,
+  ProgramStepActivityWorkingsessionNutritionController,
+  ProgramStepActivityWorkingsessionPracticeController,
   ProgramStepController,
   ProgramSubscriptionController,
   ProgramSubscriptionPlanController,
-  ProgramWorkoutNutrientBurnController
+  ProgramWorkoutNutrientBurnController,
 } from "./controller";
 
 import {
@@ -68,6 +60,8 @@ import {
   ProgramStepActivityService,
   ProgramStepActivityWorkingsessionService,
   ProgramStepActivityWorkingsessionWorkoutService,
+  ProgramStepActivityWorkingsessionNutritionService,
+  ProgramStepActivityWorkingsessionPracticeService,
   ProgramStepService,
   ProgramSubscriptionPlanService,
   ProgramSubscriptionService,
@@ -106,9 +100,12 @@ import {
  *                 Scheduled practice blocks for each activity.
  *                 A working session defines what the user does on a given day, including rest periods and workout duration.
  *
- *                 └── Workouts
+ *                 └── practices
  *                     The actionable exercise sequence within a working session.
  *                     Includes sets, reps, instructions, and demonstration videos.
+ *                                   |         |
+ *                     nutritions  ──┘         └── workouts (sport, dance)
+
  *
  * 2- Programs's Access Rights
  * Program access is determined by two types of access rights.
@@ -182,7 +179,7 @@ import {
  *            |
  *            └── Program Step Activity's Working Sessions
  *                |
- *                └── Program Step Activity Working Session's Workout
+ *                └── Program Step Activity Working Session's Practices
  * 
  */
 @Module({
@@ -195,6 +192,8 @@ import {
       ProgramWorkoutNutrientBurnEntity,
       ProgramStepActivityWorkingsessionEntity,
       ProgramStepActivityWorkingsessionWorkoutEntity,
+      ProgramStepActivityWorkingsessionNutritionEntity,
+      ProgramStepActivityWorkingsessionPracticeEntity,
       ProgramPerSociologyEntity,
       ProgramManagerEntity,
       ProgramFreetoolEntity,
@@ -210,7 +209,7 @@ import {
       BaseSociologyEntity,
       BaseWorkoutEntity,
       UserEntity,
-      UserInterestEntity
+      UserInterestEntity,
     ]),
   ],
   controllers: [
@@ -221,6 +220,8 @@ import {
     ProgramWorkoutNutrientBurnController,
     ProgramStepActivityWorkingsessionController,
     ProgramStepActivityWorkingsessionWorkoutController,
+    ProgramStepActivityWorkingsessionNutritionController,
+    ProgramStepActivityWorkingsessionPracticeController,
     ProgramPerSociologyController,
     ProgramManagerController,
     ProgramFreetoolController,
@@ -236,13 +237,15 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
+    ProgramStepActivityWorkingsessionNutritionService,
+    ProgramStepActivityWorkingsessionPracticeService,
     ProgramPerSociologyService,
     ProgramManagerService,
     ProgramFreetoolService,
     ProgramInterestService,
     ProgramFreetoolInterestService,
     UserInterestService,
-    ProgramSubscriptionService
+    ProgramSubscriptionService,
   ],
   exports: [
     ProgramService,
@@ -252,13 +255,15 @@ import {
     ProgramWorkoutNutrientBurnService,
     ProgramStepActivityWorkingsessionService,
     ProgramStepActivityWorkingsessionWorkoutService,
+    ProgramStepActivityWorkingsessionNutritionService,
+    ProgramStepActivityWorkingsessionPracticeService,
     ProgramPerSociologyService,
     ProgramManagerService,
     ProgramFreetoolService,
     ProgramInterestService,
     ProgramFreetoolInterestService,
     UserInterestService,
-    ProgramSubscriptionService
+    ProgramSubscriptionService,
   ],
 })
 export class ProgramModule {}

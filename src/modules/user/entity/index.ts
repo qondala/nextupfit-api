@@ -11,4 +11,3 @@ export * from "./user.commitment.entity";
 export * from "./user.commitment-completed-item.entity";
 export * from "./user.interest.entity";
 export * from "./user.bookmark-and-favorite.entity";
-

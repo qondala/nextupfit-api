@@ -2,16 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
-import {
-  PaginatedResponseDto,
-  PaginationOptionsDto
-} from "@app/common/dto";
+import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import {
   ProgramEntity,
   ProgramStepEntity,
-  ProgramStepActivityEntity, 
-  ProgramStepActivityWorkingsessionEntity, 
+  ProgramStepActivityEntity,
+  ProgramStepActivityWorkingsessionEntity,
   ProgramStepActivityWorkingsessionWorkoutEntity,
 } from "../entity";
 
@@ -19,12 +16,9 @@ import {
   CreateProgramDto,
   UpdateProgramDto,
   ProgramFindCriteriaDto,
-  ProgramFindOrderByEnum
+  ProgramFindOrderByEnum,
 } from "../dto";
-import {
-  ProgramItemCompositeDto,
-  ProgramItemTypeEnum,
-} from "../types";
+import { ProgramItemCompositeDto, ProgramItemTypeEnum } from "../types";
 
 @Injectable()
 export class ProgramService {
@@ -42,7 +36,7 @@ export class ProgramService {
     private readonly workingSessionRepository: Repository<ProgramStepActivityWorkingsessionEntity>,
 
     @InjectRepository(ProgramStepActivityWorkingsessionWorkoutEntity)
-    private readonly workoutRepository: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>
+    private readonly workoutRepository: Repository<ProgramStepActivityWorkingsessionWorkoutEntity>,
   ) {}
 
   async create(createProgramDto: CreateProgramDto): Promise<ProgramEntity> {
@@ -54,58 +48,70 @@ export class ProgramService {
     criteria: ProgramFindCriteriaDto,
     pagination?: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<ProgramEntity>> {
-
     const queryBuilder = this.repository.createQueryBuilder("program");
 
-    queryBuilder.where('program.id != 0');
+    queryBuilder.where("program.id != 0");
 
     if (criteria.name) {
-      queryBuilder.andWhere("program.name ILIKE :name OR program.description ILIKE :name", { name: `%${criteria.name}%` });
+      queryBuilder.andWhere(
+        "program.name ILIKE :name OR program.description ILIKE :name",
+        { name: `%${criteria.name}%` },
+      );
     }
     if (criteria.type) {
       queryBuilder.andWhere("program.type = :type", { type: criteria.type });
     }
     if (criteria.status) {
-      queryBuilder.andWhere("program.status = :status", { status: criteria.status });
+      queryBuilder.andWhere("program.status = :status", {
+        status: criteria.status,
+      });
     }
     if (criteria.duration) {
-      queryBuilder.andWhere("program.duration <= :duration", { duration: criteria.duration });
+      queryBuilder.andWhere("program.duration <= :duration", {
+        duration: criteria.duration,
+      });
     }
     if (criteria.gymId) {
-      queryBuilder.andWhere("program.gymId = :gymId", { gymId: criteria.gymId });
+      queryBuilder.andWhere("program.gymId = :gymId", {
+        gymId: criteria.gymId,
+      });
     }
     if (criteria.ownerUserId) {
-      queryBuilder.andWhere("program.ownerUserId = :ownerUserId", { ownerUserId: criteria.ownerUserId });
+      queryBuilder.andWhere("program.ownerUserId = :ownerUserId", {
+        ownerUserId: criteria.ownerUserId,
+      });
     }
     if (criteria.ownerManagerId) {
-      queryBuilder.andWhere("program.ownerManagerId = :ownerManagerId", { ownerManagerId: criteria.ownerManagerId });
+      queryBuilder.andWhere("program.ownerManagerId = :ownerManagerId", {
+        ownerManagerId: criteria.ownerManagerId,
+      });
     }
 
     if (criteria.orderBy) {
       switch (criteria.orderBy) {
         case ProgramFindOrderByEnum.random:
-          queryBuilder.addOrderBy('RANDOM()');
+          queryBuilder.addOrderBy("RANDOM()");
           break;
         case ProgramFindOrderByEnum.date:
-          queryBuilder.addOrderBy('program.createdAt', 'DESC');
+          queryBuilder.addOrderBy("program.createdAt", "DESC");
           break;
         case ProgramFindOrderByEnum.ratingsAvg:
-          queryBuilder.addOrderBy('program.ratingsAvg', 'DESC');
+          queryBuilder.addOrderBy("program.ratingsAvg", "DESC");
           break;
         case ProgramFindOrderByEnum.attendeesCount:
-          queryBuilder.addOrderBy('program.attendeesCount', 'DESC');
+          queryBuilder.addOrderBy("program.attendeesCount", "DESC");
           break;
         case ProgramFindOrderByEnum.name:
-          queryBuilder.addOrderBy('program.name', 'ASC');
+          queryBuilder.addOrderBy("program.name", "ASC");
           break;
         case ProgramFindOrderByEnum.duration:
-          queryBuilder.addOrderBy('program.duration', 'ASC');
+          queryBuilder.addOrderBy("program.duration", "ASC");
           break;
         case ProgramFindOrderByEnum.difficultyLevel:
-          queryBuilder.addOrderBy('program.difficultyLevel', 'ASC');
+          queryBuilder.addOrderBy("program.difficultyLevel", "ASC");
           break;
         default:
-          queryBuilder.addOrderBy('program.createdAt', 'DESC');
+          queryBuilder.addOrderBy("program.createdAt", "DESC");
           break;
       }
     }
@@ -127,8 +133,8 @@ export class ProgramService {
         itemCount: items.length,
         itemsPerPage: limit,
         totalPages,
-        currentPage: page
-      }
+        currentPage: page,
+      },
     };
   }
 
@@ -137,7 +143,10 @@ export class ProgramService {
     return program;
   }
 
-  async update(id: number, updateProgramDto: UpdateProgramDto): Promise<ProgramEntity> {
+  async update(
+    id: number,
+    updateProgramDto: UpdateProgramDto,
+  ): Promise<ProgramEntity> {
     const program = await this.findOne(id);
     Object.assign(program, updateProgramDto);
     return await this.repository.save(program);
@@ -148,37 +157,44 @@ export class ProgramService {
     await this.repository.remove(program);
   }
 
+  async getProgramItem(
+    itemType: ProgramItemTypeEnum,
+    itemId: number,
+  ): Promise<ProgramItemCompositeDto> {
+    const composite = new ProgramItemCompositeDto();
 
-  
-    async getProgramItem(
-      itemType: ProgramItemTypeEnum, 
-      itemId: number,
-    ): Promise<ProgramItemCompositeDto> {
+    switch (itemType) {
+      case ProgramItemTypeEnum.program:
+        composite.program = await this.repository.findOne({
+          where: { id: itemId },
+        });
+        break;
 
-      const composite = new ProgramItemCompositeDto();
+      case ProgramItemTypeEnum.step:
+        composite.step = await this.stepRepository.findOne({
+          where: { id: itemId },
+        });
+        break;
 
-      switch(itemType) {
-        case ProgramItemTypeEnum.program:
-          composite.program = await this.repository.findOne({ where: { id: itemId } });
-          break;
-  
-        case ProgramItemTypeEnum.step:
-          composite.step = await this.stepRepository.findOne({ where: { id: itemId } });
-          break;
-  
-        case ProgramItemTypeEnum.activity:
-          composite.activity = await this.activityRepository.findOne({ where: { id: itemId } });
-          break;
-  
-        case ProgramItemTypeEnum.workingsession:
-          composite.workingsession = await this.workingSessionRepository.findOne({ where: { id: itemId } });
-          break;
-  
-        case ProgramItemTypeEnum.workout:
-          composite.workout = await this.workoutRepository.findOne({ where: { id: itemId } });
-          break;
-      }
+      case ProgramItemTypeEnum.activity:
+        composite.activity = await this.activityRepository.findOne({
+          where: { id: itemId },
+        });
+        break;
 
-      return composite;
+      case ProgramItemTypeEnum.workingsession:
+        composite.workingsession = await this.workingSessionRepository.findOne({
+          where: { id: itemId },
+        });
+        break;
+
+      case ProgramItemTypeEnum.workout:
+        composite.workout = await this.workoutRepository.findOne({
+          where: { id: itemId },
+        });
+        break;
     }
+
+    return composite;
+  }
 }
