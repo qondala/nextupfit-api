@@ -39,11 +39,11 @@ export class GymHasProgramEntity {
   createdAt: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "owerManagerId" })
+  @JoinColumn({ name: "owerManagerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 
   // Transient field

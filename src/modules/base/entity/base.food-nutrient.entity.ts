@@ -3,12 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { BaseFoodEntity, BaseNutrientEntity } from ".";
+import { BaseFoodEntity, BaseNutrientEntity, BaseUnitEntity } from ".";
 
 @Entity("base_food_nutrient")
 export class BaseFoodNutrientEntity {
@@ -36,16 +37,21 @@ export class BaseFoodNutrientEntity {
   @Column({ type: "int", nullable: false })
   createdByUserId: number;
 
-  @Column({ type: "varchar", nullable: true, unique: true })
-  code?: string;
-
   @OneToOne(() => BaseFoodEntity)
-  @JoinColumn({ name: "foodId" })
+  @JoinColumn({ name: "foodId", referencedColumnName: "id" })
   food: BaseFoodEntity;
 
   @OneToOne(() => BaseNutrientEntity)
-  @JoinColumn({ name: "nutrientId" })
+  @JoinColumn({ name: "nutrientId", referencedColumnName: "id" })
   nutrient: BaseNutrientEntity;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "foodQtyUnitId", referencedColumnName: "id" })
+  foodQtyUnit: BaseUnitEntity;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "nutrientQtyUnitId", referencedColumnName: "id" })
+  nutrientQtyUnit: BaseUnitEntity;
 
   @CreateDateColumn()
   createdAt: Date;

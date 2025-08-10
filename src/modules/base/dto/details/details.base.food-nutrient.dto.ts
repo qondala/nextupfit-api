@@ -78,16 +78,6 @@ export class DetailsBaseFoodNutrientDto {
 
   @ApiProperty({
     type: SwaggerType.STRING,
-    example: "coffee-carb-100g",
-    description: "Unique code/slug",
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  code?: string;
-
-  @ApiProperty({
-    type: SwaggerType.STRING,
     format: "date-time",
     example: "2022-01-01T00:00:00Z",
     description: "Created timestamp",

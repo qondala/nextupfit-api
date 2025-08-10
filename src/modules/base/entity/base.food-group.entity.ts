@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+
+import { BaseFoodEntity } from ".";
 
 @Entity("base_food_group")
 export class BaseFoodGroupEntity {
@@ -17,7 +20,7 @@ export class BaseFoodGroupEntity {
   @Column({ type: "varchar", nullable: true })
   iconUrl?: string;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "bigint", nullable: false })
   createdByUserId: number;
 
   @Column({ type: "varchar", nullable: true, unique: true })
@@ -28,4 +31,7 @@ export class BaseFoodGroupEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => BaseFoodEntity, (food) => food.foodGroup)
+  foods: BaseFoodEntity[];
 }

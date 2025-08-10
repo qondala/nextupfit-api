@@ -2,11 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+  } from "typeorm";
 
 import { BaseIngredientTypeEnum } from "../types";
+import { BaseIngredientNutrientEntity } from ".";
 
 @Entity("base_ingredient")
 export class BaseIngredientEntity {
@@ -39,4 +41,7 @@ export class BaseIngredientEntity {
 
   @Column({ type: "int", nullable: false })
   createdByUserId: number;
+
+  @OneToMany(() => BaseIngredientNutrientEntity, (nutrient) => nutrient.ingredient)
+  nutrients: BaseIngredientNutrientEntity[];
 }

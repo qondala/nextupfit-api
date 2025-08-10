@@ -25,6 +25,16 @@ export class UpdateGymDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
+    description: "Gym owner manager Id",
+    example: 1234,
+    required: false,
+  })
+  @IsInt()
+  @IsOptional()
+  createdByManagerId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
     description: "Proprietor Manager id",
     example: 1234,
     required: false,

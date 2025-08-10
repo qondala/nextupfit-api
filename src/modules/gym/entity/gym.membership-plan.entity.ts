@@ -45,11 +45,11 @@ export class GymMembershipPlanEntity {
   contentId: number;
 
   @ManyToOne(() => ContentEntity)
-  @JoinColumn({ name: "contentId" })
+  @JoinColumn({ name: "contentId", referencedColumnName: "id" })
   content: ContentEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 
   @CreateDateColumn()

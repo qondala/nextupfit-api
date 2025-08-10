@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNumber } from "class-validator";
+import { IsInt, IsNumber, ValidateNested } from "class-validator";
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseUnitDto } from "./details.base.unit.dto";
+import { Type } from "class-transformer";
 
 export class DetailsBaseWorkoutNutrientBurnDto {
   @ApiProperty({
@@ -52,6 +54,14 @@ export class DetailsBaseWorkoutNutrientBurnDto {
   burnsNutrientQty: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Duration unit identifier",
+    example: 2,
+  })
+  @IsInt()
+  burnsNutrientQtyUnitId: number;
+
+  @ApiProperty({
     type: SwaggerType.STRING,
     format: "date-time",
     description: "Creation timestamp",
@@ -64,4 +74,22 @@ export class DetailsBaseWorkoutNutrientBurnDto {
     description: "Last update timestamp",
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    description: "Duration unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseUnitDto)
+  @ValidateNested()
+  durationUnit: DetailsBaseUnitDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    description: "Burns nutrient quantity unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseUnitDto)
+  @ValidateNested()
+  burnsNutrientQtyUnit: DetailsBaseUnitDto;
 }

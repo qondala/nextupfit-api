@@ -5,10 +5,13 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseNutrientGroupEnum } from "../../types";
+import { Type } from "class-transformer";
+import { DetailsBaseUnitDto } from "./details.base.unit.dto";
 
 export class DetailsBaseNutrientDto {
   @ApiProperty({
@@ -117,4 +120,13 @@ export class DetailsBaseNutrientDto {
     required: true,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    description: "Base unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseUnitDto)
+  @ValidateNested()
+  baseUnit: DetailsBaseUnitDto;
 }

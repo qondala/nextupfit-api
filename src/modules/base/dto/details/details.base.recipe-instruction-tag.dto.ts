@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
-import { BaseRecipeInstructionTagEnum } from "../../types";
+import { BaseRecipeItemTypeEnum } from "../../types";
+import { DetailsBaseUnitDto } from "./details.base.unit.dto";
 
 export class DetailsBaseRecipeInstructionTagDto {
   @ApiProperty({
@@ -11,23 +12,35 @@ export class DetailsBaseRecipeInstructionTagDto {
   id: number;
 
   @ApiProperty({
-    enumName: "BaseRecipeInstructionTagEnum",
-    enum: BaseRecipeInstructionTagEnum,
+    enumName: "BaseRecipeItemTypeEnum",
+    enum: BaseRecipeItemTypeEnum,
     required: true,
   })
-  tagType: BaseRecipeInstructionTagEnum;
+  tagItemType: BaseRecipeItemTypeEnum;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: true,
   })
-  tagId: number;
+  tagItemId: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
   })
   order?: number;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    required: false,
+  })
+  tagQuantity?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    required: false,
+  })
+  tagQuantityUnitId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -48,4 +61,10 @@ export class DetailsBaseRecipeInstructionTagDto {
     required: false,
   })
   updatedAt?: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    required: false,
+  })
+  tagQuantityUnit?: DetailsBaseUnitDto;
 }

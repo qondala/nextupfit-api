@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseFoodDto, DetailsBaseMealDto } from ".";
+import { Type } from "class-transformer";
 
 export class DetailsBaseMealFoodDto {
   @ApiProperty({
@@ -68,5 +70,23 @@ export class DetailsBaseMealFoodDto {
     description: "Record last update timestamp",
     required: true,
   })
-  updatedAt: Date;
+  updatedAt?: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseFoodDto,
+    title: "DetailsBaseFoodDto",
+    description: "Food",
+    required: true,
+  })
+  @Type(() => DetailsBaseFoodDto)
+  food: DetailsBaseFoodDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseMealDto,
+    title: "DetailsBaseMealDto",
+    description: "Meal",
+    required: true,
+  })
+  @Type(() => DetailsBaseMealDto)
+  meal: DetailsBaseMealDto;
 }

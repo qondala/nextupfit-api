@@ -49,14 +49,12 @@ export class BaseIngredientService {
     };
   }
 
-  async findOne(id: number): Promise<DetailsBaseIngredientDto> {
+  async findOne(id: number): Promise<BaseIngredientEntity> {
     const ingredient = await this.repository.findOne({
       where: { id },
+      relations: ["nutrients"],
     });
 
-    if (!ingredient) {
-      throw new NotFoundException(`Ingredient with ID ${id} not found`);
-    }
 
     return ingredient;
   }

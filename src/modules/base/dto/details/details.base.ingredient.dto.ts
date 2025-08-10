@@ -5,9 +5,12 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 import { BaseIngredientTypeEnum } from "../../types";
+import { Type } from "class-transformer";
+import { DetailsBaseIngredientNutrientDto } from "./details.base.ingredient-nutrient.dto";
 
 export class DetailsBaseIngredientDto {
   @ApiProperty({
@@ -108,4 +111,15 @@ export class DetailsBaseIngredientDto {
     required: true,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseIngredientNutrientDto,
+    isArray: true,
+    description: "Ingredient nutrients",
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => DetailsBaseIngredientNutrientDto)
+  @ValidateNested({ each: true })
+  nutrients: DetailsBaseIngredientNutrientDto[];
 }

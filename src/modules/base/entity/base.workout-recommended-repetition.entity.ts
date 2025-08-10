@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
 import { BaseWorkoutAttendeeLevelEnum } from "../types";
+import { BaseUnitEntity, BaseWorkoutEntity } from ".";
 
 @Entity("base_workout_recommended_repetition")
 export class BaseWorkoutRecommendedRepetitionEntity {
@@ -37,4 +40,12 @@ export class BaseWorkoutRecommendedRepetitionEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseWorkoutEntity, (workout) => workout.recommendedRepetitions)
+  @JoinColumn({ name: "baseWorkoutId", referencedColumnName: "id" })
+  workout: BaseWorkoutEntity;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "durationUnitId", referencedColumnName: "id" })
+  durationUnit: BaseUnitEntity;
 }

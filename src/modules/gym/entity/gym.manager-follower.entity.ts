@@ -76,10 +76,10 @@ export class GymManagerFollowerEntity {
   rejected?: boolean;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "managerId" })
+  @JoinColumn({ name: "managerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "followerUserId" })
+  @JoinColumn({ name: "followerUserId", referencedColumnName: "id" })
   follower: UserEntity;
 }

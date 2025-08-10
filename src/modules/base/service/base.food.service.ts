@@ -85,11 +85,23 @@ export class BaseFoodService {
   }
 
   async findOne(id: number): Promise<BaseFoodEntity | null> {
-    return this.baseFoodRepository.findOneBy({ id });
+    return this.baseFoodRepository.findOne({
+      where: { id },
+      relations: [
+        "nutrients",
+        "foodGroup",
+      ],
+    });
   }
 
   async findByCode(code: string): Promise<BaseFoodEntity | null> {
-    return this.baseFoodRepository.findOneBy({ code });
+    return this.baseFoodRepository.findOne({
+      where: { code },
+      relations: [
+        "nutrients",
+        "foodGroup",
+      ],
+    });
   }
 
   async update(

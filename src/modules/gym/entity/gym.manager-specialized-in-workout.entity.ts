@@ -29,10 +29,10 @@ export class GymManagerSpecializedInWorkoutEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "managerId" })
+  @JoinColumn({ name: "managerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => BaseWorkoutEntity)
-  @JoinColumn({ name: "baseWorkoutId" })
+  @JoinColumn({ name: "baseWorkoutId", referencedColumnName: "id" })
   baseWorkout: BaseWorkoutEntity;
 }

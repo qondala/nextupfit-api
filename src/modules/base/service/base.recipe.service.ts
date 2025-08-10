@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { PaginationOptionsDto, PaginatedResponseDto } from "@app/common/dto";
 import { CreateBaseRecipeDto, UpdateBaseRecipeDto } from "../dto";
 import { BaseRecipeEntity } from "../entity";
+import { BaseRecipeItemTypeEnum } from "../types";
 
 @Injectable()
 export class BaseRecipeService {
@@ -59,5 +60,39 @@ export class BaseRecipeService {
 
   async remove(id: number): Promise<void> {
     await this.recipeRepository.delete(id);
+  }
+
+  async findRecipesRelatedToItem(
+    itemId: number,
+    itemType: BaseRecipeItemTypeEnum,
+    pagination: PaginationOptionsDto,
+  ): Promise<PaginatedResponseDto<BaseRecipeEntity>> {
+    const qb = this.recipeRepository
+      .createQueryBuilder("recipe")
+      .leftJoinAndSelect("recipe.items", "item")
+      .where("item.id = :itemId AND item.itemType = :itemType", {
+        itemId,
+        itemType,
+      })
+      .orderBy("recipe.createdAt", "DESC");
+
+    const skip = (pagination.page - 1) * pagination.limit;
+    const [items, totalItems] = await qb
+      .skip(skip)
+      .take(pagination.limit)
+      .getManyAndCount();
+
+    const totalPages = Math.ceil(totalItems / pagination.limit);
+
+    return {
+      items,
+      meta: {
+        totalItems,
+        itemCount: items.length,
+        itemsPerPage: pagination.limit,
+        totalPages,
+        currentPage: pagination.page,
+      },
+    };
   }
 }

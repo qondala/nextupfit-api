@@ -5,10 +5,14 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
+
 import { BaseMealTypeEnum } from "../../types";
+import { DetailsBaseMealFoodDto } from ".";
 
 export class DetailsBaseMealDto {
   @ApiProperty({
@@ -79,4 +83,15 @@ export class DetailsBaseMealDto {
   @IsOptional()
   @IsInt()
   order?: number;
+
+  @ApiProperty({
+    type: () => DetailsBaseMealFoodDto,
+    isArray: true,
+    description: "Meal foods",
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => DetailsBaseMealFoodDto)
+  @ValidateNested({ each: true })
+  mealFoods?: DetailsBaseMealFoodDto[];
 }

@@ -1,7 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt } from "class-validator";
+import {
+  IsDefined,
+  IsEnum,
+  IsInt,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
+
 import { SwaggerType } from "@app/common/types";
+
 import { BaseWorkoutAttendeeLevelEnum } from "../../types";
+import { DetailsBaseUnitDto } from ".";
+
 
 export class DetailsBaseWorkoutRecommendedRepetitionDto {
   @ApiProperty({
@@ -66,4 +76,15 @@ export class DetailsBaseWorkoutRecommendedRepetitionDto {
     description: "Last update timestamp",
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    title: "DetailsBaseUnitDto",
+    description: "Duration unit",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseUnitDto)
+  durationUnit: DetailsBaseUnitDto;
 }

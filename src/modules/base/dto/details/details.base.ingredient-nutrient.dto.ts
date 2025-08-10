@@ -1,6 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty, IsOptional } from "class-validator";
+import { IsDefined, IsInt, IsNotEmpty, IsOptional, ValidateNested } from "class-validator";
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseIngredientDto } from "./details.base.ingredient.dto";
+import { DetailsBaseNutrientDto } from "./details.base.nutrient.dto";
+import { Type } from "class-transformer";
+import { DetailsBaseUnitDto } from "./details.base.unit.dto";
 
 export class DetailsBaseIngredientNutrientDto {
   @ApiProperty({
@@ -99,4 +103,48 @@ export class DetailsBaseIngredientNutrientDto {
     required: true,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseIngredientDto,
+    title: "DetailsBaseIngredientDto",
+    description: "Ingredient details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseIngredientDto)
+  ingredient: DetailsBaseIngredientDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseNutrientDto,
+    title: "DetailsBaseNutrientDto",
+    description: "Nutrient details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseNutrientDto)
+  nutrient: DetailsBaseNutrientDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    title: "DetailsBaseUnitDto",
+    description: "Ingredient quantity unit details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseUnitDto)
+  ingredientQtyUnit: DetailsBaseUnitDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    title: "DetailsBaseUnitDto",
+    description: "Nutrient quantity unit details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseUnitDto)
+  nutrientQtyUnit: DetailsBaseUnitDto;
 }

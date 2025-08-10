@@ -1,14 +1,19 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  IsDefined,
   IsEnum,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseFoodProcessTypeEnum } from "../../types";
+import { DetailsBaseFoodNutrientDto } from "./details.base.food-nutrient.dto";
+import { Type } from "class-transformer";
+import { DetailsBaseFoodGroupDto } from "./details.base.food-group.dto";
 
 export class DetailsBaseFoodDto {
   @ApiProperty({
@@ -90,6 +95,29 @@ export class DetailsBaseFoodDto {
   @IsOptional()
   @IsEnum(BaseFoodProcessTypeEnum)
   processType?: BaseFoodProcessTypeEnum;
+
+  @ApiProperty({
+    type: () => DetailsBaseFoodNutrientDto,
+    isArray: true,
+    title: "DetailsBaseFoodNutrientDto",
+    description: "Food nutrients",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseFoodNutrientDto)
+  nutrients: DetailsBaseFoodNutrientDto[];
+
+  @ApiProperty({
+    type: () => DetailsBaseFoodGroupDto,
+    title: "DetailsBaseFoodGroupDto",
+    description: "Food group",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseFoodGroupDto)
+  foodGroup: DetailsBaseFoodGroupDto;
 
   @ApiProperty({
     type: SwaggerType.STRING,

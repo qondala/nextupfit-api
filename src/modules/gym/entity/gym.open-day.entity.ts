@@ -46,6 +46,6 @@ export class GymOpenDayEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 }

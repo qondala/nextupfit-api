@@ -9,12 +9,15 @@ import {
   Post,
   Query,
   ParseIntPipe,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiParam,
+  ApiQuery,
   ApiTags,
 } from "@nestjs/swagger";
 
@@ -26,6 +29,8 @@ import {
   PaginatedDetailsBaseRecipeDto,
 } from "../dto";
 import { BaseRecipeService } from "../service";
+import { BaseRecipeItemTypeEnum } from "../types";
+import { SwaggerType } from "@app/common/types";
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -57,6 +62,43 @@ export class BaseRecipeController {
     @Query() pagination: PaginationOptionsDto,
   ): Promise<PaginatedDetailsBaseRecipeDto> {
     return this.recipeService.findAll(pagination);
+  }
+
+  @Get("recipes/:itemType/:itemId")
+  @ApiOperation({
+    summary: "Get recipes related to a specific item",
+    operationId: "findBaseRecipesRelatedToItem",
+  })
+  @ApiParam({
+    name: "itemType",
+    description: "Type of the item",
+    required: true,
+    type: SwaggerType.STRING,
+  })
+  @ApiParam({
+    name: "itemId",
+    description: "ID of the item",
+    required: true,
+    type: SwaggerType.INTEGER,
+  })
+  @ApiQuery({
+    type: PaginationOptionsDto,
+    required: false,
+  })
+  @ApiOkResponse({
+    description: "List of recipes related to a specific item.",
+    type: PaginatedDetailsBaseRecipeDto,
+  })
+  findRecipesRelatedToItem(
+    @Param("itemType", new ParseEnumPipe(BaseRecipeItemTypeEnum)) itemType: BaseRecipeItemTypeEnum,
+    @Param("itemId", ParseIntPipe) itemId: number,
+    @Query() paginationOptions?: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsBaseRecipeDto> {
+    return this.recipeService.findRecipesRelatedToItem(
+      itemId,
+      itemType,
+      paginationOptions,
+    );
   }
 
   @Get(":id")

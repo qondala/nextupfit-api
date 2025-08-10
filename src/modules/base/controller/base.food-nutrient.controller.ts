@@ -7,9 +7,7 @@ import {
   Body,
   Param,
   Query,
-  NotFoundException,
   HttpStatus,
-  HttpCode,
   UseGuards,
   ParseIntPipe,
 } from "@nestjs/common";
@@ -21,7 +19,6 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiNotFoundResponse,
   ApiNoContentResponse,
   ApiBadRequestResponse,
 } from "@nestjs/swagger";
@@ -38,10 +35,9 @@ import {
   PaginatedDetailsBaseFoodNutrientDto,
 } from "../dto";
 import {
-  ErrorResponseException,
-  ErrorResponseExceptionType,
-  SystemStatusCode,
+  ErrorResponseException
 } from "@app/common/exceptions";
+
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -49,7 +45,7 @@ import {
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BaseFoodNutrientController {
   constructor(
-    private readonly baseFoodNutrientService: BaseFoodNutrientService,
+    private readonly service: BaseFoodNutrientService,
   ) {}
 
   @Post()
@@ -69,20 +65,7 @@ export class BaseFoodNutrientController {
   async create(
     @Body() createDto: CreateBaseFoodNutrientDto,
   ): Promise<DetailsBaseFoodNutrientDto> {
-    try {
-      return await this.baseFoodNutrientService.create(createDto);
-    } catch (error: any) {
-      if (error.code === "23505") {
-        // unique violation
-        throw new ErrorResponseException(
-          ErrorResponseExceptionType.DATABASE,
-          "Food nutrient with this code already exists",
-          HttpStatus.BAD_REQUEST,
-          SystemStatusCode.DUPLICATE,
-        );
-      }
-      throw error;
-    }
+    return await this.service.create(createDto);
   }
 
   @Get()
@@ -111,46 +94,7 @@ export class BaseFoodNutrientController {
     @Query("page") page = 1,
     @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseFoodNutrientDto> {
-    return this.baseFoodNutrientService.findAll({ page: +page, limit: +limit });
-  }
-
-  @Get("search")
-  @ApiOperation({
-    summary: "Search food nutrients by code with pagination",
-    description: "Search food nutrients by code with pagination",
-    operationId: "searchFoodNutrients",
-  })
-  @ApiQuery({
-    name: "q",
-    required: true,
-    type: SwaggerType.STRING,
-    description: "Search query string",
-  })
-  @ApiQuery({
-    name: "page",
-    required: false,
-    type: SwaggerType.INTEGER,
-    description: "Page number",
-  })
-  @ApiQuery({
-    name: "limit",
-    required: false,
-    type: SwaggerType.INTEGER,
-    description: "Items per page",
-  })
-  @ApiOkResponse({
-    description: "Paginated search results",
-    type: PaginatedDetailsBaseFoodNutrientDto,
-  })
-  async search(
-    @Query("q") q: string,
-    @Query("page") page = 1,
-    @Query("limit") limit = 10,
-  ): Promise<PaginatedDetailsBaseFoodNutrientDto> {
-    return this.baseFoodNutrientService.search(q, {
-      page: +page,
-      limit: +limit,
-    });
+    return this.service.findAll({ page: +page, limit: +limit });
   }
 
   @Get("food/:foodId")
@@ -183,7 +127,7 @@ export class BaseFoodNutrientController {
     @Query("page") page = 1,
     @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseFoodNutrientDto> {
-    return this.baseFoodNutrientService.findByFoodId(foodId, {
+    return this.service.findByFoodId(foodId, {
       page: +page,
       limit: +limit,
     });
@@ -219,7 +163,7 @@ export class BaseFoodNutrientController {
     @Query("page") page = 1,
     @Query("limit") limit = 10,
   ): Promise<PaginatedDetailsBaseFoodNutrientDto> {
-    return this.baseFoodNutrientService.findByNutrientId(nutrientId, {
+    return this.service.findByNutrientId(nutrientId, {
       page: +page,
       limit: +limit,
     });
@@ -240,23 +184,10 @@ export class BaseFoodNutrientController {
     description: "Found record",
     type: DetailsBaseFoodNutrientDto,
   })
-  @ApiNotFoundResponse({
-    description: "Record not found",
-    type: ErrorResponseException,
-  })
   async findOne(
     @Param("id", ParseIntPipe) id: number,
   ): Promise<DetailsBaseFoodNutrientDto> {
-    const record = await this.baseFoodNutrientService.findOne(id);
-    if (!record) {
-      throw new ErrorResponseException(
-        ErrorResponseExceptionType.DATABASE,
-        `Food nutrient with ID ${id} not found`,
-        HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND,
-      );
-    }
-    return record;
+    return this.service.findOne(id);
   }
 
   @Put(":id")
@@ -274,24 +205,11 @@ export class BaseFoodNutrientController {
     description: "Updated record",
     type: DetailsBaseFoodNutrientDto,
   })
-  @ApiNotFoundResponse({
-    description: "Record not found",
-    type: ErrorResponseException,
-  })
   async update(
     @Param("id") id: string,
     @Body() updateDto: UpdateBaseFoodNutrientDto,
   ): Promise<DetailsBaseFoodNutrientDto> {
-    const record = await this.baseFoodNutrientService.update(+id, updateDto);
-    if (!record) {
-      throw new ErrorResponseException(
-        ErrorResponseExceptionType.DATABASE,
-        `Food nutrient with ID ${id} not found`,
-        HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND,
-      );
-    }
-    return record;
+    return await this.service.update(+id, updateDto);
   }
 
   @Delete(":id")
@@ -308,19 +226,7 @@ export class BaseFoodNutrientController {
   @ApiNoContentResponse({
     description: "Successfully deleted",
   })
-  @ApiNotFoundResponse({
-    description: "Record not found",
-    type: ErrorResponseException,
-  })
   async remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
-    const ok = await this.baseFoodNutrientService.remove(id);
-    if (!ok) {
-      throw new ErrorResponseException(
-        ErrorResponseExceptionType.DATABASE,
-        `Food nutrient with ID ${id} not found`,
-        HttpStatus.NOT_FOUND,
-        SystemStatusCode.NOT_FOUND,
-      );
-    }
+    await this.service.remove(id);
   }
 }

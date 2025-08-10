@@ -43,11 +43,11 @@ export class GymHasManagerEntity {
   lastStatusUpdate: Date;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "managerId" })
+  @JoinColumn({ name: "managerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 
   @CreateDateColumn()

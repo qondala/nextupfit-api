@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 import { BaseRecipeItemTypeEnum } from "../../types";
+import { DetailsBaseUnitDto } from "./details.base.unit.dto";
 
 export class DetailsBaseRecipeItemDto {
   @ApiProperty({
@@ -60,4 +61,10 @@ export class DetailsBaseRecipeItemDto {
     required: false,
   })
   updatedAt?: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    required: false,
+  })
+  itemQuantityUnit?: DetailsBaseUnitDto;
 }

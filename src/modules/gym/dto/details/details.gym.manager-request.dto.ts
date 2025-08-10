@@ -9,7 +9,7 @@ import {
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { DetailsUserDto } from "@app/module/user/dto";
+import { DetailsGymManagerDto } from ".";
 
 export class DetailsGymManagerRequestDto {
   @ApiProperty({
@@ -34,13 +34,13 @@ export class DetailsGymManagerRequestDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "ID of the applicant user",
+    description: "ID of the applicant manager",
     example: 1,
     required: true,
   })
   @IsNotEmpty()
   @IsInt()
-  applicantUserId: number;
+  applicantManagerId: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -145,13 +145,13 @@ export class DetailsGymManagerRequestDto {
   rejectedByGymManagerUserId: number;
 
   @ApiProperty({
-    type: () => DetailsUserDto,
-    title: "DetailsUserDto",
+    type: () => DetailsGymManagerDto,
+    title: "DetailsGymManagerDto",
     description: "Applicant of the gym manager request",
     required: true,
   })
-  @Type(() => DetailsUserDto)
-  applicant: DetailsUserDto;
+  @Type(() => DetailsGymManagerDto)
+  applicant: DetailsGymManagerDto;
 
   @ApiProperty({
     type: SwaggerType.STRING,

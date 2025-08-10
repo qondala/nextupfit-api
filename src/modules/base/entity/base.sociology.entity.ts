@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { BaseSociologyGroupEntity } from ".";
 
 @Entity("base_sociology")
 export class BaseSociologyEntity {
@@ -28,4 +31,8 @@ export class BaseSociologyEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseSociologyGroupEntity, (group) => group.sociologies)
+  @JoinColumn({ name: "baseSociologyGroupId", referencedColumnName: "id" })
+  baseSociologyGroup: BaseSociologyGroupEntity;
 }

@@ -5,9 +5,12 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
+import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseSociologyGroupDto } from ".";
 
 export class DetailsBaseSociologyDto {
   @ApiProperty({
@@ -71,4 +74,13 @@ export class DetailsBaseSociologyDto {
   @IsOptional()
   @IsDate()
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseSociologyGroupDto,
+    description: "Base sociology group",
+    required: false,
+  })
+  @Type(() => DetailsBaseSociologyGroupDto)
+  @ValidateNested()
+  baseSociologyGroup: DetailsBaseSociologyGroupDto;
 }

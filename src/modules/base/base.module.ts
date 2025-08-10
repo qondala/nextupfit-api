@@ -30,6 +30,10 @@ import {
   BaseProgramGoalEntity,
   BaseIngredientEntity,
   BaseIngredientNutrientEntity,
+  BaseWorkoutMuscleEntity,
+  BaseEquipmentEntity,
+  BaseEquipmentUsageEntity,
+  BaseWorkoutEquipmentEntity,
 } from "./entity";
 
 import {
@@ -60,7 +64,10 @@ import {
   BaseProgramGoalService,
   BaseIngredientService,
   BaseIngredientNutrientService,
-} from "./service"; // Added BaseProgramGoalService
+  BaseWorkoutMuscleService,
+  BaseEquipmentService,
+  BaseWorkoutEquipmentService,
+} from "./service";
 
 import {
   BaseAppUpdateController,
@@ -90,7 +97,10 @@ import {
   BaseProgramGoalController,
   BaseIngredientController,
   BaseIngredientNutrientController,
-} from "./controller"; // Added BaseProgramGoalController
+  BaseWorkoutMuscleController,
+  BaseEquipmentController,
+  BaseWorkoutEquipmentController,
+} from "./controller";
 
 @Module({
   imports: [
@@ -122,6 +132,10 @@ import {
       BaseProgramGoalEntity,
       BaseIngredientEntity,
       BaseIngredientNutrientEntity,
+      BaseWorkoutMuscleEntity,
+      BaseEquipmentEntity,
+      BaseEquipmentUsageEntity,
+      BaseWorkoutEquipmentEntity,
     ]),
   ],
   controllers: [
@@ -152,6 +166,9 @@ import {
     BaseProgramGoalController,
     BaseIngredientController,
     BaseIngredientNutrientController,
+    BaseWorkoutMuscleController,
+    BaseEquipmentController,
+    BaseWorkoutEquipmentController,
   ],
   providers: [
     BaseAppUpdateService,
@@ -181,6 +198,9 @@ import {
     BaseProgramGoalService,
     BaseIngredientService,
     BaseIngredientNutrientService,
+    BaseWorkoutMuscleService,
+    BaseEquipmentService,
+    BaseWorkoutEquipmentService,
   ],
   exports: [
     BaseAppUpdateService,
@@ -210,6 +230,9 @@ import {
     BaseProgramGoalService,
     BaseIngredientService,
     BaseIngredientNutrientService,
+    BaseWorkoutMuscleService,
+    BaseEquipmentService,
+    BaseWorkoutEquipmentService,
   ],
 })
 export class BaseModule {}

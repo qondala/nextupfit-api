@@ -45,15 +45,15 @@ export class GymMembershipEntity {
   lastStatusUpdate?: Date;
 
   @ManyToOne(() => GymMembershipPlanEntity)
-  @JoinColumn({ name: "gymMembershipPlanId" })
+  @JoinColumn({ name: "gymMembershipPlanId", referencedColumnName: "id" })
   membershipPlan: GymMembershipPlanEntity;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "memberUserId" })
+  @JoinColumn({ name: "memberUserId", referencedColumnName: "id" })
   member: UserEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 
   @CreateDateColumn()

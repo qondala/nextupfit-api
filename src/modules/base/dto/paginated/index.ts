@@ -1,4 +1,6 @@
 export * from "./paginated.details.base.workout.dto";
+export * from "./paginated.details.base.workout-equipment.dto";
+export * from "./paginated.details.base.workout-muscle.dto";
 export * from "./paginated.details.base.body-param.dto";
 export * from "./paginated.details.base.workout-howto-perform-step.dto";
 export * from "./paginated.details.base.unit.dto";
@@ -22,6 +24,7 @@ export * from "./paginated.details.base.recipe-instruction-tag.dto";
 export * from "./paginated.details.base.recipe-instruction.dto";
 export * from "./paginated.details.base.recipe.dto";
 export * from "./paginated.details.base.currency.dto";
+export * from "./paginated.details.base.equipment.dto";
 export * from "./paginated.details.base.program-goal.dto";
 export * from "./paginated.details.base.ingredient.dto";
 export * from "./paginated.details.base.ingredient-nutrient.dto";

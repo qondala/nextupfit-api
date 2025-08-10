@@ -2,14 +2,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+
+import { BaseRecipeEntity, BaseRecipeInstructionTagEntity } from ".";
 
 @Entity("base_recipe_instruction")
 export class BaseRecipeInstructionEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: "bigint", nullable: false })
+  recipeId: number;
 
   @Column({ type: "varchar", length: 255 })
   title: string;
@@ -20,7 +27,7 @@ export class BaseRecipeInstructionEntity {
   @Column({ type: "varchar", length: 255, nullable: true })
   imageUrl?: string;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "integer", nullable: true })
   order?: number;
 
   @CreateDateColumn({ type: "timestamp" })
@@ -28,4 +35,10 @@ export class BaseRecipeInstructionEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt?: Date;
+
+  @ManyToOne(() => BaseRecipeEntity, (recipe) => recipe.instructions)
+  recipe: BaseRecipeEntity;
+
+  @OneToMany(() => BaseRecipeInstructionTagEntity, (tag) => tag.recipeInstruction)
+  tags: BaseRecipeInstructionTagEntity[];
 }

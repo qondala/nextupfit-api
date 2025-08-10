@@ -29,10 +29,10 @@ export class GymManagerSpecializedInNutritionEntity {
   updatedAt: Date;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "managerId" })
+  @JoinColumn({ name: "managerId", referencedColumnName: "id" })
   manager: GymManagerEntity;
 
   @ManyToOne(() => BaseNutritionEntity)
-  @JoinColumn({ name: "baseNutritionId" })
+  @JoinColumn({ name: "baseNutritionId", referencedColumnName: "id" })
   baseNutrition: BaseNutritionEntity;
 }

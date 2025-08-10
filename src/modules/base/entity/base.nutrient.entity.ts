@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
 import { BaseNutrientGroupEnum } from "../types";
+import { BaseIngredientEntity, BaseUnitEntity } from ".";
 
 @Entity("base_nutrient")
 export class BaseNutrientEntity {
@@ -32,10 +35,10 @@ export class BaseNutrientEntity {
   @Column({ type: "varchar", nullable: false })
   abbreviation: string;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "integer", nullable: false })
   baseUnitId: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "integer", nullable: true })
   order?: number;
 
   @Column({ type: "varchar", nullable: true, unique: true })
@@ -46,4 +49,9 @@ export class BaseNutrientEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "baseUnitId", referencedColumnName: "id" })
+  baseUnit: BaseUnitEntity;
 }
+

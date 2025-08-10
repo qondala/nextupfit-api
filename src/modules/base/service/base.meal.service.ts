@@ -6,6 +6,7 @@ import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
 import { BaseMealEntity } from "../entity";
 import { CreateBaseMealDto, UpdateBaseMealDto } from "../dto";
+import { BaseMealTypeEnum } from "../types";
 
 @Injectable()
 export class BaseMealService {
@@ -21,6 +22,7 @@ export class BaseMealService {
 
   async findAll(
     options: PaginationOptionsDto,
+    mealType?: BaseMealTypeEnum,
     createdByUserId?: number,
   ): Promise<PaginatedResponseDto<BaseMealEntity>> {
     const queryBuilder = this.baseMealRepository.createQueryBuilder("meal");
@@ -28,6 +30,12 @@ export class BaseMealService {
     if (createdByUserId) {
       queryBuilder.where("meal.createdByUserId = :createdByUserId", {
         createdByUserId,
+      });
+    }
+
+    if (mealType) {
+      queryBuilder.where("meal.mealType = :mealType", {
+        mealType,
       });
     }
 

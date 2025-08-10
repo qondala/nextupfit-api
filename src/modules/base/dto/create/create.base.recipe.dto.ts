@@ -36,37 +36,19 @@ export class CreateBaseRecipeDto {
   @IsString()
   imageUrl?: string;
 
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  calories?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
   })
-  @IsOptional()
-  @IsInt()
-  protein?: number;
+  duration: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
   })
-  @IsOptional()
-  @IsInt()
-  carbs?: number;
+  durationUnitId: number;
 
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  fat?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,

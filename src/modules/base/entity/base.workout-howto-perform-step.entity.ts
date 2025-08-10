@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
 import { BaseHighlightColorEnum } from "../types";
+import { BaseWorkoutEntity } from ".";
 
 @Entity("base_workout_howto_perform_step")
 export class BaseWorkoutHowtoPerformStepEntity {
@@ -27,13 +30,13 @@ export class BaseWorkoutHowtoPerformStepEntity {
   })
   highlight?: BaseHighlightColorEnum;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "bigint", nullable: false })
   baseWorkoutId: number;
 
   @Column({ type: "varchar", nullable: true, unique: true })
   code?: string;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "integer", nullable: true })
   order?: number;
 
   @CreateDateColumn()
@@ -41,4 +44,8 @@ export class BaseWorkoutHowtoPerformStepEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseWorkoutEntity, (workout) => workout.howtoPerformSteps)
+  @JoinColumn({ name: "baseWorkoutId", referencedColumnName: "id" })
+  workout: BaseWorkoutEntity;
 }

@@ -117,11 +117,11 @@ export class GymEntity {
   ratingsCount: number;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "createdByManagerId" })
+  @JoinColumn({ name: "createdByManagerId", referencedColumnName: "id" })
   owner: GymManagerEntity;
 
   @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "proprietorManagerId" })
+  @JoinColumn({ name: "proprietorManagerId", referencedColumnName: "id" })
   proprietor: GymManagerEntity;
 
   @OneToMany(() => GymMembershipPlanEntity, (plan) => plan.gym)

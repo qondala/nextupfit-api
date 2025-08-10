@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { UserEntity } from "@app/module/user/entity";
+import { GymManagerEntity } from ".";
 
 @Entity("gym_manager_request")
 export class GymManagerRequestEntity {
@@ -19,7 +20,7 @@ export class GymManagerRequestEntity {
   gymId: number;
 
   @Column({ nullable: false })
-  applicantUserId: number;
+  applicantManagerId: number;
 
   @Column({ nullable: true })
   letter?: string;
@@ -51,9 +52,9 @@ export class GymManagerRequestEntity {
   @Column({ nullable: true })
   rejectedByGymManagerUserId: number;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "applicantUserId" })
-  applicant: UserEntity;
+  @ManyToOne(() => GymManagerEntity)
+  @JoinColumn({ name: "applicantManagerId", referencedColumnName: "id" })
+  applicant: GymManagerEntity;
 
   @CreateDateColumn()
   createdAt: Date;

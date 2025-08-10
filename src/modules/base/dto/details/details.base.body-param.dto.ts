@@ -1,6 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsString, IsNumber } from "class-validator";
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsNumber,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
+
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseUnitDto } from ".";
 
 export class DetailsBaseBodyParamDto {
   @ApiProperty({
@@ -39,4 +48,13 @@ export class DetailsBaseBodyParamDto {
   @IsOptional()
   @IsNumber()
   unitId?: number;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    description: "Unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseUnitDto)
+  @ValidateNested()
+  unit: DetailsBaseUnitDto;
 }

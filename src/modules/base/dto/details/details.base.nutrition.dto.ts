@@ -55,14 +55,6 @@ export class DetailsBaseNutritionDto {
   @ApiProperty({
     type: () => DetailsBaseNutritionTypeDto,
     description: "Nutrition type",
-    example: {
-      id: 1,
-      name: "Protein",
-      description: "Macronutrient essential for muscle growth and repair",
-      code: "PRO",
-      createdAt: "2025-01-01T00:00:00.000Z",
-      updatedAt: "2025-01-01T00:00:00.000Z",
-    },
     required: true,
   })
   nutritionType: DetailsBaseNutritionTypeDto;

@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { BaseSociologyEntity } from "./base.sociology.entity";
 
 @Entity("base_sociology_group")
 export class BaseSociologyGroupEntity {
@@ -17,9 +19,6 @@ export class BaseSociologyGroupEntity {
   @Column({ nullable: false })
   description: string;
 
-  @Column({ nullable: false })
-  baseSociologyGroupId: number;
-
   @Column({ nullable: true, unique: true })
   code?: string;
 
@@ -28,4 +27,7 @@ export class BaseSociologyGroupEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => BaseSociologyEntity, (sociology) => sociology.baseSociologyGroupId)
+  sociologies: BaseSociologyEntity[];
 }

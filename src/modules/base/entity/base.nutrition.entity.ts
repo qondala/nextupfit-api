@@ -7,7 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { BaseNutritionTypeEntity } from "./base.nutrition-type.entity";
+
+import {
+  BaseNutritionTypeEntity,
+} from "./base.nutrition-type.entity";
 
 @Entity("base_nutrition")
 export class BaseNutritionEntity {
@@ -36,6 +39,6 @@ export class BaseNutritionEntity {
     () => BaseNutritionTypeEntity,
     (nutritionType) => nutritionType.nutritions,
   )
-  @JoinColumn({ name: "baseNutritionTypeId" })
+  @JoinColumn({ name: "baseNutritionTypeId", referencedColumnName: "id" })
   nutritionType: BaseNutritionTypeEntity;
 }

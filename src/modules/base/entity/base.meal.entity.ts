@@ -1,6 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 import { BaseMealTypeEnum } from "../types";
+import { BaseMealFoodEntity } from ".";
 
 @Entity("base_meal")
 export class BaseMealEntity {
@@ -17,7 +23,7 @@ export class BaseMealEntity {
     nullable: false,
   })
   mealType: BaseMealTypeEnum;
-
+  
   @Column({ type: "varchar", nullable: false })
   description: string;
 
@@ -32,4 +38,7 @@ export class BaseMealEntity {
 
   @Column({ type: "varchar", nullable: true, default: 0 })
   order: number;
+
+  @OneToMany(() => BaseMealFoodEntity, (mealFood) => mealFood.meal)
+  mealFoods: BaseMealFoodEntity[];
 }

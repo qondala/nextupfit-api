@@ -17,10 +17,10 @@ export class GymSpecializedInWorkoutEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: "gymId" })
+  @Column({ name: "gymId", nullable: false })
   gymId: number;
 
-  @Column({ name: "workoutId" })
+  @Column({ name: "workoutId", nullable: false })
   workoutId: number;
 
   @CreateDateColumn()
@@ -30,10 +30,10 @@ export class GymSpecializedInWorkoutEntity {
   updatedAt: Date;
 
   @ManyToOne(() => BaseWorkoutEntity)
-  @JoinColumn({ name: "workoutId" })
+  @JoinColumn({ name: "workoutId", referencedColumnName: "id" })
   workout: BaseWorkoutEntity;
 
   @ManyToOne(() => GymEntity)
-  @JoinColumn({ name: "gymId" })
+  @JoinColumn({ name: "gymId", referencedColumnName: "id" })
   gym: GymEntity;
 }

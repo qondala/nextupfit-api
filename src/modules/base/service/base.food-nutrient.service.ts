@@ -1,11 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Like, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
-import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
+import {
+  PaginatedResponseDto,
+  PaginationOptionsDto,
+} from "@app/common/dto";
 
-import { BaseFoodNutrientEntity } from "../entity";
-import { CreateBaseFoodNutrientDto, UpdateBaseFoodNutrientDto } from "../dto";
+import {
+  BaseFoodNutrientEntity,
+} from "../entity";
+import {
+  CreateBaseFoodNutrientDto,
+  UpdateBaseFoodNutrientDto,
+} from "../dto";
 
 @Injectable()
 export class BaseFoodNutrientService {
@@ -27,31 +35,6 @@ export class BaseFoodNutrientService {
     options: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
     const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
-      skip: (options.page - 1) * options.limit,
-      take: options.limit,
-      order: { id: "DESC" },
-    });
-
-    return {
-      items,
-      meta: {
-        totalItems: total,
-        itemCount: items.length,
-        itemsPerPage: options.limit,
-        totalPages: Math.ceil(total / options.limit),
-        currentPage: options.page,
-      },
-    };
-  }
-
-  async search(
-    query: string,
-    options: PaginationOptionsDto,
-  ): Promise<PaginatedResponseDto<BaseFoodNutrientEntity>> {
-    const searchTerm = `%${query}%`;
-
-    const [items, total] = await this.baseFoodNutrientRepository.findAndCount({
-      where: [{ code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
       order: { id: "DESC" },
@@ -139,12 +122,17 @@ export class BaseFoodNutrientService {
   }
 
   async findOne(id: number): Promise<BaseFoodNutrientEntity | null> {
-    return this.baseFoodNutrientRepository.findOneBy({ id });
+    return this.baseFoodNutrientRepository.findOne({
+      where: { id },
+      relations: {
+        food: true,
+        nutrient: true,
+        foodQtyUnit: true,
+        nutrientQtyUnit: true,
+      },
+    });
   }
 
-  async findByCode(code: string): Promise<BaseFoodNutrientEntity | null> {
-    return this.baseFoodNutrientRepository.findOneBy({ code });
-  }
 
   async update(
     id: number,

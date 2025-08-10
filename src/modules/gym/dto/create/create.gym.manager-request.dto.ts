@@ -24,13 +24,13 @@ export class CreateGymManagerRequestDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Applicant user id",
+    description: "Applicant manager id",
     example: 1235,
     required: true,
   })
   @IsNotEmpty()
   @IsInt()
-  applicantUserId: number;
+  applicantManagerId: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,

@@ -2,12 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { BaseFoodNutrientEntity } from ".";
+import { BaseFoodGroupEntity, BaseFoodNutrientEntity } from ".";
 import { BaseFoodProcessTypeEnum } from "../types";
 
 @Entity("base_food")
@@ -24,10 +26,10 @@ export class BaseFoodEntity {
   @Column({ type: "varchar", nullable: true })
   iconUrl?: string;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "bigint", nullable: false })
   createdByUserId: number;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "integer", nullable: false })
   foodGroupId: number;
 
   @Column({ type: "varchar", nullable: true, unique: true })
@@ -35,6 +37,10 @@ export class BaseFoodEntity {
 
   @Column({ type: "enum", enum: BaseFoodProcessTypeEnum, nullable: true })
   processType?: BaseFoodProcessTypeEnum;
+
+  @ManyToOne(() => BaseFoodGroupEntity, (foodGroup) => foodGroup.foods)
+  @JoinColumn({ name: "foodGroupId", referencedColumnName: "id" })
+  foodGroup: BaseFoodGroupEntity;
 
   @OneToMany(() => BaseFoodNutrientEntity, (foodNutrient) => foodNutrient.food)
   nutrients: BaseFoodNutrientEntity[];

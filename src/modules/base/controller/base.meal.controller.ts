@@ -12,6 +12,7 @@ import {
   BadRequestException,
   UseGuards,
   ParseIntPipe,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -33,6 +34,7 @@ import {
   PaginatedDetailsBaseMealDto,
   DetailsBaseMealDto,
 } from "../dto";
+import { BaseMealTypeEnum } from "../types";
 
 @ApiTags("Base module endpoints")
 @ApiBearerAuth()
@@ -100,6 +102,7 @@ export class BaseMealController {
   async findAll(
     @Query("page") page = 1,
     @Query("limit") limit = 10,
+    @Query("mealType", new ParseEnumPipe(BaseMealTypeEnum)) mealType?: BaseMealTypeEnum,
     @Query("userId") userId?: number,
   ): Promise<PaginatedDetailsBaseMealDto> {
     return await this.baseMealService.findAll(
@@ -107,6 +110,7 @@ export class BaseMealController {
         page: +page,
         limit: +limit,
       },
+      mealType ? mealType : undefined,
       userId ? +userId : undefined,
     );
   }

@@ -2,6 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 
 import { SwaggerType } from "@app/common/types";
 
+import { DetailsBaseRecipeInstructionTagDto } from ".";
+import { IsDefined, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
+
 export class DetailsBaseRecipeInstructionDto {
   @ApiProperty({ type: SwaggerType.INTEGER })
   id: number;
@@ -31,4 +35,15 @@ export class DetailsBaseRecipeInstructionDto {
     required: false,
   })
   updatedAt?: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseRecipeInstructionTagDto,
+    title: "DetailsBaseRecipeInstructionTagDto",
+    description: "Recipe instruction tag details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseRecipeInstructionTagDto)
+  tags: DetailsBaseRecipeInstructionTagDto[];
 }

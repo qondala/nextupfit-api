@@ -4,9 +4,18 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from "typeorm";
 
-import { BaseExerciseTargetEnum, BaseWorkoutDisciplineEnum } from "../types";
+import {
+  BaseExerciseTargetEnum,
+  BaseWorkoutDisciplineEnum,
+} from "../types";
+import { BaseWorkoutMuscleEntity } from "./base.workout-muscle.entity";
+import { BaseWorkoutHowtoPerformStepEntity } from "./base.workout-howto-perform-step.entity";
+import { BaseWorkoutRecommendedRepetitionEntity } from "./base.workout-recommended-repetition.entity";
+import { BaseWorkoutNutrientBurnEntity } from "./base.workout-nutrient-burn.entity";
+import { BaseWorkoutEquipmentEntity } from "./base.workout-equipment.entity";
 
 @Entity("base_workout")
 export class BaseWorkoutEntity {
@@ -27,7 +36,7 @@ export class BaseWorkoutEntity {
   })
   targets: BaseExerciseTargetEnum[];
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "bigint", nullable: true })
   createdByUserId: number;
 
   @Column({ type: "enum", enum: BaseWorkoutDisciplineEnum, nullable: false })
@@ -59,4 +68,19 @@ export class BaseWorkoutEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => BaseWorkoutMuscleEntity, (workoutMuscle) => workoutMuscle.workout)
+  muscles: BaseWorkoutMuscleEntity[];
+
+  @OneToMany(() => BaseWorkoutHowtoPerformStepEntity, (howtoPerformStep) => howtoPerformStep.workout)
+  howtoPerformSteps: BaseWorkoutHowtoPerformStepEntity[];
+
+  @OneToMany(() => BaseWorkoutRecommendedRepetitionEntity, (recommendedRepetition) => recommendedRepetition.workout)
+  recommendedRepetitions: BaseWorkoutRecommendedRepetitionEntity[];
+
+  @OneToMany(() => BaseWorkoutNutrientBurnEntity, (burn) => burn.workout)
+  burnsNutrients: BaseWorkoutNutrientBurnEntity[];
+
+  @OneToMany(() => BaseWorkoutEquipmentEntity, (equipment) => equipment.workout)
+  equipments: BaseWorkoutEquipmentEntity[];
 }

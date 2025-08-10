@@ -2,11 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { BaseRecipeInstructionTagEnum } from "../types";
+import { BaseRecipeItemTypeEnum } from "../types";
+import { BaseRecipeInstructionEntity, BaseUnitEntity } from ".";
 
 @Entity("base_recipe_instruction_tag")
 export class BaseRecipeInstructionTagEntity {
@@ -15,16 +18,16 @@ export class BaseRecipeInstructionTagEntity {
 
   @Column({
     type: "enum",
-    enum: BaseRecipeInstructionTagEnum,
+    enum: BaseRecipeItemTypeEnum,
     nullable: false,
   })
-  tagType: BaseRecipeInstructionTagEnum;
+  tagItemType: BaseRecipeItemTypeEnum;
 
   @Column({
-    type: "integer",
+    type: "bigint",
     nullable: false,
   })
-  tagId: number;
+  tagItemId: number;
 
   @Column({
     type: "integer",
@@ -38,9 +41,30 @@ export class BaseRecipeInstructionTagEntity {
   })
   recipeInstructionId: number;
 
+  @Column({
+    type: "integer",
+    default: 0,
+  })
+  tagQuantityUnitId?: number;
+
+  @Column({
+    type: "numeric",
+    default: 1,
+  })
+  tagQuantity?: number;
+
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseRecipeInstructionEntity, (instruction) => instruction.tags)
+  @JoinColumn({ name: "recipeInstructionId", referencedColumnName: "id" })
+  recipeInstruction: BaseRecipeInstructionEntity;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "tagQuantityUnitId", referencedColumnName: "id" })
+  tagQuantityUnit: BaseUnitEntity;
 }
