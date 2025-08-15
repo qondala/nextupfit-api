@@ -8,7 +8,7 @@ import {
 } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { DetailsBaseFoodDto, DetailsBaseNutrientDto } from ".";
+import { DetailsBaseFoodDto, DetailsBaseNutrientDto, DetailsBaseUnitDto } from ".";
 import { Type } from "class-transformer";
 
 export class DetailsBaseFoodNutrientDto {
@@ -113,4 +113,26 @@ export class DetailsBaseFoodNutrientDto {
   @ValidateNested()
   @Type(() => DetailsBaseNutrientDto)
   nutrient: DetailsBaseNutrientDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    title: "DetailsBaseUnitDto",
+    description: "Food quantity unit details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseUnitDto)
+  foodQtyUnit: DetailsBaseUnitDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseUnitDto,
+    title: "DetailsBaseUnitDto",
+    description: "Nutrient quantity unit details",
+    required: true,
+  })
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => DetailsBaseUnitDto)
+  nutrientQtyUnit: DetailsBaseUnitDto;
 }

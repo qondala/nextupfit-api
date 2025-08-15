@@ -33,13 +33,13 @@ export class BaseRecipeEntity {
   code?: string;
 
   @Column({ type: "integer", default: 1 })
-  nbPersons?: number;
+  nbPersons: number;
 
   @Column({ type: "decimal", precision: 5, scale: 2, default: 0 })
-  duration?: number;
+  duration: number;
 
   @Column({ type: "integer", default: 0 })
-  durationUnitId?: number;
+  durationUnitId: number;
 
   @Column({ type: "bigint", default: 0 })
   ownerManagerId?: number;

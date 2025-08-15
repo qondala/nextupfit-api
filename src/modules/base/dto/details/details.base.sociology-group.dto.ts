@@ -3,6 +3,14 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class DetailsBaseSociologyGroupDto {
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Record id",
+    required: true,
+  })
+  id: number;
+
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Sociology group's name",

@@ -12,6 +12,14 @@ import { SwaggerType } from "@app/common/types";
 import { DetailsBaseNutritionTypeDto } from ".";
 
 export class DetailsBaseNutritionDto {
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Record id",
+    required: true,
+  })
+  id: number;
+
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Nutrition name",

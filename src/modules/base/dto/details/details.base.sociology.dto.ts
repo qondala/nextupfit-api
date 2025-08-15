@@ -13,6 +13,14 @@ import { SwaggerType } from "@app/common/types";
 import { DetailsBaseSociologyGroupDto } from ".";
 
 export class DetailsBaseSociologyDto {
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Record id",
+    required: true,
+  })
+  id: number;
+
   @ApiProperty({
     type: SwaggerType.STRING,
     description: "Sociology's name",

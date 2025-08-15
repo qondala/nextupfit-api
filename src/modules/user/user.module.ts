@@ -28,6 +28,7 @@ import {
   UserConsumptionEntity,
   UserScheduleEntity,
   UserCommitmentCompletedItemEntity,
+  UserInterestEntity,
 } from "./entity";
 
 import {
@@ -42,6 +43,7 @@ import {
   UserConsumptionController,
   UserScheduleController,
   UserCommitmentCompletedItemController,
+  UserInterestController,
 } from "./controller";
 
 import {
@@ -56,6 +58,7 @@ import {
   UserConsumptionService,
   UserScheduleService,
   UserCommitmentCompletedItemService,
+  UserInterestService,
 } from "./service";
 
 @Module({
@@ -72,6 +75,7 @@ import {
       UserRecipeEntity,
       UserScheduleEntity,
       UserCommitmentCompletedItemEntity,
+      UserInterestEntity,
 
       // Base entities for user interest
       BaseNutritionEntity,
@@ -99,6 +103,7 @@ import {
     UserConsumptionController,
     UserScheduleController,
     UserCommitmentCompletedItemController,
+    UserInterestController,
   ],
   providers: [
     UserService,
@@ -112,6 +117,7 @@ import {
     UserConsumptionService,
     UserScheduleService,
     UserCommitmentCompletedItemService,
+    UserInterestService,
   ],
   exports: [
     UserService,
@@ -125,6 +131,7 @@ import {
     UserConsumptionService,
     UserScheduleService,
     UserCommitmentCompletedItemService,
+    UserInterestService,
   ],
 })
 export class UserModule {}
