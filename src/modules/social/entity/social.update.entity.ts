@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
+  EntityManager,
 } from "typeorm";
 
 import {
@@ -14,7 +16,8 @@ import {
   SocialUpdatePrivacyEnum,
 } from "../types";
 import { UserEntity } from "@app/module/user/entity";
-import { GymManagerEntity } from "@app/module/gym/entity";
+import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
+import { SocialUpdateInterestEntity } from "./social.update-interest.entity";
 
 @Entity("social_update")
 export class SocialUpdateEntity {
@@ -55,11 +58,45 @@ export class SocialUpdateEntity {
   @UpdateDateColumn({ type: "timestamp", nullable: true })
   updateAt: Date;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "authorUserId" })
-  authorUser: UserEntity;
+  authorUser?: UserEntity;
 
-  @ManyToOne(() => GymManagerEntity)
-  @JoinColumn({ name: "authorManagerId" })
-  authorManager: GymManagerEntity;
+  authorManager?: GymManagerEntity;
+
+  authorGym?: GymEntity;
+
+  @OneToMany(
+    () => SocialUpdateInterestEntity,
+    (interest) => interest.update,
+  )
+  interests: SocialUpdateInterestEntity[];
+
+  // Helper method to get gym if socialActorType is 'gym'
+  async loadGymIfApplicable(entityManager: EntityManager): Promise<GymEntity | null> {
+    if (this.socialActorType === SocialActorEnum.gym) {
+      return await entityManager.findOne(GymEntity, {
+        where: { id: this.socialActorId }
+      });
+    }
+    return null;
+  }
+
+  // Helper method to get user if socialActorType is 'user'
+  async loadUserIfApplicable(entityManager: EntityManager): Promise<UserEntity | null> {
+    if (this.socialActorType === SocialActorEnum.user) {
+      return await entityManager.findOne(UserEntity, {
+        where: { id: this.socialActorId }
+      });
+    }
+    return null;
+  }
+
+  // Helper method to get manager if socialActorType is 'manager'
+  async loadManagerIfApplicable(entityManager: EntityManager): Promise<GymManagerEntity | null> {
+    if (this.socialActorType === SocialActorEnum.manager) {
+      return await entityManager.findOne(GymManagerEntity, {
+        where: { id: this.socialActorId }
+      });
+    }
+    return null;
+  }
 }

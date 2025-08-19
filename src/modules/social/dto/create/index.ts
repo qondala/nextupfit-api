@@ -11,3 +11,4 @@ export * from "./create.social.chat-message-text.dto";
 export * from "./create.social.ratings.dto";
 export * from "./create.social.update.dto";
 export * from "./create.social.update-content.dto";
+export * from "./create.social.update-interest.dto";

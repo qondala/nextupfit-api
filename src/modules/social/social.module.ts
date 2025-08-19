@@ -9,8 +9,12 @@ import {
 } from "@app/module/base/entity";
 
 import { UserEntity, UserInterestEntity } from "@app/module/user/entity";
-
-import { GymEntity, GymManagerEntity } from "@app/module/gym/entity";
+import {
+  GymEntity,
+  GymManagerEntity,
+  GymFollowerEntity,
+  GymManagerFollowerEntity
+} from "@app/module/gym/entity";
 
 import {
   ProgramEntity,
@@ -35,6 +39,8 @@ import {
   SocialReviewEntity,
   SocialRatingsEntity,
   SocialAdvertisementInterestEntity,
+  SocialUpdateContentEntity,
+  SocialUpdateInterestEntity,
 } from "./entity";
 import {
   SocialAdvertisementController,
@@ -49,6 +55,8 @@ import {
   SocialChatMessageTextController,
   SocialRatingsController,
   SocialAdvertisementInterestController,
+  SocialUpdateContentController,
+  SocialUpdateInterestController,
 } from "./controller";
 import {
   SocialAdvertisementService,
@@ -63,6 +71,8 @@ import {
   SocialReviewService,
   SocialRatingsService,
   SocialAdvertisementInterestService,
+  SocialUpdateContentService,
+  SocialUpdateInterestService,
 } from "./service";
 
 @Module({
@@ -80,6 +90,8 @@ import {
       SocialReviewEntity,
       SocialRatingsEntity,
       SocialAdvertisementInterestEntity,
+      SocialUpdateContentEntity,
+      SocialUpdateInterestEntity,
 
       // Importing base entities
       BaseNutritionEntity,
@@ -94,6 +106,8 @@ import {
       // Importing gym entities
       GymEntity,
       GymManagerEntity,
+      GymFollowerEntity,
+      GymManagerFollowerEntity,
 
       // Importing program entities
       ProgramEntity,
@@ -116,6 +130,8 @@ import {
     SocialReviewController,
     SocialRatingsController,
     SocialAdvertisementInterestController,
+    SocialUpdateContentController,
+    SocialUpdateInterestController,
   ],
   providers: [
     SocialAdvertisementService,
@@ -130,6 +146,8 @@ import {
     SocialReviewService,
     SocialRatingsService,
     SocialAdvertisementInterestService,
+    SocialUpdateContentService,
+    SocialUpdateInterestService,
     UserInterestService,
   ],
   exports: [
@@ -145,6 +163,8 @@ import {
     SocialReviewService,
     SocialRatingsService,
     SocialAdvertisementInterestService,
+    SocialUpdateContentService,
+    SocialUpdateInterestService,
     UserInterestService,
   ],
 })

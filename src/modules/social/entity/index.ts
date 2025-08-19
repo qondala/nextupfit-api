@@ -10,3 +10,5 @@ export * from "./social.notification.entity";
 export * from "./social.review.entity";
 export * from "./social.ratings.entity";
 export * from "./social.update.entity";
+export * from "./social.update-content.entity";
+export * from "./social.update-interest.entity";

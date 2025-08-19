@@ -10,3 +10,5 @@ export * from "./social.update.controller";
 export * from "./social.notification.controller";
 export * from "./social.review.controller";
 export * from "./social.ratings.controller";
+export * from "./social.update-content.controller";
+export * from "./social.update-interest.controller";

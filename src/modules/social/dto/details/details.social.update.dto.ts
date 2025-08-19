@@ -8,7 +8,7 @@ import {
   SocialUpdatePrivacyEnum,
 } from "../../types";
 import { DetailsUserDto } from "@app/module/user/dto";
-import { DetailsGymManagerDto } from "@app/module/gym/dto";
+import { DetailsGymDto, DetailsGymManagerDto } from "@app/module/gym/dto";
 
 export class DetailsSocialUpdateDto {
   @ApiProperty({
@@ -87,10 +87,10 @@ export class DetailsSocialUpdateDto {
     type: () => DetailsUserDto,
     title: "DetailsUserDto",
     description: "Author user of the social update",
-    required: true,
+    required: false,
   })
   @Type(() => DetailsUserDto)
-  authorUser: DetailsUserDto;
+  authorUser?: DetailsUserDto;
 
   @ApiProperty({
     type: () => DetailsGymManagerDto,
@@ -100,4 +100,13 @@ export class DetailsSocialUpdateDto {
   })
   @Type(() => DetailsGymManagerDto)
   authorManager?: DetailsGymManagerDto;
+
+  @ApiProperty({
+    type: () => DetailsGymDto,
+    title: "DetailsGymDto",
+    description: "Author gym of the social update",
+    required: false,
+  })
+  @Type(() => DetailsGymDto)
+  authorGym?: DetailsGymDto;
 }

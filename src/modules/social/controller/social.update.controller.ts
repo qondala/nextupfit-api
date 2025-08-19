@@ -157,6 +157,68 @@ export class SocialUpdateController {
     return this.socialUpdateService.findAll(criteria, paginationOptions);
   }
 
+  @Get("user/:userId")
+  @ApiOperation({
+    summary: "Get a user's timeline updates",
+    operationId: "fetchUserTimelineUpdates",
+  })
+  @ApiParam({
+    name: "userId",
+    type: SwaggerType.INTEGER,
+    description: "User ID",
+  })
+  @ApiQuery({
+    required: true,
+    type: PaginationOptionsDto,
+    description: "Pagination options",
+    example: {
+      page: 1,
+      limit: 10,
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "User's timeline updates retrieved successfully",
+    type: PaginatedDetailsSocialUpdateDto,
+  })
+  fetchUserTimelineUpdates(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsSocialUpdateDto> {
+    return this.socialUpdateService.fetchUserTimelineUpdates(userId, paginationOptions);
+  }
+
+  @Get("manager/:managerId")
+  @ApiOperation({
+    summary: "Get a manager's timeline updates",
+    operationId: "fetchManagerTimelineUpdates",
+  })
+  @ApiParam({
+    name: "managerId",
+    type: SwaggerType.INTEGER,
+    description: "Manager ID",
+  })
+  @ApiQuery({
+    required: true,
+    type: PaginationOptionsDto,
+    description: "Pagination options",
+    example: {
+      page: 1,
+      limit: 10,
+    },
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Manager's timeline updates retrieved successfully",
+    type: PaginatedDetailsSocialUpdateDto,
+  })
+  fetchManagerTimelineUpdates(
+    @Param("managerId", ParseIntPipe) managerId: number,
+    @Query() paginationOptions: PaginationOptionsDto,
+  ): Promise<PaginatedDetailsSocialUpdateDto> {
+    return this.socialUpdateService.fetchManagerTimelineUpdates(managerId, paginationOptions);
+  }
+
   @Get(":id")
   @ApiOperation({
     summary: "Get a social update record by ID",
