@@ -12,4 +12,5 @@ export * from "./create.program.manager.dto";
 export * from "./create.program.freetool.dto";
 export * from "./create.program.interest.dto";
 export * from "./create.program.freetool-interest.dto";
+export * from "./create.program.challenge-interest.dto";
 export * from "./create.program.subscription.dto";

@@ -9,6 +9,7 @@ export * from "./find.criteria.program.activity.dto";
 export * from "./find.criteria.program.step.dto";
 export * from "./find.criteria.program.interest.dto";
 export * from "./find.criteria.program.freetool-interest.dto";
+export * from "./find.criteria.program.challenge-interest.dto";
 export * from "./find.criteria.program.subscription.dto";
 export * from "./find.criteria.program.nutrition.dto";
 export * from "./find.criteria.program.practice.dto";

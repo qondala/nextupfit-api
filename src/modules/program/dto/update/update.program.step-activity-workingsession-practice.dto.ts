@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsOptional } from "class-validator";
+import { IsBoolean, IsEnum, IsInt, IsNumber, IsOptional } from "class-validator";
 import { SwaggerType } from "@app/common/types";
+import { ProgramVisibilityEnum } from "../../types";
 
 export class UpdateProgramStepActivityWorkingsessionPracticeDto {
   @ApiProperty({
@@ -92,4 +93,33 @@ export class UpdateProgramStepActivityWorkingsessionPracticeDto {
   @IsOptional()
   @IsInt()
   programNutritionId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the practice a challenge?",
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isChallenge?: boolean;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Price of the challenge",
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  challengePrice?: number;
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the challenge public or restricted to program trail users?",
+    example: false,
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  isPublicChallenge?: boolean;
 }

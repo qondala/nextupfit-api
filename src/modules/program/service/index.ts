@@ -12,4 +12,5 @@ export * from "./program.manager.service";
 export * from "./program.freetool.service";
 export * from "./program.interest.service";
 export * from "./program.freetool-interest.service";
+export * from "./program.challenge-interest.service";
 export * from "./program.subscription.service";

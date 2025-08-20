@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
+import { ProgramVisibilityEnum } from "../../types";
 
 export class DetailsProgramStepActivityWorkingsessionPracticeDto {
   @ApiProperty({
@@ -88,4 +89,27 @@ export class DetailsProgramStepActivityWorkingsessionPracticeDto {
     required: true,
   })
   createdAt: Date;
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the practice a challenge?",
+    example: false,
+    required: false,
+  })
+  isChallenge?: boolean;
+
+  @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Price of the challenge",
+    required: false,
+  })
+  challengePrice?: number;
+
+  @ApiProperty({
+    type: SwaggerType.BOOLEAN,
+    description: "Is the challenge public or restricted to program trail users?",
+    example: true,
+    required: false,
+  })
+  isPublicChallenge?: boolean;
 }

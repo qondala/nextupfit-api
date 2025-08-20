@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -13,6 +14,8 @@ import {
   ProgramStepActivityWorkingsessionNutritionEntity,
   ProgramStepActivityWorkingsessionWorkoutEntity,
 } from ".";
+import { ProgramVisibilityEnum } from "../types";
+import { ProgramChallengeInterestEntity } from "./program.challenge-interest.entity";
 
 @Entity("program_step_activity_workingsession_practice")
 export class ProgramStepActivityWorkingsessionPracticeEntity {
@@ -49,6 +52,15 @@ export class ProgramStepActivityWorkingsessionPracticeEntity {
   @Column({ type: "bigint", nullable: true })
   position?: number;
 
+  @Column({ type: "boolean", default: false })
+  isChallenge?: boolean;
+
+  @Column({ type: "decimal", default: 0 })
+  challengePrice?: number;
+
+  @Column({ type: "boolean", default: true })
+  isPublicChallenge: boolean;
+
   @ManyToOne(
     () => ProgramStepActivityWorkingsessionEntity,
     (workingsession) => workingsession.practices,
@@ -63,6 +75,12 @@ export class ProgramStepActivityWorkingsessionPracticeEntity {
   @OneToOne(() => ProgramStepActivityWorkingsessionNutritionEntity)
   @JoinColumn({ name: "programNutritionId", referencedColumnName: "id" })
   nutrition?: ProgramStepActivityWorkingsessionNutritionEntity;
+
+  @OneToMany(
+    () => ProgramChallengeInterestEntity,
+    (interest) => interest.practice,
+  )
+  interests: ProgramChallengeInterestEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
