@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, MoreThan, Repository } from "typeorm";
+import { DataSource, In, MoreThan, Repository } from "typeorm";
 
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 
@@ -28,6 +28,7 @@ import {
 @Injectable()
 export class UserProgramEvolutionService {
   constructor(
+    private dataSource: DataSource,
     @InjectRepository(UserProgramEvolutionEntity)
     private readonly userProgramEvolutionRepository: Repository<UserProgramEvolutionEntity>,
     @InjectRepository(ProgramEntity)
@@ -362,6 +363,55 @@ export class UserProgramEvolutionService {
     };
   }
 
+  async findUserChallenges(
+    userId: number,
+    pagination: PaginationOptionsDto): Promise<PaginatedResponseDto<UserProgramEvolutionEntity>> {
+    const queryBuilder = this.dataSource
+          .getRepository(UserProgramEvolutionEntity)
+          .createQueryBuilder("userProgramEvolution")
+          .innerJoin(
+            ProgramStepActivityWorkingsessionPracticeEntity,
+            "practice",
+            "userProgramEvolution.programItemId = practice.id")
+          .where("userProgramEvolution.userId = :userId", { userId })
+          .andWhere("practice.isChallenge = true AND practice.isPublicChallenge = true")
+          .andWhere("userProgramEvolution.programItem = :programItem", { programItem: ProgramItemTypeEnum.practice })
+          .orderBy("userProgramEvolution.createdAt", "DESC");
+    
+        const { page, limit } = pagination;
+    
+        const skip = (page - 1) * limit;
+        const [items, total] = await queryBuilder
+          .skip(skip)
+          .take(limit)
+          .getManyAndCount();
+    
+        for (const item of items) {
+          item.programItemComposite = await this.getProgramItemComposite(
+            item.programItemId,
+            item.programItem,
+          );
+        }
+        const totalPages = Math.ceil(total / limit);
+    
+        return {
+          items,
+          meta: {
+            totalItems: total,
+            itemCount: items.length,
+            itemsPerPage: limit,
+            totalPages,
+            currentPage: page,
+          },
+        };
+  }
+
+  /**
+   * Get program item composite
+   * @param programItemId
+   * @param programItem
+   * @returns
+   */
   async getProgramItemComposite(
     programItemId: number,
     programItem: ProgramItemTypeEnum,

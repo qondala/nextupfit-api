@@ -361,6 +361,48 @@ export class UserProgramEvolutionController {
     );
   }
 
+  @Get("challenges/user/:userId")
+  @ApiOperation({
+    summary: "Get user challenges",
+    operationId: "findUserChallenges",
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 12345,
+  })
+  @ApiQuery({
+    name: "page",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Page number",
+    example: 1,
+  })
+  @ApiQuery({
+    name: "limit",
+    required: false,
+    type: SwaggerType.INTEGER,
+    description: "Limit number",
+    example: 10,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the user challenges.",
+    type: PaginatedDetailsUserProgramEvolutionEventDto,
+  })
+  async findUserChallenges(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Query("page", ParseIntPipe) page?: number,
+    @Query("limit", ParseIntPipe) limit?: number,
+  ): Promise<PaginatedDetailsUserProgramEvolutionEventDto> {
+    return await this.userProgramEvolutionService.findUserChallenges(
+      userId,
+      { page, limit },
+    );
+  }
+
   @Get(":id")
   @ApiOperation({
     summary: "Get a user program evolution by id",
