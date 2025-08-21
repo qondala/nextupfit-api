@@ -14,8 +14,9 @@ import {
   ProgramStepActivityWorkingsessionNutritionEntity,
   ProgramStepActivityWorkingsessionWorkoutEntity,
 } from ".";
-import { ProgramVisibilityEnum } from "../types";
-import { ProgramChallengeInterestEntity } from "./program.challenge-interest.entity";
+import {
+  ProgramChallengeInterestEntity
+} from "./program.challenge-interest.entity";
 
 @Entity("program_step_activity_workingsession_practice")
 export class ProgramStepActivityWorkingsessionPracticeEntity {

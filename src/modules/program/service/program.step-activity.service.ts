@@ -186,7 +186,24 @@ export class ProgramStepActivityService {
   }
 
   async findOne(id: number): Promise<ProgramStepActivityEntity> {
-    const activity = await this.repository.findOne({ where: { id } });
+    const activity = await this.repository.findOne({
+      where: { id },
+      relations: {
+        step: true,
+        workingssessions: true
+      }
+    });
+    return activity;
+  }
+
+  async findFlatOne(id: number): Promise<ProgramStepActivityEntity> {
+    const activity = await this.repository.findOne({
+      where: { id },
+      relations: {
+        step: false,
+        workingssessions: false
+      }
+    });
     return activity;
   }
 
@@ -194,6 +211,10 @@ export class ProgramStepActivityService {
     const activity = await this.repository.findOne({
       where: { programStepId },
       order: { position: "ASC" },
+      relations: {
+        step: true,
+        workingssessions: true
+      }
     });
     return activity;
   }
@@ -206,6 +227,10 @@ export class ProgramStepActivityService {
         position: LessThan(activity.position),
       },
       order: { position: "DESC" },
+      relations: {
+        step: true,
+        workingssessions: true
+      }
     });
     return previousActivity;
   }
@@ -214,6 +239,10 @@ export class ProgramStepActivityService {
     const activity = await this.repository.findOne({
       where: { programStepId },
       order: { position: "DESC" },
+      relations: {
+        step: true,
+        workingssessions: true
+      }
     });
     return activity;
   }

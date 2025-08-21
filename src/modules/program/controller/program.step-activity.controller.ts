@@ -125,6 +125,29 @@ export class ProgramStepActivityController {
     return details;
   }
 
+  @Get(":id")
+  @ApiOperation({
+    summary: "Get a program step activity by id",
+    operationId: "findFlatOneProgramStepActivity",
+  })
+  @ApiParam({
+    name: "id",
+    type: SwaggerType.INTEGER,
+    description: "Id of the program step activity",
+    required: true,
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the program step activity.",
+    type: DetailsProgramStepActivityDto,
+  })
+  async findFlatOne(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<DetailsProgramStepActivityDto> {
+    const result = await this.service.findFlatOne(id);
+    return result;
+  }
+
   @Patch(":id")
   @ApiOperation({
     summary: "Update a program step activity",
@@ -185,9 +208,9 @@ export class ProgramStepActivityController {
     };
 
     const managersFound =
-      await this.programManagerService.findAll(programCriteria);
+      await this.programManagerService.findAll(programCriteria, { page: 1, limit: 99 });
     const audienceFound =
-      await this.programPerSociologyService.findAll(programCriteria);
+      await this.programPerSociologyService.findAll(programCriteria, { page: 1, limit: 99 });
 
     return {
       ...activity,

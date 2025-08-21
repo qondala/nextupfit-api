@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
   ParseIntPipe,
-  HttpStatus,
   ParseArrayPipe,
   ParseEnumPipe,
 } from "@nestjs/common";
@@ -19,19 +18,14 @@ import {
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
-  ApiResponse,
   ApiParam,
   ApiBody,
 } from "@nestjs/swagger";
 
+import { ParseEnumArrayPipe } from "@app/common/pipes";
 import { SwaggerType } from "@app/common/types";
 import { JwtAuthGuard, RolesGuard } from "@app/common/guards";
 import { PaginationOptionsDto } from "@app/common/dto";
-import {
-  ErrorResponseException,
-  ErrorResponseExceptionType,
-  SystemStatusCode,
-} from "@app/common/exceptions";
 
 import { GymSpecialityEnum } from "../types";
 import {
@@ -41,7 +35,7 @@ import {
   DetailsGymDto,
 } from "../dto";
 import { GymService } from "../service";
-import { ParseEnumArrayPipe } from "@app/common/pipes";
+
 
 @ApiTags("Gym module endpoints")
 @ApiBearerAuth()

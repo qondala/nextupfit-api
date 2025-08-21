@@ -177,7 +177,26 @@ export class ProgramStepService {
   }
 
   async findOne(id: number): Promise<ProgramStepEntity> {
-    const step = await this.repository.findOne({ where: { id } });
+    const step = await this.repository.findOne({
+      where: { id },
+      relations: {
+        activities: true,
+        program: true
+      }
+    });
+
+    return step;
+  }
+
+  async findFlatOne(id: number): Promise<ProgramStepEntity> {
+    const step = await this.repository.findOne({
+      where: { id },
+      relations: {
+        activities: false,
+        program: false
+      } 
+    });
+
     return step;
   }
 

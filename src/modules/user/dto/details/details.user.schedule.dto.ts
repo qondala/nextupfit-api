@@ -25,7 +25,8 @@ export class DetailsUserScheduleDto {
   itemId: number;
 
   @ApiProperty({
-    type: SwaggerType.STRING,
+    enum: BaseSchedulableEnum,
+    enumName: "BaseSchedulableEnum",
     description: "Item type",
     required: true,
   })

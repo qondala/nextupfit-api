@@ -1,6 +1,12 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
-import { ProgramVisibilityEnum } from "../../types";
+import { Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
+import {
+  DetailsProgramStepActivityWorkingsessionDto,
+  DetailsProgramStepActivityWorkingsessionNutritionDto,
+  DetailsProgramStepActivityWorkingsessionWorkoutDto
+} from ".";
 
 export class DetailsProgramStepActivityWorkingsessionPracticeDto {
   @ApiProperty({
@@ -112,4 +118,31 @@ export class DetailsProgramStepActivityWorkingsessionPracticeDto {
     required: false,
   })
   isPublicChallenge?: boolean;
+
+  @ApiProperty({
+    type: () => DetailsProgramStepActivityWorkingsessionDto,
+    description: "Practice parent workingsession",
+    required: false,
+  })
+  @Type(() => DetailsProgramStepActivityWorkingsessionDto)
+  @ValidateNested()
+  workingsession?: DetailsProgramStepActivityWorkingsessionDto;
+
+  @ApiProperty({
+    type: () => DetailsProgramStepActivityWorkingsessionWorkoutDto,
+    description: "Practice underliying workout",
+    required: false,
+  })
+  @Type(() => DetailsProgramStepActivityWorkingsessionWorkoutDto)
+  @ValidateNested()
+  workout?: DetailsProgramStepActivityWorkingsessionWorkoutDto;
+
+  @ApiProperty({
+    type: () => DetailsProgramStepActivityWorkingsessionNutritionDto,
+    description: "Practice underliying nutrition",
+    required: false,
+  })
+  @Type(() => DetailsProgramStepActivityWorkingsessionNutritionDto)
+  @ValidateNested()
+  nutrition?: DetailsProgramStepActivityWorkingsessionNutritionDto;
 }
