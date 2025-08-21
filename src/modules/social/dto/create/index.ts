@@ -9,6 +9,7 @@ export * from "./create.social.notification.dto";
 export * from "./create.social.review.dto";
 export * from "./create.social.chat-message-text.dto";
 export * from "./create.social.ratings.dto";
+export * from "./create.social.tag.dto";
 export * from "./create.social.update.dto";
 export * from "./create.social.update-content.dto";
 export * from "./create.social.update-interest.dto";

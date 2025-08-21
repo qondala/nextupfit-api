@@ -41,6 +41,7 @@ import {
   SocialAdvertisementInterestEntity,
   SocialUpdateContentEntity,
   SocialUpdateInterestEntity,
+  SocialTagEntity
 } from "./entity";
 import {
   SocialAdvertisementController,
@@ -57,6 +58,7 @@ import {
   SocialAdvertisementInterestController,
   SocialUpdateContentController,
   SocialUpdateInterestController,
+  SocialTagController
 } from "./controller";
 import {
   SocialAdvertisementService,
@@ -73,6 +75,7 @@ import {
   SocialAdvertisementInterestService,
   SocialUpdateContentService,
   SocialUpdateInterestService,
+  SocialTagService
 } from "./service";
 
 @Module({
@@ -92,6 +95,7 @@ import {
       SocialAdvertisementInterestEntity,
       SocialUpdateContentEntity,
       SocialUpdateInterestEntity,
+      SocialTagEntity,
 
       // Importing base entities
       BaseNutritionEntity,
@@ -132,6 +136,7 @@ import {
     SocialAdvertisementInterestController,
     SocialUpdateContentController,
     SocialUpdateInterestController,
+    SocialTagController
   ],
   providers: [
     SocialAdvertisementService,
@@ -149,6 +154,7 @@ import {
     SocialUpdateContentService,
     SocialUpdateInterestService,
     UserInterestService,
+    SocialTagService
   ],
   exports: [
     SocialAdvertisementService,
@@ -166,6 +172,7 @@ import {
     SocialUpdateContentService,
     SocialUpdateInterestService,
     UserInterestService,
+    SocialTagService
   ],
 })
 export class SocialModule {}

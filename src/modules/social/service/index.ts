@@ -10,5 +10,6 @@ export * from "./social.update.service";
 export * from "./social.notification.service";
 export * from "./social.review.service";
 export * from "./social.ratings.service";
+export * from "./social.tag.service";
 export * from "./social.update-content.service";
 export * from "./social.update-interest.service";
