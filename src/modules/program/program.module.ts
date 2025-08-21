@@ -30,6 +30,7 @@ import {
   ProgramFreetoolEntity,
   ProgramInterestEntity,
   ProgramSubscriptionEntity,
+  ProgramChallengeInterestEntity
 } from "./entity";
 
 import {
@@ -48,6 +49,7 @@ import {
   ProgramSubscriptionController,
   ProgramSubscriptionPlanController,
   ProgramWorkoutNutrientBurnController,
+  ProgramChallengeInterestController
 } from "./controller";
 
 import {
@@ -66,6 +68,7 @@ import {
   ProgramSubscriptionPlanService,
   ProgramSubscriptionService,
   ProgramWorkoutNutrientBurnService,
+  ProgramChallengeInterestService
 } from "./service";
 
 /**
@@ -200,6 +203,7 @@ import {
       ProgramInterestEntity,
       ProgramFreetoolInterestEntity,
       ProgramSubscriptionEntity,
+      ProgramChallengeInterestEntity,
 
       // External modules
       BaseSociologyEntity,
@@ -228,6 +232,7 @@ import {
     ProgramInterestController,
     ProgramFreetoolInterestController,
     ProgramSubscriptionController,
+    ProgramChallengeInterestController,
   ],
   providers: [
     ProgramService,
@@ -246,6 +251,7 @@ import {
     ProgramFreetoolInterestService,
     UserInterestService,
     ProgramSubscriptionService,
+    ProgramChallengeInterestService,
   ],
   exports: [
     ProgramService,
@@ -264,6 +270,7 @@ import {
     ProgramFreetoolInterestService,
     UserInterestService,
     ProgramSubscriptionService,
+    ProgramChallengeInterestService,
   ],
 })
 export class ProgramModule {}
