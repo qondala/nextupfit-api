@@ -2,9 +2,24 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsInt } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { PaymentStatusEnum } from "../../types";
+import { PaymentCartTypeEnum, PaymentStatusEnum } from "../../types";
 
 export class CreatePaymentCartDto {
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "Name",
+    required: true,
+  })
+  name: string;
+
+  @ApiProperty({
+    enum: PaymentCartTypeEnum,
+    enumName: "PaymentCartTypeEnum",
+    required: true,
+  })
+  @IsEnum(PaymentCartTypeEnum)
+  type: PaymentCartTypeEnum
+
   @ApiProperty({
     type: SwaggerType.NUMBER,
     description: "Amount",

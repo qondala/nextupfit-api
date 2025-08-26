@@ -7,13 +7,22 @@ import {
   OneToMany,
 } from "typeorm";
 
-import { PaymentStatusEnum } from "../types";
+import { PaymentCartTypeEnum, PaymentStatusEnum } from "../types";
 import { PaymentCartItemEntity } from ".";
 
 @Entity("payment_cart")
 export class PaymentCartEntity {
   @PrimaryGeneratedColumn({ type: "bigint" })
   id: number;
+
+  @Column()
+  name: string;
+
+  @Column({
+    type: "enum",
+    enum: PaymentCartTypeEnum
+  })
+  type: PaymentCartTypeEnum;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
   amount: number;
