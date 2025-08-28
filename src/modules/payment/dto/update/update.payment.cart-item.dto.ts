@@ -3,7 +3,6 @@ import { IsEnum, IsOptional, IsNumber, IsInt } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
 import { PaymentStatusEnum } from "../../types";
-import { BaseSubscriptionPlanItemEnum } from "../../../base/types";
 
 export class UpdatePaymentCartItemDto {
   @ApiProperty({
@@ -22,23 +21,6 @@ export class UpdatePaymentCartItemDto {
   @IsOptional()
   @IsEnum(PaymentStatusEnum)
   status?: PaymentStatusEnum;
-
-  @ApiProperty({
-    enum: BaseSubscriptionPlanItemEnum,
-    enumName: "BaseSubscriptionPlanItemEnum",
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(BaseSubscriptionPlanItemEnum)
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  subscriptionPlanId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,

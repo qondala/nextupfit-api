@@ -6,7 +6,7 @@ import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
 import { CreatePaymentDto, UpdatePaymentDto } from "../dto";
-import { PaymentEntity } from "../entity";
+import { PaymentCartItemEntity, PaymentEntity, PaymentItemEntity } from "../entity";
 import {
   PaymentPayableItemEnum,
   PaymentScopeEnum,
@@ -18,6 +18,10 @@ export class PaymentService {
   constructor(
     @InjectRepository(PaymentEntity)
     private readonly paymentRepository: Repository<PaymentEntity>,
+    @InjectRepository(PaymentItemEntity)
+    private readonly paymentItemRepository: Repository<PaymentItemEntity>,
+    @InjectRepository(PaymentCartItemEntity)
+    private readonly paymentCartItemRepository: Repository<PaymentCartItemEntity>,
   ) {}
 
   async create(
@@ -342,19 +346,26 @@ export class PaymentService {
   async countUserGymMembershipPlanPaymentsWithinPeriod(
     userId: number,
     gymMembershipPlanId: number,
-    gymId: number,
     dateStart: Date,
     dateEnd: Date,
   ): Promise<number> {
-    return await this.paymentRepository.count({
+    const paymentCartItem = await this.paymentCartItemRepository.findOne({
       where: {
         userId,
-        gymMembershipPlanId,
-        receiverGymId: gymId,
-        subscriptionType: BaseSubscriptionPlanItemEnum.gym,
-        paymentScope: PaymentScopeEnum.subscription,
-        status: PaymentStatusEnum.done,
+        itemId: gymMembershipPlanId,
+        itemType: PaymentPayableItemEnum.membership,
+      },
+    });
+    
+    if (!paymentCartItem) {
+      return 0;
+    }
+    
+    return await this.paymentItemRepository.count({
+      where: {
+        cartItemId: paymentCartItem.id,
         createdAt: Between(dateStart, dateEnd),
+        status: PaymentStatusEnum.done,
       },
     });
   }
@@ -365,35 +376,63 @@ export class PaymentService {
     dateStart: Date,
     dateEnd: Date,
   ): Promise<number> {
-    return await this.paymentRepository.count({
+    const paymentCartItem = await this.paymentCartItemRepository.findOne({
       where: {
         userId,
-        programSubscriptionPlanId,
-        subscriptionType: BaseSubscriptionPlanItemEnum.program,
-        paymentScope: PaymentScopeEnum.subscription,
-        status: PaymentStatusEnum.done,
+        itemId: programSubscriptionPlanId,
+        itemType: PaymentPayableItemEnum.subscription,
+      },
+    });
+    
+    if (!paymentCartItem) {
+      return 0;
+    }
+    
+    return await this.paymentItemRepository.count({
+      where: {
+        cartItemId: paymentCartItem.id,
         createdAt: Between(dateStart, dateEnd),
+        status: PaymentStatusEnum.done,
       },
     });
   }
 
   async getUserLastPaymentForGymMembershipPlan(
     userId: number,
-    gymMembershipPlanId: number,
-    gymId: number,
+    gymMembershipPlanId: number
   ): Promise<PaymentEntity> {
-    return this.paymentRepository.findOne({
+
+    const paymentCartItem = await this.paymentCartItemRepository.findOne({
       where: {
         userId,
-        gymMembershipPlanId,
-        receiverGymId: gymId,
-        subscriptionType: BaseSubscriptionPlanItemEnum.gym,
-        paymentScope: PaymentScopeEnum.subscription,
+        itemId: gymMembershipPlanId,
+        itemType: PaymentPayableItemEnum.membership,
+      },
+    });
+    
+    if (!paymentCartItem) {
+      return null;
+    }
+    
+    const paymentItem = await this.paymentItemRepository.findOne({
+      where: {
+        cartItemId: paymentCartItem.id,
         status: PaymentStatusEnum.done,
       },
       order: {
         createdAt: "DESC",
       },
+    });
+    
+    if (!paymentItem) {
+      return null;
+    }
+    
+    return this.paymentRepository.findOne({
+      where: {
+        id: paymentItem.paymentId,
+        status: PaymentStatusEnum.done,
+      }
     });
   }
 
@@ -401,17 +440,36 @@ export class PaymentService {
     subscriberUserId: number,
     programSubscriptionPlanId: number,
   ): Promise<PaymentEntity | null> {
-    return this.paymentRepository.findOne({
+    const paymentCartItem = await this.paymentCartItemRepository.findOne({
       where: {
         userId: subscriberUserId,
-        programSubscriptionPlanId,
-        subscriptionType: BaseSubscriptionPlanItemEnum.program,
-        paymentScope: PaymentScopeEnum.subscription,
+        itemId: programSubscriptionPlanId,
+        itemType: PaymentPayableItemEnum.subscription,
+      },
+    });
+
+    if (!paymentCartItem) {
+      return null;
+    }
+
+    const paymentItem = await this.paymentItemRepository.findOne({
+      where: {
+        cartItemId: paymentCartItem.id,
         status: PaymentStatusEnum.done,
       },
       order: {
         createdAt: "DESC",
       },
+    });
+    
+    if (!paymentItem) {
+      return null;
+    }
+    
+    return this.paymentRepository.findOne({
+      where: {
+        id: paymentItem.paymentId,
+      }
     });
   }
 }

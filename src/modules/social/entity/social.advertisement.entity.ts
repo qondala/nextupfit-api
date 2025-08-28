@@ -50,7 +50,7 @@ export class SocialAdvertisementEntity {
   updatedAt: Date;
 
   @OneToOne(() => ContentEntity)
-  @JoinColumn({ name: "contentId" })
+  @JoinColumn({ name: "contentId", referencedColumnName: "id" })
   content: ContentEntity;
 
   @OneToMany(

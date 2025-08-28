@@ -1,25 +1,44 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
-
-import { SwaggerType } from "@app/common/types";
-import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+import {
+  IsArray,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested
+} from "class-validator";
+import { Type } from "class-transformer";
 
 import {
-  PaymentPayableItemEnum,
+  SwaggerType
+} from "@app/common/types";
+
+import {
   PaymentStatusEnum,
   PaymentMethodEnum,
   PaymentScopeEnum,
 } from "../../types";
+import {
+  DetailsPaymentCartDto,
+  DetailsPaymentCreditCardDto,
+  DetailsPaymentItemDto,
+} from ".";
+
 
 export class DetailsPaymentDto {
   @ApiProperty({
     type: SwaggerType.INTEGER,
+    required: true,
   })
   @IsInt()
   id: number;
 
   @ApiProperty({
     type: SwaggerType.NUMBER,
+    required: true,
   })
   @IsNumber()
   amount: number;
@@ -27,6 +46,7 @@ export class DetailsPaymentDto {
   @ApiProperty({
     type: SwaggerType.STRING,
     format: "date-time",
+    required: true,
   })
   paymentDate: Date;
 
@@ -40,22 +60,10 @@ export class DetailsPaymentDto {
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
+    required: true,
   })
   @IsInt()
   userId: number;
-
-  @ApiProperty({
-    enum: PaymentPayableItemEnum,
-    enumName: "PaymentPayableItemEnum",
-  })
-  @IsEnum(PaymentPayableItemEnum)
-  itemType: PaymentPayableItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-  })
-  @IsInt()
-  itemId: number;
 
   @ApiProperty({
     enum: PaymentStatusEnum,
@@ -63,18 +71,6 @@ export class DetailsPaymentDto {
   })
   @IsEnum(PaymentStatusEnum)
   status: PaymentStatusEnum;
-
-  @ApiProperty({
-    type: SwaggerType.STRING,
-    format: "date-time",
-  })
-  createdAt: Date;
-
-  @ApiProperty({
-    type: SwaggerType.STRING,
-    format: "date-time",
-  })
-  updatedAt: Date;
 
   @ApiProperty({
     enum: PaymentMethodEnum,
@@ -92,39 +88,11 @@ export class DetailsPaymentDto {
   currencyId?: number;
 
   @ApiProperty({
-    enum: BaseSubscriptionPlanItemEnum,
-    enumName: "BaseSubscriptionPlanItemEnum",
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(BaseSubscriptionPlanItemEnum)
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @ApiProperty({
     type: SwaggerType.INTEGER,
-    description: "Subscription plan id",
-    required: false,
+    required: true,
   })
-  @IsOptional()
   @IsInt()
-  programSubscriptionPlanId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Gym membership plan id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  gymMembershipPlanId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  paymentCartId?: number;
+  paymentCartId: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -133,30 +101,6 @@ export class DetailsPaymentDto {
   @IsOptional()
   @IsString()
   stripePaymentId?: string;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverUserId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverManagerId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverGymId?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -169,7 +113,56 @@ export class DetailsPaymentDto {
   @ApiProperty({
     enum: PaymentScopeEnum,
     enumName: "PaymentScopeEnum",
+    required: true,
   })
   @IsEnum(PaymentScopeEnum)
   paymentScope: PaymentScopeEnum;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Payment credit card id",
+    required: true,
+  })
+  @IsInt()
+  paymentCreditCardId: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+  })
+  createdAt: Date;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+  })
+  updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsPaymentCreditCardDto,
+    description: "Payment credit card",
+    required: true,
+  })
+  @Type(() => DetailsPaymentCreditCardDto)
+  paymentCreditCard: DetailsPaymentCreditCardDto;
+
+  @ApiProperty({
+    type: () => DetailsPaymentCartDto,
+    description: "Payment cart",
+    required: true,
+  })
+  @Type(() => DetailsPaymentCartDto)
+  paymentCart: DetailsPaymentCartDto;
+
+  @ApiProperty({
+    type: () => DetailsPaymentItemDto,
+    isArray: true,
+    description: "Payment items",
+    required: true,
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => DetailsPaymentItemDto)
+  items: DetailsPaymentItemDto[];
 }

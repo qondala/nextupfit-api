@@ -1,10 +1,20 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNumber, IsOptional } from "class-validator";
+import {
+  ApiProperty,
+} from "@nestjs/swagger";
+import {
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+} from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
-import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
 
-import { PaymentPayableItemEnum, PaymentStatusEnum } from "../../types";
+import {
+  PaymentPayableItemEnum,
+  PaymentStatusEnum,
+} from "../../types";
+
 
 export class DetailsPaymentCartItemDto {
   @ApiProperty({
@@ -49,22 +59,6 @@ export class DetailsPaymentCartItemDto {
   @IsOptional()
   @IsInt()
   currencyId?: number;
-
-  @ApiProperty({
-    enum: BaseSubscriptionPlanItemEnum,
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(BaseSubscriptionPlanItemEnum)
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  subscriptionPlanId?: number;
 
   @ApiProperty({
     enum: PaymentStatusEnum,

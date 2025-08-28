@@ -1,14 +1,24 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
+import {
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString
+} from "class-validator";
 
-import { SwaggerType } from "@app/common/types";
+import {
+  SwaggerType
+} from "@app/common/types";
 
 import {
   PaymentPayableItemEnum,
   PaymentStatusEnum,
   PaymentMethodEnum,
 } from "../../types";
-import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
+
 
 export class UpdatePaymentDto {
   @ApiProperty({
@@ -72,39 +82,28 @@ export class UpdatePaymentDto {
   currencyId?: number;
 
   @ApiProperty({
-    enum: BaseSubscriptionPlanItemEnum,
-    enumName: "BaseSubscriptionPlanItemEnum",
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(BaseSubscriptionPlanItemEnum)
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Subscription plan id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  programSubscriptionPlanId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Gym membership plan id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  gymMembershipPlanId?: number;
-
-  @ApiProperty({
     type: SwaggerType.INTEGER,
     required: false,
   })
   @IsOptional()
   @IsInt()
   paymentCartId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    required: true,
+  })
+  @IsOptional()
+  @IsInt()
+  paymentCreditCardId?: number;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: true,
+  })
+  @IsOptional()
+  paymentDate: Date;
 
   @ApiProperty({
     type: SwaggerType.STRING,
@@ -115,34 +114,26 @@ export class UpdatePaymentDto {
   stripePaymentId?: string;
 
   @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverUserId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverManagerId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverGymId?: number;
-
-  @ApiProperty({
     type: SwaggerType.STRING,
     required: false,
   })
   @IsOptional()
   @IsString()
   message?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: true,
+  })
+  @IsOptional()
+  createdAt: Date;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    required: true,
+  })
+  @IsOptional()
+  updatedAt: Date;
 }

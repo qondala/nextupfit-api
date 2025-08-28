@@ -7,6 +7,7 @@ import { PaginatedResponseDto } from "@app/common/dto";
 
 import { CreateUserScheduleDto, UpdateUserScheduleDto } from "../dto";
 import { UserScheduleEntity } from "../entity";
+import { BaseSchedulableEnum } from "@app/module/base/types";
 
 @Injectable()
 export class UserScheduleService {
@@ -60,6 +61,17 @@ export class UserScheduleService {
     if (!userSchedule) {
       throw new Error(`User schedule with ID ${id} not found`);
     }
+    return userSchedule;
+  }
+
+  async findUserScheduleByUserIdAndItemIdAndItemType(
+    userId: number,
+    itemId: number,
+    itemType: BaseSchedulableEnum,
+  ): Promise<UserScheduleEntity> {
+    const userSchedule = await this.userScheduleRepository.findOne({
+      where: { userId, itemId, itemType },
+    });
     return userSchedule;
   }
 

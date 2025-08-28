@@ -1,4 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import {
+  ApiProperty
+} from "@nestjs/swagger";
 import {
   IsEnum,
   IsInt,
@@ -11,11 +13,10 @@ import {
 import { SwaggerType } from "@app/common/types";
 
 import {
-  PaymentPayableItemEnum,
   PaymentMethodEnum,
   PaymentScopeEnum,
 } from "../../types";
-import { BaseSubscriptionPlanItemEnum } from "@app/module/base/types";
+
 
 export class CreatePaymentDto {
   @ApiProperty({
@@ -37,21 +38,6 @@ export class CreatePaymentDto {
   secret?: string;
 
   @ApiProperty({
-    enum: PaymentPayableItemEnum,
-    enumName: "PaymentPayableItemEnum",
-    description: "Item type",
-  })
-  @IsEnum(PaymentPayableItemEnum)
-  itemType: PaymentPayableItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Item identifier",
-  })
-  @IsInt()
-  itemId: number;
-
-  @ApiProperty({
     enum: PaymentMethodEnum,
     enumName: "PaymentMethodEnum",
     description: "Payment method",
@@ -69,33 +55,6 @@ export class CreatePaymentDto {
   currencyId?: number;
 
   @ApiProperty({
-    enum: BaseSubscriptionPlanItemEnum,
-    enumName: "BaseSubscriptionPlanItemEnum",
-    required: false,
-  })
-  @IsOptional()
-  @IsEnum(BaseSubscriptionPlanItemEnum)
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Subscription plan id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  programSubscriptionPlanId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Gym membership plan id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  gymMembershipPlanId?: number;
-
-  @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Payment cart id",
     required: false,
@@ -105,6 +64,14 @@ export class CreatePaymentDto {
   paymentCartId?: number;
 
   @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Payment credit card id",
+    required: true,
+  })
+  @IsInt()
+  paymentCreditCardId: number;
+
+  @ApiProperty({
     type: SwaggerType.STRING,
     description: "Stripe payment id",
     required: false,
@@ -112,33 +79,6 @@ export class CreatePaymentDto {
   @IsOptional()
   @IsString()
   stripePaymentId?: string;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Receiver user id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverUserId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Receiver manager id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverManagerId?: number;
-
-  @ApiProperty({
-    type: SwaggerType.INTEGER,
-    description: "Receiver gym id",
-    required: false,
-  })
-  @IsOptional()
-  @IsInt()
-  receiverGymId?: number;
 
   @ApiProperty({
     type: SwaggerType.STRING,

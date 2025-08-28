@@ -8,7 +8,6 @@ import {
 } from "typeorm";
 
 import { PaymentPayableItemEnum, PaymentStatusEnum } from "../types";
-import { BaseSubscriptionPlanItemEnum } from "../../base/types";
 import { PaymentCartEntity } from ".";
 
 @Entity("payment_cart_item")
@@ -33,12 +32,6 @@ export class PaymentCartItemEntity {
 
   @Column({ type: "bigint", nullable: true })
   currencyId?: number;
-
-  @Column({ type: "enum", enum: BaseSubscriptionPlanItemEnum, nullable: true })
-  subscriptionType?: BaseSubscriptionPlanItemEnum;
-
-  @Column({ type: "bigint", nullable: true })
-  subscriptionPlanId?: number;
 
   @Column({
     type: "enum",

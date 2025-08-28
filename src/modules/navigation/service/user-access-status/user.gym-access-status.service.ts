@@ -159,7 +159,6 @@ export class UserGymAccessStatusService {
       await this.paymentService.getUserLastPaymentForGymMembershipPlan(
         userGymMembership.memberUserId,
         gymMembershipPlan.id,
-        userGymMembership.gymId,
       );
 
     // In case the membership plan is lifetime, we just check if the user has made any payment
@@ -195,7 +194,6 @@ export class UserGymAccessStatusService {
       (await this.paymentService.countUserGymMembershipPlanPaymentsWithinPeriod(
         userGymMembership.memberUserId,
         gymMembershipPlan.id,
-        userGymMembership.gymId,
         date,
         dueDate,
       )) > 0

@@ -10,6 +10,7 @@ import {
   Patch,
   Delete,
   HttpStatus,
+  ParseEnumPipe,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -31,6 +32,7 @@ import {
 } from "../dto";
 import { PaginationOptionsDto } from "@app/common/dto";
 import { SwaggerType } from "@app/common/types";
+import { BaseSchedulableEnum } from "@app/module/base/types";
 
 @ApiTags("User module endpoints")
 @ApiBearerAuth()
@@ -118,9 +120,53 @@ export class UserScheduleController {
   async findOne(
     @Param("id", ParseIntPipe) id: number,
   ): Promise<DetailsUserScheduleDto> {
-    return this.userScheduleService.findOne(id);
+    return await this.userScheduleService.findOne(id);
   }
 
+  @Get("user/:userId/item/:itemId/itemType/:itemType")
+  @ApiOperation({
+    summary: "Get a user schedule by user id, item id and item type",
+    operationId: "findOneUserScheduleByUserIdAndItemIdAndItemType",
+  })
+  @ApiParam({
+    name: "userId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "User id",
+    example: 123,
+  })
+  @ApiParam({
+    name: "itemId",
+    required: true,
+    type: SwaggerType.INTEGER,
+    description: "Item id",
+    example: 123,
+  })
+  @ApiParam({
+    name: "itemType",
+    required: true,
+    enum: BaseSchedulableEnum,
+    enumName: "BaseSchedulableEnum",
+    description: "Item type",
+    example: "workout",
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Return the user schedule.",
+    type: DetailsUserScheduleDto,
+  })
+  async findOneByUserIdAndItemIdAndItemType(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Param("itemId", ParseIntPipe) itemId: number,
+    @Param("itemType", new ParseEnumPipe(BaseSchedulableEnum)) itemType: BaseSchedulableEnum,
+  ): Promise<DetailsUserScheduleDto> {
+    return await this.userScheduleService.findUserScheduleByUserIdAndItemIdAndItemType(
+      userId,
+      itemId,
+      itemType,
+    );
+  }
+  
   @Patch(":id")
   @ApiOperation({
     summary: "Update a user schedule",

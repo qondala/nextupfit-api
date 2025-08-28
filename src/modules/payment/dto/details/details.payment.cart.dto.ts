@@ -11,9 +11,12 @@ import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
 
-import { PaymentCartTypeEnum, PaymentStatusEnum } from "../../types";
-
+import {
+  PaymentCartTypeEnum,
+  PaymentStatusEnum,
+} from "../../types";
 import { DetailsPaymentCartItemDto } from ".";
+
 
 export class DetailsPaymentCartDto {
   @ApiProperty({
@@ -61,6 +64,7 @@ export class DetailsPaymentCartDto {
 
   @ApiProperty({
     enum: PaymentStatusEnum,
+    enumName: "PaymentStatusEnum",
     required: true,
   })
   @IsEnum(PaymentStatusEnum)
