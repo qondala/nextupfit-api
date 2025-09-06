@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 
 import { ProgramStepActivityWorkingsessionEntity } from ".";
+import { BaseNutritionEntity, BaseUnitEntity } from "@app/module/base/entity";
 
 @Entity("program_step_activity_workingsession_nutrition")
 export class ProgramStepActivityWorkingsessionNutritionEntity {
@@ -72,6 +73,9 @@ export class ProgramStepActivityWorkingsessionNutritionEntity {
   @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
   ratingsAvg: number;
 
+  @Column({ default: 0 })
+  price: number;
+  
   @Column({ type: "bigint", default: 0 })
   points: number;
 
@@ -90,4 +94,12 @@ export class ProgramStepActivityWorkingsessionNutritionEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => BaseNutritionEntity)
+  @JoinColumn({ name: "baseNutritionId", referencedColumnName: "id" })
+  baseNutrition?: BaseNutritionEntity;
+
+  @ManyToOne(() => BaseUnitEntity)
+  @JoinColumn({ name: "durationUnitId", referencedColumnName: "id" })
+  durationUnit: BaseUnitEntity;
 }

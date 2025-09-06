@@ -13,7 +13,7 @@ import { Type } from "class-transformer";
 
 import { SwaggerType } from "@app/common/types";
 import { DetailsGymManagerDto } from "@app/module/gym/dto";
-import { DetailsBaseSociologyDto } from "@app/module/base/dto";
+import { DetailsBaseSociologyDto, DetailsBaseUnitDto, DetailsBaseWorkoutDto } from "@app/module/base/dto";
 
 import { ProgramStepActivityStatusEnum } from "../../types";
 import { BaseWorkoutTypeEnum } from "@app/module/base/types";
@@ -68,6 +68,26 @@ export class DetailsProgramStepActivityWorkingsessionWorkoutDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Duration of the workout",
+    example: 60,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  duration?: number;
+
+  @ApiProperty({
+    type: SwaggerType.INTEGER,
+    description: "Duration unit id (e.g., minutes=1)",
+    example: 1,
+    required: false,
+  })
+  @IsOptional()
+  @IsNumber()
+  durationUnitId?: number;
 
   @ApiProperty({
     type: SwaggerType.INTEGER,
@@ -185,6 +205,16 @@ export class DetailsProgramStepActivityWorkingsessionWorkoutDto {
   status: ProgramStepActivityStatusEnum;
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Price of the workout",
+    example: 0,
+    required: false,
+    default: 0,
+  })
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number points gained after passing this Workingsession",
     example: 10,
@@ -287,4 +317,20 @@ export class DetailsProgramStepActivityWorkingsessionWorkoutDto {
   @ValidateNested({ each: true })
   @Type(() => DetailsBaseSociologyDto)
   audience?: DetailsBaseSociologyDto[];
+
+  @ApiProperty({
+    type: () => DetailsBaseSociologyDto,
+    description: "Workingsession audience",
+    required: false,
+  })
+  @Type(() => DetailsBaseSociologyDto)
+  baseWorkout?: DetailsBaseWorkoutDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseSociologyDto,
+    description: "Workout duration unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseSociologyDto)
+  durationUnit?: DetailsBaseUnitDto;
 }

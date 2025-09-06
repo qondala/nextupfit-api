@@ -1,5 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseNutritionDto, DetailsBaseSociologyDto, DetailsBaseUnitDto } from "@app/module/base/dto";
+import { Type } from "class-transformer";
+import { IsNumber } from "class-validator";
 
 export class DetailsProgramStepActivityWorkingsessionNutritionDto {
   @ApiProperty({
@@ -18,6 +21,7 @@ export class DetailsProgramStepActivityWorkingsessionNutritionDto {
   })
   baseNutritionId?: number;
 
+  
   @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Id of the gym promoting the nutrition",
@@ -150,6 +154,16 @@ export class DetailsProgramStepActivityWorkingsessionNutritionDto {
   ratingsAvg: number;
 
   @ApiProperty({
+    type: SwaggerType.NUMBER,
+    description: "Price of the nutrition",
+    example: 0,
+    required: false,
+    default: 0,
+  })
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({
     type: SwaggerType.INTEGER,
     description: "Number points gained after completing this nutrition",
     required: true,
@@ -178,4 +192,20 @@ export class DetailsProgramStepActivityWorkingsessionNutritionDto {
     required: true,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseSociologyDto,
+    description: "Base nutrition",
+    required: false,
+  })
+  @Type(() => DetailsBaseSociologyDto)
+  baseNutrition?: DetailsBaseNutritionDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseSociologyDto,
+    description: "Nutrition duration unit",
+    required: false,
+  })
+  @Type(() => DetailsBaseSociologyDto)
+  durationUnit?: DetailsBaseUnitDto;
 }
