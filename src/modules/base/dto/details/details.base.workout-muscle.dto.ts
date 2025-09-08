@@ -1,7 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsInt, IsNotEmpty } from "class-validator";
+import { IsInt, IsNotEmpty, ValidateNested } from "class-validator";
 
 import { SwaggerType } from "@app/common/types";
+import { DetailsBaseMuscleDto } from ".";
+import { Type } from "class-transformer";
 
 export class DetailsBaseWorkoutMuscleDto {
   @ApiProperty({
@@ -49,4 +51,13 @@ export class DetailsBaseWorkoutMuscleDto {
     required: true,
   })
   updatedAt: Date;
+
+  @ApiProperty({
+    type: () => DetailsBaseMuscleDto,
+    description: "Workout muscle",
+    required: true,
+  })
+  @Type(() => DetailsBaseMuscleDto)
+  @ValidateNested()
+  muscle: DetailsBaseMuscleDto;
 }

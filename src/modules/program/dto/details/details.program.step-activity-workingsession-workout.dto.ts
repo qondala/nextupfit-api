@@ -319,18 +319,18 @@ export class DetailsProgramStepActivityWorkingsessionWorkoutDto {
   audience?: DetailsBaseSociologyDto[];
 
   @ApiProperty({
-    type: () => DetailsBaseSociologyDto,
-    description: "Workingsession audience",
+    type: () => DetailsBaseWorkoutDto,
+    description: "Base workout",
     required: false,
   })
-  @Type(() => DetailsBaseSociologyDto)
+  @Type(() => DetailsBaseWorkoutDto)
   baseWorkout?: DetailsBaseWorkoutDto;
 
   @ApiProperty({
-    type: () => DetailsBaseSociologyDto,
+    type: () => DetailsBaseUnitDto,
     description: "Workout duration unit",
     required: false,
   })
-  @Type(() => DetailsBaseSociologyDto)
+  @Type(() => DetailsBaseUnitDto)
   durationUnit?: DetailsBaseUnitDto;
 }

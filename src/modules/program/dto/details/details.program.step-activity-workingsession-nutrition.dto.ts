@@ -194,18 +194,18 @@ export class DetailsProgramStepActivityWorkingsessionNutritionDto {
   updatedAt: Date;
 
   @ApiProperty({
-    type: () => DetailsBaseSociologyDto,
+    type: () => DetailsBaseNutritionDto,
     description: "Base nutrition",
     required: false,
   })
-  @Type(() => DetailsBaseSociologyDto)
+  @Type(() => DetailsBaseNutritionDto)
   baseNutrition?: DetailsBaseNutritionDto;
 
   @ApiProperty({
-    type: () => DetailsBaseSociologyDto,
+    type: () => DetailsBaseUnitDto,
     description: "Nutrition duration unit",
     required: false,
   })
-  @Type(() => DetailsBaseSociologyDto)
+  @Type(() => DetailsBaseUnitDto)
   durationUnit?: DetailsBaseUnitDto;
 }

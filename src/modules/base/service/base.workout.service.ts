@@ -88,14 +88,32 @@ export class BaseWorkoutService {
   async findOne(id: number): Promise<BaseWorkoutEntity | null> {
     return await this.baseWorkoutRepository.findOne({
       where: { id },
-      relations: ["muscles", "muscles.muscle"],
+      relations: [
+        "muscles",
+        "muscles.muscle",
+        "howtoPerformSteps",
+        "recommendedRepetitions",
+        "burnsNutrients",
+        "burnsNutrients.nutrient",
+        "equipments",
+        "equipments.equipment"
+      ],
     });
   }
 
   async findByCode(code: string): Promise<BaseWorkoutEntity | null> {
     return await this.baseWorkoutRepository.findOne({
       where: { code },
-      relations: ["muscles", "muscles.muscle"],
+      relations: [
+        "muscles",
+        "muscles.muscle",
+        "howtoPerformSteps",
+        "recommendedRepetitions",
+        "burnsNutrients",
+        "burnsNutrients.nutrient",
+        "equipments",
+        "equipments.equipment"
+      ],
     });
   }
 

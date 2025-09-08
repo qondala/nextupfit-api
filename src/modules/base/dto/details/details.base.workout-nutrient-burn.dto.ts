@@ -3,6 +3,8 @@ import { IsInt, IsNumber, ValidateNested } from "class-validator";
 import { SwaggerType } from "@app/common/types";
 import { DetailsBaseUnitDto } from "./details.base.unit.dto";
 import { Type } from "class-transformer";
+import { DetailsBaseNutrientDto } from "./details.base.nutrient.dto";
+import { DetailsBaseWorkoutDto } from "./details.base.workout.dto";
 
 export class DetailsBaseWorkoutNutrientBurnDto {
   @ApiProperty({
@@ -86,10 +88,19 @@ export class DetailsBaseWorkoutNutrientBurnDto {
 
   @ApiProperty({
     type: () => DetailsBaseUnitDto,
-    description: "Burns nutrient quantity unit",
-    required: false,
+    description: "Burnt nutrient quantity unit",
+    required: true,
   })
   @Type(() => DetailsBaseUnitDto)
   @ValidateNested()
   burnsNutrientQtyUnit: DetailsBaseUnitDto;
+
+  @ApiProperty({
+    type: () => DetailsBaseNutrientDto,
+    description: "Burnt nutrient",
+    required: true,
+  })
+  @Type(() => DetailsBaseNutrientDto)
+  @ValidateNested()
+  nutrient: DetailsBaseNutrientDto;
 }
