@@ -134,6 +134,7 @@ export class AuthController {
   })
   async refreshToken(@Request() req): Promise<AccessTokenDto> {
     const refreshToken = req.body.refreshToken;
+    console.log("Refresh token: ", refreshToken);
     const newAccessToken = await this.authService.refreshToken(refreshToken);
     return newAccessToken;
   }

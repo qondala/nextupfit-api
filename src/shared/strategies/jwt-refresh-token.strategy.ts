@@ -31,6 +31,8 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     const refreshToken = req.body.refreshToken;
     const user = await this.userService.findOne(payload.userId);
 
+    console.log("Refresh token user: ", user);
+
     if (!user) {
       return null;
     }

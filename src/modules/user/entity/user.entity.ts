@@ -41,7 +41,7 @@ export class UserEntity {
   @Column({ type: "timestamp", nullable: true })
   lastLogin: Date;
 
-  @Column({ type: "bigint", nullable: true, default: 1 })
+  @Column({ type: "integer", nullable: true, default: 1 })
   managerAccountId: number;
 
   @Column({ type: "integer", nullable: true, default: 1 })
