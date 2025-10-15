@@ -17,7 +17,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     private userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromBodyField("refreshToken"),
       ignoreExpiration: false,
       secretOrKey: configService.get("JWT_REFRESH_SECRET"),
       passReqToCallback: true,
@@ -28,14 +28,17 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     req: AppRequest,
     payload: any,
   ): Promise<DetailsUserDto | null> {
+    console.log("refresh otken sub: ", payload.sub);
+    console.log("refresh otken meme: ", req.body.refreshToken);
+    console.log("Here we validate the refresh token", {payload, req});
+
     const refreshToken = req.body.refreshToken;
-    const user = await this.userService.findOne(payload.userId);
+    const user = await this.userService.findOne(payload.sub);
 
     console.log("Refresh token user: ", user);
 
-    if (!user) {
-      return null;
-    }
+    if (!user || !user.refreshToken) return null;
+
 
     return user;
   }

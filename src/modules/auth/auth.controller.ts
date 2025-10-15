@@ -14,6 +14,8 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiCreatedResponse,
+  ApiBody,
+  ApiOperation,
 } from "@nestjs/swagger";
 
 import { AuthService } from "./auth.service";
@@ -26,6 +28,7 @@ import {
   AuthTokenDto,
   AccessTokenDto,
   LoginDto,
+  RefreshTokenDto,
 } from "./dto";
 
 import {
@@ -126,16 +129,25 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(JwtRefreshTokenAuthGuard)
+  // @UseGuards(JwtRefreshTokenAuthGuard)
   @Post("refresh-token")
+  @ApiOperation({
+    summary: "Refresh access token",
+    operationId: "refreshToken",
+  })
+  @ApiBody({
+    type: RefreshTokenDto,
+    required: true,
+    description: "Refresh token",
+  })
   @ApiOkResponse({
     description: "Token refreshed successfully.",
-    type: AccessTokenDto,
+    type: AuthTokenDto,
   })
-  async refreshToken(@Request() req): Promise<AccessTokenDto> {
-    const refreshToken = req.body.refreshToken;
-    console.log("Refresh token: ", refreshToken);
-    const newAccessToken = await this.authService.refreshToken(refreshToken);
+  async refreshToken(@Body() body: RefreshTokenDto): Promise<AuthTokenDto> {
+    console.log("Refresh token body: ", body);
+    const newAccessToken = await this.authService.refreshTokens(body.refreshToken);
+    console.log("Refresh token response: ", newAccessToken);
     return newAccessToken;
   }
 

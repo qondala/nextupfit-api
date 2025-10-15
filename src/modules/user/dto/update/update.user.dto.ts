@@ -135,4 +135,14 @@ export class UpdateUserDto {
   @IsOptional()
   @IsInt()
   gender?: number;
+
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "User's refresh token",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  refreshToken?: string;
 }

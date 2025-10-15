@@ -29,6 +29,9 @@ export class UserEntity {
   @Column()
   passwordHash: string;
 
+  @Column()
+  refreshToken: string;
+
   @Column({ nullable: true })
   profileImageUrl: string;
 

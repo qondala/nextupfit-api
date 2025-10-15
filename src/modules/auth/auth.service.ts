@@ -101,15 +101,7 @@ export class AuthService {
       return await this.signUpWithIdToken(idTokenDto);
     }
 
-    const payload = { sub: user.id, email: user.email };
-    return {
-      uid: user.id,
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, {
-        expiresIn: "5h",
-        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-      }),
-    };
+    return this.generateTokens(user);
   }
 
   async verifyEmail(token: string): Promise<void> {
@@ -150,15 +142,7 @@ export class AuthService {
       throw new UnauthorizedException("Invalid credentials");
     }
 
-    const payload = { sub: user.id, email: user.email };
-    return {
-      uid: user.id,
-      accessToken: this.jwtService.sign(payload),
-      refreshToken: this.jwtService.sign(payload, {
-        expiresIn: "5h",
-        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
-      }),
-    };
+    return this.generateTokens(user);
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
@@ -205,23 +189,6 @@ export class AuthService {
     }
   }
 
-  async refreshToken(
-    refreshTokenDto: RefreshTokenDto,
-  ): Promise<AccessTokenDto> {
-    // Validate refresh token
-    try {
-      const decoded = this.jwtService.verify(refreshTokenDto.refreshToken, {
-        secret: process.env.JWT_REFRESH_TOKEN_SECRET, // Use a separate secret for refresh tokens
-      });
-
-      // Generate new access token
-      const payload = { sub: decoded.sub, email: decoded.email };
-      const accessToken = this.jwtService.sign(payload);
-      return { accessToken: accessToken };
-    } catch (err) {
-      throw new UnauthorizedException("Invalid refresh token");
-    }
-  }
 
   async validateUser(
     email: string,
@@ -234,5 +201,46 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  async generateTokens(user: UserEntity): Promise<AuthTokenDto> {
+    const payload = { sub: user.id, email: user.email };
+
+    const accessToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '15m',
+      secret: process.env.JWT_SECRET,
+    });
+
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '7d',
+      secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+    });
+
+    // Hash refresh token with Argon2id
+    const hashedRt = await argon2.hash(refreshToken, {
+      type: argon2.argon2id,
+    });
+
+    await this.userService.update(user.id, { refreshToken: hashedRt });
+
+    return { uid: user.id, accessToken, refreshToken };
+  }
+
+  async refreshTokens(refreshToken: string): Promise<AuthTokenDto> {
+    try {
+      const decoded = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+      });
+      const user = await this.userService.findOne(decoded.sub);
+
+      if (!user.refreshToken) return null;
+
+      const isValid = await argon2.verify(user.refreshToken, refreshToken);
+      if (!isValid) return null;
+
+      return this.generateTokens(user);
+    } catch (err) {
+      throw new UnauthorizedException("Invalid refresh token");
+    }
   }
 }
