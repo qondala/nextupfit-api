@@ -4,8 +4,6 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
   OneToMany,
   EntityManager,
 } from "typeorm";
@@ -58,10 +56,8 @@ export class SocialUpdateEntity {
   @UpdateDateColumn({ type: "timestamp", nullable: true })
   updateAt: Date;
 
-  authorUser?: UserEntity;
-
   authorManager?: GymManagerEntity;
-
+  authorUser?: UserEntity;
   authorGym?: GymEntity;
 
   @OneToMany(
@@ -71,32 +67,42 @@ export class SocialUpdateEntity {
   interests: SocialUpdateInterestEntity[];
 
   // Helper method to get gym if socialActorType is 'gym'
-  async loadGymIfApplicable(entityManager: EntityManager): Promise<GymEntity | null> {
+  async loadGymIfApplicable(entityManager: EntityManager): Promise<void> {
     if (this.socialActorType === SocialActorEnum.gym) {
-      return await entityManager.findOne(GymEntity, {
+      this.authorGym = await entityManager.findOne(GymEntity, {
         where: { id: this.socialActorId }
       });
     }
-    return null;
   }
 
   // Helper method to get user if socialActorType is 'user'
-  async loadUserIfApplicable(entityManager: EntityManager): Promise<UserEntity | null> {
+  async loadUserIfApplicable(entityManager: EntityManager): Promise<void> {
     if (this.socialActorType === SocialActorEnum.user) {
-      return await entityManager.findOne(UserEntity, {
+      this.authorUser = await entityManager.findOne(UserEntity, {
         where: { id: this.socialActorId }
       });
     }
-    return null;
   }
 
   // Helper method to get manager if socialActorType is 'manager'
-  async loadManagerIfApplicable(entityManager: EntityManager): Promise<GymManagerEntity | null> {
+  async loadManagerIfApplicable(entityManager: EntityManager): Promise<void> {
     if (this.socialActorType === SocialActorEnum.manager) {
-      return await entityManager.findOne(GymManagerEntity, {
+      this.authorManager = await entityManager.findOne(GymManagerEntity, {
         where: { id: this.socialActorId }
       });
     }
-    return null;
+  }
+
+  loadApplicableData(entityManager: EntityManager): Promise<void> {
+    switch (this.socialActorType) {
+      case SocialActorEnum.gym:
+        this.loadGymIfApplicable(entityManager);
+      case SocialActorEnum.user:
+        this.loadUserIfApplicable(entityManager);
+      case SocialActorEnum.manager:
+        this.loadManagerIfApplicable(entityManager);
+      default:
+        return;
+    }
   }
 }

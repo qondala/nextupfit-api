@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DataSource, In, Repository } from "typeorm";
+import { DataSource, EntityManager, In, Repository } from "typeorm";
 
 import { PaginatedResponseDto, PaginationOptionsDto } from "@app/common/dto";
 import { GymFollowerEntity, GymManagerFollowerEntity } from "@app/module/gym/entity";
@@ -20,6 +20,7 @@ import { SocialActorEnum } from "../types";
 export class SocialUpdateService {
   constructor(
     private dataSource: DataSource,
+    private entityManager: EntityManager,
     @InjectRepository(SocialUpdateEntity)
     private readonly socialUpdateRepository: Repository<SocialUpdateEntity>,
     @InjectRepository(GymFollowerEntity)
@@ -38,9 +39,7 @@ export class SocialUpdateService {
     paginationOptions: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialUpdateEntity>> {
     const queryBuilder = this.socialUpdateRepository
-      .createQueryBuilder("socialUpdate")
-      .leftJoinAndSelect("socialUpdate.authorUser", "authorUser")
-      .leftJoinAndSelect("socialUpdate.authorManager", "authorManager");
+      .createQueryBuilder("socialUpdate");
 
     if (criteria.authorUserId) {
       queryBuilder.andWhere("socialUpdate.authorUserId = :authorUserId", {
@@ -98,8 +97,12 @@ export class SocialUpdateService {
 
     const totalPages = Math.ceil(totalItems / paginationOptions.limit);
 
+    for (const item of items) {
+      await item.loadApplicableData(this.entityManager);
+    }
+
     return {
-      items,
+      items: items,
       meta: {
         totalItems,
         itemCount: items.length,
@@ -121,6 +124,10 @@ export class SocialUpdateService {
 
     // Sort items by date
     const sortedItems = items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    for (const item of sortedItems) {
+      await item.loadApplicableData(this.entityManager);
+    }
 
     return {
       items: sortedItems,
@@ -149,8 +156,12 @@ export class SocialUpdateService {
       .getManyAndCount();
     const totalPages = Math.ceil(totalItems / paginationOptions.limit);
 
+    for (const item of items) {
+      await item.loadApplicableData(this.entityManager);
+    }
+
     return {
-      items,
+      items: items,
       meta: {
         totalItems,
         itemCount: items.length,
@@ -186,13 +197,12 @@ export class SocialUpdateService {
       .getManyAndCount();
     const totalPages = Math.ceil(totalItems / paginationOptions.limit);
 
-    // assing gym to each update
-    items.forEach((update) => {
-      update.authorManager = managers.find((manager) => manager.id === update.socialActorId);
-    });
+    for (const item of items) {
+      await item.loadApplicableData(this.entityManager);
+    }
   
     return {
-      items,
+      items: items,
       meta: {
         totalItems,
         itemCount: items.length,
@@ -227,13 +237,12 @@ export class SocialUpdateService {
       .getManyAndCount();
     const totalPages = Math.ceil(totalItems / paginationOptions.limit);
 
-    // assing gym to each update
-    items.forEach((update) => {
-      update.authorGym = gyms.find((gym) => gym.id === update.socialActorId);
-    });
+    for (const item of items) {
+      await item.loadApplicableData(this.entityManager);
+    }
   
     return {
-      items,
+      items: items,
       meta: {
         totalItems,
         itemCount: items.length,
@@ -271,8 +280,12 @@ export class SocialUpdateService {
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
 
+    for (const item of items) {
+      await item.loadApplicableData(this.entityManager);
+    }
+
     return {
-      items,
+      items: items,
       meta: {
         totalItems,
         itemCount: items.length,
@@ -284,10 +297,11 @@ export class SocialUpdateService {
   }
 
   async findOne(id: number): Promise<SocialUpdateEntity> {
-    return await this.socialUpdateRepository.findOne({
+    const record = await this.socialUpdateRepository.findOne({
       where: { id },
-      relations: ["authorUser", "authorManager"],
     });
+    await record.loadApplicableData(this.entityManager);
+    return record;
   }
 
   async update(

@@ -71,6 +71,7 @@ export class ProgramInterestService {
     const { page, limit } = pagination || { page: 1, limit: 10 };
 
     const skip = (page - 1) * limit;
+
     const [items, total] = await queryBuilder
       .skip(skip)
       .take(limit)

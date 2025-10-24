@@ -231,15 +231,20 @@ export class AuthService {
       const decoded = await this.jwtService.verifyAsync(refreshToken, {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       });
+
+      console.log("Decoded refresh token: ", decoded);
       const user = await this.userService.findOne(decoded.sub);
 
       if (!user.refreshToken) return null;
 
       const isValid = await argon2.verify(user.refreshToken, refreshToken);
+
+      console.log("Is valid refresh token: ", isValid);
       if (!isValid) return null;
 
       return this.generateTokens(user);
     } catch (err) {
+      console.log("Error verifying refresh token: ", err);
       throw new UnauthorizedException("Invalid refresh token");
     }
   }

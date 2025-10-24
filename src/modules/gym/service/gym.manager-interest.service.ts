@@ -127,7 +127,6 @@ export class GymManagerInterestService {
     const queryBuilder = this.dataSource
       .getRepository(GymManagerEntity)
       .createQueryBuilder("gymManager")
-      .leftJoinAndSelect("gymManager.gym", "gym")
       .leftJoinAndSelect("gymManager.user", "user")
       .innerJoin("gymManager.interests", "gymManagerInterest")
       .innerJoin(

@@ -177,6 +177,7 @@ export class ProgramFreetoolInterestService {
     const { page, limit } = pagination;
 
     const skip = (page - 1) * limit;
+
     const [items, total] = await queryBuilder
       .skip(skip)
       .take(limit)
