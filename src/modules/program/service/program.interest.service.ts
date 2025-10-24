@@ -123,7 +123,6 @@ export class ProgramInterestService {
       .getRepository(ProgramEntity)
       .createQueryBuilder("program")
       .leftJoinAndSelect("program.gym", "gym")
-      .leftJoinAndSelect("program.manager", "manager")
       .innerJoin("program.interests", "programInterest")
       .innerJoin(
         UserInterestEntity,
