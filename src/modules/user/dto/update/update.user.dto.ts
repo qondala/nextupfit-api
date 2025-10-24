@@ -1,16 +1,12 @@
 import {
-  IsNotEmpty,
   IsString,
   IsEmail,
   IsOptional,
-  IsArray,
   IsDate,
   IsBoolean,
-  IsEnum,
   IsInt,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { UserProfileTypeEnum } from "../../types";
 import { SwaggerType } from "@app/common/types";
 
 export class UpdateUserDto {

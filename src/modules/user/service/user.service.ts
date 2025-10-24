@@ -62,6 +62,12 @@ export class UserService {
 
   async findOne(id: number): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
+
+    // Convert managerAccountId to number (don't know why it comes out as a string)
+    // TODO: fix this
+    user.managerAccountId = Number(user.managerAccountId);
+    console.log("User found: ", user);
+
     return user;
   }
 

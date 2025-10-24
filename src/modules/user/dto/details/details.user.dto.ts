@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDefined, IsInt, IsOptional, ValidateNested } from "class-validator";
-
+import { Type } from "class-transformer";
 import { SwaggerType } from "@app/common/types";
 import { DetailsGymManagerDto } from "@app/module/gym/dto";
-import { Type } from "class-transformer";
+
 
 export class DetailsUserDto {
   @ApiProperty({
