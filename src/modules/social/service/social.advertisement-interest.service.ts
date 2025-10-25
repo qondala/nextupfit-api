@@ -127,26 +127,56 @@ export class SocialAdvertisementInterestService {
     userId: number,
     pagination: PaginationOptionsDto,
   ): Promise<PaginatedResponseDto<SocialAdvertisementEntity>> {
-    const queryBuilder = this.dataSource
+    const skip = (pagination.page - 1) * pagination.limit;
+
+    // First query: Get matching advertisement IDs with count
+    const idsQueryBuilder = this.dataSource
       .getRepository(SocialAdvertisementEntity)
       .createQueryBuilder("advertisement")
-      .leftJoinAndSelect("advertisement.content", "content")
+      .select("advertisement.id")
+      .addSelect("advertisement.createdAt")
       .innerJoin("advertisement.interests", "advertisementInterest")
       .innerJoin(
         UserInterestEntity,
         "userInterest",
         "userInterest.interestType = advertisementInterest.interestType AND userInterest.interestId = advertisementInterest.interestId",
       )
-      .where("userInterest.userId = :userId", { userId });
+      .where("userInterest.userId = :userId", { userId })
+      .groupBy("advertisement.id")
+      .addGroupBy("advertisement.createdAt")
+      .orderBy("advertisement.createdAt", "DESC")
+      .addOrderBy("RANDOM()")
+      .skip(skip || 0)
+      .take(pagination.limit || 10);
 
-    queryBuilder.addOrderBy("advertisement.createdAt", "DESC");
-    queryBuilder.addOrderBy("RANDOM()");
+    const [idsResult, totalItems] = await Promise.all([
+      idsQueryBuilder.getRawMany(),
+      idsQueryBuilder.getCount(),
+    ]);
 
-    const skip = (pagination.page - 1) * pagination.limit;
-    const [items, totalItems] = await queryBuilder
-      .skip(skip)
-      .take(pagination.limit)
-      .getManyAndCount();
+    // If no results, return early
+    if (idsResult.length === 0) {
+      return {
+        items: [],
+        meta: {
+          totalItems: 0,
+          totalPages: 0,
+          currentPage: pagination.page,
+          itemsPerPage: pagination.limit,
+        },
+      };
+    }
+
+    const advertisementIds = idsResult.map((r) => r.advertisement_id);
+
+    // Second query: Load full entities with relations
+    const items = await this.dataSource
+      .getRepository(SocialAdvertisementEntity)
+      .createQueryBuilder("advertisement")
+      .leftJoinAndSelect("advertisement.content", "content")
+      .whereInIds(advertisementIds)
+      .orderBy("advertisement.createdAt", "DESC")
+      .getMany();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
 
@@ -154,10 +184,9 @@ export class SocialAdvertisementInterestService {
       items,
       meta: {
         totalItems,
-        itemCount: items.length,
-        itemsPerPage: pagination.limit,
         totalPages,
         currentPage: pagination.page,
+        itemsPerPage: pagination.limit,
       },
     };
   }

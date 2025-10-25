@@ -128,11 +128,11 @@ export class GymManagerInterestService {
       .getRepository(GymManagerEntity)
       .createQueryBuilder("gymManager")
       .leftJoinAndSelect("gymManager.user", "user")
-      .innerJoin("gymManager.interests", "gymManagerInterest")
+      .leftJoinAndSelect("gymManager.interests", "interests")
       .innerJoin(
         UserInterestEntity,
         "userInterest",
-        "userInterest.interestType = gymManagerInterest.interestType AND userInterest.interestId = gymManagerInterest.interestId",
+        "userInterest.interestType = interests.interestType AND userInterest.interestId = interests.interestId",
       )
       .where("userInterest.userId = :userId", { userId });
 
@@ -178,10 +178,14 @@ export class GymManagerInterestService {
         break;
     }
 
+    console.log("Gym Manager interest service - Pagination: ", pagination);
+
     const skip = (pagination.page - 1) * pagination.limit;
+    console.log("Gym Manager interest service - Skip: ", skip);
+
     const [items, totalItems] = await queryBuilder
-      .skip(skip)
-      .take(pagination.limit)
+      .skip(skip || 0)
+      .take(pagination.limit || 10)
       .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);

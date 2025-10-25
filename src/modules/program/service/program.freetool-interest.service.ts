@@ -127,10 +127,10 @@ export class ProgramFreetoolInterestService {
     const queryBuilder = this.dataSource
       .getRepository(ProgramFreetoolEntity)
       .createQueryBuilder("freetool")
-      .leftJoinAndSelect("freetool.gym", "gym")
-      .leftJoinAndSelect("freetool.manager", "manager")
       .leftJoinAndSelect("freetool.activity", "activity")
-      .innerJoin("freetool.interests", "freetoolInterest")
+      .leftJoin("freetool.manager", "manager")
+      .leftJoin("freetool.gym", "gym")
+      .leftJoin("freetool.interests", "freetoolInterest")
       .innerJoin(
         UserInterestEntity,
         "userInterest",
@@ -176,11 +176,14 @@ export class ProgramFreetoolInterestService {
 
     const { page, limit } = pagination;
 
+    console.log("Program Freetool interest service - Pagination: ", pagination);
+
     const skip = (page - 1) * limit;
+    console.log("Program Freetool interest service - Skip: ", skip);
 
     const [items, total] = await queryBuilder
-      .skip(skip)
-      .take(limit)
+      .skip(skip || 0)
+      .take(limit || 10)
       .getManyAndCount();
 
     const totalPages = Math.ceil(total / limit);

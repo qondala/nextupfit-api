@@ -124,11 +124,11 @@ export class ProgramInterestService {
       .getRepository(ProgramEntity)
       .createQueryBuilder("program")
       .leftJoinAndSelect("program.gym", "gym")
-      .innerJoin("program.interests", "programInterest")
+      .innerJoin("program.interests", "interests")
       .innerJoin(
         UserInterestEntity,
         "userInterest",
-        "userInterest.interestType = programInterest.interestType AND userInterest.interestId = programInterest.interestId",
+        "userInterest.interestType = interests.interestType AND userInterest.interestId = interests.interestId",
       )
       .where("userInterest.userId = :userId", { userId });
 
@@ -155,11 +155,13 @@ export class ProgramInterestService {
         queryBuilder.addOrderBy("RANDOM()");
         break;
     }
-
+    console.log("Program interest service - Pagination: ", pagination);
     const skip = (pagination.page - 1) * pagination.limit;
+
+    console.log("Program interest service - Skip: ", skip);
     const [items, totalItems] = await queryBuilder
-      .skip(skip)
-      .take(pagination.limit)
+      .skip(skip || 0)
+      .take(pagination.limit || 10)
       .getManyAndCount();
 
     const totalPages = Math.ceil(totalItems / pagination.limit);
