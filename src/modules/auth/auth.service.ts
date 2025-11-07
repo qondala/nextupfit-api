@@ -226,24 +226,51 @@ export class AuthService {
     return { uid: user.id, accessToken, refreshToken };
   }
 
+
   async refreshTokens(refreshToken: string): Promise<AuthTokenDto> {
     try {
+      // First, verify the JWT signature and expiration
       const decoded = await this.jwtService.verifyAsync(refreshToken, {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,
       });
 
-      console.log("Decoded refresh token: ", decoded);
       const user = await this.userService.findOne(decoded.sub);
 
-      if (!user.refreshToken) return null;
+      // No refresh token stored - user logged out or never logged in
+      if (!user.refreshToken) {
+        throw new UnauthorizedException("Invalid refresh token");
+      }
 
+      // Verify the refresh token hash
       const isValid = await argon2.verify(user.refreshToken, refreshToken);
 
-      console.log("Is valid refresh token: ", isValid);
-      if (!isValid) return null;
+      if (!isValid) {
+        // TOKEN REUSE DETECTED!
+        // The JWT is valid (not expired, correct signature) but doesn't match 
+        // the stored hash. This means:
+        // 1. The token was already used and replaced, OR
+        // 2. Potential security breach - stolen token being reused
+        
+        console.warn(
+          `[SECURITY] Refresh token reuse detected for user ${user.id}. Invalidating all tokens.`
+        );
+        
+        // Invalidate all refresh tokens for this user as a security measure
+        await this.userService.update(user.id, { refreshToken: null });
+        
+        throw new UnauthorizedException(
+          "Refresh token reuse detected. Please login again."
+        );
+      }
 
+      // Token is valid - generate new tokens (this will rotate the refresh token)
       return this.generateTokens(user);
     } catch (err) {
+      // Handle JWT verification errors (expired, invalid signature, etc.)
+      if (err instanceof UnauthorizedException) {
+        throw err;
+      }
+      
       console.log("Error verifying refresh token: ", err);
       throw new UnauthorizedException("Invalid refresh token");
     }

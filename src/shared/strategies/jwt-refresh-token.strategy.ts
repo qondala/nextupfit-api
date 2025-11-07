@@ -28,17 +28,10 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     req: AppRequest,
     payload: any,
   ): Promise<DetailsUserDto | null> {
-    console.log("refresh otken sub: ", payload.sub);
-    console.log("refresh otken meme: ", req.body.refreshToken);
-    console.log("Here we validate the refresh token", {payload, req});
-
     const refreshToken = req.body.refreshToken;
     const user = await this.userService.findOne(payload.sub);
 
-    console.log("Refresh token user: ", user);
-
     if (!user || !user.refreshToken) return null;
-
 
     return user;
   }

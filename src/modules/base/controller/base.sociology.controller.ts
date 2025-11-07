@@ -102,10 +102,12 @@ export class BaseSociologyController {
     @Query("limit") limit = 10,
     @Query("userId") userId?: number,
   ): Promise<PaginatedDetailsBaseSociologyDto> {
-    return await this.baseSociologyService.findAll(
+    const response = await this.baseSociologyService.findAll(
       { page: +page, limit: +limit },
       userId ? +userId : undefined,
     );
+    console.log("PaginatedDetailsBaseSociologyDto : ", response);
+    return response;
   }
 
   @Get("search")

@@ -83,7 +83,7 @@ export class DetailsBaseProgramGoalDto {
     type: SwaggerType.STRING,
     format: "date-time",
     description: "Record last update timestamp",
-    required: true,
+    required: false,
   })
   updatedAt: Date;
 }

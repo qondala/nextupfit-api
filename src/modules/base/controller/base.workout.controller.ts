@@ -103,13 +103,15 @@ export class BaseWorkoutController {
     @Query("limit") limit = 10,
     @Query("userId") userId?: number,
   ): Promise<PaginatedDetailsBaseWorkoutDto> {
-    return this.baseWorkoutService.findAll(
+    const response = await this.baseWorkoutService.findAll(
       {
         page: +page,
         limit: +limit,
       },
       userId ? +userId : undefined,
     );
+    console.log("PaginatedDetailsBaseWorkoutDto : ", response);
+    return response;
   }
 
   @Get("search")

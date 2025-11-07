@@ -46,6 +46,9 @@ export class BaseNutritionService {
   ): Promise<PaginatedResponseDto<BaseNutritionEntity>> {
     const searchTerm = `%${query}%`;
     const [items, total] = await this.nutritionRepository.findAndCount({
+      relations: {
+        nutritionType: true,
+      },
       where: [{ name: Like(searchTerm) }, { code: Like(searchTerm) }],
       skip: (options.page - 1) * options.limit,
       take: options.limit,
@@ -65,11 +68,11 @@ export class BaseNutritionService {
   }
 
   findOne(id: number): Promise<BaseNutritionEntity | null> {
-    return this.nutritionRepository.findOneBy({ id });
+    return this.nutritionRepository.findOne({ where: { id }, relations: { nutritionType: true } });
   }
 
   findByCode(code: string): Promise<BaseNutritionEntity | null> {
-    return this.nutritionRepository.findOneBy({ code });
+    return this.nutritionRepository.findOne({ where: { code }, relations: { nutritionType: true } });
   }
 
   async update(

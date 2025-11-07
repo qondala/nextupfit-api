@@ -14,7 +14,6 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    console.log("RoleGuard User 1: ", user);
     if (!user) {
       throw new UnauthorizedException("User not found"); // Gérez le cas où l'utilisateur n'est pas trouvé
     }
@@ -23,8 +22,6 @@ export class RolesGuard implements CanActivate {
     const fetchedUser = await userRepository.findOne({
       where: { id: user.id },
     });
-
-    console.log("RoleGuard User 2: ", fetchedUser);
 
     if (!fetchedUser) {
       throw new UnauthorizedException("User not found");
