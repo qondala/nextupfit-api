@@ -141,4 +141,24 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   refreshToken?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    description: "User's previous refresh token",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  previousRefreshToken?: string;
+
+  @ApiProperty({
+    type: SwaggerType.STRING,
+    format: "date-time",
+    description: "Refresh token rotation date",
+    example: Date(),
+    required: false,
+  })
+  @IsOptional()
+  @IsDate()
+  refreshTokenRotatedAt?: Date;
 }

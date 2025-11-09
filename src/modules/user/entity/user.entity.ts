@@ -33,6 +33,12 @@ export class UserEntity {
   refreshToken: string;
 
   @Column({ nullable: true })
+  previousRefreshToken: string;
+
+  @Column({ type: "timestamp", nullable: true })
+  refreshTokenRotatedAt: Date;
+
+  @Column({ nullable: true })
   profileImageUrl: string;
 
   @Column({ nullable: true })

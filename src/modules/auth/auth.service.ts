@@ -221,7 +221,12 @@ export class AuthService {
       type: argon2.argon2id,
     });
 
-    await this.userService.update(user.id, { refreshToken: hashedRt });
+    // Store current token as previous token for grace period
+    await this.userService.update(user.id, {
+      previousRefreshToken: user.refreshToken,
+      refreshToken: hashedRt,
+      refreshTokenRotatedAt: new Date(),
+    });
 
     return { uid: user.id, accessToken, refreshToken };
   }
@@ -229,6 +234,14 @@ export class AuthService {
 
   async refreshTokens(refreshToken: string): Promise<AuthTokenDto> {
     try {
+      // Grace period for token rotation (in milliseconds)
+      // For handling race conditions between refresh token rotation and token reuse detection
+      // In fact, two requests can be sent by the client at the same time, creating a race condition
+      // The first request will rotate the refresh token, and the second request will use the old refresh token
+      // So we make the old refresh token valid for a short period of time (grace period)
+      // If the second request is sent within this grace period, it will be accepted
+      const GRACE_PERIOD_MS = 10000; // 10 seconds
+
       // First, verify the JWT signature and expiration
       const decoded = await this.jwtService.verifyAsync(refreshToken, {
         secret: process.env.JWT_REFRESH_TOKEN_SECRET,
@@ -241,23 +254,47 @@ export class AuthService {
         throw new UnauthorizedException("Invalid refresh token");
       }
 
-      // Verify the refresh token hash
-      const isValid = await argon2.verify(user.refreshToken, refreshToken);
+      // Verify the refresh token hash against current token
+      let isValid = await argon2.verify(user.refreshToken, refreshToken);
+
+      if (!isValid && user.previousRefreshToken && user.refreshTokenRotatedAt) {
+        // Check if we're within the grace period
+        const timeSinceRotation =
+          Date.now() - new Date(user.refreshTokenRotatedAt).getTime();
+
+        if (timeSinceRotation <= GRACE_PERIOD_MS) {
+          // Within grace period - check against previous token
+          isValid = await argon2.verify(
+            user.previousRefreshToken,
+            refreshToken,
+          );
+
+          if (isValid) {
+            console.log(
+              `[INFO] Token verified within grace period for user ${user.id} (${timeSinceRotation}ms after rotation)`
+            );
+          }
+        }
+      }
 
       if (!isValid) {
         // TOKEN REUSE DETECTED!
-        // The JWT is valid (not expired, correct signature) but doesn't match 
-        // the stored hash. This means:
-        // 1. The token was already used and replaced, OR
+        // The JWT is valid (not expired, correct signature) but doesn't match
+        // either current or previous hash (or is outside grace period).
+        // This indicates:
+        // 1. The token was already used and replaced (outside grace period), OR
         // 2. Potential security breach - stolen token being reused
-        
+
         console.warn(
           `[SECURITY] Refresh token reuse detected for user ${user.id}. Invalidating all tokens.`
         );
-        
+
         // Invalidate all refresh tokens for this user as a security measure
-        await this.userService.update(user.id, { refreshToken: null });
-        
+        await this.userService.update(user.id, {
+          refreshToken: null,
+          previousRefreshToken: null,
+        });
+
         throw new UnauthorizedException(
           "Refresh token reuse detected. Please login again."
         );
@@ -270,7 +307,7 @@ export class AuthService {
       if (err instanceof UnauthorizedException) {
         throw err;
       }
-      
+
       console.log("Error verifying refresh token: ", err);
       throw new UnauthorizedException("Invalid refresh token");
     }
